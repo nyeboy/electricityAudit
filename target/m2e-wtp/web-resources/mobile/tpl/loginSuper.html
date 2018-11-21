@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<script src="../config.js"></script>
+	<script src="../assets/js/extends/jquery-3.1.1.min.js"></script>
+	<script src="../bower_components/layer/layer.js" ></script>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+	<body style="background:url('../assets/img/bg.jpg')  no-repeat;">
+		<div class="loginmain" style="background: #fff; width: 520px; height: 360px; margin: 0 auto; position:absolute; left: 50%;box-shadow: 0px 2px 0px 8px rgba(0,0,0,0.1);
+		top: 50%; margin-left: -260px; margin-top: -240px; text-align: center;">
+				<div style="border: none; max-height: 500px; ">
+						<div style="font-size: 28px; font-weight: bolder; text-align: center; padding-top: 40px; padding-bottom: 30px; font-family: '微软雅黑'">四川移动网络业务管理稽核平台</div>
+						<input type="text" placeholder="用户名" id="account">
+						<input type="password" placeholder="密码" id="word">
+						<input type="button"  class="btn" value="登录" id="goLogin" >
+				</div>
+		</div>
+<script type="text/javascript">
+    var base_url=CONFIG.BASE_URL;
+	$("body").keydown(function() {
+	  if (event.keyCode == "13") {//keyCode=13是回车键
+	    $('#goLogin').click();
+	  }
+	});  
+	// $('#goLogin').click();	
+    $('#goLogin').click(function(){
+    	var account = $("#account").val();
+    	var word = $("#word").val();
+    	if(!account){
+    		layer.msg("请输入超级管理员用户名。");
+    		return;
+    	}
+    	if(!account.match('[a-zA-Z0-9_]+')){
+    		layer.msg("用户名由英文字母、数字或下划线组成。");
+    		return;
+    	}
+    	if(!word){
+    		layer.msg("请输入密码");
+    		return;
+    	}
+    	var date=new Date();
+		var timer=date.getTime().toString();
+	    //登录,采用post请求
+	    $.ajax({
+	    	url:base_url+"/loginController/login.do?t="+timer,
+	    	type:"POST",
+	    	data:{
+		        "loginAccountParam":account,
+		        "fromPage":1,
+		        "word":word
+	    		},
+	    	dataType:"json",
+            timeout:10000,
+            success:function(data){
+	            	if(data.code==200){
+			            layer.msg("登录成功！");
+			            window.location.href='../login.html';
+			        }else{
+			            layer.msg(data.message);
+			        	}	
+            	}
+	    })
+
+/*	    $.get(base_url+"/loginController/login.do",{
+	        "loginAccountParam":account,
+	        "fromPage":1,
+	        "word":word
+	    },function(data){
+	        if(data.code==200){
+	            layer.msg("登录成功！");
+	            window.location.href='../login.html?loginAccountParam='+account;
+	        }else{
+	            layer.msg(data.message);
+	        }
+	    });*/
+    })
+</script>
+	</body>
+</html>
+<style type="text/css">
+.loginmain input { width: 360px; padding: 12px;border: 1px solid #cccccc; margin: 10px 0px; font-size: 14px; }
+.loginmain .btn{ width: 388px; background: #3982f1; color: #ffffff; font-size: 16px; border: none; margin-top: 15px; cursor:pointer; font-size: 16px; font-weight: bolder; }
+.loginmain .btn:hover { background: #3476d9; }
+</style>

@@ -1,0 +1,155 @@
+
+<!-- 换表弹出框 -->
+<div class="reimbur-dialog-title">电表信息管理换表</div>
+<div class="basic-container" style="padding-top: 0px;">
+    <div class="ledge-title">坏表信息</div>
+    <div class="ledge-table">
+        <table>
+            <tbody>
+            <tr>
+            	 <td>
+	                	<span class="table-left"> 电表户号:</span>
+	                	 <input type="text" disabled="disabled" name="" class="table-right" value="{{oldObject.paymentAccountCode}}">
+	                </td>
+	                	                <td>
+	                	<span class="table-left"> 电表标识符:</span>
+	                	 <input type="text" disabled="disabled" name="" class="table-right" value="{{oldObject.code}}">
+	                </td>
+	                	                <td>
+	                	<span class="table-left"> 是否翻表:</span>
+	                	 <input type="text" disabled="disabled" name="" class="table-right" value="{{oldObject.whetherMeter}}">
+	                </td>
+            
+            </tr>
+                <tr>
+	               
+                    <td>
+                        <span class="table-left">电表号:</span>
+                        <input type="text" disabled="disabled" name="" class="table-right" value="{{oldObject.id}}">
+                    </td>
+                    <td>
+                        <span class="table-left">电表状态:</span>
+                        <!-- <select ng-model="oldObject.status" disabled="disabled" name="" id="" style="width:192px">
+	                        <option value="1">正常</option>
+	                        <option value="0">损坏</option>
+                    	</select> -->
+                        <input type="text" disabled="disabled" name="" class="table-right" value="损坏"> 
+                    </td>
+                    <td>
+                        <span class="table-left">倍率:</span>
+                        <input type="text" disabled="disabled" name="" class="table-right" value="{{oldObject.rate}}">
+                    </td>
+                      
+                </tr>
+                <tr>
+                    <td>
+                        <span class="table-left">当前读数:</span>
+                        <input type="text" disabled="disabled" name="" class="table-right" value="{{oldObject.currentReadingStr}}">
+                    </td>
+                    <td>
+                        <span class="table-left">当前电费归属日期:</span>
+                        <input type="text" disabled="disabled" name="" class="table-right" value="{{oldObject.reimbursementDateStr}}">
+                    </td>
+                    <td>
+	                	<span class="table-left">总用电量:</span>
+	                	 <input type="text" disabled="disabled" name="" class="table-right" value="{{oldObject.damageInnerNum}}">
+	                </td>
+                   
+                </tr>
+                <tr>
+                    <td>
+                        <span class="sign table-left">损坏日期:</span>
+                        <input ng-laydate 
+	                       id="id2"
+	                       ng-model="newObject.damageDate"
+	                       format="YYYY-MM-DD"
+	                       type="text"  class="table-right" name=""/>
+                    </td>
+                    <td>
+                        <span class="sign table-left">损坏期间电量(度):</span>
+                        <input type="text" ng-model="newObject.damageInnerNum" name="" class="table-right " value="{{newObject.damageInnerNum}}">
+                    </td>
+                    <td>
+                        <span class="table-left">电损(度):</span>
+                        <input type="text" ng-model="newObject.electricLoss" name="" class="table-right " value="{{newObject.electricLoss}}">
+                    </td>
+                    
+                </tr>
+                <tr>
+                 <td>
+                        <span class="sign table-left">损坏读数:</span>
+                        <input type="text" name="" ng-model="newObject.damageNum" class="table-right" value="{{newObject.damageNum}}">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- 新表信息-->
+    <div class="ledge-title ledge-sub">新表信息</div>
+    <div class="ledge-table">
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                        <span class="table-left">电表户号:</span>
+                        <input ng-model="newObject.paymentAccountCode" type="text" name="" class="table-right" value="{{newObject.paymentAccountCode}}">
+                    </td>
+                    <td>
+                        <span class="table-left">电表标识符:</span>
+                        <input ng-model="newObject.code" type="text" name="" class="table-right" value="{{newObject.code}}">
+                    </td>
+                    <td>
+                        <span class="table-left">电表类型:</span>
+	                    <select ng-model="newObject.ptype" name="" id="" style="padding-right: 0px" class="table-right ng-pristine ng-valid">
+	                        <option value="1">普通</option>
+	                        <option value="2">智能</option>
+	                    </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                       <span class="sign table-left">电表状态:</span>
+                       <select ng-model="newObject.status" name="" id="" style="padding-right: 0px" class="table-right ng-pristine ng-valid"处理>
+	                        <option value="1">正常</option>
+	                        <!-- <option value="0">损坏</option> -->
+                    	</select> 
+                    </td>
+                    <td>
+                        <span class="table-left">倍率:</span>
+                        <input ng-model="newObject.rate" type="text"  name="" class="table-right" value="{{newObject.rate}}">
+                    </td>
+                     <td>
+                        <span class="sign table-left">所属户头:</span>
+                        <select ng-model="newObject.belongAccount" name="" id="" style="padding-right: 0px" class="table-right ng-pristine ng-valid" >
+	                        <option value="1">移动</option>
+	                        <option value="2">铁搭</option>
+                   		</select>
+                    </td>
+                </tr>
+                <tr>
+                	<td>
+                        <span class="sign table-left">更换读数:</span>
+                        <input ng-model="newObject.currentReadingStr" type="text" name="" class="table-right" value="{{newObject.currentReadingStr}}" >
+                    </td>
+                    <td>
+                        <span class="sign table-left">更换日期:</span>
+                        <input ng-laydate  class="table-right"
+	                       id="id1"
+	                       ng-model="newObject.reimbursementDateStr"
+	                       format="YYYY-MM-DD"
+	                       type="text" class="process-input con-parts" name=""/>
+                    </td>
+                    <td>
+                        <input type="text" ng-hide="true" name="站点id" class="table-right" value="{{oldObject.accountSiteId}}">
+                        <input type="text" ng-hide="true" name="坏表id" class="table-right" value="{{oldObject.damageMeterNum}}">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+    </div>
+    <div class="submit-btn" style="text-align: center; padding-left: 0px; margin-top: 30px;">
+                <button ng-click="closeDialog('changeDialog')" class="reimbur-cancel btn">取消</button>
+                <button ng-click="saveNewMeter()" class="reimbur-save btn">保存</button>
+        </div>
+</div>

@@ -1,0 +1,335 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=8" >
+    <meta http-equiv="X-UA-Compatible" content="IE=9" />
+    <meta http-equiv="X-UA-Compatible" content="IE=10" />
+    <meta http-equiv="X-UA-Compatible" content="IE=11" />
+    <title>四川移动网络业务管理稽核平台</title>
+    <link rel="stylesheet" href="assets/css/cores/public.css">
+    <link rel="stylesheet" href="assets/css/modular.css">
+    <link rel="shortcut icon" href="./favicon.ico" type="images/x-icon">
+</head>
+
+<body>
+<style>
+    .modular-left a{
+        text-decoration:none;
+        color: white;
+    }
+</style>
+<div class="modular-content" >
+    <div class="modular">
+        <div class="modular-title" style="background:url(./assets/img/title-logo.png) no-repeat center; margin-bottom:100px;" ></div>
+        <div class="modular-left">
+            <div id="goIndex" class="m-sinceEle" data-sinceName="0"><a>自维电费管理</a></div>
+            <div id="goTaiwei" class="m-taiWei" data-taiweiName="1"><a>塔维电费管理</a></div>
+            <div id="goYouFei" class="m-costOil"><a>油费管理</a></div>
+            <div id="goZuFang" class="m-sinceRent"><a>自维房租管理</a></div>
+            <div id="goTower" class="m-taiweiRent"><a>塔维租赁管理</a></div>
+        </div>
+        <div class="modular-right" id="maplear" _echarts_instance_="ec_1492161983316"
+             style="-webkit-tap-highlight-color: transparent; user-select: none; background: transparent;">
+            <div style="position: relative; overflow: hidden; width: 714px; height: 432px; padding: 0px; margin: 0px; border-width: 0px; cursor: default;">
+
+            </div>
+        </div>
+        <div class="modular-foot">
+            四川移动致力提供一个精细管理的信息化平台，可以实现数据收集统计的核心功能，帮助四川移动公司适应基站电费管理和场租管理的新形势，挖掘和管理数据信息，最大效率地对电费和场租开支的信息内容进行管理和利用，对企业内部管理提供强有力的支撑。
+        </div>
+        <div class="footer-info">2016 rights reserved.</div>
+    </div>
+</div>
+
+<!-- ---------------------------------------------外部库-------------------------------------------------------------- -->
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+  <script src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+  <script src="http://apps.bdimg.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+<script src="assets/js/extends/jquery.min.js"></script>
+<script src="assets/js/extends/bootstrap.min.js"></script>
+<script src="./assets/js/extends/echarts.min.js"></script>
+<!-- 引入json.js -->
+<script src="./assets/js/cycle.js"></script>
+<script src="./assets/js/json_parse_state.js"></script>
+<script src="./assets/js/json_parse.js"></script>
+<script src="./assets/js/json2.js"></script>
+
+<!--layer 弹出框-->
+<script src="bower_components/layer/layer.js" ></script>
+
+<script src="config.js"></script>
+<script src="src/waterMark.js"></script>
+<script type="text/javascript">
+
+    var base_url=CONFIG.BASE_URL;
+    //是否登录判断标示
+    var isLogin=false;
+    // var userName=getParameter("loginAccountParam");
+    function getCurrentUser(){
+        var date=new Date();
+        var timer=date.getTime().toString();
+        $.get(base_url+'/loginController/getCurrentUser.do?t='+timer,function(data){
+            console.log(data+"sdfdsfdsfds");
+            // var userName=getParameter("loginAccountParam");
+            if(data.code && data.code==200 ){
+                console.log(data.data);
+               if(data.data && data.data.roleIds){
+                   isLogin = true;
+                   console.log("isLogin",isLogin)
+                }
+                /*if(data.data && data.data.roleIds && data.data.roleIds.match("180,")){
+                   isLogin = true;
+                   console.log("isLogin",isLogin)
+                }*/
+            }else{
+                alert("请重新登陆");
+                window.location.href='../mobile/tpl/loginSuper.html';
+                console.log("请重新登陆")
+                // userLogin();
+            }
+        })
+    }
+    getCurrentUser();
+    console.log("isLogin",isLogin)
+    /**
+     * 获取URL参数
+     * @param name
+     * @returns {null}
+     */
+    function getParameter(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) {
+            return unescape(r[2]);
+        }
+        return null;
+    }
+
+    //用户登录
+    // function  userLogin(){
+    //     clearMenu();
+    //     if(userName==null){
+    //         layer.msg("获取用户名失败，请稍候再试！");
+    //         return;
+    //     }
+    //     //登录，采用post请求
+    //     $.ajax({
+    //         url:base_url+"/loginController/login.do",
+    //         type:"POST",
+    //         data:{"loginAccountParam":userName},
+    //         dataType:"json",
+    //         timeout:10000,
+    //         success:function(data){
+    //             if(data.code!=200){
+    //                isLogin=false;
+    //                 if(data.message){
+    //                     layer.msg(data.message);
+    //                 }else{
+    //                     layer.msg("获取用户名失败，请稍候再试！");
+    //                 } 
+    //             }else{
+    //                 layer.msg("登录成功！");
+    //                 isLogin=true;
+    //             }
+    //         },
+    //         error:function(data){
+    //             console.log(data)
+    //         }
+    //     });
+
+        /*$.get(base_url+"/loginController/login.do",{
+            "loginAccountParam":userName
+        },function(data){
+            if(data.code!=200){
+                isLogin=false;
+                if(data.message){
+                    layer.msg(data.message);
+                }else{
+                    layer.msg("获取用户名失败，请稍候再试！");
+                }
+              
+            }else{
+                layer.msg("登录成功！");
+                isLogin=true;
+            }
+        });*/
+    // }
+    function clearMenu(){
+        if(window.localStorage && window.localStorage.selectedMenu){
+            window.localStorage.selectedMenu=null;
+        }
+    }
+
+    // 登录自维系统
+    $('#goIndex').click(function(){
+        if(isLogin==false){
+            alert("未登录");
+            return;
+            console.log("请重新登陆")
+            // userLogin();
+        }
+        var functionName = $(this).attr("data-sinceName");  // 获取自维信息
+        $.getJSON(base_url+'/loginController/getCurrentUser.do',function(data){
+            if(data.code==200){
+                var loginUser=data.data;
+                typeof loginUser!="object"&&(loginUser=JSON.parse(loginUser));
+                localStorage.setItem("loginUser",JSON.stringify(loginUser));
+                window.sessionStorage.setItem("userType",loginUser.userLevel);
+                window.sessionStorage.removeItem("functionType");
+                window.sessionStorage.setItem("userCityName",loginUser.cityStr);
+                
+                switch (loginUser.userLevel){
+                    case 0:
+                        window.location.href = 'index.html#/provincial/index';
+                        break;
+                    case 5:
+                        window.location.href = 'index.html#/municipal/index';
+                        break;
+                    case 2:
+                        window.location.href = 'index.html#/trustees/index';
+                        break;
+                    case 1:
+                    case 3:
+                        window.location.href = 'index.html#/county/index';
+                        break;
+                    case 4:
+                    	window.location.href = 'index.html#/reimbursement/index';
+                    	break;
+                }
+            }else{
+                alert("获取用户登录信息失败");
+            }
+        });
+    });
+
+
+     // 登录塔维系统
+    $('#goTaiwei').click(function(){
+
+        if(isLogin==false){
+            alert("未登陆")
+            return;
+        }
+
+        var functionName = $(this).attr("data-taiweiName");  // 获取塔维信息
+
+
+        $.getJSON(base_url+'/loginController/getCurrentUser.do',function(data){
+
+            if(data.code==200){
+
+                var loginUser=data.data;
+                typeof loginUser!="object"&&(loginUser=JSON.parse(loginUser));
+                localStorage.setItem("loginUser",JSON.stringify(loginUser));
+                window.sessionStorage.setItem("userType",loginUser.userLevel);
+                window.sessionStorage.setItem("userCityName",loginUser.cityStr);
+                window.sessionStorage.setItem("functionType",functionName);
+
+                switch (loginUser.userLevel){
+                    case 0:
+                        window.location.href = 'index.html#/provincial/index';
+                        break;
+                    case 5:
+                        window.location.href = 'index.html#/municipal/index';
+                        break;
+                    case 2:
+                        window.location.href = 'index.html#/trustees/index';
+                        break;
+                    case 1:
+                    case 3:
+                        window.location.href = 'index.html#/county/index';
+                        break;
+                    case 4:
+                        window.location.href = 'index.html#/reimbursement/index';
+                        break;
+                }
+                
+
+            }else{
+                alert("获取用户登录信息失败");
+            }
+
+
+        });
+    });
+
+
+    // 首页地图
+    $.get('./assets/map/json/sichuan.json', function (sichuanJson) {
+        echarts.registerMap('sichuan', sichuanJson);
+        var chart = echarts.init(document.getElementById('maplear'));
+        chart.setOption({
+            title: {
+                 text: '',
+                 padding:[22,0,100,0],
+                 left: 'center'
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                 orient: 'vertical',
+                 left: '5.5%',
+                 top:'13%',
+                 //align:'top',
+                 itemGap:25,
+                 selectedMode: 'single',
+             },
+            series: [{
+                type: 'map',
+                map: 'sichuan',
+                roam: true,
+                aspectScale: 1,  //拉伸比例
+                scaleLimit:  1,  //最小比例
+                scaleLimit: 10,
+                label: {
+                    normal: {
+                        show: true,
+                        borderWidth:.5,//各区域边框宽度
+                        borderColor: '#0d4566',//区域描线颜色 #000  #0d4566 #3681af
+                        areaColor:"#4599cc",//单位区域颜色
+                    },
+                    emphasis: {
+                        show: true,
+                        color:'#4b0082',
+                        areaColor:"#64c1fa",
+                        shadowColor: 'rgba(0, 0, 0, 0.5)',//地图阴影
+                        shadowBlur: 10//地图阴影大小
+                    }
+                } 
+            }]
+
+        });
+    });
+   
+  
+    
+    var goYouFei = document.getElementById("goYouFei");
+    goYouFei.onclick = function(){
+    	var url = "http://10.101.58.217:8085/home";
+    	window.location.href=url;
+    }
+
+    var goYouFei = document.getElementById("goZuFang");
+    goYouFei.onclick = function(){
+    	var url = "http://10.101.58.217/toLogin";
+    	window.location.href=url;
+    }
+    
+    var goYouFei = document.getElementById("goTower");
+    goYouFei.onclick = function(){
+    	var url = "http://10.101.58.217:8082/Tieta/back";
+    	window.location.href=url;
+    }
+   
+
+</script>
+
+
+
+</body>
+</html>

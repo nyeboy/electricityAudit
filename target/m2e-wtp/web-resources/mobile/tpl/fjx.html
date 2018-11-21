@@ -1,0 +1,19 @@
+ <!-- 上传界面 -->
+ <div >
+ 	<!-- 上传图片 -->
+ 	<form action="" method="post" enctype="multipart/form-data" id="uploadForm" ng-show="tabUpload==1" >  
+	 	<div class="upload-title">上传附件1</div>
+		<div>
+		<p style="font-size: 2em;margin-bottom: 10px">请选择文件</p>
+				<input type="file" 
+					id="upload-continue" 
+					name="files" 
+					ng-model="upFiles" 
+					onchange="angular.element(this).scope().change1(this)">
+		</div>
+		<input   name="fjszydno" ng-model="jfszydno" style="display: none">
+		<div class="reimbur-foot ledge-foot">
+			<button ng-click="uploadType1()" class="reimbur-save btn">确定上传</button>
+		</div>
+	</form>	
+ </div>

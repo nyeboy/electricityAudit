@@ -1,0 +1,84 @@
+<!-- 塔维生成电费提交单 dialog弹框 -->
+<div class="add-submit add-data-width">
+    <div class="reimbur-dialog-title" style="padding: 10px 0px;">电费提交单</div>
+    <div class="search-box">
+        <div>
+            <input ng-laydate 
+                   id="generatedStart" 
+                   ng-model="generatedParams.startTime"
+                   format="YYYY-MM-DD" 
+                   type="text" placeholder="开始时间" class="add-title">
+            <input ng-laydate 
+                   id="generatedEnd" 
+                   ng-model="generatedParams.endTime"
+                   format="YYYY-MM-DD"
+                   type="text" placeholder="截止时间" name="" class="add-title">
+            <input type="text" placeholder="供应商" name="" class="add-title" ng-model="generatedParams.supplierName">
+            <button class="btn btn-primary" type="button" ng-click="getGeneratedData()">搜索</button>          
+        </div>
+    </div>
+    <!-- table-content -->
+    <div class="table-content">
+        <div class="table-title">
+            <select id="invoiceType" 
+                    ng-model="electricCharge.invoiceType" 
+                    class="add-title"
+                    ng-options="invoice.id as invoice.billType for invoice in invoiceTypeList">
+                <option value="">发票类型</option>
+            </select>
+            <button class="btn btn-blue" ng-click="creatGenerated()">生成电费提交单</button>
+        </div>
+        <!-- table -->
+        <div class="invoinc-table">
+            <div class="table-details">
+                <div>
+                    <table>
+                       <!--  <colgroup>
+                            <col style="width:5%" />
+                            <col style="width:18%" />
+                            <col style="width:12%" />
+                            <col style="width:8%" />
+                            <col style="width:10%" />
+                            <col style="width:15%" />
+                            <col style="width:8%" />
+                            <col style="width:10%" />
+                            <col style="width:14%" />
+                        </colgroup> -->
+                        <tbody class="query-date" id="generatedList">
+                            <tr>
+                                <th>
+                                    <input type="checkbox" ng-click="checkAll('#checkAllgen','#generatedList')" id="checkAllgen">
+                                </th>
+                                <th>稽核单流水号</th>
+                                <th>铁塔地址编号</th>
+                                <th>建单时间</th>
+                                <th>供应商名称</th>
+                                <th>供应商ID</th>
+                                <th>成本中心</th>
+                                <th>合同编号</th>
+                                <th>操作</th>
+                            </tr>
+                            <tr ng-repeat="item in list track by $index">
+                                <td><input type="checkbox" value="{{item.id}}"></td>
+                                <td>{{item.serialNumber}}</td>
+                                <td>{{item.sysTowerSitNo}}</td>
+                                <td>{{item.createDate | date:"yyyy-MM-dd HH:mm:ss"}}</td>
+                                <td>{{item.supplierName}}</td>
+                                <td>{{item.supplierID}}</td>
+                                <td>{{item.costCenterName}}</td>
+                                <td>{{item.contractNo}}</td>
+                                <td>
+                                    <a ng-click="showDetail(item,false,true)" href="javascript:void(0)" class="check-detail">查看</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- 分页 -->
+        <div class="page-foot">
+            <im-pagination conf="generatedPageInfo" params="generatedParams" get-data="getGeneratedData()"></im-pagination>
+        </div>
+    </div>
+</div>

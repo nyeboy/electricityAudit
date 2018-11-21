@@ -1,0 +1,337 @@
+@charset "utf-8";
+/* CSS Document */
+/*
+	*@description: 各级首页;
+	*@author:tmliu;
+	*@date:2017.4.7 11:35;
+*/
+/* 首页共用 */
+#home-page{
+	padding-top: 16px;
+	background-color: #f6f6f8;
+	height: 100%;
+}
+.top-message{
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	width: 100%;
+	/*min-width: 1200px;*/
+	overflow: hidden;
+	box-sizing: border-box;
+	border: 1px solid #edf0f2;
+	background-color: #fff;
+	border-right: none;
+	color: #585c5e;
+	margin-bottom: -100px;
+}
+.flex{
+	padding: 24px 24px 20px;
+	-webkit-box-flex:1;
+	-webkit-flex:1;
+	-ms-flex:1;
+	flex:1;
+	border-right: 1px solid #edf0f2;
+	box-sizing: border-box;
+}
+.top-title {
+	font-size: 18px;
+	font-weight: 600;
+	text-align: center;
+	margin-bottom: 16px;
+	line-height: 18px;
+}
+.top-title:before {
+	height: 20px;
+	content:url('../img/home_page/audit.png');
+	margin-right: 9px;
+	vertical-align: middle;
+	display: inline-block;
+}
+.t2:before {
+	content:url('../img/home_page/prepay.png');
+}
+.t3:before {
+	content:url('../img/home_page/recycle_icon.png');
+}
+.t4:before {
+	content:url('../img/home_page/sell_icon.png');
+}
+.t5:before {
+	content:url('../img/home_page/withdrawing_icon.png');
+}
+.t6:before {
+	content:url('../img/home_page/against_icon.png');
+}
+.top-title span{
+	margin-left: 6px;
+}
+.top-title span:before{
+	content:'(';
+}
+.top-title span:after{
+	content:')';
+}
+.detail{
+	font-size: 14px;
+	overflow: hidden;
+	text-align: center;
+}
+.detail>div {
+	display: inline-block;
+}
+.detail div:nth-child(1) {
+	margin-right: 13px;
+}
+.circle{
+	width: 16px;
+	height: 16px;
+	font-size: 12px;
+	text-align: center;
+	color:#fff;
+	margin-left: 4px;
+	display: inline-block;
+	border-radius: 50%;
+	background: #fb6638;
+	vertical-align: middle;
+}
+
+/*
+ *经办人图表 
+ *
+ */
+.manager-pie {
+	width: 100%;
+	height: 100%;
+	padding-top: 120px;
+	color: #5c6266;
+}
+/* 选项卡 */
+.header-pie {
+	overflow: hidden;
+}
+.header-pie ul{
+	overflow: hidden;
+	border: 1px solid #edf0f2;
+	border-bottom: none;
+	box-sizing: border-box;
+	background-color: #fff;
+	margin: 0;
+}
+.header-pie ul li {
+	float: left;
+	padding: 15px 60px;
+	border-right: 1px solid #edf0f2;
+	box-sizing: border-box;
+	cursor: pointer;
+}
+.header-pie ul li:last-of-type {
+	padding: 15px 30px;
+}
+/* 选项卡选中状态 */
+.tab-hover {
+	color: #4b8de6;
+	font-weight: bold;
+	border-bottom: 2px solid #4b8de6;
+}
+/* 饼图及数据table展示 */
+.manager-content {
+	width: 100%;
+	height: 100%;
+	background: #fff;
+}
+small {
+	font-size: 14px;
+}
+/* 表格数据展示 ----首页、基础数据、额定功率通用 */
+.data-table {
+	overflow: hidden;
+	height: 100%;
+	border: 1px solid #edf0f2;
+	background-color: #fff;
+}
+/* 表格通用 */
+.table-result {
+	width: 100%;
+	border-collapse: collapse;
+	table-layout: fixed;
+	border-spacing: 0;
+}
+/* 表头数据 */
+.table-result thead tr{
+	height: 45px;
+	padding: 10px;
+	background: #e1e7eb;
+	width: calc(100% - 8px);
+	border-bottom: 1px solid #edf0f2;
+
+}
+.table-result thead tr th {
+	color: #555b5e;
+// white-space: nowrap;   /* 暂时显示 */
+	text-align: center;
+// border: 1px solid #edf0f2;
+	box-sizing: border-box;
+	letter-spacing: 2px;   /* hover后文字抖动 */
+}
+/* tbody查询后的数据 */
+.query-date tr td{
+	height: 45px;
+	text-align: center;
+	border-top: none;
+	box-sizing: border-box;
+	word-wrap: break-word;   /* 暂时隐藏 */
+}
+.query-date tr:nth-of-type(2n) {
+	background: #fcfeff;
+}
+.query-date tr:hover {
+	background: #f9fbfe;
+}
+/* 查看 */
+.table-result tr td a {
+	color: #4b8de6;
+	padding: 2px;
+	margin: 0 8px;
+	display: inline-block;
+	letter-spacing: 2px; /* hover后文字抖动 */
+}
+.table-result tr td a:hover {
+	font-weight: 700;
+	padding: 2px;
+	margin: 0 8px;
+}
+.table-result tr td img {
+	cursor: pointer;
+	display: inline-block;
+}
+
+.table-details {
+	padding-top: 100px;
+	margin-top: -100px;
+	padding-bottom: 100px;
+	margin-bottom: -100px;
+	height: 100%;
+}
+.table-details div {
+	height: 100%;
+	overflow: auto;
+	max-height: 580px;
+}
+.table-details div table {
+	width: 100%;
+	border-spacing: 0;
+	table-layout: fixed;  /* 暂时隐藏 */
+}
+
+
+
+/*
+ *市级领导图表 
+ *
+ */
+.middle-chart{
+
+	width: 100%;
+	margin-top: 121px;
+	background-color: #fff;
+	border: 1px solid #edf0f2;
+	box-sizing: border-box;
+	overflow: hidden;
+}
+/* 数据图导航条 */
+.chart-title {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	border-bottom: 1px solid #edf0f2;
+}
+.chart-title .flex {
+	padding: 10px 10px;
+	text-align: center;
+	box-sizing: border-box;
+}
+.chart-title .flex:last-of-type {
+	border-right: none;
+}
+.chart-title .flex:hover {
+	color: #4b8de6;
+	font-weight: bold;
+	cursor: pointer;
+}
+/* 数据图显示 */
+.chart-content {
+	position: relative;
+	height: 500px;
+}
+.chart-content .chart-date {
+	position: absolute;
+	width: 81.5%;
+	height: 100%;
+	left: 0;
+}
+/* 地图首页图 */
+.map-date {
+	width: 100%;
+}
+.chart-content .ranking {
+	position: absolute;
+	right: 0;
+	width: 215px;
+	border-left: 1px solid #f7f9fc;
+	border-bottom: 1px solid #f7f9fc;
+	background-color: #fff;
+}
+
+/* 评优排名 */
+.ranking .sidebar-title{
+	text-align: center;
+	height: 46px;
+	line-height:46px;
+	font-weight: 600;
+	color: #4b8de6;
+	font-size: 16px;
+	border-bottom: 1px solid #f7f9fc;
+}
+.sidebar-tree{
+	font-size:14px;
+	color:#5c6266;
+	height: 100%;
+	overflow: auto;
+}
+.sidebar-tree ul {
+	overflow: hidden;
+}
+.sidebar-tree ul li{
+	height: 38px;
+	line-height: 38px;
+	padding:0 20px;
+}
+.sidebar-tree ul li span:nth-of-type(odd){
+	float: left;
+}
+.sidebar-tree ul li span:nth-of-type(even){
+	float: right;
+}
+.sidebar-tree ul li:hover{
+	color:#4b8de6;
+	cursor: pointer;
+}
+.sidebar-tree ul li:nth-of-type(even){
+	background: #f7f9fc;
+}
+
+
+/*
+ *省级领导图表
+ *
+ */
+.province-chart {
+	width: 100%;
+	background-color: #fff;
+	border: 1px solid #edf0f2;
+	box-sizing: border-box;
+	overflow: hidden;
+}

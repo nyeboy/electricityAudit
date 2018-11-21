@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.workflow.dao.WorkflowManageDao">
+
+    <select id="queryFlowInfo" parameterType="com.audit.modules.common.mybatis.PageUtil" 
+      resultType="org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity">
+		SELECT
+		  RES.ID_ as id,
+		  RES.NAME_ as "name",
+		  RES.DESCRIPTION_ as description,
+		  RES.KEY_ as "key",
+		  RES.DEPLOYMENT_ID_ as deploymentId,
+		  RES.RESOURCE_NAME_ as resourceName
+		FROM
+		  ACT_RE_PROCDEF RES,
+		  ACT_RE_DEPLOYMENT RED
+		WHERE
+		  RED.ID_ = RES.DEPLOYMENT_ID_ 
+		  AND RES.VERSION_ = (
+		    SELECT 
+		      MAX (VERSION_) 
+		    FROM 
+		      ACT_RE_PROCDEF 
+		    WHERE 
+		      KEY_ = RES.KEY_ 
+		    AND ((TENANT_ID_ IS NOT NULL AND TENANT_ID_ = RES.TENANT_ID_) OR (TENANT_ID_ IS NULL AND RES.TENANT_ID_ IS NULL)))
+		  AND (RES.SUSPENSION_STATE_ = 1) 
+		  <if test="obj.cityStr != null">
+		    AND RES.KEY_ LIKE '%'||#{obj.cityStr,jdbcType=VARCHAR}||'%' 
+		  </if>
+		  <if test="obj.countyStr != null">
+		    AND RES.KEY_ LIKE '%'||#{obj.countyStr,jdbcType=VARCHAR}||'%' 
+		  </if>
+		  <if test="obj.type != null">
+		    AND RES.KEY_ LIKE '%'||#{obj.type,jdbcType=VARCHAR}||'%' 
+		  </if>
+		  <if test="obj.name != null">
+		    AND RES.NAME_ LIKE '%'||#{obj.name,jdbcType=VARCHAR}||'%'
+		  </if>
+		  ORDER BY
+			RED.DEPLOY_TIME_ DESC
+	</select>
+</mapper>

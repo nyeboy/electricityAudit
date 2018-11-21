@@ -1,0 +1,557 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.watthourmeter.dao.WatthourMeterDao">
+<!-- id="columns"中去除了swm.ELECTRIC_LOSS as electricLoss -->
+    <sql id="columns">
+		swm.id as id,swm.CODE as code,swm.PAYMENT_ACCOUNT_CODE as paymentAccountCode,swm.TYPE as ptype,swm.STATUS as status,swm.DAMAGE_METER_NUM as damageMeterNum,
+		swm.RATE as rate,swm.MAX_READING as maxReading,swm.CURRENT_READING as currentReadingStr,to_char(swm.REIMBURSEMENT_DATE,'yyyy-MM-dd') as reimbursementDateStr,
+		swm.BELONG_ACCOUNT as belongAccount,to_char(swm.UPDATE_TIME,'yyyy-MM-dd') as updateTimeStr
+	</sql>
+
+    <sql id="columnsExtend">
+		swe.ID as exTendId,swe.SYS_WATTHOUR_ID as watthourId ,swe.WHETHER_METER as whetherMeter ,swe.END_AMMETER as endAmmeter,
+		swe.ELECTRIC_LOSS as electricLoss,swe.UNIT_PRICE as unitPrice, swe.REMARKS as remarks ,swe.TOTAL_ELECIRIC as totalEleciric,
+		swe.DAY_AMMETER as dayAmmeter,swe.TOTALAMOUNT AS totalAmount,swe.MAX_READING as maxReadings,swe.LAST_TAKE_PHOTOS_TIME as lastTakePhotosTime,
+		swe.THE_TAKE_PHOTOS_TIME as theTakePhotosTime,swe.ELECTRIC_METER_DEG as electricMeterDeg,swe.TAKE_PHOTOS_PEOPLE_INFO as takePhotosPeopleInfo,
+		swe.ACCESSORIES as accessories,swe.BACKCALCULATION_PRICE as backcalculationPrice
+	</sql>
+
+   <!--  <select id="findBySiteID" resultType="com.audit.modules.watthourmeter.entity.WatthourMeterVO" parameterType="java.util.Map">
+        SELECT
+          swe.END_AMMETER as startAmmeter,swe.BELONG_END_TIME as belongEndTime,<include refid="columns"/>
+        FROM
+          SYS_ACCOUNT_SITE sas
+		INNER JOIN SYS_SITE_MID_METER ssmm on sas.id = ssmm.ACCOUNT_SITE_ID
+		INNER JOIN SYS_WATTHOUR_METER swm on ssmm.WATTHOUR_METER_ID = swm.id
+		left join  SYS_WATTHOUR_EXTEND swe on swe.SYS_WATTHOUR_ID=swm.id
+        WHERE 1=1
+        <if test="siteId!=null and siteId!=''">
+            AND sas.id = #{siteId}
+        </if>
+		ORDER BY   swe.BELONG_END_TIME desc,
+		<![CDATA[
+			substr(swm.CODE,0,"INSTR"(swm.CODE,'_')+4) ASC,
+			(CASE WHEN "INSTR"(swm.CODE,'_',3,2) >0 THEN "TO_NUMBER"("TO_CHAR"(substr(swm.CODE,"INSTR"(swm.CODE,'_',3,2)+1,10))) END) asc
+		]]>
+    </select> -->
+    
+    <select id="findHisSiteInfo" resultType="com.audit.modules.watthourmeter.entity.WatthourExtendVO" parameterType="java.util.Map">
+    SELECT 
+    	<include refid="columnsExtend"/> 
+    FROM SYS_ACCOUNT_SITE sas 
+	LEFT JOIN SYS_ELECTRICITY se ON(SAS.id=SE.SYS_ACCOUNT_SITE_ID) 
+	LEFT JOIN SYS_ELE_MID_WATTHOUR semw ON(se.ID = semw.SYS_ELECIRICITY_ID) 
+	LEFT JOIN SYS_WATTHOUR_EXTEND swe ON(swe.SYS_WATTHOUR_ID = semw.SYS_WATTHOUR_EXTEND_ID) 
+	LEFT JOIN SYS_WATTHOUR_METER swm ON(swm.id = swe.SYS_WATTHOUR_ID)
+	WHERE
+		swm.TYPE = '2' AND 
+		SAS.id=#{siteId,jdbcType=VARCHAR}
+    </select>
+    
+    
+    <select id="findBySiteID" resultType="com.audit.modules.watthourmeter.entity.WatthourMeterVO" parameterType="java.util.Map">
+SELECT swe.END_AMMETER as startAmmeter,swe.BELONG_END_TIME as belongEndTime,<include refid="columns"/>       
+        FROM                                                                            
+          SYS_ACCOUNT_SITE sas
+		INNER JOIN SYS_SITE_MID_METER ssmm on sas.id = ssmm.ACCOUNT_SITE_ID
+		INNER JOIN SYS_WATTHOUR_METER swm on ssmm.WATTHOUR_METER_ID = swm.id
+		left join  SYS_WATTHOUR_EXTEND swe on swe.SYS_WATTHOUR_ID=swm.id
+WHERE 1=1   AND sas.id = #{siteId} and swe.BELONG_END_TIME =(select belongEndTime from 
+
+(select * from (
+				SELECT
+          swe.END_AMMETER as startAmmeter,swe.BELONG_END_TIME as belongEndTime
+        FROM
+          SYS_ACCOUNT_SITE sas
+				INNER JOIN SYS_SITE_MID_METER ssmm on sas.id = ssmm.ACCOUNT_SITE_ID
+				INNER JOIN SYS_WATTHOUR_METER swm on ssmm.WATTHOUR_METER_ID = swm.id
+				left join  SYS_WATTHOUR_EXTEND swe on swe.SYS_WATTHOUR_ID=swm.id
+        WHERE 1=1  
+            AND sas.id = #{siteId}
+        ORDER BY   swe.BELONG_END_TIME desc) where <![CDATA[rownum<=1]]>)
+)   and swe.END_AMMETER =(select startAmmeter from 
+
+(select * from (
+				SELECT
+          swe.END_AMMETER as startAmmeter,swe.BELONG_END_TIME as belongEndTime
+        FROM
+          SYS_ACCOUNT_SITE sas
+				INNER JOIN SYS_SITE_MID_METER ssmm on sas.id = ssmm.ACCOUNT_SITE_ID
+				INNER JOIN SYS_WATTHOUR_METER swm on ssmm.WATTHOUR_METER_ID = swm.id
+				left join  SYS_WATTHOUR_EXTEND swe on swe.SYS_WATTHOUR_ID=swm.id
+        WHERE 1=1  
+            AND sas.id = #{siteId}
+        ORDER BY   swe.BELONG_END_TIME desc) where <![CDATA[rownum<=1]]>)
+)
+    ORDER BY   swe.BELONG_END_TIME desc,
+		<![CDATA[
+			substr(swm.CODE,0,"INSTR"(swm.CODE,'_')+4) ASC,
+			(CASE WHEN "INSTR"(swm.CODE,'_',3,2) >0 THEN "TO_NUMBER"("TO_CHAR"(substr(swm.CODE,"INSTR"(swm.CODE,'_',3,2)+1,10))) END) asc
+		]]>
+    </select>
+    
+    
+    
+    
+    <select id="geteleinfo" parameterType="java.lang.String" resultType="com.audit.modules.watthourmeter.entity.WatthourMeterVO">
+    	select * from (
+		select swe.BELONG_END_TIME as belongEndTime,swe.END_AMMETER as endAmmeter
+ from SYS_ELECTRICITY se
+   LEFT JOIN SYS_ELE_MID_WATTHOUR semw on semw.SYS_ELECIRICITY_ID=SE.id
+		left join SYS_WATTHOUR_EXTEND swe on swe.id=semw.SYS_WATTHOUR_EXTEND_ID
+		left join SYS_WATTHOUR_METER swm on swm.id=swe.SYS_WATTHOUR_ID
+where swm.id=#{id} order by SE.BELONG_END_TIME desc 
+) t1 where <![CDATA[ROWNUM<=1]]>  
+    </select>
+
+    <update id="updateWatthourMeter" parameterType="com.audit.modules.watthourmeter.entity.WatthourExtendVO">
+		UPDATE SYS_WATTHOUR_METER set TAKE_PHOTOS_TIME = #{theTakePhotosTime,jdbcType=TIMESTAMP}
+		WHERE 
+		 	ID = #{watthourId,jdbcType=VARCHAR} 
+	</update>
+
+	 <select id="selectTime" resultType="com.audit.modules.watthourmeter.entity.WatthourMeterVO" parameterType="java.util.Map">
+        select SYS_WATTHOUR_ID as watthourId,
+        THE_TAKE_PHOTOS_TIME as theTakePhotosTime,
+        MAX_READING as maxReadings
+			from 
+		SYS_WATTHOUR_EXTEND 
+			where 
+		SYS_WATTHOUR_ID=#{watthourId} 
+		ORDER BY THE_TAKE_PHOTOS_TIME desc
+    </select>
+
+    <insert id="saveWatthourExtend" parameterType="com.audit.modules.watthourmeter.entity.WatthourExtendVO">
+		INSERT INTO
+		        SYS_WATTHOUR_EXTEND(
+		            ID,
+		            SYS_WATTHOUR_ID,
+		            WHETHER_METER,
+		            END_AMMETER,
+		            ELECTRIC_LOSS,
+		            UNIT_PRICE,
+		            REMARKS,
+		            TOTAL_ELECIRIC,
+		            DAY_AMMETER,
+		            BELONG_START_TIME,
+		            BELONG_END_TIME,
+		            STARTAMMETER,
+		            TOTALAMOUNT,
+		            MAX_READING,
+		            EXCEPTIONS_EXPLAIN,
+		            ACCESSORIES,
+		            LAST_TAKE_PHOTOS_TIME,
+		            TAKE_PHOTOS_PEOPLE_INFO,
+		            ELECTRIC_METER_DEG,
+		            THE_TAKE_PHOTOS_TIME,
+		            EXCEPTIONS1_EXPLAIN,
+		            BACKCALCULATION_PRICE,
+		            EXCEPTIONS2_EXPLAIN,
+		            EXCEPTIONS3_EXPLAIN,
+		            EXCEPTIONS4_EXPLAIN
+		        )
+		VALUES (
+		        #{exTendId,jdbcType=VARCHAR},
+		        #{watthourId,jdbcType=VARCHAR},
+		        #{whetherMeter,jdbcType=INTEGER},
+		        #{endAmmeter,jdbcType=VARCHAR},
+		        #{electricLoss,jdbcType=VARCHAR},
+		        #{unitPrice,jdbcType=VARCHAR},
+		        #{remarks,jdbcType=VARCHAR},
+		        #{totalEleciric,jdbcType=VARCHAR},
+		        #{dayAmmeter,jdbcType=INTEGER},
+		        #{belongStartTime,jdbcType=TIMESTAMP},
+		        #{belongEndTime,jdbcType=TIMESTAMP},
+		        #{startAmmeter,jdbcType=VARCHAR},
+		        #{totalAmount,jdbcType=VARCHAR},
+		        #{maxReadings,jdbcType=VARCHAR},		        
+		        #{exceptionsExplain,jdbcType=VARCHAR},
+		        #{accessories,jdbcType=VARCHAR},
+		        #{lastTakePhotosTime,jdbcType=TIMESTAMP},
+		        #{takePhotosPeopleInfo,jdbcType=VARCHAR},
+		        #{electricMeterDeg,jdbcType=VARCHAR},
+		        #{theTakePhotosTime,jdbcType=TIMESTAMP},
+		        #{exceptions1Explain,jdbcType=VARCHAR},
+		        #{backcalculationPrice,jdbcType=VARCHAR},
+		        #{exceptions2Explain,jdbcType=VARCHAR},
+		        #{exceptions3Explain,jdbcType=VARCHAR},
+		        #{exceptions4Explain,jdbcType=VARCHAR}
+		        )
+	</insert>
+
+    <insert id="saveInMiddle" parameterType="java.util.Map">
+		INSERT INTO
+		        SYS_ELE_MID_WATTHOUR(
+		          ID,
+		          SYS_ELECIRICITY_ID,
+		          SYS_WATTHOUR_EXTEND_ID
+		        )
+		VALUES(
+		  #{id,jdbcType=VARCHAR},
+		  #{sysEleciricityId,jdbcType=VARCHAR},
+		  #{sysWatthourExtendId,jdbcType=VARCHAR}
+		)
+	</insert>
+
+    <select id="findAllBySiteID" resultType="com.audit.modules.watthourmeter.entity.WatthourMeterVO"
+            parameterType="java.util.Map">
+        SELECT <include refid="columns"/>,
+                SAS.ELECTRICITY_TYPE AS powerType,
+                SAS.SUPPLY_COMPANY AS powerSupply,
+                sas.SHARE_TYPE AS shareEnable,
+                SAS.PAY_TYPE AS paymentType,
+		swe.STARTAMMETER,
+		swe.BELONG_START_TIME as belongStartTime,
+		swe.BELONG_END_TIME as belongEndTime,
+                <include refid="columnsExtend"/>
+        FROM SYS_ELECTRICITY se
+             LEFT JOIN SYS_ACCOUNT_SITE sas ON SE.SYS_ACCOUNT_SITE_ID = SAS.ID
+             left JOIN SYS_ELE_MID_WATTHOUR semw ON se.ID = semw.SYS_ELECIRICITY_ID
+             LEFT join SYS_WATTHOUR_EXTEND swe ON semw.SYS_WATTHOUR_EXTEND_ID =swe.ID
+             LEFT join SYS_WATTHOUR_METER swm ON swe.SYS_WATTHOUR_ID=swm.ID
+        WHERE se.id = #{id}
+		ORDER BY
+		<![CDATA[
+			substr(swm.CODE,0,"INSTR"(swm.CODE,'_')+4) ASC,
+			(CASE WHEN "INSTR"(swm.CODE,'_',3,2) >0 THEN "TO_NUMBER"("TO_CHAR"(substr(swm.CODE,"INSTR"(swm.CODE,'_',3,2)+1,10))) END) asc
+		]]>
+    </select>
+
+    <select id="findExtendBySiteIDs" parameterType="java.util.List" resultType="java.util.LinkedHashMap">
+        SELECT se.ID,
+                sum(swe.UNIT_PRICE) as price ,
+                sum(swe.TOTAL_ELECIRIC) as electricity,
+                sum(swe.UNIT_PRICE*swe.TOTAL_ELECIRIC) as amount,
+                sum(swe.DAY_AMMETER) as totalDay
+		FROM
+			SYS_ELECTRICITY se
+		LEFT JOIN SYS_ELE_MID_WATTHOUR semw ON semw.SYS_ELECIRICITY_ID = se.ID
+		LEFT JOIN SYS_WATTHOUR_EXTEND swe ON semw.SYS_WATTHOUR_EXTEND_ID = swe.ID
+        WHERE se.ID IN
+        <foreach collection="list" index="index" item="id" open="("
+                 separator="," close=")">
+            #{id}
+        </foreach>
+        GROUP BY se.ID
+    </select>
+
+    <select id="findWatthourExtendIDs" resultType="String">
+		SELECT SYS_WATTHOUR_EXTEND_ID FROM SYS_ELE_MID_WATTHOUR WHERE SYS_ELECIRICITY_ID=#{id}
+	</select>
+
+    <delete id="deleteMilldeWatthour">
+		DELETE SYS_ELE_MID_WATTHOUR WHERE SYS_ELECIRICITY_ID=#{id}
+	</delete>
+
+  <!--   <delete id="deleteWatthourExtends">
+        DELETE FROM SYS_FILE WHERE ID IN
+        <foreach collection="list" index="index" item="id" open="("
+                 separator="," close=")">
+            #{id}
+        </foreach>
+    </delete> -->
+    
+    
+     <delete id="deleteWatthourExtends">
+        DELETE FROM SYS_WATTHOUR_EXTEND
+        where
+         ID IN
+        <foreach collection="list" index="index" item="id" open="("
+                 separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="findAll" resultType="com.audit.modules.watthourmeter.entity.WatthourMeterVO">
+		SELECT
+			ID,CODE,PAYMENT_ACCOUNT_CODE AS paymentAccountCode ,TYPE AS ptype,STATUS AS status ,RATE AS rate,
+			MAX_READING AS maxReading,CURRENT_READING AS currentReading,REIMBURSEMENT_DATE AS reimbursementDate,
+			BELONG_ACCOUNT AS belongAccount
+		FROM SYS_WATTHOUR_METER
+	</select>
+
+    <insert id="batchSave" parameterType="com.audit.modules.watthourmeter.entity.WatthourMeterVO">
+        INSERT INTO SYS_WATTHOUR_METER(ID,CODE,PAYMENT_ACCOUNT_CODE,TYPE,STATUS,
+        RATE,MAX_READING,CURRENT_READING,REIMBURSEMENT_DATE,BELONG_ACCOUNT)
+        <foreach collection="list" index="index" item="watthour" separator="union all">
+            SELECT
+            #{watthour.id,jdbcType=VARCHAR},#{watthour.code,jdbcType=VARCHAR},#{watthour.paymentAccountCode,jdbcType=VARCHAR},#{watthour.ptype,jdbcType=INTEGER},
+            #{watthour.status,jdbcType=INTEGER},#{watthour.rate,jdbcType=DOUBLE},#{watthour.maxReading,jdbcType=DOUBLE},#{watthour.currentReading,jdbcType=DOUBLE},
+            #{watthour.reimbursementDate,jdbcType=TIMESTAMP},#{watthour.belongAccount,jdbcType=INTEGER}
+            FROM dual
+        </foreach>
+    </insert>
+
+    <update id="batchUpdate" parameterType="com.audit.modules.watthourmeter.entity.WatthourMeterVO">
+        begin
+        <foreach collection="list" item="item" index="index" separator=";">
+            UPDATE SYS_WATTHOUR_METER
+            <set>
+                <if test="item.id!=null and item.id!=''">
+                    ID = #{item.id},
+                </if>
+                <if test="item.code!=null and item.code!=''">
+                    CODE = #{item.code},
+                </if>
+                <if test="item.paymentAccountCode!=null and item.paymentAccountCode!=''">
+                    PAYMENT_ACCOUNT_CODE = #{item.paymentAccountCode},
+                </if>
+                <if test="item.ptype!=null and item.ptype!=''">
+                    TYPE = #{item.ptype},
+                </if>
+                <if test="item.status!=null and item.status!=''">
+                    STATUS = #{item.status},
+                </if>
+                <if test="item.rate!=null and item.rate!=''">
+                    RATE = #{item.rate},
+                </if>
+                <if test="item.maxReading!=null and item.maxReading!=''">
+                    MAX_READING = #{item.maxReading},
+                </if>
+                <if test="item.currentReading!=null and item.currentReading!=''">
+                    CURRENT_READING = #{item.currentReading},
+                </if>
+                <if test="item.reimbursementDate!=null">
+                    REIMBURSEMENT_DATE = #{item.reimbursementDate,jdbcType=TIMESTAMP},
+                </if>
+                <if test="item.belongAccount!=null and item.belongAccount!=''">
+                    BELONG_ACCOUNT = #{item.belongAccount},
+                </if>
+            </set>
+            WHERE id = #{item.id}
+        </foreach>
+        ;end;
+    </update>
+
+    <!-- 查询分页搜索 -->
+	<select id="getPageList" parameterType="java.lang.String" resultType="com.audit.modules.watthourmeter.entity.WatthourMeterVO">
+		SELECT
+		 <include refid="columns" />, sas.ACCOUNT_NAME as accountName, sas.OLD_FINANCE_NAME as oldFinanceName,
+		  sas.ID as accountSiteId, sas.CITY_ID as cityId, sas.COUNTY_ID as countyId,SC.PRICE as price
+		  ,swe.WHETHER_METER as whetherMeter,
+		swe.END_AMMETER as endAmmeter
+		FROM SYS_WATTHOUR_METER swm
+			LEFT JOIN SYS_SITE_MID_METER mswm ON mswm.WATTHOUR_METER_ID = swm.ID
+			LEFT JOIN SYS_ACCOUNT_SITE sas ON mswm.ACCOUNT_SITE_ID = sas. ID
+			LEFT JOIN SYS_SITE_MID_CONTRACT SSMC ON SSMC.ACCOUNT_SITE_ID = sas.ID
+			LEFT JOIN SYS_CONTRACT SC ON SC.ID = SSMC.CONTRACT_ID
+			LEFT JOIN SYS_WATTHOUR_EXTEND swe on swm.ID=swe.SYS_WATTHOUR_ID
+		WHERE 1=1
+		<if test="obj.CityId != null and obj.CityId!=''">
+			AND  sas.CITY_ID = #{obj.CityId,jdbcType=VARCHAR}
+		</if>
+		<if test="obj.CountyId != null and obj.CountyId!=''">
+			AND  sas.COUNTY_ID = #{obj.CountyId,jdbcType=VARCHAR}
+		</if>
+		<if test="obj.Id != null and obj.Id!=''">
+			AND  swm.Id = #{obj.Id,jdbcType=VARCHAR}
+		</if>
+		<if test="obj.AccountName != null and obj.AccountName!=''">
+			AND  sas.ACCOUNT_NAME LIKE '%'||#{obj.AccountName,jdbcType=VARCHAR}||'%'
+		</if>
+		<if test="obj.code != null and obj.code!=''">
+			AND  swm.CODE LIKE '%'||#{obj.code,jdbcType=VARCHAR}||'%'
+		</if>
+			AND sas.id is not null
+			order by swm.REIMBURSEMENT_DATE desc
+	</select>
+	
+
+     <!-- 依据ID查询单行数据 -->
+	<select id="selectById" resultType="com.audit.modules.watthourmeter.entity.WatthourMeterVO">
+		SELECT
+		 <include refid="columns" />, sas.ACCOUNT_NAME as accountName, sas.OLD_FINANCE_NAME as oldFinanceName,
+		  sas.ID as accountSiteId, sas.CITY_ID as cityId, sas.COUNTY_ID as countyId
+		FROM SYS_WATTHOUR_METER swm, SYS_SITE_MID_METER mswm, SYS_ACCOUNT_SITE sas
+		WHERE 1=1 AND mswm.WATTHOUR_METER_ID = swm.ID AND mswm.ACCOUNT_SITE_ID =sas.ID AND swm.ID = #{id}
+	</select>
+	
+	 <!-- 根据ID删除 -->
+	<delete id="delete">
+	    BEGIN
+		DELETE from SYS_WATTHOUR_METER WHERE ID IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        ;
+        DELETE from SYS_SITE_MID_METER WHERE WATTHOUR_METER_ID IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        ;
+        END;
+	</delete>
+	
+	 <!-- 保存或修改 -->
+	<insert id="saveOrUpdate" parameterType="com.audit.modules.watthourmeter.entity.WatthourMeterVO">
+	<selectKey keyProperty="count" resultType="int" order="BEFORE">
+		select count(*) from SYS_WATTHOUR_METER where ID = #{id}
+	</selectKey>
+	<!-- 修改信息 -->
+	<if test="count > 0">
+	    UPDATE SYS_WATTHOUR_METER 
+		<set>
+		<if test="paymentAccountCode != null">
+			PAYMENT_ACCOUNT_CODE = #{paymentAccountCode,jdbcType=VARCHAR},
+		</if>
+		<if test="ptype != null">
+			 TYPE = #{ptype,jdbcType=NUMERIC},
+		</if>
+		<if test="status != null">
+			 STATUS = #{status,jdbcType=NUMERIC},
+		</if>
+		<if test="rate != null">
+			 RATE = #{rate,jdbcType=NUMERIC},
+		</if>
+		
+		<if test="maxReading != null">
+			MAX_READING = #{maxReading,jdbcType=NUMERIC},
+		</if>
+		<if test="currentReadingStr != null">
+			 CURRENT_READING = #{currentReadingStr,jdbcType=VARCHAR},
+		</if>
+		<if test="reimbursementDateStr != null">
+			 REIMBURSEMENT_DATE = TO_DATE(substr(#{reimbursementDateStr,jdbcType=VARCHAR},1,10),'yyyy-mm-dd'),
+		</if>
+		<if test="belongAccount != null">
+			 BELONG_ACCOUNT = #{belongAccount,jdbcType=NUMERIC},
+		</if>
+		
+		<if test="damageNum != null">
+			 DAMAGE_NUM = #{damageNum,jdbcType=NUMERIC},
+		</if>
+		<if test="damageDate != null">
+			 DAMAGE_DATE = TO_DATE(substr(#{damageDate,jdbcType=VARCHAR},1,10),'yyyy-mm-dd'),
+		</if>
+		<if test="damageInnerNum != null">
+			 DAMAGE_INNER_NUM = #{damageInnerNum,jdbcType=NUMERIC},
+		</if>
+		<if test="electricLoss != null">
+			 ELECTRIC_LOSS = #{damageInnerNum,jdbcType=VARCHAR},
+		</if>
+		<if test="damageMeterNum != null">
+			 DAMAGE_METER_NUM = #{damageMeterNum,jdbcType=VARCHAR},
+		</if>
+		<if test="updateTimeStr != null">
+			 UPDATE_TIME = TO_DATE(substr(#{updateTimeStr,jdbcType=VARCHAR},1,10),'yyyy-mm-dd'),
+		</if>
+		</set>
+		WHERE ID = #{id}
+	</if>
+	<!-- 保存 -->
+	<if test="count == 0">
+	BEGIN  
+	   INSERT INTO SYS_WATTHOUR_METER
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID,
+			</if>
+			<if test="code != null">
+				CODE,
+			</if>
+			<if test="paymentAccountCode != null">
+				PAYMENT_ACCOUNT_CODE,
+			</if>
+			<if test="ptype != null">
+				TYPE,
+			</if>
+			<if test="status != null">
+				STATUS,
+			</if>
+			<if test="rate != null">
+				RATE,
+			</if>
+			<if test="maxReading != null">
+				MAX_READING,
+			</if>
+			<if test="currentReadingStr != null">
+				CURRENT_READING,
+			</if>
+			<if test="reimbursementDateStr != null">
+				REIMBURSEMENT_DATE,
+			</if>
+			<if test="belongAccount != null">
+				BELONG_ACCOUNT,
+			</if>
+			<if test="updateTimeStr != null">
+				UPDATE_TIME,
+			</if>
+			<if test="damageMeterNum != null">
+				DAMAGE_METER_NUM,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+		    <if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="code != null">
+				#{code,jdbcType=VARCHAR},
+			</if>
+			<if test="paymentAccountCode != null">
+				#{paymentAccountCode,jdbcType=VARCHAR},
+			</if>
+			<if test="ptype != null">
+				#{ptype,jdbcType=NUMERIC},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=NUMERIC},
+			</if>
+			 <if test="rate != null">
+				#{rate,jdbcType=NUMERIC},
+			</if>
+			<if test="maxReading != null">
+				#{maxReading,jdbcType=NUMERIC},
+			</if>
+			<if test="currentReadingStr != null">
+				#{currentReadingStr,jdbcType=VARCHAR},
+			</if>
+			<if test="reimbursementDateStr != null">
+				TO_DATE(substr(#{reimbursementDateStr,jdbcType=VARCHAR},1,10),'yyyy-mm-dd'),
+			</if>
+			<if test="belongAccount != null">
+				#{belongAccount,jdbcType=NUMERIC},
+			</if>
+			<if test="updateTimeStr != null">
+				TO_DATE(substr(#{updateTimeStr,jdbcType=VARCHAR},1,10),'yyyy-mm-dd'),
+			</if>
+			<if test="damageMeterNum != null">
+				#{damageMeterNum,jdbcType=VARCHAR},
+			</if>
+		</trim>
+		  ;
+		  INSERT INTO SYS_SITE_MID_METER
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="mid != null">
+				ID,
+			</if>
+			<if test="accountSiteId != null">
+				ACCOUNT_SITE_ID,
+			</if>
+			<if test="id != null">
+				WATTHOUR_METER_ID,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+		    <if test="mid != null">
+				#{mid,jdbcType=VARCHAR},
+			</if>
+			<if test="accountSiteId != null">
+				#{accountSiteId,jdbcType=VARCHAR},
+			</if>
+			<if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+		</trim>
+		; END;
+	</if>
+	
+    </insert>
+    
+    <!-- 更新旧表状态 ：损坏0  -->
+    <update id="updatState" parameterType="Integer">
+		UPDATE SYS_WATTHOUR_METER set STATUS = 0
+		WHERE 
+		 	ID = #{meterId,jdbcType=VARCHAR} 
+	</update>
+	
+</mapper>

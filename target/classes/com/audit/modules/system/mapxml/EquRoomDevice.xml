@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.site.dao.EquRoomDeviceDao">
+
+	<sql id="columns">
+		id,
+		EQUROOM_ID as equipmentRoomId,
+		EQUROOM_NAME as equipmentRoomName,
+		EQUROOM_TYPE as equipmentRoomType,
+		DEVICE_BELONG as deviceBelong,
+		DEVICE_ID as deviceId,
+		POWER_RATING as powerRating,
+		DEVICE_STATUS as deviceStatus,
+		DEVICE_TYPE as deviceType,
+		DEVICE_MODEL as deviceModel,
+		DEVICE_VENDOR as deviceVendor
+	</sql>
+
+	<select id="queryBySiteId" parameterType="java.lang.String" resultType="com.audit.modules.site.entity.EquRoomDevice">
+		SELECT <include refid="columns"/>
+		FROM
+		SYS_EQUROOM_POWER_RATING
+		where EQUROOM_ID in (select RESOURCE_ID from sys_site_mid_resource where ACCOUNT_SITE_ID = #{id})
+	</select>
+
+	<select id="queryBySiteIds" parameterType="java.util.List" resultType="com.audit.modules.site.entity.EquRoomDevice">
+    		SELECT <include refid="columns"/>
+    		FROM
+    		SYS_EQUROOM_POWER_RATING
+    		WHERE EQUROOM_ID in (select RESOURCE_ID from sys_site_mid_resource where ACCOUNT_SITE_ID in
+            		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            			#{item}
+            		</foreach> )
+    </select>
+
+	<select id="findAllByCountyID" parameterType="java.lang.String" resultType="com.audit.modules.site.entity.EquRoomDevice">
+		SELECT
+		INT_ID AS ID ,ZH_LABEL as equipmentRoomName
+		FROM ZG_SPACE_EQUIP_ROOM WHERE COUNTY_ID=#{countyID}
+	</select>
+	
+	<select id="getPowerRating" parameterType="com.audit.modules.basedata.entity.PowerRateManage" resultType="com.audit.modules.basedata.entity.PowerRateManage">
+		SELECT POWER_RATING as powerRating
+		FROM SYS_POWER_RATING
+		WHERE MODEL = #{deviceModel}
+		AND VENDOR = #{deviceVendor}
+		AND TYPE = #{deviceType}
+	</select>
+
+	<!-- <select id="findBySiteIds" parameterType="java.util.List" resultType="com.audit.modules.site.entity.SitePowerRatingEntity">
+		SELECT
+			sas.id AS siteId,
+			sas.account_name AS accountName,
+			zs.city_name AS cityName,
+			zsc.zh_label AS countyName,
+			epr.EQUROOM_NAME AS equipmentRoomName,
+			epr.EQUROOM_TYPE AS equipmentRoomType,
+			epr.DEVICE_BELONG AS deviceBelong,
+			epr.DEVICE_TYPE AS deviceType,
+			epr.DEVICE_MODEL AS deviceModel,
+			epr.DEVICE_VENDOR AS deviceVendor,
+			epr.DEVICE_STATUS AS deviceStatus,
+			epr.POWER_RATING AS powerRating
+		FROM sys_account_site sas
+		LEFT JOIN sys_site_mid_resource smr ON sas.id = smr.ACCOUNT_SITE_ID
+		LEFT JOIN SYS_EQUROOM_POWER_RATING epr ON smr.RESOURCE_ID = epr.EQUROOM_ID
+		LEFT JOIN ZG_SPACE_CITY zs ON sas.CITY_ID = zs.INT_ID
+		LEFT JOIN ZG_SPACE_COUNTY zsc ON sas.COUNTY_ID = zsc.INT_ID
+		WHERE sas.id in
+		<foreach collection="list" index="index" item="id" open="("
+				 separator="," close=")">
+			#{id}
+		</foreach>
+	</select>
+
+	<select id="findByTowerSiteIds" parameterType="java.util.List" resultType="com.audit.modules.site.entity.SitePowerRatingEntity">
+		SELECT
+		sas.id AS siteId,
+		sas.zy_name AS accountName,
+		zs.city_name AS cityName,
+		zsc.zh_label AS countyName,
+		epr.EQUROOM_NAME AS equipmentRoomName,
+		epr.EQUROOM_TYPE AS equipmentRoomType,
+		epr.DEVICE_BELONG AS deviceBelong,
+		epr.DEVICE_TYPE AS deviceType,
+		epr.DEVICE_MODEL AS deviceModel,
+		epr.DEVICE_VENDOR AS deviceVendor,
+		epr.DEVICE_STATUS AS deviceStatus,
+		epr.POWER_RATING AS powerRating
+		FROM sys_tower_account_site sas
+		left join zg_tower_room tr on sas.ZY_NAME = tr.RELATED_SITE
+		left join ZG_SPACE_EQUIP_ROOM er on tr.yw_code = er.TOWER_ROOM_CODE
+		LEFT JOIN SYS_EQUROOM_POWER_RATING epr ON er.int_id = epr.EQUROOM_ID
+		LEFT JOIN ZG_SPACE_CITY zs ON sas.CITY_ID = zs.INT_ID
+		LEFT JOIN ZG_SPACE_COUNTY zsc ON sas.COUNTY_ID = zsc.INT_ID
+		WHERE sas.id in
+		<foreach collection="list" index="index" item="id" open="("
+				 separator="," close=")">
+			#{id}
+		</foreach>
+	</select> -->
+	
+	<select id="findBySiteIds" parameterType="java.util.List" resultType="com.audit.modules.site.entity.SitePowerRatingEntity">
+		SELECT
+			sas.id AS siteId,
+			sas.account_name AS accountName,
+			zs.NAME AS cityName,
+			zsc.NAME AS countyName,
+			epr.EQUROOM_NAME AS equipmentRoomName,
+			epr.EQUROOM_TYPE AS equipmentRoomType,
+			epr.DEVICE_BELONG AS deviceBelong,
+			epr.DEVICE_TYPE AS deviceType,
+			epr.DEVICE_MODEL AS deviceModel,
+			epr.DEVICE_VENDOR AS deviceVendor,
+			epr.DEVICE_STATUS AS deviceStatus,
+			epr.POWER_RATING AS powerRating
+		FROM sys_account_site sas
+		LEFT JOIN sys_site_mid_resource smr ON sas.id = smr.ACCOUNT_SITE_ID
+		LEFT JOIN SYS_EQUROOM_POWER_RATING epr ON smr.RESOURCE_ID = epr.EQUROOM_ID
+		LEFT JOIN YDJH_AREA zs ON sas.CITY_ID = zs.ID
+		LEFT JOIN YDJH_AREA zsc ON sas.COUNTY_ID = zsc.ID
+		WHERE sas.id in
+		<foreach collection="list" index="index" item="id" open="("
+				 separator="," close=")">
+			#{id}
+		</foreach>
+	</select>
+
+	<select id="findByTowerSiteIds" parameterType="java.util.List" resultType="com.audit.modules.site.entity.SitePowerRatingEntity">
+		SELECT
+		sas.id AS siteId,
+		sas.zy_name AS accountName,
+		zs.NAME AS cityName,
+		zsc.NAME AS countyName,
+		epr.EQUROOM_NAME AS equipmentRoomName,
+		epr.EQUROOM_TYPE AS equipmentRoomType,
+		epr.DEVICE_BELONG AS deviceBelong,
+		epr.DEVICE_TYPE AS deviceType,
+		epr.DEVICE_MODEL AS deviceModel,
+		epr.DEVICE_VENDOR AS deviceVendor,
+		epr.DEVICE_STATUS AS deviceStatus,
+		epr.POWER_RATING AS powerRating
+		FROM sys_tower_account_site sas
+		left join zg_tower_room tr on sas.ZY_NAME = tr.RELATED_SITE
+		left join ZG_SPACE_EQUIP_ROOM er on tr.yw_code = er.TOWER_ROOM_CODE
+		LEFT JOIN SYS_EQUROOM_POWER_RATING epr ON er.int_id = epr.EQUROOM_ID
+		LEFT JOIN YDJH_AREA zs ON sas.CITY_ID = zs.ID
+		LEFT JOIN YDJH_AREA zsc ON sas.COUNTY_ID = zsc.ID
+		WHERE sas.id in
+		<foreach collection="list" index="index" item="id" open="("
+				 separator="," close=")">
+			#{id}
+		</foreach>
+	</select>
+	
+</mapper>

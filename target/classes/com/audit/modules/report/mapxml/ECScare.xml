@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.report.dao.ECScareDao">
+  <resultMap id="BaseResultMap" type="com.audit.modules.report.entity.ECScare">
+    <id column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="CITY_ID" jdbcType="VARCHAR" property="cityId" />
+    <result column="COUNTY_ID" jdbcType="VARCHAR" property="countyId" />
+    <result column="REGION_NAME" jdbcType="VARCHAR" property="regionName" />
+    <result column="STASTIC_TIME" jdbcType="TIMESTAMP" property="stasticTime" />
+    <result column="AVARAGE_INCOME_SCARE" jdbcType="VARCHAR" property="avarageIncomeScare" />
+    <result column="INCOME_SCARE" jdbcType="VARCHAR" property="incomeScare" />
+    <result column="COST_SCARE" jdbcType="VARCHAR" property="costScare" />
+    <result column="AVARAGE_COST_SCARE" jdbcType="VARCHAR" property="avarageCostScare" />
+    <result column="TYPE_CODE" jdbcType="VARCHAR" property="typeCode" />
+    <result column="YEAR" jdbcType="VARCHAR" property="year" />
+    
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, CITY_ID, COUNTY_ID, REGION_NAME, STASTIC_TIME, INCOME_SCARE, COST_SCARE, TYPE_CODE,Year
+    , AVARAGE_INCOME_SCARE, AVARAGE_COST_SCARE
+  </sql>
+   <select id="findByCodeTypeAndYear"  resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from SYS_STASTIC_EC_SCARE
+    where TYPE_CODE = #{typeCode,jdbcType=VARCHAR}
+     AND YEAR = #{year,jdbcType=VARCHAR}
+  </select>
+</mapper>

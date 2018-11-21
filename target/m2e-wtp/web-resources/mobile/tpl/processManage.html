@@ -1,0 +1,137 @@
+<!-- 流程管理 -->
+ <div class="system-content" id="systemContent" style="overflow: hidden;">
+    <div class="business-box" id="businessBox">
+        <div class="content-rout" id="contentRout"><span>流程管理</span></div>
+        <div class="content-box" id="contentBox">
+            <!-- title -->
+            <div class="search-box">
+                <div>
+
+                    <select name=""
+                            id="cityName"
+                            ng-model="city"
+                            ng-options="city.key as city.value for city in citys"
+                            ng-change="queryCountyList(city)"
+                            class="title-select">
+                         <option value="">全省</option>
+                    </select>
+
+
+                    <select class="title-select"
+                            id="county"
+                            ng-model="county"
+                            class="title-select"
+                            ng-options="county.value as county.value for county in countys">
+                        <option value="">全市</option>
+                    </select>
+                    
+                    <select class="title-select"
+                            ng-model="type"
+                            class="title-select">
+                        <option value="">流程类型</option>
+                        <option value="mandimension">自维电费管理</option>
+                        <option value="pagodadimension">塔维电费管理</option>
+                        <option value="basicdata">基础数据变更管理</option>
+                         <option value="mandimensionpre">自维预付管理</option>
+                         <option value="transelepower">转供电管理</option>
+                    </select>
+
+                    <!--<select name="" id=""  class="title-select"><option value=""></option></select>-->
+
+
+                    <!--<select class="title-select"><option value=""></option></select>-->
+                    <input ng-model="name" type="text" placeholder="流程名称" class="process-input" style="width: 22.54%">
+                </div>
+                <button ng-click="getData()" class="btn btn-primary" type="button">搜索</button>
+            </div>
+            <!-- table-content -->
+            <div class="table-content">
+                <!-- table-title -->
+                <div class="table-title">
+                    <button ng-click="goAddPage()" class="btn btn-blue">新增审批流程</button>
+                </div>
+                <!-- table -->
+                <div class="data-table">
+                    <!--<table class="table-result" id="tableResult">-->
+                        <!--<colgroup>-->
+                            <!--<col style="width:10%" />-->
+                            <!--<col style="width:20%" />-->
+                            <!--<col style="width:7%" />-->
+                            <!--<col style="width:20%" />-->
+                            <!--<col style="width:30%" />-->
+                            <!--<col style="width:13%" />-->
+                        <!--</colgroup>-->
+                        <!--<thead>-->
+                          <!---->
+                        <!--</thead>-->
+                    <!--</table>-->
+                    <div class="table-details basic-table">
+                        <div>
+                            <table>
+                                <colgroup>
+                                    <col style="width:10%" />
+                                    <col style="width:20%" />
+                                    <col style="width:7%" />
+                                    <col style="width:20%" />
+                                    <col style="width:30%" />
+                                    <col style="width:13%" />
+                                </colgroup>
+                                <tbody class="query-date">
+                                <tr>
+                                    <th>流程名称</th>
+                                    <th>流程说明</th>
+                                    <th>用户地市</th>
+                                    <th>用户区县</th>
+                                    <th>流程类型</th>
+                                    <th>操作</th>
+                                </tr>
+                                    <tr ng-repeat="item in list track by $index">
+                                        <td>{{item.name}}</td>
+                                        <td>{{item.desc}}</td>
+                                        <td>{{item.cityStr}}</td>
+                                        <td>{{item.countyStr}}</td>
+                                        <td>{{item.typeStr}}</td>
+                                        <td>
+                                            <a ng-click="goUpdatePage(item)"  class="check-detail">查看</a>
+                                            <a ng-click="goUpdatePage(item,true)" class="edit-process">修改</a>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                    <div class="page-foot">
+                        <im-pagination class="page-list2 ng-isolate-scope" conf="pageInfo" params="params" get-data="getData()"></im-pagination>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/ng-template" id="showDetailDialog">
+    <h4 style="text-align: center">公告详情</h4>
+
+    <div class="content-box">
+        <div class="content-box">
+            <div class="add-user">
+                <form name="form">
+                    <ul class="user-list">
+                        <li><span>公告标题:</span><input ng-model="notice.title" name="title" type="text" readonly></li>
+                        <li><span>开始时间:</span><input  ng-model="notice.startDateStr" name="startDate" type="text"readonly></li>
+                        <li><span class="end-time">结束时间:</span><input  ng-model="notice.endDateStr" name="endDate" type="text" readonly></li>
+                        <li><span>公告内容:</span><textarea ng-model="notice.message" name="message" id="" cols="80" rows="8" readonly style="width: 380px;"></textarea></li>
+                    </ul>
+                    <div class="submit-btn" style="text-align: center">
+                        <input ng-click="closeDialog()" type="button" value="关闭" class="save">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</script>

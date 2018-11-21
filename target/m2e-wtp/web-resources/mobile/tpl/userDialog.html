@@ -1,0 +1,52 @@
+<!-- 流程角色添加 -->
+<div class="role-select">
+    <h4 style="padding:10px; text-align:center;">新增审批人</h4>
+    <div class="search-box" >
+        <div>
+            <input class=" form-control" ng-model="key.word" placeholder="账号／姓名" type="text">
+        </div>
+        <button type="button" ng-click="getData()" class="btn btn-primary">查找</button> 
+    </div>
+    <div class="data-table">
+        <table class="table-result" id="tableResult">
+            <colgroup>
+                <col style="width:40%" />
+                <col style="width:20%" />
+                <col style="width:20%" />
+                <col style="width:20%" />
+            </colgroup>
+            <thead>
+            <tr>
+                <th>姓名</th>
+                <th>地市</th>
+                <th>区县</th>
+                <th>选择</th>
+            </tr>
+            </thead>
+        </table>
+        <div class="table-details">
+            <div>
+                <table>
+                    <colgroup>
+                        <col style="width:40%" />
+                        <col style="width:20%" />
+                        <col style="width:20%" />
+                        <col style="width:20%" />
+                    </colgroup>
+                    <tbody class="query-date">
+                    <tr ng-repeat="item in userList track by $index">
+                        <td>{{item.userName}}</td>
+                        <td>{{item.cityStr}}</td>
+                        <td>{{item.countyStr}}</td>
+                        <td><a ng-click="choiceUsers(item)" class="check-detail">选择</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        <div style="text-align:right; padding-right:20px;">
+            <im-pagination conf="pageInfo" params="params" get-data="getData()"></im-pagination>
+        </div>
+    </div>
+</div>

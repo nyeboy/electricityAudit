@@ -1,0 +1,49 @@
+<!--系统操作日志列表-->
+<div class="system-content">
+    <div class="business-box" id="businessBox">
+        <div class="content-rout" id="contentRout">
+            <span>系统管理</span>&gt;<span class="now-rout">操作日志管理</span>
+            <div class="hbox hbox-auto-xs hbox-auto-sm" style=" background-color:#fff; padding: 20px;">
+                <div class="bg-light lter b-b wrapper-md ng-scope" style="margin-bottom: 40px;">
+                    <h1 class="m-n font-thin h3">操作日志</h1>
+                </div>
+
+                <div class="wrapper-md ">
+
+                    <div class="panel panel-default">
+
+                        <div class="table-responsive">
+                            <table class="table table-striped b-t b-light">
+                                <thead>
+                                <tr>
+                                    <th>用户名</th>
+                                    <th>帐号</th>
+                                    <th>操作地址</th>
+                                    <th>操作类型</th>
+                                    <th>操作时间</th>
+                                    <th>IP地址</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                <tr  ng-repeat="item in list track by $index">
+                                    <td>{{item.userName}}</td>
+                                    <td>{{item.account}}</td>
+                                    <td>{{item.uri}}</td>
+                                    <td>{{item.type|logTypeFilter}}</td>
+                                    <td>{{item.createTime|date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                                    <td>{{item.loginIP}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="page-foot">
+                            <im-pagination class="" conf="pageInfo" params="params" get-data="getData()"></im-pagination>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

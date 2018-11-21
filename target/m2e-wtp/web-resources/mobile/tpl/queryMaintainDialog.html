@@ -1,0 +1,49 @@
+<!-- 维护数据修改查看详情 -->
+<div class="basic-container query-maintain">
+    <div>
+        <div class="ledge-title">原数据详情</div>
+        <div class="ledge-table">
+            <table>
+                <tbody>
+                    <tr ng-repeat="item in object.originalDataList track by $index">
+                        <td ng-if="item.left.key != null">  
+                            <span class="table-left">{{item.left.key}}:</span>
+                            <input type="text" disabled = "disabled" name="" class="table-right" value="{{item.left.value}}">
+                        </td>
+                        <td ng-if="item.mid.key != null">
+                            <span class="table-left">{{item.mid.key}}:</span>
+                            <input type="text" disabled = "disabled" name="" class="table-right" value="{{item.mid.value}}">
+                        </td>
+                        <td ng-if="item.right.key != null">
+                            <span class="table-left">{{item.right.key}}:</span>
+                            <input type="text" disabled = "disabled" name="" class="table-right" value="{{item.right.value}}">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- 修改日志-->
+        <div class="ledge-title ledge-sub" ng-if="object.modifyLogList.length > 0">修改日志</div>
+        <div class="invoinc-table" ng-if="object.modifyLogList.length > 0">
+            <div class="table-details invoinc-list">
+                <div>
+                    <table>
+                        <colgroup>
+                            <col style="width:75%" />
+                            <col style="width:25%" />
+                        </colgroup>
+                        <tbody class="query-date">
+                            <tr ng-repeat="item in object.modifyLogList track by $index">
+                                <td>{{item.log}}</td>
+                                <td>{{item.time}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="reimbur-foot ledge-foot">
+        <button ng-click="closeDialog()" class="reimbur-save btn">关闭</button>
+    </div>
+</div>

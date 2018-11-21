@@ -1,0 +1,113 @@
+<!-- 新增稽核单 -->
+<div class="system-content" id="systemContent" style="margin-bottom: 60px;">
+    <div class="business-box" id="businessBox" style="padding-bottom: 0px;">
+        <div class="content-rout" id="contentRout">
+            <span>基础数据维护</span>&gt;<span class="now-rout">白名单详情</span>
+        </div>
+        <div class="content-box" id="contentBox">
+            <div class="ledge-detail">
+                <div class="ledge-title">白名单新增</div>
+                <div class="ledge-table">
+                    <table>
+                        <tbody>
+                        	<tr>
+                                <td>
+                                    <span class="table-left">三重一大会议编号:</span>
+                                    <input ng-model="siteInfo.szydNo" type="text"  name="szydNo" class="table-right" disabled="disabled">
+                                </td>
+                                <td>
+                                    <span class="table-left">录入员:</span>
+                                    <input ng-model="siteInfo.cperson" disabled="disabled"  type="text"  name="" class="table-right" >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="table-left">会议通过时间:</span>
+                                    <input
+									readOnly="true" ng-laydate id="id1"
+									ng-model="siteInfo.szydBeginTime" format="YYYY-MM-DD" type="text"
+									placeholder="开始时间" class="process-input con-parts" name="szydBeginTime" disabled="disabled">
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                   	<span class="table-left">三重一大附件:</span>
+									<select >
+										<option >--已上传附件--</option>
+										<option ng-repeat="item in fjslist" value="{{item.filename}}">{{item.filename}}</option>
+								</select> 
+                                </td>
+                            </tr>
+                            <tr ng-show="flag">
+                            	<td>
+                            		<button ng-show="fjflag1" disabled="disabled"  ng-click="fj1()"  class="reimbur-save btn">附件1</button>
+                            		<button ng-show="!fjflag1"   ng-click="fj1()"  class="reimbur-save btn">附件1</button>
+                            		<button ng-show="fjflag2" disabled="disabled"  ng-click="fj2()"  class="reimbur-save btn">附件2</button>
+                            		<button ng-show="!fjflag2"   ng-click="fj2()"  class="reimbur-save btn">附件2</button>
+                            		<button ng-show="fjflag3" disabled="disabled"  ng-click="fj3()"  class="reimbur-save btn">附件3</button>
+                            		<button ng-show="!fjflag3"   ng-click="fj3()"  class="reimbur-save btn">附件3</button>
+                            	</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="ledge-title ledge-sub">备注信息</div>
+                <div class="remark">
+                    <textarea ng-model="bz"  name="" id="bz" class="textarea"></textarea>
+                </div>
+               	<div class="ledge-title ledge-sub">站点信息
+<!--                	<span style="color: red" ng-model="shengyucity">{{shengyucity}}</span ><span style="color: red">剩余可添加白名单数</span><span style="color: red" ng-model="shengyu">{{shengyu}}</span>
+ -->               	<!-- <button ng-click="goupload()" class="reimbur-save btn">导入</button> --></div>
+               	<div class="table-content">
+                <!-- table -->
+                <div class="data-table">
+
+                    <div class="table-details">
+                        <div>
+                            <table>
+                                <tbody class="query-date">
+                                 <tr>
+                               		<th>序号</th>
+                               		<th>地市</th>
+                               		<th>区县</th>
+                               		<th>站点名称</th>
+                               		<th>合同编号</th>
+                              		<th>供应商名称</th>
+                               		<th>白名单场景</th>
+                               		<th>操作</th> 
+                            	</tr>
+                            	<tr ng-repeat="item in siteInfo.whiteSubmitLists track by $index">
+                                        <td>{{$index+1}}</td>
+                                        <td>{{item.cityName}}</td>
+                                        <td>{{item.zhLabel}}</td>
+                                        <td>{{item.ziguanName}}</td>
+                                        <td>{{item.contractId}}</td>
+                                        <td>{{item.supplyName}}</td>
+                                        <td>{{item.cj|whiteType}}</td>
+                                        <td>
+                                        	<a ng-click="showSiteDetail(item)" class="check-detail" >详情</a>
+                                        	<!-- <a ng-click="delWhiteMgByid(item)" class="edit-process">删除</a> -->
+                                        </td> 
+                                 </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+						
+                    </div>
+                    <div class="page-foot">
+                                <im-pagination  conf="pageInfo" params="params" get-data="getData()"></im-pagination>
+                            </div>
+                </div>
+                <div class="reimbur-foot ledge-foot" style="margin-top:0px; padding-bottom:80px;">
+                    <!-- <button ng-click="saveWhiteMgSubmit(1)" class="reimbur-save btn">提交审批</button> -->
+                    <!-- <button ng-click="saveWhiteMgSubmit(0)" class="reimbur-save btn">保存</button> -->
+                    <button ng-click="closewindow()" class="reimbur-save btn">取消</button>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+

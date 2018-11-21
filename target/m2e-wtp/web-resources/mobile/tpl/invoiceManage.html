@@ -1,0 +1,88 @@
+<!-- 发票信息管理 -->
+<div class="system-content">
+    <div class="business-box" id="businessBox">
+        <div class="content-rout" id="contentRout">
+            <span>基础数据</span>&gt;<span>基础数据维护</span>&gt;<span class="now-rout">发票信息管理</span>
+        </div>
+       <!--  <div class="content-box trariffc-table" id="contentBox">
+            <div class="search-box">
+                <div>
+                    <select name="" id="" class="title-select" 
+                            ng-model="cityId"
+                            ng-options="city.key as city.value for city in citys"
+                            ng-change="queryCountyList(cityId)">
+                            <option value="">全省</option>
+                    </select>
+
+                    <select class="title-select" 
+                            ng-model="countyId"
+                            ng-options="county.key as county.value for county in countys">
+                    		<option value="">全市</option>
+                    </select>
+                    <input  ng-model="billType" name="" type="text">
+                    <input ng-laydate
+                           id="id1"
+                           ng-model="createDateStr"
+                           format="YYYY-MM-DD"
+                           type="text" placeholder="时间" class="process-input con-parts" name=""/>
+                    <input ng-model="createDate" type="text" placeholder="时间" class="process-input con-parts" name="">
+                </div>
+                <button ng-click="getData()" class="btn btn-primary" type="button">搜索</button>
+            </div> -->
+            <div class="table-content invoice-page">
+                 <div class="table-title">
+                    <button ng-click="showAddDialog()" class="btn btn-blue">+ 新增发票</button>
+                    <button ng-click="deleteSelected()" class="btn btn-blue">批量删除</button>
+                </div>
+                <!-- table -->
+                <div class="data-table">
+
+                    <div class="table-details">
+                        <div>
+                            <table>
+
+                                <tbody class="query-date" id="select-invoice">
+                                    <tr>
+                                       <th><input ng-click="checkAll('#checkAll','#select-invoice')" id="checkAll"  type="checkbox" ></th>
+                                       <th>发票类型</th>
+                                       <th>税率</th>
+                                       <th>开票系数</th>
+                                       <th>最近一次修改时间</th>
+                                       <th>操作</th>
+                                    </tr>
+                                <!--"id": "1",-->
+                                <!--"billTax": "17",-->
+                                <!--"billType": "分割单 ",-->
+                                <!--"billCoefficient": "1.1944",-->
+                                <!--"createDate": 1489445805218,-->
+                                <!--"modifyDate": null,-->
+                                <!--"count": 0-->
+
+
+                                    <tr ng-repeat="item in list track by $index" id="list">
+                                        <td><input type="checkbox" value="{{item.id}}"></td>
+                                        <td>{{item.billType}}</td>
+                                        <td>{{item.billTax}}%</td>
+                                        <td>{{item.billCoefficient}}</td>
+                                        <td>{{item.modifyDate | date:"yyyy-MM-dd "}}</td>
+                                        <td class="through">
+                                            <img src="./assets/img/editor_icon.png">
+                                            <a ng-click="showAddDialog(item)" href="javascript:void(0)" class="browse">修改</a>
+                                            <img src="./assets/img/delet.png">
+                                            <a ng-click="deleteSelected(item.id)" href="javascript:void(0)" class="browse">删除</a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                        </div>
+                        <div class="page-foot" style="right: 20px;">
+                            <im-pagination  conf="pageInfo" params="params" get-data="getData()"></im-pagination>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

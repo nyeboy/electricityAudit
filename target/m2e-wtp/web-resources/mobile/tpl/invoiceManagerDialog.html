@@ -1,0 +1,26 @@
+ <!-- 
+    发票信息修改
+  -->
+<div class="ngdialog-content" role="document" style="width: 605px; padding-bottom: 0px;">
+<div class="reimbur-dialog-title">发票信息新增/修改</div>
+<div class="business-box" id="businessBox">
+    <div class="contract-edit">
+        <form action="">
+            <ul class="user-list">
+                <li><span>发票类型:</span><input  ng-model="invoice.billType" name="" type="text"></li>
+                <li><span>发票税率:</span><input ng-model="invoice.billTax" name="" type="text" placeholder="请输入0~100的数值"></li>
+                <li><span>开票系数:</span><input  ng-model="invoice.billCoefficient" name="" type="text"></i></li>
+               <!--  <li><span>合同名称:</span><input  type="text" name="" value="{{contract.name}}" ><i class="error"></i></li> -->
+            </ul>
+            <!-- 查看时隐藏该功能 -->
+            <div class="submit-btn" style="padding-left: 0px;">               
+                <button ng-click="closeDialog('addDialog')" class="reimbur-cancel btn">取消</button>
+            <button ng-click="addOrUpdate()" class="reimbur-save btn">保存</button>
+            </div>
+        </form>
+    </div>
+</div>
+     </div>
+     <style type="text/css">
+.contract-edit .user-list li span{ width: 80px; }
+     </style>

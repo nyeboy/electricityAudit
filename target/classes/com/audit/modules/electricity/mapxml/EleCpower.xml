@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.electricity.dao.JobDao">
+
+	<insert id="insertByJobNum" parameterType="com.audit.modules.electricity.entity.EleCpowerJobVO">
+		INSERT INTO SYS_ELE_CPOWER_JOB(ELECTRICITY_ID,JOB_NUM,CREATE_JOB_TIME,TYPE)
+		VALUES(#{electricity_id},#{job_num},#{create_job_time},#{type})
+	</insert>
+	
+	<insert id="insertByDescription" parameterType="com.audit.modules.electricity.entity.EleCpowerJobVO">
+		INSERT INTO SYS_ELE_CPOWER_JOB(ELECTRICITY_ID,FAILED_DESC,CREATE_JOB_TIME,TYPE)
+		VALUES(#{electricity_id},#{failed_desc},#{create_job_time},#{type})
+	</insert>
+	
+	<select id="getWatthourExtendByEleID" parameterType="java.lang.String" resultType="com.audit.modules.watthourmeter.entity.WatthourExtendVO">
+		SELECT 	SWE.SYS_WATTHOUR_ID AS watthourId,
+				SWE.TOTAL_ELECIRIC AS totalEleciric,
+				SWE.DAY_AMMETER AS dayAmmeter,
+			 	(SELECT SYS_ACCOUNT_SITE_ID FROM SYS_ELECTRICITY WHERE ID = #{eleid}) AS accountid
+			FROM SYS_ELE_MID_WATTHOUR SEMW
+			LEFT JOIN SYS_WATTHOUR_EXTEND SWE ON( SEMW.SYS_WATTHOUR_EXTEND_ID = SWE."ID")
+		WHERE SEMW.SYS_ELECIRICITY_ID = #{eleid}
+	</select>
+
+</mapper>

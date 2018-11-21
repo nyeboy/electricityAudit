@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.basedata.dao.AccountSitePSUDao">
+	<resultMap id="BaseResultMap" type="com.audit.modules.basedata.entity.AccountSitePSU">
+		<result column="ID" jdbcType="VARCHAR" property="id" />
+		<result column="SITE_NAME" jdbcType="VARCHAR" property="siteName" />
+		<result column="ACCOUNT_NAME" jdbcType="VARCHAR" property="accountName" />
+		<result column="ACCOUNT_ALIAS" jdbcType="VARCHAR" property="accountAlias" />
+		<result column="CITY_ID" jdbcType="VARCHAR" property="cityId" />
+		<result column="COUNTY_ID" jdbcType="VARCHAR" property="countyId" />
+		<result column="ELECTRICITY_TYPE" jdbcType="VARCHAR" property="electricityType" />
+		<result column="SUPPLY_COMPANY" jdbcType="VARCHAR" property="supplyCompany" />
+		<result column="SHARE_TYPE" jdbcType="VARCHAR" property="shareType" />
+		<result column="PAY_TYPE" jdbcType="VARCHAR" property="payType" />
+		<result column="UPDATETIME" jdbcType="VARCHAR" property="updateTime" />
+	</resultMap>
+
+	<select id="queryPageAccountSitePSU" parameterType="com.audit.modules.common.mybatis.PageUtil"
+		resultMap="BaseResultMap">
+		SELECT
+		ID, SITE_NAME, ACCOUNT_NAME,
+		ACCOUNT_ALIAS, CITY_ID, COUNTY_ID,
+		ELECTRICITY_TYPE, SUPPLY_COMPANY, SHARE_TYPE, PAY_TYPE,TO_CHAR(UPDATE_TIME,'yyyy-MM-dd') UPDATETIME
+		FROM SYS_ACCOUNT_SITE
+		WHERE 1=1
+			AND SUPPLY_COMPANY IS NOT NULL
+			AND ELECTRICITY_TYPE IS NOT NULL
+			AND SHARE_TYPE IS NOT NULL
+			AND PAY_TYPE IS NOT NULL
+		<if test="null != obj.accountName and obj.accountName!=''">AND (INSTR(ACCOUNT_NAME,#{obj.accountName}) > 0 OR
+			INSTR(ACCOUNT_ALIAS,#{obj.accountName}) > 0)</if>
+		<if test="null != obj.cityId and obj.cityId!=''">AND CITY_ID = #{obj.cityId}</if>
+		<if test="null != obj.countyId and obj.countyId!=''">AND COUNTY_ID = #{obj.countyId}</if>
+		<if test="null != obj.electricityType and obj.electricityType!=''">AND ELECTRICITY_TYPE = #{obj.electricityType}</if>
+		Order By ID DESC
+	</select>
+	
+	<select id="queryAccountSitePSUBYId" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		SELECT
+		ID, SITE_NAME, ACCOUNT_NAME,
+		ACCOUNT_ALIAS, CITY_ID, COUNTY_ID,
+		ELECTRICITY_TYPE, SUPPLY_COMPANY, SHARE_TYPE, PAY_TYPE, TO_CHAR(UPDATE_TIME,'yyyy-MM-dd') UPDATETIME
+		FROM SYS_ACCOUNT_SITE
+		WHERE ID = #{accountSitePSUId,jdbcType=VARCHAR}
+	</select>
+
+	<update id="updateSelective" parameterType="com.audit.modules.basedata.entity.AccountSitePSU">
+		UPDATE SYS_ACCOUNT_SITE
+		<set>
+			<if test="electricityType != null">
+				ELECTRICITY_TYPE = #{electricityType,jdbcType=VARCHAR},
+			</if>
+			<if test="supplyCompany != null">
+				SUPPLY_COMPANY = #{supplyCompany,jdbcType=VARCHAR},
+			</if>
+			<if test="shareType != null">
+				SHARE_TYPE = #{shareType,jdbcType=VARCHAR},
+			</if>
+			<if test="payType != null">
+			    PAY_TYPE = #{payType,jdbcType=VARCHAR},
+			</if>
+			<if test="updateTime != null">
+			    UPDATE_TIME = TO_DATE(#{updateTime,jdbcType=VARCHAR},'yyyy-MM-dd'),
+			</if>
+		</set>
+		WHERE
+		ID = #{id,jdbcType=VARCHAR}
+	</update>
+	<update id="clearByIDs" parameterType="com.audit.modules.basedata.entity.AccountSitePSU">
+		UPDATE SYS_ACCOUNT_SITE
+		<set>
+			ELECTRICITY_TYPE = '',
+			SUPPLY_COMPANY = '',
+			SHARE_TYPE = '',
+			payType = '',
+		</set>
+		WHERE 
+		ID IN
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+	</update>
+</mapper>

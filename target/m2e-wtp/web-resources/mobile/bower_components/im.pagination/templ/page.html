@@ -1,0 +1,23 @@
+<div class="page-list">
+
+    <ul class="pagination" ng-show="conf.totalCount > 0">
+        
+        <li ng-class="{disabled: params.page == 1}" ng-click="prevPage()" class="disabled"><span>«</span>
+        </li>
+		
+        <li ng-repeat="item in pages track by $index" ng-class="{active: item == params.page}" ng-click="showPage(item)"><span>{{item}}</span>
+        </li>
+        
+        <li ng-class="{disabled: params.page == conf.pageCount}" ng-click="nextPage()"><span>»</span>
+        </li>
+
+    </ul>
+
+	<div class="page-total" ng-show="conf.totalCount > 0">每页
+        <select ng-model="params.rows" ng-options="option for option in conf.pageOptions " ng-change="changeRows()" class="">条
+        </select>/共<strong class="ng-binding">{{conf.totalCount}}</strong>条 跳转至
+        <input type="text" ng-model="jumpPageNum" ng-keyup="jumpPageKeyUp($event)" class="ng-pristine ng-untouched ng-valid ng-empty">
+    </div>
+
+    <div class="no-items ng-hide" style="text-align: center;" ng-show="conf.totalCount <= 0">暂无数据!</div>
+</div>

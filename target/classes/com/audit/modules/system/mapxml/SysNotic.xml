@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.system.dao.SysNoticeDao">
+	
+	<!-- 查询所有列表 -->
+	<select id="queryNoticByPage" parameterType="com.audit.modules.common.mybatis.PageUtil" resultType="com.audit.modules.system.entity.SysNoticVo">
+		SELECT
+			NOTIC_ID as noticId,
+			TO_CHAR(START_DATE, 'yyyy-MM-dd') as startDateStr,
+			TO_CHAR(END_DATE, 'yyyy-MM-dd') as endDateStr,
+			USER_NAME as userName,
+			TITLE as title,
+			MESSAGE as message
+		FROM
+			SYS_NOTIC WHERE 1=1
+		    <if test="null != obj.startDateStr">
+		    <![CDATA[AND START_DATE >= TO_DATE(#{obj.startDateStr,jdbcType=VARCHAR},'yyyy-MM-dd')]]>
+		    </if>
+		    <if test="null != obj.endDateStr">
+		    <![CDATA[AND END_DATE <= TO_DATE(#{obj.endDateStr,jdbcType=VARCHAR},'yyyy-MM-dd')]]>
+		    </if>
+		    ORDER BY CREATE_DATE DESC NULLS LAST
+	</select>
+	
+	<!-- 查询所有公告 -->
+	<select id="queryAllNotice" resultType="com.audit.modules.system.entity.SysNoticVo">
+		SELECT
+			NOTIC_ID as noticId,
+			TO_CHAR(START_DATE, 'yyyy-MM-dd') as startDateStr,
+			TO_CHAR(END_DATE, 'yyyy-MM-dd') as endDateStr,
+			USER_NAME as userName,
+			TITLE as title,
+			MESSAGE as message
+		FROM
+			SYS_NOTIC
+		ORDER BY CREATE_DATE DESC NULLS LAST
+	</select>
+	<!-- 查询用户已读消息 -->
+	<select id="queryNoticeIdReaded" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT NOTICE_ID FROM SYS_NOTICE_READED WHERE USER_ID = #{userId,jdbcType=VARCHAR}
+	</select>
+	
+	<!-- 删除被选中id(批量String[]) -->
+	<delete id="deleteNoticById" parameterType="String" >
+		BEGIN
+			DELETE FROM 
+				SYS_NOTIC 
+			WHERE NOTIC_ID IN
+			<foreach item="item" index="index" collection="array" open="(" separator="," close=")"> 
+				  #{item} 
+			</foreach>
+		;
+			DELETE FROM 
+				SYS_NOTICE_READED 
+			WHERE NOTICE_ID IN
+			<foreach item="item" index="index" collection="array" open="(" separator="," close=")"> 
+				  #{item}
+			</foreach>
+		;
+		END;
+	</delete> 
+	
+	<update id="updateNotic" parameterType="com.audit.modules.system.entity.SysNoticVo">
+		UPDATE SYS_NOTIC 
+		<set>
+			<if test="userName != null">USER_NAME = #{userName,jdbcType=VARCHAR},</if>
+			<if test="title != null">TITLE = #{title,jdbcType=VARCHAR},</if>
+			<if test="message != null">MESSAGE = #{message,jdbcType=VARCHAR},</if>
+     	 	<if test="startDateStr != null">START_DATE = TO_DATE(#{startDateStr,jdbcType=VARCHAR},'yyyy-MM-dd'),</if>
+			<if test="endDateStr != null">END_DATE = TO_DATE(#{endDateStr,jdbcType=VARCHAR},'yyyy-MM-dd'),</if>
+		</set>
+		 WHERE 
+		 	NOTIC_ID = #{noticId,jdbcType=VARCHAR} 
+	</update>
+	
+	<!-- 添加信息 -->
+	<insert id="addNotic" parameterType="com.audit.modules.system.entity.SysNoticVo" >
+		INSERT INTO SYS_NOTIC
+			 <trim prefix="(" suffix=")" suffixOverrides=",">
+		      <if test="noticId != null">NOTIC_ID,</if>
+		      <if test="userName != null">USER_NAME,</if>
+		      <if test="title != null">TITLE,</if>
+		      <if test="message != null">MESSAGE,</if>
+		      <if test="startDateStr != null">START_DATE,</if>
+		      <if test="endDateStr != null">END_DATE,</if>
+		      <if test="createDate != null">CREATE_DATE,</if>
+		    </trim>
+		    <trim prefix="values (" suffix=")" suffixOverrides=",">
+		      <if test="noticId != null">#{noticId,jdbcType=VARCHAR},</if>
+		      <if test="userName != null">#{userName,jdbcType=VARCHAR},</if>
+		      <if test="title != null">#{title,jdbcType=VARCHAR},</if>
+		      <if test="message != null">#{message,jdbcType=VARCHAR},</if>
+		      <if test="startDateStr != null">TO_DATE(#{startDateStr,jdbcType=VARCHAR},'yyyy-MM-dd'),</if>
+		      <if test="endDateStr != null">TO_DATE(#{endDateStr,jdbcType=VARCHAR},'yyyy-MM-dd'),</if>
+		      <if test="createDate != null">#{createDate,jdbcType=TIMESTAMP},</if>
+		    </trim>
+	</insert>
+	
+	<!-- 查询所有用户列表 -->
+	<select id="queryNoticById" parameterType="String" resultType="com.audit.modules.system.entity.SysNoticVo">
+		SELECT
+			NOTIC_ID as noticId,
+			TO_CHAR(START_DATE, 'yyyy-MM-dd') as startDateStr,
+			TO_CHAR(END_DATE, 'yyyy-MM-dd') as endDateStr,
+			TITLE as title,
+			MESSAGE as message
+		FROM
+			SYS_NOTIC WHERE 1=1
+		    <if test="null != noticId">AND NOTIC_ID = #{noticId}</if>
+	</select>
+	
+</mapper>

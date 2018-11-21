@@ -1,0 +1,250 @@
+﻿<!-- 报销单明细  --> 
+<div class="ledge-detail ledge-edit elec-dialog">
+   <div class="ledge-content">
+       <div class="pannel-basic">
+            <div class="basic-container">
+                <div class="basic-audit">           
+		<div class="ledge-detail add-details">
+		<div class="table-details invoinc-list" id="expenseAccountDetails">	
+		<table border="1px solid black">
+		<tbody class="query-date">
+					<tr>
+						<th>         
+					   
+							<span class="table-left">报销单号</span>
+						</th>
+						<td>
+							<span class="table-left">{{list1.submitNo}}</span><br><br>
+						</td>
+					</tr>						
+					<tr>
+						<th>
+						    <span class="table-left">制单时间</span>
+						</th>
+						<td>
+						 <span class="table-left">{{list1.createDate | date:"yyyy-MM-dd HH:mm:ss"}}</span>
+						<br><br>
+						</td>
+					</tr>
+					<tr>
+						<th>
+						   <span class="table-left">报销总金额</span>
+						</th>
+						<td>
+						<span class="table-left">{{list1.totalAmount}}</span>
+						<br><br>
+						</td>
+					</tr>
+					<tr>
+						<th>
+						    <span class="table-left">分公司</span>
+						</th>
+						<td>
+						<span class="table-left">{{list1.cityName}}</span>
+					   </td>
+					 </tr>  
+					 </tbody>
+					 </table>
+					 <br><br><br>
+					 <table border="1px solid black">
+		<tbody class="query-date">
+							   	<!-- 报账点用电信息	-->		
+							    <tr>
+                             			 <th colspan="20"><h4>报账点电费报销明细表</h4></th>
+                               </tr>
+                                <tr>                                   
+                                    <th rowspan="2">序号</th>
+                                    <th rowspan="2">报账点名称</th>
+                                    <th rowspan="2">所属区县</th>
+                                    <th colspan="3">电费支付日期段</th>
+                                    <th colspan="6">电费信息明细</th>
+                                    <th colspan="7">付款信息</th>
+                                    <th rowspan="2">备注</th>                                 
+                                </tr>
+                                <tr>
+                               		<th>起始日期 </th>
+                               		<th>终止日期 </th>
+                               		<th>用电天数</th>
+                               		<th>起始度数 </th>
+                               		<th>终止度数 </th>
+                               		<th>电损(度) </th>
+                               		<th>总电量(度) </th>
+                               		<th>单价(元/度) </th>
+                               		<th>电费金额(元/含税) </th>
+                               		<th>收款单位 </th> 
+                               		<th>开户银行 </th>
+                               		<th>银行账号 </th>
+                               		<th>用途 </th>
+                               		<th>支付方 </th>
+                               		<th>合同甲</th>  
+									<th>是否委</th> 
+                                </tr>							
+								<tr ng-repeat="item in BasicInfo track by $index">
+								<!-- <td colspan="20">
+								<table>
+								<tr ng-repeat="items in item.watthourMeterVOs track by $index">
+								 <tr ng-repeat="items in item.watthourMeterVOs track by $index"> -->
+								<td>{{((params.pageNo-1)*params.pageSize) +1*($index+1)}}</td>
+								<td>{{item.accountName}}</td>
+								<td>{{item.counties}}</td>
+								<!-- <td colspan="9">
+								 <div ng-repeat="items in item.watthourMeterVOs track by $index">  -->
+								<!--<table>
+								<tr ng-repeat="items in item.watthourMeterVOs track by $index"> -->
+								<td>{{item.belongStartTime}}</td>
+								<td>{{item.belongEndTime}}</td>								
+								<td>{{item.dayAmmeter}}</td>								
+								<td>{{item.startAmmeter}}</td>
+								<td>{{item.endAmmeter}}</td>
+								<td>{{item.electricLoss}}</td>
+								<td>{{item.totalEleciric}}</td>
+								<td>{{item.unitPrice}}</td>
+								<td>{{item.totalAmount}}</td>
+								<!-- </tr>
+								</table>  
+								</div>
+								</td> -->
+								<td>{{item.supplierName}}</td>
+								<td>{{item.bankBranchName}}</td>
+								<td><span class="table-left">{{item.bankNum}}</span></td>
+								<td></td>
+								<td></td>
+								<td>{{item.contract}}</td>
+								<td></td>
+								<td>{{item.remark}}</td>
+								<!-- </tr> 	
+								</tr>
+								</table> 
+								</td> -->
+								</tr>  
+								<tr>
+									<th>合计</th>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th>{{total}}</th>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th></th>
+									<th></th>
+								</tr>                                
+</tbody>
+</table>
+<br><br><br>
+
+						<table border="1px solid black" >
+		<tbody class="query-date">
+						<!-- 报账点费用明细表 -->																				
+                               <tr>
+                             			 <th colspan="9"><h4>报账点费用明细表</h4></th>
+                               </tr>							 
+                                <tr>                                   
+                                    <th>发票序号</th>
+                                    <th>报账点名称</th>
+                                    <th>所属区县</th>
+                                    <th>其他费用(元)</th>
+                                    <th>电费金额(元/不含税)</th>
+                                    <th>税金金额</th>
+                                    <th>总金额(元/含税)</th>                                                                                               
+                               		<th>本次核销金额</th>
+                               		<th>支付金额(元/含税)</th>                              		
+                                </tr>
+								<tr ng-repeat="item in BasicInfo1 track by $index">
+								<!-- <td colspan="9">
+								<table>
+								<tr ng-repeat="items in item.watthourMeterVOs track by $index">
+								 <tr ng-repeat="items in item.watthourMeterVOs track by $index"> 
+								<td>{{((params.pageNo-1)*params.pageSize) +1*($index+1)}}</td> -->
+								<td>{{((params.pageNo-1)*params.pageSize) +1*($index+1)}}</td>
+								<td>{{item.accountName}}</td>
+								<td>{{item.counties}}</td>
+								<!-- <td colspan="9">
+								 <div ng-repeat="items in item.watthourMeterVOs track by $index">  -->
+								<!--<table>
+								<tr ng-repeat="items in item.watthourMeterVOs track by $index"> -->
+								<td>{{item.otherCost}}</td>
+								
+								<td>{{item.electricityAmount}}</td>								
+								<td>{{item.taxAmount}}</td>								
+								<td>{{item.totalAmountSum}}</td>
+								<!--  核销金额数据暂没有 -->
+								<td>{{item.expenseTotalAmount}}</td>
+								<td>{{item.paymentAmount}}</td>								
+								<!-- </tr>
+								</table> 
+								</td> -->
+								</tr>
+                                   <tr>
+									<th>合计</th>
+									<th></th>
+									<th></th>
+									<th>{{otherCostSums}}</th>
+									<th>{{electricityAmountSums}}</th>
+									<th>{{taxAmountSums}}</th>
+									<th>{{totalAmountSumSums}}</th>
+									<th>{{expenseTotalAmountSums}}</th>
+									<th>{{paymentAmountSums}}</th>									
+								</tr>         
+							
+						</tbody>
+						</table>
+						<br><br><br>
+						<table border="1px solid black">
+		<tbody class="query-date">
+						<!-- 审批流程意见一览 -->																					
+                               <tr>
+                             			 <th colspan="7"><h4>审批流程意见一览</h4></th>
+                               </tr>							  
+                                <tr>                                   
+                                    <th rowspan={{ApprovalZWDetails.length+1}}>审核流程信息</th>
+                                    <th rowspan={{ApprovalZWDetails.length+1}}>业务部门审批流程信息</th> 
+									<th>操作人姓名</th>
+									<th>部门职位</th>
+									<th>审批时间</th>
+									<th>审核流程</th>
+									<th>审批意见</th>
+                                </tr>
+								<tr ng-repeat="item in ApprovalZWDetails track by $index">
+								<td>
+								{{item.user.userName}}
+								</td>
+								<td>
+								暂无
+								</td>
+								<td>
+								{{item.time}}
+								</td>
+								<td>
+								{{item.opType}}
+								</td>
+								<td>
+								{{item.suggestion}}
+								</td>
+								</tr>								
+								</tbody>
+							</table>						
+                        </div>
+				<div class="reimbur-foot ledge-foot">
+        <button ng-click="deriveExcel()" class="reimbur-save btn" style="margin-left:80%;">导出Excle</button>
+    </div>		
+		<div class="reimbur-foot ledge-foot">
+        <button ng-click="closeDialog('expenseAccountDialog')" class="reimbur-save btn">关闭</button>
+    </div>
+   </div>
+     </div>
+   </div>
+     </div>
+	 </div>
+     </div>
+	 

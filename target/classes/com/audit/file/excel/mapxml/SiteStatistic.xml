@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.audit.modules.excelUpload.dao.SiteDao">
+
+	<delete id="deleteAll">
+		truncate table SYS_SWITCH_MODE_POWER
+	</delete>
+
+	<insert id="batchSave" parameterType="com.audit.file.excel.entity.SiteStatisticMeta">
+		INSERT INTO SYS_SWITCH_MODE_POWER(ID,SYSTEM_TITLE,NE_CLASS,SITE_NAME,SITE_NO,SITE_ATTIBUTION,TIME,ELECCURRENT,OUTPUT_VOLTAGE,SWITCH_POWER_STATE)"
+		<foreach collection="list" index="index" item="siteStatistic" separator="union all" >
+			select
+				#{siteStatistic.primartKey,jdbcType=NUMBER},
+				#{siteStatistic.system_title,jdbcType=NUMBER},#{siteStatistic.ne_class,jdbcType=NUMBER},
+				#{siteStatistic.site_name,jdbcType=VERCHAR},#{siteStatistic.site_no,jdbcType=NUMBER},
+				#{siteStatistic.site_attribution,jdbcType=VERCHAR},#{siteStatistic.time,jdbcType=TIMESTAMP},
+				#{siteStatistic.current,jdbcType=NUMBER},#{siteStatistic.output_voltage,jdbcType=NUMBER},
+				#{siteStatistic.switch_power_state,jdbcType=NUMBER}
+			from dual
+		</foreach>
+	</insert>
+</mapper>

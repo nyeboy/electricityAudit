@@ -1,0 +1,26 @@
+<!-- 其他信息管理 dialog弹框修改 -->
+<div class="ngdialog-content" role="document" style="width: 605px;">
+<div class="reimbur-dialog-title">其他信息修改</div>
+<div class="business-box" id="businessBox">
+    <div class="contract-edit">
+        <form action="">
+            <ul class="user-list">
+                <li><span>站点名称:</span><input ng-model="other.siteName" type="text" name="" value="" disabled="disabled"></li>
+                <li><span>原财务站点名称:</span><input ng-model="other.oldFinanceName" type="text" name="" value="" disabled="disabled"></li>
+                <li><span>报销周期:</span> <select name="" id="" ng-model="other.cycle">
+                        <option value="1">月</option>
+                        <option value="3">季度</option>
+                        <option value="6">半年</option>
+                        <option value="12">年</option>
+                    </select></i>
+                
+            </ul>
+            <!-- 查看时隐藏该功能 -->
+            <div class="submit-btn" style="padding-left: 0px;">
+                <button ng-click="closeDialog('addDialog')" class="reimbur-cancel btn">取消</button>
+                <button ng-click="addOrUpdate()" class="reimbur-save btn">保存</button>
+            </div>
+        </form>
+    </div>
+</div>
+</div>

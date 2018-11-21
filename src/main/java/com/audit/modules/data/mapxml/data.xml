@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.data.dao.DataDao">
+
+	<insert id="addDpt" parameterType="com.audit.modules.data.entity.OrgDetailPo">
+		INSERT INTO OA_DEPARTMENT_DATA
+		(
+			AREA_CODE,COMPANY_CODE,DEPARTMENT_LEVEL,DEPARTMENT_NAME,DEPARTMENT_NO,DEPARTMENT_ORDER,
+			DEPARTMENT_PARENT_NO,STATUS,VISIBLE,CREATE_DATE,MODIFY_DATE
+		)
+	 	VALUES(
+		 	#{areaCode,jdbcType=VARCHAR},
+		 	#{companyCode,jdbcType=VARCHAR},
+		 	#{departmentLevel,jdbcType=VARCHAR},
+		 	
+		 	#{departmentName,jdbcType=VARCHAR},
+		 	#{departmentNo,jdbcType=VARCHAR},
+			#{departmentOrder,jdbcType=VARCHAR},
+			#{departmentParentNo,jdbcType=VARCHAR},
+			#{status,jdbcType=VARCHAR},
+			#{visible,jdbcType=VARCHAR},
+			sysdate,sysdate
+		 )
+	</insert>
+	
+    <insert id="addDpts" parameterType="java.util.List">
+		INSERT INTO OA_DEPARTMENT_DATA
+			(AREA_CODE,COMPANY_CODE,DEPARTMENT_NAME,DEPARTMENT_NO,DEPARTMENT_ORDER,
+			 DEPARTMENT_PARENT_NO,STATUS,VISIBLE,DEPARTMENT_LEVEL,CREATE_DATE,MODIFY_DATE
+			)
+		(
+		 <foreach collection="list" index="" item="item" separator="union all">
+		 select
+		 	#{item.areaCode,jdbcType=VARCHAR},
+		 	#{item.companyCode,jdbcType=VARCHAR},
+		 	#{item.departmentName,jdbcType=VARCHAR},
+		 	#{item.departmentNo,jdbcType=VARCHAR},
+			#{item.departmentOrder,jdbcType=VARCHAR},
+			#{item.departmentParentNo,jdbcType=VARCHAR},
+			#{item.status,jdbcType=VARCHAR},
+			#{item.visible,jdbcType=VARCHAR},
+			#{item.departmentLevel,jdbcType=NUMERIC},
+			sysdate,sysdate
+		 from dual
+		 </foreach>
+		 )
+	</insert>
+
+	<insert id="addEmps" parameterType="java.util.List">
+		INSERT INTO OA_EMPLOYEE_DATA
+			(EMPLOYEE_LEVEL,EMPLOYEE_NAME,EMPLOYEE_NUMBER,
+			 EMPLOYEE_STATUS,LOGIN_NAME,MAIL,MOBILE,ROW_NO,CREATE_DATE,MODIFY_DATE
+			)
+		(
+		 <foreach collection="list" index="" item="item" separator="union all">
+		 select
+		 	#{item.employeeLevel,jdbcType=VARCHAR},
+		 	#{item.employeeName,jdbcType=VARCHAR},
+		 	#{item.employeeNumber,jdbcType=VARCHAR},
+		 	#{item.employeeStatus,jdbcType=VARCHAR},
+			#{item.loginName,jdbcType=VARCHAR},
+			#{item.mail,jdbcType=VARCHAR},
+			#{item.mobile,jdbcType=VARCHAR},
+			#{item.rowNo,jdbcType=VARCHAR},
+			sysdate,sysdate
+		 from dual
+		 </foreach>
+		 )
+	</insert>
+	<insert id="addEmpDepartment" parameterType="java.util.List">
+		INSERT INTO OA_DEPARTMENT_DATA_EMPLOYEES
+		(
+			OA_DEPARTMENT_DATA,EMPLOYEES
+		)
+		(
+		 <foreach collection="list" index="" item="item" separator="union all">
+		 select
+		 	#{item.departmentId,jdbcType=VARCHAR},
+		 	#{item.rowNo,jdbcType=VARCHAR}
+		 from dual
+		 </foreach>
+		 )
+	</insert>
+	
+	<insert id="addEmpDuty" parameterType="java.util.List">
+		INSERT INTO OA_EMPLOY_DUTY
+		(
+			ID,DUTY_ID,NAME,CREATE_DATE,MODIFY_DATE
+		)
+		(
+		 <foreach collection="list" index="" item="item" separator="union all">
+		 select
+		 	#{item.rowNo,jdbcType=VARCHAR},
+		 	#{item.id,jdbcType=VARCHAR},
+		 	#{item.name,jdbcType=VARCHAR},
+		 	sysdate,sysdate
+		 from dual
+		 </foreach>
+		 )
+	</insert>
+	<insert id="addEmpRole" parameterType="java.util.List">
+		INSERT INTO OA_EMPLOY_ROLE
+		(
+			ID,ROLE_ID,NAME,CREATE_DATE,MODIFY_DATE
+		)
+		(
+		 <foreach collection="list" index="" item="item" separator="union all">
+		 select
+		 	#{item.rowNo,jdbcType=VARCHAR},
+		 	#{item.id,jdbcType=VARCHAR},
+		 	#{item.name,jdbcType=VARCHAR},
+		 	sysdate,sysdate
+		 from dual
+		 </foreach>
+		 )
+	</insert>
+	
+</mapper>

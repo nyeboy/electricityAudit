@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.basedata.dao.DataModifyApplyDao">
+  <resultMap id="BaseResultMap" type="com.audit.modules.basedata.entity.DataModifyApply">
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="APPLY_USER_ID" jdbcType="VARCHAR" property="applyUserId" />
+    <result column="APPLY_USER_NAME" jdbcType="VARCHAR" property="applyUserName" />
+    <result column="CHANGE_TIME" jdbcType="TIMESTAMP" property="changeTime" />
+    <result column="CHANGE_STATUS" jdbcType="VARCHAR" property="changeStatus" />
+    <result column="CITY_ID" jdbcType="VARCHAR" property="cityId" />
+    <result column="CITY_NAME" jdbcType="VARCHAR" property="cityName" />
+    <result column="COUNTY_ID" jdbcType="VARCHAR" property="countyId" />
+    <result column="COUNTY_NAME" jdbcType="VARCHAR" property="countyName" />
+    <result column="REMARKS" jdbcType="VARCHAR" property="remarks" />
+    <result column="CHANGE_TYPE" jdbcType="VARCHAR" property="changeType" />
+    <result column="CHANGE_OBJECT" jdbcType="VARCHAR" property="changeObject" />
+    <result column="URL" jdbcType="VARCHAR" property="url" />
+    <result column="PARAMS" jdbcType="VARCHAR" property="params" />
+    <result column="APPROVE_USER_ID" jdbcType="VARCHAR" property="approveUserId" />
+  	<result column="MOBILE_TYPE" jdbcType="VARCHAR" property="mobileType" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    sdma.MOBILE_TYPE,sdma.ID, sdma.APPLY_USER_ID, sdma.CHANGE_TIME, sdma.CHANGE_STATUS, sdma.CITY_ID, sdma.COUNTY_ID, 
+    sdma.REMARKS, sdma.CHANGE_TYPE, sdma.CHANGE_OBJECT, sdma.URL, sdma.PARAMS, sdma.APPROVE_USER_ID, sdma.APPLY_USER_NAME
+  </sql>
+ 
+<!--  地市区县改变前的sql -->
+  <!-- <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT 
+    <include refid="Base_Column_List" />,
+    (select zsc.city_name from zg_space_city  zsc where zsc.int_id = sdma.CITY_ID) as CITY_NAME,
+    (select zscu.zh_label from zg_space_county zscu where zscu.int_id = sdma.COUNTY_ID) as COUNTY_NAME
+    FROM SYS_DATA_MODIFY_APPLY sdma
+    WHERE sdma.ID = #{id,jdbcType=VARCHAR}
+  </select> -->
+  
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT 
+    <include refid="Base_Column_List" />,
+    (select zsc.NAME from YDJH_AREA  zsc where zsc.ID = sdma.CITY_ID) as CITY_NAME,
+    (select zscu.NAME from YDJH_AREA zscu where zscu.ID = sdma.COUNTY_ID) as COUNTY_NAME
+    FROM SYS_DATA_MODIFY_APPLY sdma
+    WHERE sdma.ID = #{id,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="findInFlowApplyBydataIds" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT 
+    <include refid="Base_Column_List" />,
+    FROM SYS_DATA_MODIFY_APPLY sdma ,SYS_DATA_MODIFY_LOG sdml
+    WHERE 
+   		sdma.ID = sdml.APPLY_ID 
+    	AND sdma.CHANGE_STATUS = '0'
+    	AND sdml.DATA_ID in 
+    	<foreach collection="list" item="dataid" index="index"
+			open="(" separator="," close=")">
+			#{dataid}
+		</foreach>
+  </select>
+ <!--  地市区县改变前的sql -->
+ <!--  <select id="findApplyByPage" parameterType="java.util.Map" resultMap="BaseResultMap">
+    SELECT 
+    <include refid="Base_Column_List" />,
+    (select zsc.city_name from zg_space_city  zsc where zsc.int_id = sdma.CITY_ID) as CITY_NAME,
+    (select zscu.zh_label from zg_space_county zscu where zscu.int_id = sdma.COUNTY_ID) as COUNTY_NAME
+    FROM SYS_DATA_MODIFY_APPLY sdma
+    WHERE 1=1
+    <if test="obj.changeType != null and obj.changeType != ''">
+		AND sdma.CHANGE_TYPE = #{obj.changeType,jdbcType=VARCHAR}
+	</if>
+	<if test="obj.applyUserName != null and obj.applyUserName != ''">
+		AND INSTR(sdma.APPLY_USER_NAME, #{obj.applyUserName,jdbcType=VARCHAR}) > 0
+	</if>
+	<if test="obj.applyUserId != null and obj.applyUserId != ''">
+		AND sdma.APPLY_USER_ID = #{obj.applyUserId,jdbcType=VARCHAR}
+	</if>
+	<if test="obj.cityId != null and obj.cityId != ''">
+		AND sdma.CITY_ID = #{obj.cityId,jdbcType=VARCHAR}
+	</if>
+	<if test="obj.countyId != null and obj.countyId != ''">
+		AND sdma.COUNTY_ID = #{obj.countyId,jdbcType=VARCHAR}
+	</if>
+		order by sdma.CHANGE_TIME desc
+  </select> -->
+  
+   <select id="findApplyByPage" parameterType="java.util.Map" resultMap="BaseResultMap">
+    SELECT 
+    <include refid="Base_Column_List" />,
+    (select zsc.NAME from YDJH_AREA  zsc where zsc.ID = sdma.CITY_ID) as CITY_NAME,
+    (select zscu.NAME from YDJH_AREA zscu where zscu.ID = sdma.COUNTY_ID) as COUNTY_NAME
+    FROM SYS_DATA_MODIFY_APPLY sdma
+    WHERE 1=1
+    <if test="obj.changeType != null and obj.changeType != ''">
+		AND sdma.CHANGE_TYPE = #{obj.changeType,jdbcType=VARCHAR}
+	</if>
+	<if test="obj.applyUserName != null and obj.applyUserName != ''">
+		AND INSTR(sdma.APPLY_USER_NAME, #{obj.applyUserName,jdbcType=VARCHAR}) > 0
+	</if>
+	<if test="obj.applyUserId != null and obj.applyUserId != ''">
+		AND sdma.APPLY_USER_ID = #{obj.applyUserId,jdbcType=VARCHAR}
+	</if>
+	<if test="obj.cityId != null and obj.cityId != ''">
+		AND sdma.CITY_ID = #{obj.cityId,jdbcType=VARCHAR}
+	</if>
+	<if test="obj.countyId != null and obj.countyId != ''">
+		AND sdma.COUNTY_ID = #{obj.countyId,jdbcType=VARCHAR}
+	</if>
+		order by sdma.CHANGE_TIME desc
+  </select>
+  
+  <delete id="deleteApplyByIds" >
+    DELETE FROM 
+    SYS_DATA_MODIFY_APPLY
+    WHERE ID IN
+    <foreach collection="array" item="applyid" index="index"
+			open="(" separator="," close=")">
+			#{applyid}
+		</foreach>
+  </delete>
+  
+  <insert id="insertSelective" parameterType="com.audit.modules.basedata.entity.DataModifyApply">
+    insert into SYS_DATA_MODIFY_APPLY
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="applyUserId != null">
+        APPLY_USER_ID,
+      </if>
+      <if test="applyUserName != null">
+        APPLY_USER_NAME,
+      </if>
+      <if test="changeTime != null">
+        CHANGE_TIME,
+      </if>
+      <if test="changeStatus != null">
+        CHANGE_STATUS,
+      </if>
+      <if test="cityId != null">
+        CITY_ID,
+      </if>
+      <if test="countyId != null">
+        COUNTY_ID,
+      </if>
+      <if test="remarks != null">
+        REMARKS,
+      </if>
+      <if test="changeType != null">
+        CHANGE_TYPE,
+      </if>
+      <if test="changeObject != null">
+        CHANGE_OBJECT,
+      </if>
+      <if test="url != null">
+        URL,
+      </if>
+      <if test="params != null">
+        PARAMS,
+      </if>
+      <if test="approveUserId != null">
+        APPROVE_USER_ID,
+      </if>
+      <if test="mobileType != null">
+        MOBILE_TYPE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="applyUserId != null">
+        #{applyUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="applyUserName != null">
+         #{applyUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="changeTime != null">
+        #{changeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="changeStatus != null">
+        #{changeStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="cityId != null">
+        #{cityId,jdbcType=VARCHAR},
+      </if>
+      <if test="countyId != null">
+        #{countyId,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="changeType != null">
+        #{changeType,jdbcType=VARCHAR},
+      </if>
+      <if test="changeObject != null">
+        #{changeObject,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="params != null">
+        #{params,jdbcType=VARCHAR},
+      </if>
+      <if test="approveUserId != null">
+        #{approveUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileType != null">
+        #{mobileType,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.audit.modules.basedata.entity.DataModifyApply">
+    update SYS_DATA_MODIFY_APPLY
+    <set>
+      <if test="applyUserId != null">
+        APPLY_USER_ID = #{applyUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="applyUserName != null">
+        APPLY_USER_NAME = #{applyUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="changeTime != null">
+        CHANGE_TIME = #{changeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="changeStatus != null">
+        CHANGE_STATUS = #{changeStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="cityId != null">
+        CITY_ID = #{cityId,jdbcType=VARCHAR},
+      </if>
+      <if test="countyId != null">
+        COUNTY_ID = #{countyId,jdbcType=VARCHAR},
+      </if>
+      <if test="remarks != null">
+        REMARKS = #{remarks,jdbcType=VARCHAR},
+      </if>
+      <if test="changeType != null">
+        CHANGE_TYPE = #{changeType,jdbcType=VARCHAR},
+      </if>
+      <if test="changeObject != null">
+        CHANGE_OBJECT = #{changeObject,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        URL = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="params != null">
+        PARAMS = #{params,jdbcType=VARCHAR},
+      </if>
+      <if test="approveUserId != null">
+        APPROVE_USER_ID = #{approveUserId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,146 @@
+﻿ <!-- 额定功率管理 -->
+ <style>
+ 
+	.trariffc-table .search-box select{
+		width: 19%;
+	}
+		
+	.search-box .process-input {
+			width: 19%;
+		}
+
+	</style>
+ <div class="system-content">
+ <div class="business-box" id="businessBox">
+    <div class="content-rout" id="contentRout">
+        <span>基础数据</span>&gt;<span>基础数据维护</span>&gt;<span class="now-rout">额定功率管理</span>
+    </div>
+     <button ng-click="getDataExcel()" class="btn btn-primary" type="button">导出excel</button>
+    <div class="content-box trariffc-table" id="contentBox">
+        <div class="search-box">
+            <div>
+             <!--   <select name="" id="" class="title-select"
+                        ng-model="cityId"
+                        ng-options="city.key as city.value for city in citys"
+                        ng-change="queryCountyList(cityId)">
+                <option value="">全省</option>
+                </select>
+                <select class="title-select"
+                        ng-model="countyId"
+                        ng-options="county.key as county.value for county in countys">
+                <option value="">全市</option>
+                </select> -->
+				<select name="" id="" class="title-select"
+							ng-if="userCity==null"
+                            ng-model="$parent.cityId"
+                            ng-options="city.key as city.value for city in citys"
+                            ng-change="queryCountyList(cityId)">
+                    <option  value="">全省</option>
+                    </select> 
+                    <input
+                           ng-if="userCity!=null"
+                           name="" class="title-select"
+                           disabled="disabled"
+                           ng-model="userCity"
+                           type="text">	
+                    <select class="title-select"
+							ng-if="userCounty==null"
+                            ng-model="$parent.countyId"
+                            ng-options="county.key as county.value for county in countys">
+                    <option value="" >全市</option>
+                    </select>
+					<input
+                           ng-if="userCounty!=null"
+                           name="" class="title-select"
+                           disabled="disabled"
+                           ng-model="userCounty"
+                           type="text">	
+				<select name="" id="" class="title-select"
+                        ng-model="zproperty"
+                        ng-options="zproperty for zproperty in listProperty">                      
+                <option value=""> -- 请选择资管机房拥有者 -- </option>
+                </select>
+                <select class="title-select"
+                        ng-model="zstatus"
+                        ng-options="zstatus for zstatus in listStatus">
+                <option value=""> -- 请选择资管机房状态 -- </option>
+                </select>
+				<input ng-model="zhLabel" type="text" placeholder="资管机房名称" class="process-input con-parts" name="">
+							<!--	<select  name="payType" class="table-right" ng-model="deviceType" >	
+										<option ng-selected="-1" value="-1"> -- 设备类型 -- </option>
+										<option value="PDH">PDH</option>
+										<option value="BTS">BTS</option>
+										<option value="普通空调">普通空调</option>
+										<option value="SDH">SDH</option>
+										<option value="OTN">OTN</option>
+										<option value="NODEB">NODEB</option>
+										<option value="PTN">PTN</option>
+										<option value="WDM">WDM</option>
+									</select>	 -->
+                <!-- <input ng-model="deviceType" type="text" placeholder="设备类型" class="process-input con-parts" name=""> -->
+               <!-- <input ng-model="deviceModel" type="text" placeholder="设备型号" class="process-input con-parts" name=""> -->
+            </div>
+            <button ng-click="getData(true)" class="btn btn-primary" type="button">搜索</button>
+        </div>
+        <!-- table-content -->
+        <div class="table-content">
+            <!-- table -->
+            <div class="data-table">
+                <div class="table-details">
+                    <div id="exportable">
+                        <table>
+                            <tbody class="query-date">
+                       <!--     <tr>
+                       	   <th>序号</th>
+                           <th>设备类型</th>
+                           <th>型号</th>
+                           <th>生产厂家</th>
+                           <th>额定功率</th>
+                            <th>最近一次修改时间</th>
+                            <th style="display: none">操作</th>
+                        </tr>
+                                <tr ng-repeat="item in list track by $index">
+                                	<td>{{((params.pageNo-1)*params.pageSize)+1*(1+$index)}}</td>
+                                    <td>{{item.deviceType}}</td>
+                                    <td>{{item.deviceModel}}</td>
+                                    <td>{{item.deviceVendor}}</td>
+                                    <td>{{item.powerRating}}</td>
+                                    <td>{{item.updateDate}}</td> 
+                                    <td style="display: none">
+                                    <a ng-click="editedRMS(item)" href="javascript:void(0)" class="check-detail">修改</a>
+                                    </td> 
+                                </tr> -->
+						<tr>
+                       	   <th>序号</th>
+                           <th>地市</th>
+                           <th>区县</th>
+                           <th>资管机房名称</th>
+                           <th>资管机房拥有者</th>
+                           <th>资管机房状态</th>
+                           <th>操作</th>
+                        </tr>
+						<tr ng-repeat="item in list track by $index">
+                                	<td>{{((params.pageNo-1)*params.pageSize)+1*(1+$index)}}</td>
+                                    <td>{{item.cityName}}</td>
+                                    <td>{{item.countyNmae}}</td>
+                                    <td>{{item.zhLabel}}</td>
+                                    <td>{{item.property}}</td>
+                                    <td>{{item.status}}</td> 
+                                    <td>
+                                    <a ng-click="selectFacility(item)" href="javascript:void(0)" class="check-detail">查看</a>
+                                    </td> 
+                                </tr>
+                            </tbody>
+                        </table>
+
+                     </div>
+                    </div>
+                    <div class="page-foot">
+                            <im-pagination  conf="pageInfo" params="params" get-data="getData()"></im-pagination>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ </div>

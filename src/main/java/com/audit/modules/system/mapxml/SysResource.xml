@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.system.dao.SysResourceDao">
+	<resultMap id="BaseResultMap" type="com.audit.modules.system.entity.SysResource">
+		<id column="ID" jdbcType="DECIMAL" property="id" />
+		<result column="RESOURCE_NAME" jdbcType="VARCHAR" property="resourceName" />
+		<result column="PERMISSION" jdbcType="VARCHAR" property="permission" />
+		<result column="TYPE" jdbcType="VARCHAR" property="type" />
+		<result column="PARENT_ID" jdbcType="DECIMAL" property="parentId" />
+		<result column="PARENT_IDS" jdbcType="VARCHAR" property="parentIds" />
+		<result column="URL" jdbcType="VARCHAR" property="url" />
+		<result column="ALIAS" jdbcType="VARCHAR" property="alias" />
+		<result column="FUNCTION_TYPE" jdbcType="VARCHAR" property="functionType" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		SYS_RESOURCE.ID, SYS_RESOURCE.RESOURCE_NAME,
+		SYS_RESOURCE.PERMISSION, SYS_RESOURCE.TYPE, SYS_RESOURCE.PARENT_ID,
+		SYS_RESOURCE.PARENT_IDS, SYS_RESOURCE.URL, SYS_RESOURCE.ALIAS,SYS_RESOURCE.FUNCTION_TYPE
+	</sql>
+	<!-- 根据Id查询资源 -->
+	<select id="selectByPrimaryKey" parameterType="java.math.BigDecimal"
+		resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM SYS_RESOURCE
+		WHERE ID = #{id}
+	</select>
+	<!-- 根据IdList查询资源 -->
+	<select id="selectByResourceIdList" parameterType="java.math.BigDecimal"
+		resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM SYS_RESOURCE
+		WHERE ID IN
+		<foreach collection="list" item="resourceid" index="index"
+			open="(" separator="," close=")">
+			#{resourceid}
+		</foreach>
+	</select>
+	<!-- 分页搜索查询 -->
+	<select id="getPageRoleList" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		SELECT
+		 <include refid="Base_Column_List" />
+		FROM SYS_RESOURCE
+		WHERE 1=1 
+			<if test="obj.resourceName !=null and obj.resourceName !=''">
+				AND  INSTR(RESOURCE_NAME,#{obj.resourceName,jdbcType=VARCHAR}) > 0
+			</if>
+			<if test="obj.parentId !=null and obj.parentId !=''">
+				AND  INSTR(PARENT_IDS,#{obj.parentId,jdbcType=VARCHAR}) > 0
+			</if>
+			<if test="obj.permission != null and obj.permission!=''">
+				AND  PERMISSION = #{obj.permission,jdbcType=VARCHAR}
+			</if>
+			<if test="obj.type != null and obj.type !=''">
+				AND  TYPE = #{obj.type,jdbcType=INTEGER}
+			</if>
+			<if test="obj.resourceId != null and obj.resourceId !=''">
+				AND  ID = #{obj.resourceId,jdbcType=INTEGER}
+			</if>
+	</select>
+	<!-- 通过IdSet批量删除资源 -->
+	<delete id="deleteResByIdList" parameterType="java.math.BigDecimal">
+		DELETE from
+		SYS_RESOURCE
+		WHERE 
+			ID IN
+		<foreach collection="list" item="resourceid" index="index"
+			open="(" separator="," close=")">
+			#{resourceid}
+		</foreach>
+	</delete>
+	<!-- 查询所有资源 -->
+	<select id="findAll" 
+		resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM SYS_RESOURCE
+	</select>
+	<select id="findAllByFunctionType" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM SYS_RESOURCE
+		WHERE 1=1
+		<if test="functionType != null">
+			AND FUNCTION_TYPE = #{functionType, jdbcType=VARCHAR}
+		</if>
+	</select>
+	<!-- 根据type查询资源 -->
+	<select id="findResourceByType" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM SYS_RESOURCE
+		WHERE 1=1
+		<if test="type != null">
+			AND TYPE = #{type, jdbcType=VARCHAR}
+		</if>
+		<if test="functionType != null">
+			AND FUNCTION_TYPE = #{functionType, jdbcType=VARCHAR}
+		</if>
+	</select>
+	<!-- 根据角色Id查询资源 -->
+	<select id="selectByRoleId" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM 
+		 SYS_RESOURCE, SYS_ROLE_RESOURCE
+		WHERE
+		 SYS_RESOURCE.ID = SYS_ROLE_RESOURCE.RESOURCE_ID
+		 AND SYS_ROLE_RESOURCE.ROLE_ID = #{roleId}
+	</select>
+	<!-- 根据资源Id查询子资源IdList -->
+	<select id="selectIdByParentId" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT
+		 ID
+		FROM SYS_RESOURCE
+		WHERE INSTR(PARENT_IDS,#{id,jdbcType=VARCHAR}) > 0
+	</select>
+	<!-- 根据角色IdList查询资源IdList -->
+	<select id="selectIdByRoleIdList" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
+		SELECT
+		 RESOURCE_ID
+		FROM SYS_ROLE_RESOURCE
+		WHERE ROLE_ID IN
+		<foreach collection="list" item="roleId" index="index"
+			open="(" separator="," close=")">
+			#{roleId}
+		</foreach>
+	</select>
+	<select id="selectIdByRoleId" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
+		SELECT
+		 RESOURCE_ID
+		FROM SYS_ROLE_RESOURCE
+		WHERE ROLE_ID = #{roleId}
+	</select>
+	<insert id="insertSelective" parameterType="com.audit.modules.system.entity.SysResource">
+		INSERT INTO SYS_RESOURCE
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="resourceName != null">
+				RESOURCE_NAME,
+			</if>
+			<if test="permission != null">
+				PERMISSION,
+			</if>
+			<if test="type != null">
+				TYPE,
+			</if>
+			<if test="parentId != null">
+				PARENT_ID,
+			</if>
+			<if test="parentIds != null">
+				PARENT_IDS,
+			</if>
+			<if test="url != null">
+				URL,
+			</if>
+			<if test="alias != null">
+				ALIAS,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="resourceName != null">
+				#{resourceName,jdbcType=VARCHAR},
+			</if>
+			<if test="permission != null">
+				#{permission,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=VARCHAR},
+			</if>
+			<if test="parentId != null">
+				#{parentId,jdbcType=DECIMAL},
+			</if>
+			<if test="parentIds != null">
+				#{parentIds,jdbcType=VARCHAR},
+			</if>
+			<if test="url != null">
+				#{url,jdbcType=VARCHAR},
+			</if>
+			<if test="alias != null">
+				#{alias,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.audit.modules.system.entity.SysResource">
+		UPDATE SYS_RESOURCE
+		<set>
+			<if test="resourceName != null">
+				RESOURCE_NAME = #{resourceName,jdbcType=VARCHAR},
+			</if>
+			<if test="permission != null">
+				PERMISSION = #{permission,jdbcType=VARCHAR},
+			</if>
+			<if test="type != null">
+				TYPE = #{type,jdbcType=VARCHAR},
+			</if>
+			<if test="parentId != null">
+				PARENT_ID = #{parentId,jdbcType=DECIMAL},
+			</if>
+			<if test="parentIds != null">
+				PARENT_IDS = #{parentIds,jdbcType=VARCHAR},
+			</if>
+			<if test="url != null">
+				URL = #{url,jdbcType=VARCHAR},
+			</if>
+			<if test="alias != null">
+				ALIAS = #{alias,jdbcType=VARCHAR},
+			</if>
+		</set>
+		WHERE ID = #{id,jdbcType=DECIMAL}
+	</update>
+</mapper>

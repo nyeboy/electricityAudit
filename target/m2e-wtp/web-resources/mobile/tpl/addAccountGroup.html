@@ -1,0 +1,15 @@
+<!-- 新增保账组管理 -->
+<div class="reimbur-dialog">
+    <div class="reimbur-dialog-title">报账点列表</div>
+    <div class="reimbur-search">
+        <div>
+            <input ng-if="isAddAccount" ng-model="accountObject.addName" type="text" placeholder="请输入报账组名称" style="padding-left:0;">
+            <input ng-if="isModifyAccount" ng-model="getAccountDetail.name" type="text" placeholder="请输入报账组名称" style="padding-left:0;">
+        </div>
+    </div>
+    <div class="reimbur-foot">
+        <button ng-click="closeDialog('accountGroupDialog')" class="reimbur-cancel btn">取消</button>
+        <button ng-if="isModifyAccount" ng-click="modifyAccountNameSave()" class="reimbur-save btn">提交</button>
+        <button ng-if="isAddAccount" ng-click="addAccountNameSave()" class="reimbur-save btn">保存</button>
+    </div>
+</div>

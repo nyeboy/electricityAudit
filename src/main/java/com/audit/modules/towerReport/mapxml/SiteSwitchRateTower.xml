@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.towerReport.dao.SiteSwitchRateTowerDao">
+  <resultMap id="BaseResultMap" type="com.audit.modules.towerReport.entity.SiteSwitchRateTower">
+    <id column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="CITY_ID" jdbcType="VARCHAR" property="cityId" />
+    <result column="COUNTY_ID" jdbcType="VARCHAR" property="countyId" />
+    <result column="REGION_NAME" jdbcType="VARCHAR" property="regionName" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="CROSS_SITE_AMOUNT" jdbcType="VARCHAR" property="crossSiteAmount" />
+    <result column="INTACT_RATE" jdbcType="VARCHAR" property="intactRate" />
+    <result column="AVAILABLE_RATE" jdbcType="VARCHAR" property="availableRate" />
+    <result column="TYPE_CODE" jdbcType="VARCHAR" property="typeCode" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, CITY_ID, COUNTY_ID, REGION_NAME, CREATE_TIME, CROSS_SITE_AMOUNT, INTACT_RATE, AVAILABLE_RATE, 
+    TYPE_CODE
+  </sql>
+   <select id="findByTypeAndYear"  resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from SYS_STASTIC_SITE_POWER
+    where TYPE_CODE = #{typeCode,jdbcType=VARCHAR}
+     AND YEAR = #{year,jdbcType=VARCHAR}
+  </select>
+</mapper>

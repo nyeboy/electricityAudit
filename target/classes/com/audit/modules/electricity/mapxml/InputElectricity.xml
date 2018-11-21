@@ -1,0 +1,1541 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.electricity.dao.InputElectricityDao">
+
+<resultMap type="com.audit.modules.electricity.entity.ElectrictyVO" id="elMap">
+	<id property="id" column="id"></id>
+	<result property="serialNumber"  column="SERIAL_NUMBER"></result> 
+	<result property="createPerson"  column="CREATE_PERSON"></result>
+	<result property="expenseTotalAmount"  column="EXPENSE_TOTAL_AMOUNT"></result>
+	<result property="supplierID" column="SYS_SUPPLIER_ID"/>
+</resultMap>
+
+<!--     <select id="queryList" parameterType="java.util.Map" resultType="com.audit.modules.electricity.entity.ElectrictyListVO">
+        SELECT *  FROM (
+          SELECT rownum rsn, a1.*  FROM (
+        SELECT
+            se.id as id,
+            se.SERIAL_NUMBER as serialNumber,
+            zsy.CITY_NAME as AREAS,
+            zsc.ZH_LABEL as COUNTIES,
+            sas.ACCOUNT_NAME as accountName,
+            se.CREATE_DATE as createDate,
+            se.STATUS,
+            su.NAME as supplierName,
+            se.TOTAL_AMOUNT as amount
+        FROM
+            SYS_ELECTRICITY se
+        LEFT JOIN
+            SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas.ID
+        LEFT JOIN
+            ZG_SPACE_COUNTY zsc ON sas.COUNTY_ID=zsc.INT_ID
+        LEFT JOIN
+            ZG_SPACE_CITY zsy ON sas.CITY_ID=zsy.INT_ID
+        LEFT JOIN SYS_REIMBURSEMENT_GROUP srg ON se.SYS_RG_ID = srg.ID
+        LEFT JOIN SYS_SUPPLIER su ON se.SYS_SUPPLIER_ID = su.ID
+        WHERE
+            1=1
+            <if test="map.serialNumber != null and map.serialNumber!=''">
+                AND se.SERIAL_NUMBER = #{map.serialNumber}
+            </if>
+            <if test="map.accountName!=null and map.accountName!=''">
+                AND sas.ACCOUNT_NAME LIKE '%'||#{map.accountName}||'%'
+            </if>
+            <if test="map.status!=null and map.status.length>0">
+                AND se.STATUS IN
+                <foreach collection="map.status" index="index" item="id" open="("
+                         separator="," close=")">
+                    #{id}
+                </foreach>
+            </if>
+            <if test="map.submitPerson!=null and map.submitPerson!=''">
+                AND se.SUBMIT_PERSON = #{map.submitPerson}
+            </if>
+            <if test="map.sysRgName!=null and map.sysRgName!=''">
+                AND srg.NAME LIKE '%'||#{map.sysRgName}||'%'
+            </if>
+            <if test="map.userID!=null and map.userID!=''">
+                AND se.CREATE_PERSON = #{map.userID}
+            </if>
+            <if test="map.countyId!=null and map.countyId!=''">
+                AND sas.COUNTY_ID = #{map.countyId}
+            </if>
+            <if test="map.cityId!=null and map.cityId!=''">
+                AND sas.CITY_ID = #{map.cityId}
+            </if>
+            <if test="map.createStartDate!=null">
+                AND <![CDATA[se.CREATE_DATE >= #{map.createStartDate}]]>
+            </if>
+            <if test="map.createEndDate!=null">
+                AND <![CDATA[se.CREATE_DATE < #{map.createEndDate}]]>
+            </if>
+            <if test="map.auditType!=null">
+				and se.AUDITTYPE=#{map.auditType}           
+            </if>
+        ORDER BY se.CREATE_DATE DESC
+        ) a1  WHERE
+        <![CDATA[ROWNUM <= #{map.pageSize}]]> ) a2
+        WHERE <![CDATA[a2.rsn > #{map.pageNo}]]>
+    </select>
+
+    <select id="queryListCount" parameterType="java.util.Map" resultType="java.lang.Long">
+        SELECT
+          count(1)
+        FROM
+        SYS_ELECTRICITY se
+        LEFT JOIN
+        SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas.ID
+        LEFT JOIN
+        ZG_SPACE_COUNTY zsc ON sas.COUNTY_ID=zsc.INT_ID
+        LEFT JOIN
+        ZG_SPACE_CITY zsy ON sas.CITY_ID=zsy.INT_ID
+        LEFT JOIN SYS_REIMBURSEMENT_GROUP srg ON se.SYS_RG_ID = srg.ID
+        WHERE
+        1=1
+        <if test="map.serialNumber != null and map.serialNumber!=''">
+            AND se.SERIAL_NUMBER = #{map.serialNumber}
+        </if>
+        <if test="map.accountName!=null and map.accountName!=''">
+            AND sas.ACCOUNT_NAME LIKE '%'||#{map.accountName}||'%'
+        </if>
+        <if test="map.status!=null and map.status.length>0">
+            AND se.STATUS IN
+            <foreach collection="map.status" index="index" item="st" open="("
+                     separator="," close=")">
+                #{st}
+            </foreach>
+        </if>
+        <if test="map.submitPerson!=null and map.submitPerson!=''">
+            AND se.SUBMIT_PERSON = #{map.submitPerson}
+        </if>
+        <if test="map.sysRgName!=null and map.sysRgName!=''">
+            AND srg.NAME LIKE '%'||#{map.sysRgName}||'%'
+        </if>
+        <if test="map.userID!=null and map.userID!=''">
+            AND se.CREATE_PERSON = #{map.userID}
+        </if>
+        <if test="map.countyId!=null and map.countyId!=''">
+            AND sas.COUNTY_ID = #{map.countyId}
+        </if>
+        <if test="map.cityId!=null and map.cityId!=''">
+            AND sas.CITY_ID = #{map.cityId}
+        </if>
+        <if test="map.createStartDate!=null">
+            AND <![CDATA[se.CREATE_DATE >= #{map.createStartDate}]]>
+        </if>
+        <if test="map.createEndDate!=null">
+            AND <![CDATA[se.CREATE_DATE < #{map.createEndDate}]]>
+        </if>
+        <if test="map.auditType!=null">
+				and se.AUDITTYPE=1            
+        </if>
+    </select> -->
+
+    <select id="queryList" parameterType="java.util.Map" resultType="com.audit.modules.electricity.entity.ElectrictyListVO">
+        SELECT *  FROM (
+          SELECT rownum rsn, a1.*  FROM (
+        SELECT
+            se.id as id,
+            se.SERIAL_NUMBER as serialNumber,
+            zsy.NAME as AREAS,
+            zsc.NAME as COUNTIES,
+            sas.ACCOUNT_NAME as accountName,
+            se.CREATE_DATE as createDate,
+            se.STATUS,
+            su.NAME as supplierName,
+            se.TOTAL_AMOUNT as amount
+        FROM
+            SYS_ELECTRICITY se
+        LEFT JOIN
+            SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas.ID
+        LEFT JOIN
+            YDJH_AREA zsc ON sas.COUNTY_ID=zsc.ID
+        LEFT JOIN
+            YDJH_AREA zsy ON sas.CITY_ID=zsy.ID
+        LEFT JOIN SYS_REIMBURSEMENT_GROUP srg ON se.SYS_RG_ID = srg.ID
+        LEFT JOIN SYS_SUPPLIER su ON se.SYS_SUPPLIER_ID = su.ID
+        WHERE
+            1=1
+            <if test="map.serialNumber != null and map.serialNumber!=''">
+                AND se.SERIAL_NUMBER = #{map.serialNumber}
+            </if>
+            <if test="map.accountName!=null and map.accountName!=''">
+                AND sas.ACCOUNT_NAME LIKE '%'||#{map.accountName}||'%'
+            </if>
+            <if test="map.status!=null and map.status.length>0">
+                AND se.STATUS IN
+                <foreach collection="map.status" index="index" item="id" open="("
+                         separator="," close=")">
+                    #{id}
+                </foreach>
+            </if>
+            <if test="map.submitPerson!=null and map.submitPerson!=''">
+                AND se.SUBMIT_PERSON = #{map.submitPerson}
+            </if>
+            <if test="map.sysRgName!=null and map.sysRgName!=''">
+                AND srg.NAME = #{map.sysRgName}
+            </if>
+            <if test="map.userID!=null and map.userID!=''">
+                AND se.CREATE_PERSON = #{map.userID}
+            </if>
+            <if test="map.countyId!=null and map.countyId!=''">
+                AND sas.COUNTY_ID = #{map.countyId}
+            </if>
+            <if test="map.cityId!=null and map.cityId!=''">
+                AND sas.CITY_ID = #{map.cityId}
+            </if>
+            <if test="map.createStartDate!=null">
+                AND <![CDATA[se.CREATE_DATE >= #{map.createStartDate}]]>
+            </if>
+            <if test="map.createEndDate!=null">
+                AND <![CDATA[se.CREATE_DATE < #{map.createEndDate}]]>
+            </if>
+            <if test="map.auditType!=null">
+				and se.AUDITTYPE=#{map.auditType}           
+            </if>
+        ORDER BY se.CREATE_DATE DESC
+        ) a1  WHERE
+        <![CDATA[ROWNUM <= #{map.pageSize}]]> ) a2
+        WHERE <![CDATA[a2.rsn > #{map.pageNo}]]>
+    </select>
+
+	<select id="selectSysRg" parameterType="java.util.Map" resultType="java.lang.String">
+		SELECT 
+			   srg.NAME				
+		FROM SYS_ELECTRICITY se
+        LEFT JOIN SYS_REIMBURSEMENT_GROUP srg on se.SYS_RG_ID = srg.ID
+		WHERE 1=1
+		and srg.NAME is not null
+		<if test="userId != null and userId !=''">
+			AND se.CREATE_PERSON =#{userId}
+		</if>
+		GROUP BY srg.NAME
+	</select>
+	
+	<select id="getExcelByEleId" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT 
+			se.SERIAL_NUMBER as jhdh,					
+			se.STATUS as jhdzt,							
+			se.SUPPLIER_NAME as gysmc,					
+			se.OTHER_COST as qtfy,					
+			se.TOTAL_AMOUNT as zje,					
+			zsc.NAME as qx,								
+			zsy.NAME as ds,							
+			sas.ACCOUNT_NAME as bzdmc,					
+			sas.ACCOUNT_ALIAS as bzdbm,	
+			sas.OLD_FINANCE_NAME as ycwzdmc,			
+			sc.CONTRACT_NUMBER as htbh,						
+			sc.ASSET_MANAGEMENT_SITE_NAME as zgzdmc,	
+			sc.VENDOR_SITE_ID as gysddid,				
+			sc.IS_CLUD as sfbg,							
+			sc.CLUD_PRICE as bgj,						
+			swm.PAYMENT_ACCOUNT_CODE as dbhh,			
+			swm.CODE as dbbsf,						
+			swm.RATE as bl,							
+			swe.WHETHER_METER as sffb,					
+			swe.ELECTRIC_LOSS as dds,					
+			to_char(swe.BELONG_START_TIME,'yyyy-mm-dd HH24:mi:ss') as dfqsrq,			
+			to_char(swe.BELONG_END_TIME,'yyyy-mm-dd HH24:mi:ss') as dfzzrq,			
+			swe.STARTAMMETER as dfydqd,					
+			swe.MAX_READING as dfdbzdds,				
+			swe.DAY_AMMETER as dfydts,					
+			swe.END_AMMETER as dfydzd,					
+			swe.TOTAL_ELECIRIC as dfzydl,				
+			swe.UNIT_PRICE as dfdj,						
+			swe.TOTALAMOUNT as dfdbzje,					
+			swe.REMARKS as dfbz,						
+			swe.ACCESSORIES as dffj,					
+			scc.COST_CENTER_NAME as cbzx,				
+			semi.ELECTRICITY_AMOUNT as dfjebhs,			
+			semi.TAX_AMOUNT as fpsjje,					
+			srg.NAME as bzzmc
+			
+		FROM 
+			
+			SYS_ELECTRICITY se												
+			LEFT JOIN SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas.ID  	
+			LEFT JOIN YDJH_AREA zsc ON sas.COUNTY_ID = zsc.ID 				
+			LEFT JOIN YDJH_AREA zsy ON sas.CITY_ID = zsy.ID                		
+			LEFT JOIN SYS_CONTRACT sc ON se.CONTRACT_ID = sc.ID
+			LEFT JOIN SYS_REIMBURSEMENT_GROUP srg ON srg.ID = se.SYS_RG_ID  			
+			LEFT JOIN SYS_ELE_MID_WATTHOUR semw ON semw.SYS_ELECIRICITY_ID = se.ID 
+			LEFT JOIN SYS_WATTHOUR_EXTEND swe ON swe.ID = semw.SYS_WATTHOUR_EXTEND_ID 
+			LEFT JOIN SYS_WATTHOUR_METER swm ON swm.ID = swe.SYS_WATTHOUR_ID 	
+			LEFT JOIN SYS_COST_CENTER scc ON scc.ID = se.COST_CENTER_ID  		
+			LEFT JOIN SYS_ELECTRICITY_MID_INVOICE  semi ON semi.SYS_ELECTRICITY_ID = se.ID 
+			
+		WHERE se.ID = #{id}
+	</select>
+	
+	<select id="checkSubmitIsOneyOne" parameterType="java.util.Map" resultType="java.lang.Long">
+		SELECT 
+			count(1) AS isTrue
+		FROM
+			SYS_ELE_MID_SUBMIT
+		WHERE
+			SYS_ELE_SUBMIT_ID = #{submitID}
+	</select>
+	
+    <select id="queryListCount" parameterType="java.util.Map" resultType="java.lang.Long">
+        SELECT
+          count(1)
+        FROM
+        SYS_ELECTRICITY se
+        LEFT JOIN
+        SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas.ID
+        LEFT JOIN
+        YDJH_AREA zsc ON sas.COUNTY_ID=zsc.ID
+        LEFT JOIN
+        YDJH_AREA zsy ON sas.CITY_ID=zsy.ID
+        LEFT JOIN SYS_REIMBURSEMENT_GROUP srg ON se.SYS_RG_ID = srg.ID
+        WHERE
+        1=1
+        <if test="map.serialNumber != null and map.serialNumber!=''">
+            AND se.SERIAL_NUMBER = #{map.serialNumber}
+        </if>
+        <if test="map.accountName!=null and map.accountName!=''">
+            AND sas.ACCOUNT_NAME LIKE '%'||#{map.accountName}||'%'
+        </if>
+        <if test="map.status!=null and map.status.length>0">
+            AND se.STATUS IN
+            <foreach collection="map.status" index="index" item="st" open="("
+                     separator="," close=")">
+                #{st}
+            </foreach>
+        </if>
+        <if test="map.submitPerson!=null and map.submitPerson!=''">
+            AND se.SUBMIT_PERSON = #{map.submitPerson}
+        </if>
+        <if test="map.sysRgName!=null and map.sysRgName!=''">
+            AND srg.NAME LIKE '%'||#{map.sysRgName}||'%'
+        </if>
+        <if test="map.userID!=null and map.userID!=''">
+            AND se.CREATE_PERSON = #{map.userID}
+        </if>
+        <if test="map.countyId!=null and map.countyId!=''">
+            AND sas.COUNTY_ID = #{map.countyId}
+        </if>
+        <if test="map.cityId!=null and map.cityId!=''">
+            AND sas.CITY_ID = #{map.cityId}
+        </if>
+        <if test="map.createStartDate!=null">
+            AND <![CDATA[se.CREATE_DATE >= #{map.createStartDate}]]>
+        </if>
+        <if test="map.createEndDate!=null">
+            AND <![CDATA[se.CREATE_DATE < #{map.createEndDate}]]>
+        </if>
+        <if test="map.auditType!=null">
+				and se.AUDITTYPE=1            
+        </if>
+    </select>
+
+    <select id="stasticStatusByCreatePerson"  resultType="map">
+       SELECT SE.STATUS ,count(1) AMOUNT FROM SYS_ELECTRICITY se
+       WHERE 1=1
+      <if test="userId!=null and userId!=''">
+           AND se.CREATE_PERSON = #{userId, jdbcType=VARCHAR}
+      </if>
+        GROUP BY SE.STATUS
+    </select>
+
+    <select id="stasticStatusBySubmitPerson"  resultType="map">
+       SELECT SE.STATUS ,count(1) AMOUNT FROM SYS_ELECTRICITY se
+       WHERE 1=1
+      <if test="userId!=null and userId!=''">
+           AND se.SUBMIT_PERSON  = #{userId, jdbcType=VARCHAR}
+      </if>
+        GROUP BY SE.STATUS
+    </select>
+
+    <!-- 根据iDs 删除  mybatis 传入的都为map  list:ids-->
+    <delete id="deleteByIDs">
+        DELETE FROM SYS_ELECTRICITY WHERE ID IN
+        <foreach collection="list" index="index" item="id" open="("
+                 separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    <!-- 根据报账点ID获取税金金额 -->
+	<select id="findTaxAmountSum" resultType="java.lang.String">
+		select TAX_AMOUNT from SYS_ELECTRICITY_MID_INVOICE where SYS_ELECTRICITY_ID=#{id}
+	</select>
+	
+	<!-- 根据报账点ID获取电费金额-->
+	<select id="findElectricityAmountSum" resultType="java.lang.String">
+		select ELECTRICITY_AMOUNT from SYS_ELECTRICITY_MID_INVOICE where SYS_ELECTRICITY_ID=#{id}
+	</select>
+
+	<!-- 根据报账点ID获取其他金额 -->
+	<select id="findOtherCostSum" resultType="java.lang.String">
+		select OTHER_COST from SYS_ELECTRICITY where ID=#{id}
+	</select>
+	
+	<!-- 根据电费ID（SYS_ELECTRICITY的ID）获取报销单明细数据 -->
+	<!--  <select id="findExpenseAccountDetails" resultType="com.audit.modules.electricity.entity.ExpenseAccountDetails">
+		SELECT          
+            zsc.ZH_LABEL AS counties,
+            sas.ACCOUNT_NAME AS accountName,        
+            semi.TAX_AMOUNT AS taxAmount,           
+            semi.ELECTRICITY_AMOUNT as electricityAmount,           
+            se.OTHER_COST AS otherCost,        
+            swe.TOTALAMOUNT AS totalAmount,
+            se.EXPENSE_TOTAL_AMOUNT AS expenseTotalAmount,
+            se.PAYMENT_AMOUNT AS paymentAmount,
+            swe.UNIT_PRICE AS unitPrice,
+            swe.BELONG_START_TIME as belongStartTime,
+			swe.BELONG_END_TIME as belongEndTime,
+			swe.ELECTRIC_LOSS as electricLoss,
+			swe.DAY_AMMETER as dayAmmeter,
+			swe.STARTAMMETER as startAmmeter,
+			swe.END_AMMETER as endAmmeter,
+			swe.TOTAL_ELECIRIC as totalEleciric,
+			ss.NAME as supplierName,
+			ss.BANK_BRANCH_NAME as bankBranchName,
+			ss.BANK_NUM as bankNum,
+			sc.NAME as contract,
+			swe.REMARKS AS remark
+        FROM
+                SYS_ELECTRICITY se
+            LEFT JOIN SYS_ELECTRICITY_MID_INVOICE semi ON se. ID = semi.SYS_ELECTRICITY_ID
+            LEFT JOIN SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas.ID
+            LEFT JOIN ZG_SPACE_COUNTY zsc ON sas.COUNTY_ID = zsc.INT_ID
+ 			LEFT JOIN SYS_SUPPLIER ss ON se.SYS_SUPPLIER_ID = TO_CHAR(ss.ID)           
+            LEFT JOIN SYS_CONTRACT sc ON se.CONTRACT_ID = sc.ID
+            Left JOIN SYS_ELE_MID_WATTHOUR semw ON se.ID = semw.SYS_ELECIRICITY_ID
+            LEFT join SYS_WATTHOUR_EXTEND swe ON semw.SYS_WATTHOUR_EXTEND_ID =swe.ID
+		WHERE se.id=#{id}
+	</select>
+	
+	根据报账点ID获取稽核单数据
+	原来的合同与报账点关联
+	       LEFT JOIN SYS_SITE_MID_CONTRACT ssmc ON sas.ID = ssmc.ACCOUNT_SITE_ID
+           LEFT JOIN SYS_CONTRACT sc ON ssmc.CONTRACT_ID = sc.ID
+    <select id="findOneByID" resultType="com.audit.modules.electricity.entity.ElectrictyVO">
+		SELECT
+            se.ID AS ID,
+            se.SERIAL_NUMBER AS serialNumber,
+            se.CREATE_PERSON as createPerson,
+            zsy.CITY_NAME AS AREAS,
+            zsc.ZH_LABEL AS COUNTIES,
+            sas.CITY_ID as cityId,
+            sas.COUNTY_ID as countyId,
+            sas.ACCOUNT_NAME AS accountName,
+            sas.ACCOUNT_ALIAS AS accountAlias,
+            sc.IS_CLUD AS isClud,
+            sas.PRODUCT_NATURE AS productNature,
+            ss.NAME AS supplierName,
+            ss.ID AS supplierID,
+            ss.CODE AS supplierCode,
+            ss.ORGANIZATION_CODE AS organizationCode,
+            ss.REGION_CODE as regionCode,
+            se.COST_CENTER_ID as costCenterID,
+            scc.COST_CENTER_NAME AS costCenter,
+            se.TOWER_SITE_NUMBER AS towerSiteNumber,
+            se.SHARE_ELECTRICITY AS shareElectricity,          
+            semi.TAX_AMOUNT AS taxAmount,           
+            semi.ELECTRICITY_AMOUNT as electricityAmount,           
+            se.OTHER_COST AS otherCost,        
+            se.TOTAL_AMOUNT AS totalAmount,
+            se.EXPENSE_TOTAL_AMOUNT AS expenseTotalAmount,
+            se.PAYMENT_AMOUNT AS paymentAmount,
+            se.CREATE_DATE AS createDate,
+            se.STATUS,
+            sc.PRICE AS unitPrice,
+            sc.CLUD_PRICE AS cludPrice,
+            sas.ID AS sysAccountSiteId,
+            se.REMARK AS remark,
+            se.OVERPROOFREASONS AS overproofReasons,
+            srg.NAME AS sysRgName,
+            srg.ID AS sysRgID,
+            se.CONTRACT_ID as contractID,
+            se.DEPARTMENT_NAME as departmentName,
+            se.PAYTYPE as payType,
+            se.PROFESSIONAL as professional,
+
+            se.AUDITTYPE as auditType,
+            su.USER_NAME as createPerson,
+            sas.SITE_NAME as siteName,
+            sas.OLD_FINANCE_NAME as oldFinanceName,
+
+            se.AUDITTYPE as auditType,
+            su.USER_NAME as inputPerson     
+
+        FROM
+                SYS_ELECTRICITY se
+            LEFT JOIN SYS_ELECTRICITY_MID_INVOICE semi ON se. ID = semi.SYS_ELECTRICITY_ID
+            LEFT JOIN SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas.ID
+            LEFT JOIN ZG_SPACE_COUNTY zsc ON sas.COUNTY_ID = zsc.INT_ID
+            LEFT JOIN ZG_SPACE_CITY zsy ON sas.CITY_ID = zsy.INT_ID 
+            LEFT JOIN SYS_CONTRACT sc ON se.CONTRACT_ID = sc.ID
+            LEFT JOIN SYS_SUPPLIER ss ON se.SYS_SUPPLIER_ID = TO_CHAR(ss.ID)
+            LEFT JOIN SYS_COST_CENTER scc ON se.COST_CENTER_ID = scc.ID
+            LEFT JOIN SYS_REIMBURSEMENT_GROUP srg ON se.SYS_RG_ID= srg.ID
+
+            LEFT JOIN SYS_USER su on su.id=se.CREATE_PERSON
+
+
+		WHERE se.id=#{id}
+		
+		ORDER BY scc.SORT_NO asc
+	</select> -->
+
+	<!-- 根据电费ID（SYS_ELECTRICITY的ID）获取报销单明细数据 -->
+	 <select id="findExpenseAccountDetails" resultType="com.audit.modules.electricity.entity.ExpenseAccountDetails">
+		SELECT          
+            zsc.NAME AS counties,
+            sas.ACCOUNT_NAME AS accountName,        
+            semi.TAX_AMOUNT AS taxAmount,           
+            semi.ELECTRICITY_AMOUNT as electricityAmount,           
+            se.OTHER_COST AS otherCost,        
+            swe.TOTALAMOUNT AS totalAmount,
+            se.EXPENSE_TOTAL_AMOUNT AS expenseTotalAmount,
+            se.PAYMENT_AMOUNT AS paymentAmount,
+            swe.UNIT_PRICE AS unitPrice,
+            swe.BELONG_START_TIME as belongStartTime,
+			swe.BELONG_END_TIME as belongEndTime,
+			swe.ELECTRIC_LOSS as electricLoss,
+			swe.DAY_AMMETER as dayAmmeter,
+			swe.STARTAMMETER as startAmmeter,
+			swe.END_AMMETER as endAmmeter,
+			swe.TOTAL_ELECIRIC as totalEleciric,
+			ss.NAME as supplierName,
+			ss.BANK_BRANCH_NAME as bankBranchName,
+			ss.BANK_NUM as bankNum,
+			sc.NAME as contract,
+			swe.REMARKS AS remark
+        FROM
+                SYS_ELECTRICITY se
+            LEFT JOIN SYS_ELECTRICITY_MID_INVOICE semi ON se. ID = semi.SYS_ELECTRICITY_ID
+            LEFT JOIN SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas.ID
+            LEFT JOIN YDJH_AREA zsc ON sas.COUNTY_ID = zsc.ID
+ 			LEFT JOIN SYS_SUPPLIER ss ON se.SYS_SUPPLIER_ID = TO_CHAR(ss.ID)           
+            LEFT JOIN SYS_CONTRACT sc ON se.CONTRACT_ID = sc.ID
+            Left JOIN SYS_ELE_MID_WATTHOUR semw ON se.ID = semw.SYS_ELECIRICITY_ID
+            LEFT join SYS_WATTHOUR_EXTEND swe ON semw.SYS_WATTHOUR_EXTEND_ID =swe.ID
+		WHERE se.id=#{id}
+	</select>
+	
+	<!-- 根据报账点ID获取稽核单数据 -->
+	<!-- 原来的合同与报账点关联 -->
+	      <!--  LEFT JOIN SYS_SITE_MID_CONTRACT ssmc ON sas.ID = ssmc.ACCOUNT_SITE_ID -->
+          <!--  LEFT JOIN SYS_CONTRACT sc ON ssmc.CONTRACT_ID = sc.ID -->
+    <select id="findOneByID" resultType="com.audit.modules.electricity.entity.ElectrictyVO">
+		SELECT
+            se.ID AS ID,
+            se.SUBMIT_PERSON as submitPerson,
+            se.SERIAL_NUMBER AS serialNumber,
+            zsy.NAME AS AREAS,
+            zsc.NAME AS COUNTIES,
+            sas.CITY_ID as cityId,
+            sas.COUNTY_ID as countyId,
+            sas.ACCOUNT_NAME AS accountName,
+            sas.ACCOUNT_ALIAS AS accountAlias,
+            sc.IS_CLUD AS isClud,
+            sas.PRODUCT_NATURE AS productNature,
+            ss.ID AS supplierID,
+            ss.CODE AS supplierCode,
+            ss.ORGANIZATION_CODE AS organizationCode,
+            ss.REGION_CODE as regionCode,
+            se.COST_CENTER_ID as costCenterID,
+            scc.COST_CENTER_NAME AS costCenter,
+            se.TOWER_SITE_NUMBER AS towerSiteNumber,
+            se.SHARE_ELECTRICITY AS shareElectricity,                    
+            se.OTHER_COST AS otherCost,        
+            se.TOTAL_AMOUNT AS totalAmount,
+            se.EXPENSE_TOTAL_AMOUNT AS expenseTotalAmount,
+            se.PAYMENT_AMOUNT AS paymentAmount,
+            se.CREATE_DATE AS createDate,
+            se.STATUS,
+            sc.PRICE AS unitPrice,
+            sc.CLUD_PRICE AS cludPrice,
+            sas.ID AS sysAccountSiteId,
+            se.REMARK AS remark,
+            se.OVERPROOFREASONS AS overproofReasons,
+            srg.NAME AS sysRgName,
+            srg.ID AS sysRgID,
+            se.CONTRACT_ID as contractID,
+            se.DEPARTMENT_NAME as departmentName,
+            se.PAYTYPE as payType,
+            se.PROFESSIONAL as professional,
+
+            se.AUDITTYPE as auditType,
+            su.USER_NAME as createPerson,
+            sas.SITE_NAME as siteName,
+            sas.OLD_FINANCE_NAME as oldFinanceName,
+
+            su.USER_NAME as inputPerson,
+            se.SUPPLIER_NAME as supplierName,
+            si.BILL_TAX as taxes,
+            se.ISONLINE as isOnline
+            
+
+        FROM
+                SYS_ELECTRICITY se
+            LEFT JOIN SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas.ID
+            LEFT JOIN YDJH_AREA zsc ON sas.COUNTY_ID = zsc.ID
+            LEFT JOIN YDJH_AREA zsy ON sas.CITY_ID = zsy.ID 
+            LEFT JOIN SYS_CONTRACT sc ON se.CONTRACT_ID = sc.CONTRACTID
+            LEFT JOIN SYS_SUPPLIER ss ON se.SYS_SUPPLIER_ID = TO_CHAR(ss.ID)
+            LEFT JOIN SYS_COST_CENTER scc ON se.COST_CENTER_ID = scc.ID
+            LEFT JOIN SYS_REIMBURSEMENT_GROUP srg ON se.SYS_RG_ID= srg.ID
+			LEFT JOIN SYS_ELECTRICITY_MID_INVOICE semi on semi.SYS_ELECTRICITY_ID=se.id
+			LEFT JOIN SYS_INVOICE si on si.id=semi.SYS_INVOICE_ID
+            LEFT JOIN SYS_USER su on su.id=se.CREATE_PERSON
+
+
+		WHERE se.id=#{id}
+		
+		ORDER BY scc.SORT_NO asc
+	</select>
+	
+	
+	<select id="findOneByID11" resultType="com.audit.modules.electricity.entity.ElectrictyVO">
+		SELECT
+            se.ID AS ID,
+            se.SERIAL_NUMBER AS serialNumber,
+            zsy.NAME AS AREAS,
+            zsc.NAME AS COUNTIES,
+            sas.CITY_ID as cityId,
+            sas.COUNTY_ID as countyId,
+            sas.ACCOUNT_NAME AS accountName,
+            sas.ACCOUNT_ALIAS AS accountAlias,
+            sc.IS_CLUD AS isClud,
+            sas.PRODUCT_NATURE AS productNature,
+            ss.ID AS supplierID,
+            ss.CODE AS supplierCode,
+            ss.ORGANIZATION_CODE AS organizationCode,
+            ss.REGION_CODE as regionCode,
+            se.COST_CENTER_ID as costCenterID,
+            scc.COST_CENTER_NAME AS costCenter,
+            se.TOWER_SITE_NUMBER AS towerSiteNumber,
+            se.SHARE_ELECTRICITY AS shareElectricity,                    
+            se.OTHER_COST AS otherCost,        
+            se.TOTAL_AMOUNT AS totalAmount,
+            se.EXPENSE_TOTAL_AMOUNT AS expenseTotalAmount,
+            se.PAYMENT_AMOUNT AS paymentAmount,
+            se.CREATE_DATE AS createDate,
+            se.STATUS,
+            sc.PRICE AS unitPrice,
+            sc.CLUD_PRICE AS cludPrice,
+            sas.ID AS sysAccountSiteId,
+            se.REMARK AS remark,
+            se.OVERPROOFREASONS AS overproofReasons,
+            srg.NAME AS sysRgName,
+            srg.ID AS sysRgID,
+            se.CONTRACT_ID as contractID,
+            se.DEPARTMENT_NAME as departmentName,
+            se.PAYTYPE as payType,
+            se.PROFESSIONAL as professional,
+
+            se.AUDITTYPE as auditType,
+          
+            sas.SITE_NAME as siteName,
+            sas.OLD_FINANCE_NAME as oldFinanceName,
+
+          
+            se.SUPPLIER_NAME as supplierName     
+
+        FROM
+                SYS_ELECTRICITY se
+            LEFT JOIN SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas.ID
+            LEFT JOIN YDJH_AREA zsc ON sas.COUNTY_ID = zsc.ID
+            LEFT JOIN YDJH_AREA zsy ON sas.CITY_ID = zsy.ID 
+            LEFT JOIN SYS_CONTRACT sc ON se.CONTRACT_ID = sc.CONTRACTID
+            LEFT JOIN SYS_SUPPLIER ss ON se.SYS_SUPPLIER_ID = TO_CHAR(ss.ID)
+            LEFT JOIN SYS_COST_CENTER scc ON se.COST_CENTER_ID = scc.ID
+            LEFT JOIN SYS_REIMBURSEMENT_GROUP srg ON se.SYS_RG_ID= srg.ID
+
+           
+
+
+		WHERE se.id=#{id}
+			
+		ORDER BY scc.SORT_NO asc
+	</select>
+	
+	
+	
+	
+	<!-- 根据电费ID（SYS_ELECTRICITY的ID）获取流程ID -->
+	<select id="findInstanceId" resultType="java.lang.String">
+	select PROC_INST_ID_ from ACT_HI_PROCINST where BUSINESS_KEY_ = #{id} and ROWNUM=1
+	</select>
+	
+    <select id="findBySiteID" resultType="com.audit.modules.electricity.entity.ElectricyBaseVO">
+        SELECT
+              sc.IS_CLUD as isClud,
+              sc.CLUD_PRICE as cludPrice,
+              sc.PRICE as unitPrice
+        FROM
+               SYS_ACCOUNT_SITE sas
+        LEFT JOIN SYS_SITE_MID_CONTRACT ssmc ON sas.ID = ssmc.ACCOUNT_SITE_ID
+        LEFT JOIN SYS_CONTRACT sc ON ssmc.CONTRACT_ID = sc.ID
+        where 1=1
+        <if test="siteID!=null and siteID!=''">
+            AND sas.ID = #{siteID}
+        </if>
+    </select>
+
+	<select id="checkRoomIdByAccountId" parameterType="java.util.Map" resultType="java.lang.String">
+		SELECT ZSER.INT_ID as roomID
+			FROM SYS_SITE_MID_RESOURCE SSMR
+			LEFT JOIN ZG_SPACE_EQUIP_ROOM zser ON SSMR.RESOURCE_ID = ZSER.INT_ID
+			LEFT JOIN SYS_ROOM_LOCKING SRL ON  ZSER.INT_ID = SRL.ROOM_ID
+			
+			WHERE 
+				SSMR."TYPE" = 1
+				AND SSMR.ACCOUNT_SITE_ID = #{accountId}
+				<if test="status=='在网'">
+		           <![CDATA[ AND INSTR(ZSER.STATUS,'在网')>0 ]]>
+		        </if>
+		        <if test="status=='退网'">
+		            and INSTR(ZSER.STATUS,'在网')=0
+		        </if>
+		        <if test="isLocking != null and isLocking == 'isLocking'">
+		        	AND SRL.ROOM_ID IS NOT NULL
+		        </if>
+	</select>
+<!--  
+	<update id="lockingRoom" parameterType="java.util.Map">
+		UPDATE SYS_SITE_MID_RESOURCE 
+				SET ISLOCKING = #{isLocking},
+				LOCKING_ELECTRICTYID = #{electrictyId}
+				
+			WHERE RESOURCE_ID = #{roomID}
+				AND "TYPE" = 1
+				
+	
+	</update>
+	
+	<update id="unLockingRoom" parameterType="java.lang.String">
+		UPDATE SYS_SITE_MID_RESOURCE 
+				SET ISLOCKING = '',
+				LOCKING_ELECTRICTYID = ''
+			WHERE RESOURCE_ID = #{roomID}
+				AND "TYPE" = 1
+	</update>
+-->
+
+  <select id="findByCreateDate" resultType="com.audit.modules.electricity.entity.ElectricyBaseVO">
+        SELECT
+              se.SYS_ACCOUNT_SITE_ID as siteID,
+              se.CREATE_DATE as createDate
+        FROM
+               SYS_ACCOUNT_SITE sas
+        LEFT JOIN SYS_ELECTRICITY se ON sas.ID = se.SYS_ACCOUNT_SITE_ID
+        where 1=1
+        <if test="siteID!=null and siteID!=''">
+            AND sas.ID = #{siteID}
+        </if>
+    </select>
+
+     <insert id="saveElectricty" parameterType="com.audit.modules.electricity.entity.ElectrictySaveVO">
+		INSERT INTO SYS_ELECTRICITY(ID,SERIAL_NUMBER,SYS_ACCOUNT_SITE_ID,
+		             STATUS,COST_CENTER_ID,TOWER_SITE_NUMBER,SHARE_ELECTRICITY,
+		             OTHER_COST,TOTAL_AMOUNT,EXPENSE_TOTAL_AMOUNT,
+		             PAYMENT_AMOUNT,CREATE_DATE,SUBMIT_PERSON,CREATE_PERSON,SYS_RG_ID,REMARK,SYS_SUPPLIER_ID,CONTRACT_ID,DEPARTMENT_NAME,
+		             PAYTYPE,PROFESSIONAL,AUDITTYPE,SUPPLIER_NAME,ISONLINE
+		             )
+
+		VALUES (#{id,jdbcType=VARCHAR},#{serialNumber,jdbcType=VARCHAR},#{sysAccountSiteId,jdbcType=VARCHAR}
+		        ,#{status,jdbcType=INTEGER},#{costCenterID,jdbcType=VARCHAR},#{towerSiteNumber,jdbcType=VARCHAR},
+		        #{shareElectricity,jdbcType=VARCHAR},#{otherCost,jdbcType=VARCHAR},#{totalAmount,jdbcType=VARCHAR},
+		        #{expenseTotalAmount,jdbcType=VARCHAR},#{paymentAmount,jdbcType=VARCHAR},#{createDate,jdbcType=TIMESTAMP}
+		        ,#{submitPerson,jdbcType=VARCHAR},#{createPerson,jdbcType=VARCHAR},#{sysRgID,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR}
+		        ,#{sysSupplierID,jdbcType=VARCHAR},#{contractID,jdbcType=VARCHAR},#{departmentName,jdbcType=VARCHAR},
+		        #{payType,jdbcType=INTEGER},#{professional,jdbcType=VARCHAR},#{auditType,jdbcType=INTEGER},#{supplierName,jdbcType=VARCHAR},
+		        #{isOnline,jdbcType=VARCHAR}
+		        )
+	</insert>
+
+    <select id="findFileByElID" parameterType="java.util.Map" resultType="com.audit.modules.system.entity.SysFileVO">
+        SELECT
+            sf.ID as id,
+            sf.FILENAME as filename,
+            sf.EXT as ext
+        FROM SYS_ELECTRICITY se
+        INNER JOIN SYS_MIDDLE_FILE smf ON se.ID=smf.BUSINESS_ID
+        INNER JOIN SYS_FILE sf ON smf.SYS_FILE_ID = sf.ID
+        WHERE 1=1
+        <if test="id!=null and id!=''">
+            AND se.ID = #{id}
+        </if>
+    </select>
+
+    <select id="queryElectricityBenchmarkByElectricityId" resultType="com.audit.modules.electricity.entity.ElectricityBenchmark" parameterType="java.lang.String">
+		SELECT
+		    ID,
+		    ELECTRICITY_ID,
+		    TYPE,
+		    BENCHMARK,
+		    OVER_PROPORTION, REASON
+		FROM SYS_ELECTRICITY_BENCHMARK
+		WHERE
+			ELECTRICITY_ID = #{electricityId}
+	</select>
+
+    <!-- 修改电费 -->
+    <update id="updateElectricty" parameterType="com.audit.modules.electricity.entity.ElectrictySaveVO">
+		UPDATE SYS_ELECTRICITY
+		<set>
+		    SERIAL_NUMBER=#{serialNumber,jdbcType=VARCHAR},
+            SYS_ACCOUNT_SITE_ID=#{sysAccountSiteId,jdbcType=VARCHAR},
+            STATUS=#{status,jdbcType=INTEGER},
+            COST_CENTER_ID=#{costCenterID,jdbcType=VARCHAR},
+            TOWER_SITE_NUMBER=#{towerSiteNumber,jdbcType=VARCHAR},
+            SHARE_ELECTRICITY=#{shareElectricity,jdbcType=VARCHAR},
+            OTHER_COST=#{otherCost,jdbcType=VARCHAR},
+            TOTAL_AMOUNT=#{totalAmount,jdbcType=VARCHAR},
+            EXPENSE_TOTAL_AMOUNT=#{expenseTotalAmount,jdbcType=VARCHAR},
+            PAYMENT_AMOUNT=#{paymentAmount,jdbcType=VARCHAR},
+            UPDATE_DATE=#{updateDate,jdbcType=TIMESTAMP},
+            REMARK=#{remark,jdbcType=VARCHAR},
+            OVERPROOFREASONS=#{overproofReasons,jdbcType=VARCHAR},
+            SYS_RG_ID=#{sysRgID,jdbcType=VARCHAR},
+            CONTRACT_ID=#{contractID,jdbcType=VARCHAR},
+            DEPARTMENT_NAME=#{departmentName,jdbcType=VARCHAR},
+            <if test="payType!=null">
+            	PAYTYPE=#{payType},
+            	PROFESSIONAL=#{professional}
+            </if>
+         </set>
+		WHERE ID=#{id}
+	</update>
+
+    <update id="updateStatus" parameterType="java.util.Map">
+		UPDATE SYS_ELECTRICITY
+		SET
+		    STATUS=#{status,jdbcType=INTEGER}
+		WHERE ID=#{id}
+	</update>
+
+    <update id="updateSubmitPerson" parameterType="java.util.Map">
+		UPDATE SYS_ELECTRICITY
+		SET
+		      SUBMIT_PERSON=#{submitPerson,jdbcType=VARCHAR}
+		WHERE ID=#{id}
+	</update>
+
+    <select id="findSiteIdByEid" resultType="com.audit.modules.electricity.entity.ElectrictyVO"
+            parameterType="java.util.List">
+        SELECT
+            se.ID AS ID,
+            SYS_ACCOUNT_SITE_ID AS sysAccountSiteId,
+            semi.ELECTRICITY_AMOUNT AS electricityAmount,
+            semi.TAX_AMOUNT AS taxAmount,
+            TOTAL_AMOUNT AS totalAmount
+        FROM
+            SYS_ELECTRICITY se
+        LEFT JOIN SYS_ELECTRICITY_MID_INVOICE semi ON se.ID = semi.SYS_ELECTRICITY_ID
+        WHERE se.ID IN
+        <foreach collection="list" index="index" item="id" open="("
+                 separator="," close=")">
+            #{id,jdbcType=VARCHAR}
+        </foreach>
+    </select>
+
+    <!-- <select id="queryByIDs" parameterType="java.util.List"
+            resultType="com.audit.modules.electricity.entity.ElectrictyListVO">
+        SELECT
+            se.id as id,
+            se.SERIAL_NUMBER as serialNumber,
+            zsy.CITY_NAME as AREAS,
+            zsc.ZH_LABEL as COUNTIES,
+            sas.ACCOUNT_NAME as accountName,
+            sas.ID as siteID,
+            se.CREATE_DATE as createDate,
+            se.STATUS,
+            se.TOTAL_AMOUNT as amount,
+            su.NAME as supplierName,
+            (SELECT sysu.USER_NAME FROM SYS_USER sysu WHERE sysu.ID = se.CREATE_PERSON AND ROWNUM &lt;= 1) as createPersonName
+        FROM SYS_ELECTRICITY se
+        LEFT JOIN SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas.ID
+        LEFT JOIN ZG_SPACE_COUNTY zsc ON sas.COUNTY_ID=zsc.INT_ID
+        LEFT JOIN ZG_SPACE_CITY zsy ON sas.CITY_ID=zsy.INT_ID
+        LEFT JOIN SYS_SITE_MID_SUPPLIER ssms ON ssms.ACCOUNT_SITE_ID = sas.ID
+        LEFT JOIN SYS_SUPPLIER su ON ssms.SUPPLIER_ID=su.ID
+        WHERE se.id IN
+        <foreach collection="list" index="index" item="id" open="("
+                 separator="," close=")">
+            #{id,jdbcType=VARCHAR}
+        </foreach>
+
+    </select>
+    
+    
+    
+    
+    <select id="zqueryByIDs" parameterType="java.util.List"
+            resultType="com.audit.modules.electricity.entity.ElectrictyListVO">
+        SELECT
+            se.id as id,
+            se.SERIAL_NUMBER as serialNumber,
+            zsy.CITY_NAME as AREAS,
+            zsc.ZH_LABEL as COUNTIES,
+            sas.ACCOUNT_NAME as accountName,
+            sas.ID as siteID,
+            se.CREATE_DATE as createDate,
+            se.STATUS,
+            se.TOTAL_AMOUNT as amount,
+            su.NAME as supplierName,
+            (SELECT sysu.USER_NAME FROM SYS_USER sysu WHERE sysu.ID = se.CREATE_PERSON AND ROWNUM &lt;= 1) as createPersonName
+        FROM SYS_ELECTRICITY se
+        LEFT JOIN SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas.ID
+        LEFT JOIN ZG_SPACE_COUNTY zsc ON sas.COUNTY_ID=zsc.INT_ID
+        LEFT JOIN ZG_SPACE_CITY zsy ON sas.CITY_ID=zsy.INT_ID
+        LEFT JOIN SYS_SITE_MID_SUPPLIER ssms ON ssms.ACCOUNT_SITE_ID = sas.ID
+        LEFT JOIN SYS_SUPPLIER su ON ssms.SUPPLIER_ID=su.ID
+        WHERE se.id IN
+        <foreach collection="list" index="index" item="id" open="("
+                 separator="," close=")">
+            #{id,jdbcType=VARCHAR}
+        </foreach>
+        and se.AUDITTYPE=1
+    </select> -->
+
+<select id="queryByIDs" parameterType="java.util.List"
+            resultType="com.audit.modules.electricity.entity.ElectrictyListVO">
+        SELECT
+            se.id as id,
+            se.SERIAL_NUMBER as serialNumber,
+            zsy.NAME as AREAS,
+            zsc.NAME as COUNTIES,
+            sas.ACCOUNT_NAME as accountName,
+            sas.ID as siteID,
+            se.CREATE_DATE as createDate,
+            se.STATUS,
+            se.TOTAL_AMOUNT as amount,
+            su.NAME as supplierName,
+            se.OVERPROOFREASONS as dec,
+            
+            (SELECT sysu.USER_NAME FROM SYS_USER sysu WHERE sysu.ID = se.CREATE_PERSON AND ROWNUM &lt;= 1) as createPersonName
+        FROM SYS_ELECTRICITY se
+        LEFT JOIN SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas.ID
+        LEFT JOIN YDJH_AREA zsc ON sas.COUNTY_ID=zsc.ID
+        LEFT JOIN YDJH_AREA zsy ON sas.CITY_ID=zsy.ID
+        LEFT JOIN SYS_SUPPLIER su ON  se.SYS_SUPPLIER_ID = TO_CHAR(su.ID)
+        WHERE se.id IN
+        <foreach collection="list" index="index" item="id" open="("
+                 separator="," close=")">
+            #{id,jdbcType=VARCHAR}
+        </foreach>
+
+    </select>
+    
+    
+    
+    
+    <select id="zqueryByIDs" parameterType="java.util.List"
+            resultType="com.audit.modules.electricity.entity.ElectrictyListVO">
+        SELECT
+            se.id as id,
+            se.SERIAL_NUMBER as serialNumber,
+            zsy.NAME as AREAS,
+            zsc.NAME as COUNTIES,
+            sas.ACCOUNT_NAME as accountName,
+            sas.ID as siteID,
+            se.CREATE_DATE as createDate,
+            se.STATUS,
+            se.TOTAL_AMOUNT as amount,
+            su.NAME as supplierName,
+            (SELECT sysu.USER_NAME FROM SYS_USER sysu WHERE sysu.ID = se.CREATE_PERSON AND ROWNUM &lt;= 1) as createPersonName
+        FROM SYS_ELECTRICITY se
+        LEFT JOIN SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas.ID
+        LEFT JOIN YDJH_AREA zsc ON sas.COUNTY_ID=zsc.ID
+        LEFT JOIN YDJH_AREA zsy ON sas.CITY_ID=zsy.ID
+        LEFT JOIN SYS_SUPPLIER su ON  se.SYS_SUPPLIER_ID = TO_CHAR(su.ID)
+        WHERE se.id IN
+        <foreach collection="list" index="index" item="id" open="("
+                 separator="," close=")">
+            #{id,jdbcType=VARCHAR}
+        </foreach>
+        and se.AUDITTYPE=1
+    </select>
+
+    <select id="queryTotalAmount" resultType="com.audit.modules.electricity.entity.ElectrictySaveVO">
+        SELECT
+            SUM (TO_NUMBER(semi.TAX_AMOUNT)) AS taxAmount,
+            SUM (
+                TO_NUMBER (semi.ELECTRICITY_AMOUNT)
+            ) AS electricityAmount,
+            SUM (TO_NUMBER(OTHER_COST)) AS otherCost,
+            SUM (TO_NUMBER(TOTAL_AMOUNT)) AS totalAmount
+        FROM
+            SYS_ELECTRICITY se LEFT JOIN SYS_ELECTRICITY_MID_INVOICE semi ON se.ID=semi.SYS_ELECTRICITY_ID
+    </select>
+
+    <select id="queryElectricityBySiteID" parameterType="java.lang.String" resultType="com.audit.modules.watthourmeter.entity.WatthourExtendVO">
+        SELECT
+	      swe.BELONG_START_TIME AS belongStartTime,
+	      swe.BELONG_END_TIME as belongEndTime,
+	      swm.REIMBURSEMENT_DATE AS reimbursementDate,
+	      se.STATUS
+        FROM
+            SYS_ELECTRICITY se
+            INNER JOIN SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas.ID
+            INNER JOIN SYS_SITE_MID_METER ssme ON ssme.ACCOUNT_SITE_ID=sas.ID
+            INNER JOIN SYS_WATTHOUR_METER swm ON swm.ID = ssme.WATTHOUR_METER_ID
+            INNER JOIN SYS_WATTHOUR_EXTEND swe ON swm.ID = swe.SYS_WATTHOUR_ID
+        WHERE se.SYS_ACCOUNT_SITE_ID = #{siteID} <![CDATA[and se.AUDITTYPE<>1 ]]>
+    </select>
+    
+    
+    
+    <select id="queryZElectricityBySiteID" parameterType="java.lang.String" resultType="com.audit.modules.watthourmeter.entity.WatthourExtendVO">
+        SELECT
+	      swe.BELONG_START_TIME AS belongStartTime,
+	      swe.BELONG_END_TIME as belongEndTime,
+	      swm.REIMBURSEMENT_DATE AS reimbursementDate,
+	      se.STATUS
+        FROM
+            SYS_ELECTRICITY se
+            INNER JOIN SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas.ID
+            INNER JOIN SYS_SITE_MID_METER ssme ON ssme.ACCOUNT_SITE_ID=sas.ID
+            INNER JOIN SYS_WATTHOUR_METER swm ON swm.ID = ssme.WATTHOUR_METER_ID
+            INNER JOIN SYS_WATTHOUR_EXTEND swe ON swm.ID = swe.SYS_WATTHOUR_ID
+        WHERE se.SYS_ACCOUNT_SITE_ID = #{siteID} and se.AUDITTYPE=1
+    </select>
+    
+    
+
+    <insert id="saveEleMidInvoice" parameterType="com.audit.modules.electricity.entity.ElectrictyMidInvoice">
+        INSERT INTO
+                SYS_ELECTRICITY_MID_INVOICE(
+                  ID,
+                  SYS_INVOICE_ID,
+                  SYS_ELECTRICITY_ID,
+                  TAX_AMOUNT,
+                  ELECTRICITY_AMOUNT
+                  )
+        VALUES (
+                #{id,jdbcType=VARCHAR},
+                #{invoiceId,jdbcType=VARCHAR},
+                #{sysElectricityId,jdbcType=VARCHAR},
+                #{taxAmount,jdbcType=VARCHAR},
+                #{electricityAmount,jdbcType=VARCHAR}
+                )
+    </insert>
+
+    <select id="findByEleID" resultType="com.audit.modules.electricity.entity.ElectrictyMidInvoice" parameterType="java.lang.String">
+        SELECT
+            semi.ID,
+            semi.SYS_INVOICE_ID AS invoiceId,
+            semi.TAX_AMOUNT AS taxAmount,
+            semi.ELECTRICITY_AMOUNT as electricityAmount,
+            si.BILL_TYPE AS billType,
+            si.BILL_TAX AS billTax
+        FROM
+            SYS_ELECTRICITY se
+        LEFT JOIN SYS_ELECTRICITY_MID_INVOICE semi ON se. ID = semi.SYS_ELECTRICITY_ID
+        LEFT JOIN SYS_INVOICE si ON si. ID = semi.SYS_INVOICE_ID
+        WHERE se.ID = #{eleID}
+    </select>
+
+    <delete id="deleteEleMidInvoiceByEleID" parameterType="java.lang.String">
+        DELETE FROM SYS_ELECTRICITY_MID_INVOICE WHERE SYS_ELECTRICITY_ID = #{eleID}
+    </delete>
+
+
+    <select id="findElectricityWatthourByEleIds" resultType="com.audit.modules.electricity.entity.ElectricityWatthourEntity"
+            parameterType="java.util.List">
+        select
+          se.id as electricityId, se.sys_account_site_id as siteId, se.SERIAL_NUMBER as electricitySN,
+          swe.SYS_WATTHOUR_ID as watthourId, swe.total_eleciric as totalElecitity, swe.DAY_AMMETER as dateRange
+        from sys_electricity se
+        left join SYS_ELE_MID_WATTHOUR semw on se.id = semw.SYS_ELECIRICITY_ID
+        left join SYS_WATTHOUR_EXTEND swe on semw.SYS_WATTHOUR_EXTEND_ID = swe.id
+        where se.id in
+        <foreach collection="list" index="index" item="id" open="("
+                 separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="checkSerialNumber" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT count(1) FROM sys_electricity WHERE SERIAL_NUMBER =#{serialNumber}
+    </select>
+    
+   <!--  <select id="getWaBySiteId" parameterType="java.lang.String" resultType="">
+    	select swe.*
+from SYS_WATTHOUR_EXTEND swe
+where swe.id=
+(select semw.SYS_WATTHOUR_EXTEND_ID
+ from SYS_ELE_MID_WATTHOUR  semw
+where semw.SYS_ELECIRICITY_ID=
+(SELECT se.id
+from SYS_ELECTRICITY se
+where se.SYS_ACCOUNT_SITE_ID=#{id}))
+    </select> -->
+    
+    
+    <!-- 根据流水号查电费稽核table -->
+    <select id="getCpBySerNum" parameterType="java.lang.String" resultMap="elMap">
+    	select * from SYS_ELECTRICITY where SERIAL_NUMBER=#{serialNumber}
+    </select>
+    
+       <!-- 根据id查电费稽核table -->
+    <select id="getCpById" parameterType="java.lang.String" resultMap="elMap">
+    	select * from SYS_ELECTRICITY where id=#{id}
+    </select>
+    
+   <!--  <select id="getall" resultMap="elMap">
+    	SELECT
+            se.ID AS ID,
+            se.SERIAL_NUMBER AS serialNumber,
+            zsy.CITY_NAME AS AREAS,
+            zsc.ZH_LABEL AS COUNTIES,
+            sas.ACCOUNT_NAME AS accountName,
+            sas.ACCOUNT_ALIAS AS accountAlias,
+            sc.IS_CLUD AS isClud,
+            sas.PRODUCT_NATURE AS productNature,
+            ss.NAME AS supplierName,
+            ss.ID AS supplierID,
+            ss.CODE AS supplierCode,
+            ss.ORGANIZATION_CODE AS organizationCode,
+            ss.REGION_CODE as regionCode,
+            se.COST_CENTER_ID as costCenterID,
+            scc.COST_CENTER_NAME AS costCenter,
+            se.TOWER_SITE_NUMBER AS towerSiteNumber,
+            se.SHARE_ELECTRICITY AS shareElectricity,          
+            semi.TAX_AMOUNT AS taxAmount,           
+            semi.ELECTRICITY_AMOUNT as electricityAmount,           
+            se.OTHER_COST AS otherCost,        
+            se.TOTAL_AMOUNT AS totalAmount,
+            se.EXPENSE_TOTAL_AMOUNT AS expenseTotalAmount,
+            se.PAYMENT_AMOUNT AS paymentAmount,
+            se.CREATE_DATE AS createDate,
+            se.STATUS,
+            sc.PRICE AS unitPrice,
+            sc.CLUD_PRICE AS cludPrice,
+            sas.ID AS sysAccountSiteId,
+            se.REMARK AS remark,
+            se.OVERPROOFREASONS AS overproofReasons,
+            srg.NAME AS sysRgName,
+            srg.ID AS sysRgID,
+            se.CONTRACT_ID as contractID,
+            se.DEPARTMENT_NAME as departmentName    
+        FROM
+                SYS_ELECTRICITY se
+            LEFT JOIN SYS_ELECTRICITY_MID_INVOICE semi ON se. ID = semi.SYS_ELECTRICITY_ID
+            LEFT JOIN SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas.ID
+            LEFT JOIN ZG_SPACE_COUNTY zsc ON sas.COUNTY_ID = zsc.INT_ID
+            LEFT JOIN ZG_SPACE_CITY zsy ON sas.CITY_ID = zsy.INT_ID
+            LEFT JOIN SYS_SITE_MID_CONTRACT ssmc ON sas.ID = ssmc.ACCOUNT_SITE_ID
+            LEFT JOIN SYS_CONTRACT sc ON ssmc.CONTRACT_ID = sc.ID
+            LEFT JOIN SYS_SUPPLIER ss ON se.SYS_SUPPLIER_ID = TO_CHAR(ss.ID)
+            LEFT JOIN SYS_COST_CENTER scc ON se.COST_CENTER_ID = scc.ID
+            LEFT JOIN SYS_REIMBURSEMENT_GROUP srg ON se.SYS_RG_ID= srg.ID
+    		where se.AUDITTYPE=0 and status=2 or status=5
+    		ORDER BY scc.SORT_NO asc
+    </select>
+    
+    
+    
+    <select id="getZall" resultMap="elMap">
+    	SELECT
+            se.ID AS ID,
+            se.SERIAL_NUMBER AS serialNumber,
+            zsy.CITY_NAME AS AREAS,
+            zsc.ZH_LABEL AS COUNTIES,
+            sas.ACCOUNT_NAME AS accountName,
+            sas.ACCOUNT_ALIAS AS accountAlias,
+            sc.IS_CLUD AS isClud,
+            sas.PRODUCT_NATURE AS productNature,
+            ss.NAME AS supplierName,
+            ss.ID AS supplierID,
+            ss.CODE AS supplierCode,
+            ss.ORGANIZATION_CODE AS organizationCode,
+            ss.REGION_CODE as regionCode,
+            se.COST_CENTER_ID as costCenterID,
+            scc.COST_CENTER_NAME AS costCenter,
+            se.TOWER_SITE_NUMBER AS towerSiteNumber,
+            se.SHARE_ELECTRICITY AS shareElectricity,          
+            semi.TAX_AMOUNT AS taxAmount,           
+            semi.ELECTRICITY_AMOUNT as electricityAmount,           
+            se.OTHER_COST AS otherCost,        
+            se.TOTAL_AMOUNT AS totalAmount,
+            se.EXPENSE_TOTAL_AMOUNT AS expenseTotalAmount,
+            se.PAYMENT_AMOUNT AS paymentAmount,
+            se.CREATE_DATE AS createDate,
+            se.STATUS,
+            sc.PRICE AS unitPrice,
+            sc.CLUD_PRICE AS cludPrice,
+            sas.ID AS sysAccountSiteId,
+            se.REMARK AS remark,
+            se.OVERPROOFREASONS AS overproofReasons,
+            srg.NAME AS sysRgName,
+            srg.ID AS sysRgID,
+            se.CONTRACT_ID as contractID,
+            se.DEPARTMENT_NAME as departmentName    
+        FROM
+                SYS_ELECTRICITY se
+            LEFT JOIN SYS_ELECTRICITY_MID_INVOICE semi ON se. ID = semi.SYS_ELECTRICITY_ID
+            LEFT JOIN SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas.ID
+            LEFT JOIN ZG_SPACE_COUNTY zsc ON sas.COUNTY_ID = zsc.INT_ID
+            LEFT JOIN ZG_SPACE_CITY zsy ON sas.CITY_ID = zsy.INT_ID
+            LEFT JOIN SYS_SITE_MID_CONTRACT ssmc ON sas.ID = ssmc.ACCOUNT_SITE_ID
+            LEFT JOIN SYS_CONTRACT sc ON ssmc.CONTRACT_ID = sc.ID
+            LEFT JOIN SYS_SUPPLIER ss ON se.SYS_SUPPLIER_ID = TO_CHAR(ss.ID)
+            LEFT JOIN SYS_COST_CENTER scc ON se.COST_CENTER_ID = scc.ID
+            LEFT JOIN SYS_REIMBURSEMENT_GROUP srg ON se.SYS_RG_ID= srg.ID
+    		where se.AUDITTYPE=1 and status=2 or status=5  
+    		ORDER BY scc.SORT_NO asc
+    </select> -->
+    
+     <select id="getall" parameterType="java.util.Map" resultMap="elMap">
+    	SELECT * FROM (
+    		SELECT ROWNUM AS rn,
+            se.ID AS ID,
+            se.SERIAL_NUMBER AS serialNumber,
+            zsy.NAME AS AREAS,
+            zsc.NAME AS COUNTIES,
+            sas.ACCOUNT_NAME AS accountName,
+            sas.ACCOUNT_ALIAS AS accountAlias,
+            sc.IS_CLUD AS isClud,
+            sas.PRODUCT_NATURE AS productNature,
+            ss.NAME AS supplierName,
+            ss.ID AS supplierID,
+            ss.CODE AS supplierCode,
+            ss.ORGANIZATION_CODE AS organizationCode,
+            ss.REGION_CODE as regionCode,
+            se.COST_CENTER_ID as costCenterID,
+            scc.COST_CENTER_NAME AS costCenter,
+            se.TOWER_SITE_NUMBER AS towerSiteNumber,
+            se.SHARE_ELECTRICITY AS shareElectricity,          
+            semi.TAX_AMOUNT AS taxAmount,           
+            semi.ELECTRICITY_AMOUNT as electricityAmount,           
+            se.OTHER_COST AS otherCost,        
+            se.TOTAL_AMOUNT AS totalAmount,
+            se.EXPENSE_TOTAL_AMOUNT AS expenseTotalAmount,
+            se.PAYMENT_AMOUNT AS paymentAmount,
+            se.CREATE_DATE AS createDate,
+            se.STATUS,
+            sc.PRICE AS unitPrice,
+            sc.CLUD_PRICE AS cludPrice,
+            sas.ID AS sysAccountSiteId,
+            se.REMARK AS remark,
+            se.OVERPROOFREASONS AS overproofReasons,
+            srg.NAME AS sysRgName,
+            srg.ID AS sysRgID,
+            se.CONTRACT_ID as contractID,
+            se.DEPARTMENT_NAME as departmentName    
+        FROM
+                SYS_ELECTRICITY se
+            LEFT JOIN SYS_ELECTRICITY_MID_INVOICE semi ON se. ID = semi.SYS_ELECTRICITY_ID
+            LEFT JOIN SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas.ID
+            LEFT JOIN YDJH_AREA zsc ON sas.COUNTY_ID = zsc.ID
+            LEFT JOIN YDJH_AREA zsy ON sas.CITY_ID = zsy.ID
+            LEFT JOIN SYS_SITE_MID_CONTRACT ssmc ON sas.ID = ssmc.ACCOUNT_SITE_ID
+            LEFT JOIN SYS_CONTRACT sc ON ssmc.CONTRACT_ID = sc.ID
+            LEFT JOIN SYS_SUPPLIER ss ON se.SYS_SUPPLIER_ID = TO_CHAR(ss.ID)
+            LEFT JOIN SYS_COST_CENTER scc ON se.COST_CENTER_ID = scc.ID
+            LEFT JOIN SYS_REIMBURSEMENT_GROUP srg ON se.SYS_RG_ID= srg.ID
+    		where se.AUDITTYPE=0 and status=2 or status=5
+    		ORDER BY scc.SORT_NO asc  )
+    		where rn between #{first} and #{last}
+    </select>
+    
+    
+    
+    <select id="getZall" resultMap="elMap">
+    	SELECT
+            se.ID AS ID,
+            se.SERIAL_NUMBER AS serialNumber,
+            zsy.NAME AS AREAS,
+            zsc.NAME AS COUNTIES,
+            sas.ACCOUNT_NAME AS accountName,
+            sas.ACCOUNT_ALIAS AS accountAlias,
+            sc.IS_CLUD AS isClud,
+            sas.PRODUCT_NATURE AS productNature,
+            ss.NAME AS supplierName,
+            ss.ID AS supplierID,
+            ss.CODE AS supplierCode,
+            ss.ORGANIZATION_CODE AS organizationCode,
+            ss.REGION_CODE as regionCode,
+            se.COST_CENTER_ID as costCenterID,
+            scc.COST_CENTER_NAME AS costCenter,
+            se.TOWER_SITE_NUMBER AS towerSiteNumber,
+            se.SHARE_ELECTRICITY AS shareElectricity,          
+            semi.TAX_AMOUNT AS taxAmount,           
+            semi.ELECTRICITY_AMOUNT as electricityAmount,           
+            se.OTHER_COST AS otherCost,        
+            se.TOTAL_AMOUNT AS totalAmount,
+            se.EXPENSE_TOTAL_AMOUNT AS expenseTotalAmount,
+            se.PAYMENT_AMOUNT AS paymentAmount,
+            se.CREATE_DATE AS createDate,
+            se.STATUS,
+            sc.PRICE AS unitPrice,
+            sc.CLUD_PRICE AS cludPrice,
+            sas.ID AS sysAccountSiteId,
+            se.REMARK AS remark,
+            se.OVERPROOFREASONS AS overproofReasons,
+            srg.NAME AS sysRgName,
+            srg.ID AS sysRgID,
+            se.CONTRACT_ID as contractID,
+            se.DEPARTMENT_NAME as departmentName    
+        FROM
+                SYS_ELECTRICITY se
+            LEFT JOIN SYS_ELECTRICITY_MID_INVOICE semi ON se. ID = semi.SYS_ELECTRICITY_ID
+            LEFT JOIN SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas.ID
+            LEFT JOIN YDJH_AREA zsc ON sas.COUNTY_ID = zsc.ID
+            LEFT JOIN YDJH_AREA zsy ON sas.CITY_ID = zsy.ID
+            LEFT JOIN SYS_SITE_MID_CONTRACT ssmc ON sas.ID = ssmc.ACCOUNT_SITE_ID
+            LEFT JOIN SYS_CONTRACT sc ON ssmc.CONTRACT_ID = sc.ID
+            LEFT JOIN SYS_SUPPLIER ss ON se.SYS_SUPPLIER_ID = TO_CHAR(ss.ID)
+            LEFT JOIN SYS_COST_CENTER scc ON se.COST_CENTER_ID = scc.ID
+            LEFT JOIN SYS_REIMBURSEMENT_GROUP srg ON se.SYS_RG_ID= srg.ID
+    		where se.AUDITTYPE=1 and status=2 or status=5  
+    		ORDER BY scc.SORT_NO asc
+    </select>
+    
+    <update id="upSiteById" parameterType="java.util.Map">
+    	update SYS_ACCOUNT_SITE set PAYTYPE=#{payType},PROFESSIONAL=#{professional}
+    	where id=#{id}
+    </update>
+    
+    <update id="addDEC" parameterType="java.util.Map">
+    	update SYS_ELECTRICITY set OVERPROOFREASONS=#{dec} where id=#{id}
+    </update>
+    
+    <!-- 删除上传文件 -->
+    <delete id="delupfile" parameterType="java.lang.String">
+    	delete from sys_file where id=#{id}
+    </delete>
+    
+    
+    <select id="getaccoutsiteidbyeleid" parameterType="java.lang.String" resultType="java.lang.String">
+    	select SYS_ACCOUNT_SITE_ID from SYS_ELECTRICITY where id=#{id}
+    </select>
+    
+    <select id="getnewtime" parameterType="java.lang.String" resultType="com.audit.modules.watthourmeter.entity.WatthourMeterVO">
+    	  select * from 
+    	  (SELECT
+          swe.END_AMMETER as startAmmeter,swe.BELONG_END_TIME as belongEndTime
+        FROM
+          SYS_ACCOUNT_SITE sas
+		INNER JOIN SYS_SITE_MID_METER ssmm on sas.id = ssmm.ACCOUNT_SITE_ID
+		INNER JOIN SYS_WATTHOUR_METER swm on ssmm.WATTHOUR_METER_ID = swm.id
+		left join  SYS_WATTHOUR_EXTEND swe on swe.SYS_WATTHOUR_ID=swm.id
+        WHERE  sas.id = #{id}
+		ORDER BY swe.BELONG_END_TIME desc ) t1
+		where <![CDATA[rownum<=1]]>
+    </select>
+    
+    <select id="getelenewtime" parameterType="java.lang.String" resultType="com.audit.modules.watthourmeter.entity.WatthourMeterVO">
+    		select swe.BELONG_END_TIME as belongEndTime
+ from SYS_ELECTRICITY se
+   LEFT JOIN SYS_ELE_MID_WATTHOUR semw on semw.SYS_ELECIRICITY_ID=SE.id
+		left join SYS_WATTHOUR_EXTEND swe on swe.id=semw.SYS_WATTHOUR_EXTEND_ID
+		left join SYS_WATTHOUR_METER swm on swm.id=swe.SYS_WATTHOUR_ID
+where SE.id=#{id} and <![CDATA[ROWNUM<=1]]>
+    </select>
+    
+    <!-- 根据报销单和稽核单id删除记录 -->
+    <delete id="delSEMS" parameterType="java.util.Map">
+    	delete from SYS_ELE_MID_SUBMIT where SYS_ELE_SUBMIT_ID=#{submitID} and SYS_ELECTRICITY_ID=#{electricityID}
+    </delete>
+    
+    <!-- 查询自维机房【未退网】ZTO类电器的额定功率之和 -->
+    <select id="getZTOPower_Online" parameterType="java.lang.String" resultType="java.lang.Double">
+        SELECT 
+            SUM(SPR.POWER_RATING)
+        FROM 
+            ZG_SPACE_EQUIP_ROOM ZSER 
+            LEFT JOIN ZG_TRAN_OLT ZTO ON ZTO.RELATED_EQUIPROOM = ZSER.INT_ID
+            LEFT JOIN SYS_POWER_RATING SPR ON(SPR."MODEL"=ZTO.NE_TYPE AND SPR.VENDOR = ZTO.VENDER)
+        WHERE 
+            INSTR(ZSER.STATUS,'在网')>0
+            AND ZSER.INT_ID=#{roomId}
+    </select>
+	<!-- 查询自维机房【退网】ZTO类电器的额定功率之和 -->
+	<select id="getZTOPower" parameterType="java.lang.String" resultType="java.lang.Double">
+        SELECT 
+            SUM(SPR.POWER_RATING)
+        FROM 
+            ZG_SPACE_EQUIP_ROOM ZSER 
+            LEFT JOIN ZG_TRAN_OLT ZTO ON ZTO.RELATED_EQUIPROOM = ZSER.INT_ID
+            LEFT JOIN SYS_POWER_RATING SPR ON(SPR."MODEL"=ZTO.NE_TYPE AND SPR.VENDOR = ZTO.VENDER)
+        WHERE 
+            INSTR(ZSER.STATUS,'在网')=0
+            AND ZSER.INT_ID=#{roomId}
+    </select>
+    
+    <!-- 查询自维机房【未退网】ZTTN类电器的额定功率之和 -->
+    <select id="getZTTNPower_Online" parameterType="java.lang.String" resultType="java.lang.Double">
+        SELECT 
+            SUM(SPR.POWER_RATING)
+        FROM 
+            ZG_SPACE_EQUIP_ROOM ZSER 
+             LEFT JOIN ZG_TRAN_TRANS_NE ZTTN ON ZTTN.RELATED_EQUROOM = ZSER.INT_ID
+            LEFT JOIN SYS_POWER_RATING SPR ON(SPR."MODEL"=ZTTN.NE_TYPE AND SPR.VENDOR = ZTTN.VENDOR)
+        WHERE 
+            INSTR(ZSER.STATUS,'在网')>0
+            AND ZSER.INT_ID=#{roomId}
+    </select>
+    <!-- 查询自维机房【退网】ZTTN类电器的额定功率之和 -->
+    <select id="getZTTNPower" parameterType="java.lang.String" resultType="java.lang.Double">
+        SELECT 
+            SUM(SPR.POWER_RATING)
+        FROM 
+            ZG_SPACE_EQUIP_ROOM ZSER 
+             LEFT JOIN ZG_TRAN_TRANS_NE ZTTN ON ZTTN.RELATED_EQUROOM = ZSER.INT_ID
+            LEFT JOIN SYS_POWER_RATING SPR ON(SPR."MODEL"=ZTTN.NE_TYPE AND SPR.VENDOR = ZTTN.VENDOR)
+        WHERE 
+            INSTR(ZSER.STATUS,'在网')=0
+            AND ZSER.INT_ID=#{roomId}
+    </select>
+    
+    <!-- 查询自维机房【未退网】ZWB类电器的额定功率之和 -->
+     <select id="getZWBPower_Online" parameterType="java.lang.String" resultType="java.lang.Double">
+        SELECT 
+            SUM(SPR.POWER_RATING)
+        FROM 
+            ZG_SPACE_EQUIP_ROOM ZSER 
+             LEFT JOIN ZG_WIRE_BTS ZWB ON ZWB.RELATED_EQUIPROOM = ZSER.INT_ID
+            LEFT JOIN SYS_POWER_RATING SPR ON(SPR."MODEL"=ZWB."MODEL" AND SPR.VENDOR = ZWB.VENDOR)
+        WHERE 
+            INSTR(ZSER.STATUS,'在网')>0
+            AND ZSER.INT_ID=#{roomId}
+    </select>
+    <!-- 查询自维机房【退网】ZWB类电器的额定功率之和 -->
+     <select id="getZWBPower" parameterType="java.lang.String" resultType="java.lang.Double">
+        SELECT 
+            SUM(SPR.POWER_RATING)
+        FROM 
+            ZG_SPACE_EQUIP_ROOM ZSER 
+             LEFT JOIN ZG_WIRE_BTS ZWB ON ZWB.RELATED_EQUIPROOM = ZSER.INT_ID
+            LEFT JOIN SYS_POWER_RATING SPR ON(SPR."MODEL"=ZWB."MODEL" AND SPR.VENDOR = ZWB.VENDOR)
+        WHERE 
+            INSTR(ZSER.STATUS,'在网')=0
+            AND ZSER.INT_ID=#{roomId}
+    </select>
+    
+    <!-- 查询自维机房【未退网】ZWEN类电器的额定功率之和 -->
+    <select id="getZWENPower_Online" parameterType="java.lang.String" resultType="java.lang.Double">
+        SELECT 
+            SUM(SPR.POWER_RATING)
+        FROM 
+            ZG_SPACE_EQUIP_ROOM ZSER 
+             LEFT JOIN ZG_WIRE_E_NODEB ZWEN ON ZWEN.RELATED_EQUIPROOM = ZSER.INT_ID
+            LEFT JOIN SYS_POWER_RATING SPR ON(SPR."MODEL"=ZWEN."MODEL" AND SPR.VENDOR = ZWEN.VENDOR)
+        WHERE 
+            INSTR(ZSER.STATUS,'在网')>0
+            AND ZSER.INT_ID=#{roomId}
+    </select>
+     <!-- 查询自维机房【退网】ZWEN类电器的额定功率之和 -->
+    <select id="getZWENPower" parameterType="java.lang.String" resultType="java.lang.Double">
+        SELECT 
+            SUM(SPR.POWER_RATING)
+        FROM 
+            ZG_SPACE_EQUIP_ROOM ZSER 
+             LEFT JOIN ZG_WIRE_E_NODEB ZWEN ON ZWEN.RELATED_EQUIPROOM = ZSER.INT_ID
+            LEFT JOIN SYS_POWER_RATING SPR ON(SPR."MODEL"=ZWEN."MODEL" AND SPR.VENDOR = ZWEN.VENDOR)
+        WHERE 
+            INSTR(ZSER.STATUS,'在网')=0
+            AND ZSER.INT_ID=#{roomId}
+    </select>
+    
+    <!-- 查询自维机房【未退网】ZWLR类电器的额定功率之和 -->
+    <select id="getZWLRPower_Online" parameterType="java.lang.String" resultType="java.lang.Double">
+        SELECT 
+            SUM(SPR.POWER_RATING)
+        FROM 
+            ZG_SPACE_EQUIP_ROOM ZSER 
+             LEFT JOIN ZG_WIRE_LTE_RRU ZWLR ON ZWLR.RELATED_EQUIPROOM = ZSER.INT_ID
+            LEFT JOIN SYS_POWER_RATING SPR ON(SPR."MODEL"=ZWLR."MODEL" AND SPR.VENDOR = ZWLR.VENDOR)
+        WHERE 
+            INSTR(ZSER.STATUS,'在网')>0
+            AND ZSER.INT_ID=#{roomId}
+    </select>
+    <!-- 查询自维机房【退网】ZWLR类电器的额定功率之和 -->
+    <select id="getZWLRPower" parameterType="java.lang.String" resultType="java.lang.Double">
+        SELECT 
+            SUM(SPR.POWER_RATING)
+        FROM 
+            ZG_SPACE_EQUIP_ROOM ZSER 
+             LEFT JOIN ZG_WIRE_LTE_RRU ZWLR ON ZWLR.RELATED_EQUIPROOM = ZSER.INT_ID
+            LEFT JOIN SYS_POWER_RATING SPR ON(SPR."MODEL"=ZWLR."MODEL" AND SPR.VENDOR = ZWLR.VENDOR)
+        WHERE 
+            INSTR(ZSER.STATUS,'在网')=0
+            AND ZSER.INT_ID=#{roomId}
+    </select>
+    
+    <!-- 查询自维机房【未退网】ZWN类电器的额定功率之和 -->
+     <select id="getZWNPower_Online" parameterType="java.lang.String" resultType="java.lang.Double">
+        SELECT 
+            SUM(SPR.POWER_RATING)
+        FROM 
+            ZG_SPACE_EQUIP_ROOM ZSER 
+             LEFT JOIN ZG_WIRE_NODEB ZWN ON ZWN.RELATED_EQUIPROOM = ZSER.INT_ID
+            LEFT JOIN SYS_POWER_RATING SPR ON(SPR."MODEL"=ZWN."MODEL" AND SPR.VENDOR = ZWN.VENDOR)
+        WHERE 
+            INSTR(ZSER.STATUS,'在网')>0
+            AND ZSER.INT_ID=#{roomId}
+    </select>
+    <!-- 查询自维机房【退网】ZWN类电器的额定功率之和 -->
+     <select id="getZWNPower" parameterType="java.lang.String" resultType="java.lang.Double">
+        SELECT 
+            SUM(SPR.POWER_RATING)
+        FROM 
+            ZG_SPACE_EQUIP_ROOM ZSER 
+             LEFT JOIN ZG_WIRE_NODEB ZWN ON ZWN.RELATED_EQUIPROOM = ZSER.INT_ID
+            LEFT JOIN SYS_POWER_RATING SPR ON(SPR."MODEL"=ZWN."MODEL" AND SPR.VENDOR = ZWN.VENDOR)
+        WHERE 
+            INSTR(ZSER.STATUS,'在网')=0
+            AND ZSER.INT_ID=#{roomId}
+    </select>
+    
+       <!-- 查询原有数据库的稽核单数据 -->
+     <select id="getOldEle" parameterType="com.audit.modules.electricity.entity.ElectricityFlowVo" resultType="java.lang.String">
+         SELECT se.ID 
+						
+			FROM SYS_ELECTRICITY se
+			LEFT JOIN SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas.ID
+           	LEFT JOIN SYS_USER su on su.id=se.CREATE_PERSON
+
+		WHERE
+            1=1
+			AND se.ISOLD = 1
+			<if test="curOpUserID != null and curOpUserID!=''">
+                AND se.CREATE_PERSON = #{curOpUserID}
+            </if>
+
+			<if test="cityId != null and cityId!=''">
+                AND sas.CITY_ID = #{cityId}
+            </if>
+            
+			<if test="countyId != null and countyId!=''">
+                AND sas.COUNTY_ID = #{countyId}
+            </if>
+
+
+			<if test="inputPerson != null and inputPerson!=''">
+            AND SU.USER_NAME LIKE '%'||#{inputPerson}||'%'
+            </if>
+            
+			<if test="flowState != null and flowState!=''">
+                AND se.STATUS = #{flowState}
+            </if>
+
+			<if test="qSerialNumber != null and qSerialNumber!=''">
+                AND se.SERIAL_NUMBER LIKE '%'||#{qSerialNumber}||'%'
+			</if>
+
+            
+            <if test="qStartTime!=null">
+				AND  <![CDATA[se.CREATE_DATE >= #{qStartTime,jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="qEndTime!=null">
+				AND  <![CDATA[se.CREATE_DATE <= #{qEndTime,jdbcType=TIMESTAMP}]]>
+			</if>
+
+
+			<if test="qAccount != null and qAccount!=''">
+                AND se.SYS_RG_ID = #{qAccount}
+            </if>
+            
+			ORDER BY se.CREATE_DATE DESC
+        
+    </select>
+</mapper>

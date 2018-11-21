@@ -1,0 +1,377 @@
+﻿<!-- 新增稽核单 -->
+<div class="system-content" id="systemContent" style="margin-bottom: 60px;">
+    <div class="business-box" id="businessBox" style="padding-bottom: 0px;">
+        <div class="content-rout" id="contentRout">
+            <span>基础电费</span>&gt;<span>电费提交</span>&gt;<span>电费录入</span>&gt;<span class="now-rout">新增稽核单</span>
+        </div>
+        <div class="content-box" id="contentBox">
+            <div class="ledge-detail">
+                <div class="ledge-title">台账明细</div>
+                <div class="ledge-table">
+                    <table>
+                        <tbody>
+                            <tr>
+                            	<td>
+	                            	<span class="table-left">缴费类别:</span>
+                                    <input  type="text" disabled="disabled" value="基站" name="" class="table-right">
+	                            </td>
+                            
+                                <td>
+                                    <span class="table-left">地市:</span>
+                                    <input ng-model="resultData.areas" type="text" disabled="disabled" name="" class="table-right" value="成都市">
+                                </td>
+                                <td>
+                                    <span class="table-left">区县:</span>
+                                    <input  ng-model="resultData.counties" type="text" disabled="disabled" name="" class="table-right" value="武侯">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="sign table-left">报账点名称:</span>
+                                    <input
+                                        ng-click="getAccountSite()"
+                                        ng-model="siteObject.accountName"
+                                        type="text" name="" class="table-right"
+                                        title="{{siteObject.accountName}}"
+                                        value="锦江区汇金国际001" readOnly="true">
+                                    <i ng-click="getAccountSite()" class="search-icon"></i>
+                                </td>
+                                <td>
+                                    <span class="table-left">报账点别名:</span>
+                                    <input
+                                        title="{{siteObject.accountAlias}}"
+                                        ng-model="siteObject.accountAlias"
+                                        type="text"  name="" class="table-right" value="汇金国际001" disabled="disabled">
+                                </td>
+                                <td>
+                                    <span class="table-left">是否包干:</span>
+                                   <!-- <input ng-model="isCludInfoDetail" type="text" name="" class="table-right" disabled="disabled" > -->
+								   <input value="否" type="text" name="" class="table-right" disabled="disabled" >
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="table-left">产权性质:</span>
+                                    <input ng-model="productNatureType"  type="text" name="" class="table-right" disabled="disabled">
+                                </td>
+                                <td>                          
+									 <span class="table-left">合同编号:</span>
+                                  <!--  <input
+                                        title="resultData.contractID"
+                                        ng-click="choiceContractDialog()"
+                                        ng-model="resultData.contractID"
+                                        type="text" name="" class="table-right "
+                                        value="中移通信技术工程(EDRD)" readOnly="true">
+                                    <i ng-click="choiceContractDialog()" class="search-icon"></i> -->
+									<select name="contract" class="table-right" 
+									ng-model="contract" 
+									ng-options="i for i in contractIds"
+									ng-click="judgeContract()"									
+									ng-change="selectContract(contract)">	
+									<option value=""> -- 请选择合同 -- </option>									
+									</select>	
+                                </td>
+                                <td>
+                                    <span class="table-left">成本中心:</span>
+                                    <!--{{costCeterVOs}}-->
+                                     <!-- ng-init="a=a?a:costCeterVOs[0].costCenterName" -->
+                                    <select                                     
+                                        name="costCenterID" class="table-right"
+                                        ng-model="resultData.costCenter"										
+                                        ng-init="resultData.costCenterID != null?resultData.costCenterID:''"										
+                                        ng-options="i.id as i.costCenterName for i in costCeterVOs"
+										ng-change="selectCostCenter(resultData.costCenter)">
+                                    </select>
+                                   <!-- <input ng-if="!resultData.costCenterID" ng-model="resultData.costCenter" type="text" class="table-right" ng-disabled="!resultData.costCenterID">  -->
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="table-left">电表明细:</span>
+                                    <input
+                                        ng-click="getDianBiaoDetail()"
+                                        type="text" name="" class="table-right"
+                                        readOnly="true">
+                                    <i ng-click="getDianBiaoDetail()" class="search-icon"></i>
+                                </td>
+                                <td>
+	                            	 <span class="table-left">白名单状态:</span>
+	                            	 <input
+                                        type="text"  name="" class="table-right" value="{{whiteType|auditWhitType}}" disabled="disabled">
+	                            </td>
+                                <td>
+                                    <span class="table-left">总金额（含税）:</span>
+                                    <input ng-model="resultData.totalAmount" type="text" name="" class="table-right" disabled="disabled">
+                                </td>
+                                
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="table-left">支付总金额:</span>
+                                    <input ng-change="changePaymentAmount()" ng-model="resultData.paymentAmount" type="text" name="" class="table-right" >
+                                </td>
+                                <td class="ledge-list">
+                                    <span class="table-left">报销组:</span>
+                                    <input
+                                        ng-click="showAccountGrop()"
+                                        ng-model="accountObject.name"
+                                        type="text" name="" class="table-right" readOnly="true">
+                                    <a ng-click="showAccountGrop()" href="javascript:void(0)" class="mana-btn">管理</a>
+                                </td>
+                                <td>
+                                    <span class="table-left">供应商名称:</span>
+                                   <!-- <input
+                                        title="{{resultData.sysSupplierName}}"
+                                        ng-click="choiceSupplierDialog()"
+                                        ng-model="resultData.sysSupplierName"
+                                        type="text" name="" class="table-right "
+                                        value="中移通信技术工程(EDRD)" readOnly="true">
+                                    <i ng-click="choiceSupplierDialog()" class="search-icon"></i> -->
+									<input  type="text" ng-model="vendorName" disabled="disabled" value="" name="" class="table-right">
+                                </td>
+                                
+                                  <!-- <td>
+                                    <span class="table-left">合同编号:</span>
+                                    <input
+                                        ng-model="resultData.contractID"
+                                        type="text" name="" class="table-right "
+                                        value="" readOnly="true">
+                                </td> -->
+                            </tr>
+                            	<tr>
+                            <td>
+                             <span class="table-left">所属部门:</span>                              
+									<select name="department" class="table-right" 
+									ng-model="departmentName1" 
+									ng-options="i for i in departmentNameSum" 
+									ng-change="selectDepartmentName(departmentName1)">	
+									<option value=""> -- 请选择部门 -- </option>									
+									</select>									
+                            </td>
+                                <td ng-show="flagg">
+                                    <span  class="table-left">核销总金额:</span>
+                                    <input type="text" name="" class="table-right" ng-blur="countMoney()" ng-model="resultData.expenseTotalAmount">
+                                </td>
+                                <td>
+                                    <span class="table-left">稽核单流水号:</span>
+                                    <input ng-model="resultData.serialNumber" type="text" disabled="disabled" name="" class="table-right" value="JH201732222224612">
+                                </td>
+                            </tr>
+                            <tr>
+                            	<td>
+	                            	 <span class="table-left">所属专业:</span>
+                                    <input  type="text" disabled="disabled" value="无线" name="" class="table-right">
+	                            </td>
+							    <td>
+                                    <span class="table-left">移动站点名称:</span>
+                                    <input
+                                        title="{{siteObject.siteName}}"
+                                        ng-model="siteObject.siteName"
+                                        type="text"  name="" class="table-right" value="" disabled="disabled">
+                                </td>
+								<td>
+                                    <span class="table-left">财务站点名称:</span>
+                                    <input
+                                        title="{{siteObject.oldFinanceName}}"
+                                        ng-model="siteObject.oldFinanceName"
+                                        type="text"  name="" class="table-right" value="" disabled="disabled">
+                                </td>
+                            </tr>
+                             <tr>
+                            	
+                            </tr>
+							<tr>
+							<td>
+						
+	                            	 <span class="table-left">合同生效时间:</span>
+                                    <input  type="text" ng-model="startDate" disabled="disabled" value="" name="" class="table-right">
+	                            </td>
+									<td>
+	                            	 <span class="table-left">合同终止时间:</span>
+                                    <input  type="text" ng-model="endDate" disabled="disabled" value="" name="" class="table-right">
+	                            </td>
+								<!-- 包干类型暂放-->
+								<td>
+							<span class="table-left">包干类型:</span>                              
+	                    <select name="" id="" class="table-right">
+                            <option value="">-- 请选择包干类型 --</option>
+                            <option value="0">单价包干</option>
+                            <option value="1">总价包干</option>
+                            <option value="2">其他</option>                          
+                        </select>	
+							</td>
+							</tr>
+							<tr>
+							<td>
+							<span class="table-left">包干价:</span>
+                            <input  type="text" disabled="disabled" ng-model="priceOrLumpSumPrice" value="" name="" class="table-right">
+							</td>
+							<td>
+							<span class="table-left">电表个数:</span>
+                            <input  type="text" disabled="disabled" ng-model="meterNum" value="" name="" class="table-right">
+							</td>
+							</tr>
+							<!-- <tr>
+                                    <td>
+                                        <span class="table-left sign">电费归属起始日期:</span>
+                                        <input
+                                                ng-laydate type="text" id="'belongStartTime_'+{{$index}}"
+                                                format="YYYY-MM-DD"
+                                                readonly
+                                                ng-model="belongStartTime"
+                                                ng-change="countDays(item,$index)" type="text"  name="" class="table-right" value="2016-12-1">
+                                    </td>
+                                    <td>
+                                        <span class="table-left sign">电费归属终止日期:</span>
+                                        <input
+                                            ng-laydate type="text" id="'belongEndTime_'+{{$index}}"
+                                            readonly
+                                            format="YYYY-MM-DD"
+                                            min-date="{{belongStartTime}}"
+                                            ng-change="countDays(item,$index)" type="text"
+                                            ng-model="belongEndTime" name="" class="table-right " value="2017-12-31">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">用电天数</span>
+                                        <input type="text" readonly ng-model="dayAmmeter" name="" class="table-right " value="30">
+                                    </td>
+                                </tr> -->
+                        </tbody>
+                    </table>
+                </div>
+                <!-- 发票信息-->
+                <div class="ledge-title ledge-sub">
+                     发票信息<span class="add-btn" ng-click="addInvoiceVO()">新增发票</span>
+                </div>
+                <div class="container">
+                	<div class="row">
+                		<div class="col-md-4">电费金额(含税):{{checkElectricityAmount}}元</div>
+                		<div class="col-md-4">电费金额(不含税):{{checkElectricityElectricityAmount}}元</div>
+                		<div class="col-md-4">税金:{{checkElectricityTaxAmount}}元</div>
+                	</div>	
+                </div>
+                <div class="invoinc-table">
+                    <table class="table-result">
+                        <colgroup>
+                            <col style="width:10%" />
+                            <col style="width:20%" />
+                            <col style="width:20%" />
+                            <col style="width:20%" />
+                            <col style="width:20%" />
+                            <col style="width:20%" />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>操作</th>
+                                <th>发票</th>
+                                <th>税率</th>
+                                <th>电费金额(含税)</th>
+                                <th>电费金额(不含税)</th>
+                                <th>税金金额</th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <div class="table-details invoinc-list">
+                        <div style="max-height: 150px;">
+                            <table style="table-layout: fixed;">
+                                <colgroup>
+                                     <col style="width:10%" />
+		                            <col style="width:20%" />
+		                            <col style="width:20%" />
+		                            <col style="width:20%" />
+		                            <col style="width:20%" />
+		                            <col style="width:20%" />
+                                </colgroup>
+                                <tbody class="query-date add-audit">
+
+                                    <tr ng-repeat="item in resultData.electrictyMidInvoices track by $index">
+                                        <td>
+                                            <a ng-click="removeInvoiceVO($index,item,item.invoiceId)" class="delete">删除</a>
+                                        </td>
+                                        <!-- 发票种类 -->
+                                        <td>
+                                            <select name="" class="title-select"
+                                                    ng-model="item.invoiceId"
+													ng-change="selectInvoiceVOs(item,item.invoiceId,$index)"
+                                                    ng-options="i.id as i.billType for i in invoiceVOs"
+                                                    >
+                                            </select>
+                                        </td>
+                                        <!--税率-->
+                                        <td>{{item.billTax}}%</td>
+                                        <!-- 电费含税noone -->
+                                        <td><input ng-change="changeTotalInvoice(item,item.invoiceId,$index)" ng-model="item.totalAmount" type="text" name="" ng-disabled="disabled"></td>
+                                        <!-- 电费不含税 ng-change="changeInvoice(item,item.invoiceId,$index)"-->
+                                        <td><input  ng-model="item.electricityAmount" type="text" name="" ng-disabled="true"></td>
+                                        <!-- 税金金额 -->
+                                        <!-- <td>{{item.taxAmount}}</td> -->
+                                         <td><input ng-blur="changeTaxAmountInvoice(item,item.invoiceId,$index)"  ng-model="item.taxAmount" ng-value="item.taxAmount" type="text" name="" ></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="ledge-title ledge-sub">备注信息</div>
+                <div class="remark">
+                    <textarea ng-model="resultData.remark" name="" id="" class="textarea"></textarea>
+                    <span  style="color:red" ng-show="resultData.remark.length-150 > 0">备注信息长度不能超过150个字符,已超过{{resultData.remark.length-150}}个字符</span>
+                    <span  ng-show="resultData.remark.length-150 <= 0 && resultData.remark.length!=0">已输入{{resultData.remark.length}}个字符，还能输入{{150-resultData.remark.length}}个字符</span>
+                </div>
+                
+                <div ng-show="flagg" class="ledge-title ledge-sub">预付信息</div>
+                 <table ng-show="flagg" >
+                        <colgroup>
+                                    <col style="width:20%" />
+                                    <col style="width:12%" />
+                                    <col style="width:12%" />
+                                    <col style="width:12%" />
+                                    <col style="width:12%" />
+                                    <col style="width:22%" />
+                                    <col style="width:10%" />
+                        </colgroup>
+                    
+                         <tbody  class="query-date" id="list">
+                            <tr>
+                                <th>预付申请批号</th>
+                                <th>预付金额</th>
+                                <th>已核销金额</th>
+                                <th>流程中核销金额</th>
+                                <th>未核销金额</th>
+                                <th>本次核销金额</th>
+                            </tr>
+                                   
+                                    <tr ng-repeat="item in resultData.adpv track by $index"  >
+                                        <td>{{item.paymentNumber}}</td>
+                                        <td>{{item.totalMoney}}</td>
+                                        <td>{{item.canceledMoney}}</td>
+                                        <td>{{item.cancellingMoney}}</td>
+                                        <td>{{item.surplusMoney}}</td>
+                                        <td><input type="text" value="1" ng-model="item.expenseAmount" ng-blur="countMoney($index)"></td>
+                                    </tr>
+
+                                </tbody>
+                    </table>
+                  
+              
+               
+                
+                <div class="ledge-title ledge-sub">附件信息</div>
+                <a href="javascript:void(0)" ng-click= "uploadFile()">上传附件</a>
+                <div class="upload-method">
+                    <div ng-repeat="item in uploadFiles track by $index">
+                        附件信息：<span>{{item.upName}}{{item.ext}}</span>
+                        <a href="javascript:void(0)" ng-click="showDetailFiles(item)" >查看</a>
+                        <a href="javascript:void(0)" ng-click="deleteFiles($index)">移除</a>
+                    </div>
+                </div>
+                <div class="reimbur-foot ledge-foot" style="margin-top:0px; padding-bottom:80px;">
+                    <button ng-click="returnPage()" class="reimbur-cancel btn">取消</button>
+                    <button ng-click="saveElectricty(0)" class="reimbur-save btn">保存</button>
+                    <button ng-click="submitElectricty(1)" class="reimbur-save btn">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

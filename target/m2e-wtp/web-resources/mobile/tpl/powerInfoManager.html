@@ -1,0 +1,82 @@
+<!-- 电表信息管理 -->
+<div class="system-content">
+    <div class="business-box" id="businessBox">
+        <div class="content-rout" id="contentRout">
+            <span>基础数据</span>&gt;<span>基础数据维护</span>&gt;<span class="now-rout">电表信息管理</span>
+        </div>
+         <button ng-click="getDataExcel()" class="btn btn-primary" type="button">导出excel</button>
+        <div class="content-box trariffc-table" id="contentBox">
+            <div class="search-box">
+                <div>
+                    <select name="" id="" class="title-select"
+                            ng-model="cityId"
+                            ng-options="city.key as city.value for city in citys"
+                            ng-change="queryCountyList(cityId)">
+                    <option value="">全省</option></select>
+                    <select class="title-select"
+                            ng-model="countyId"
+                            ng-options="county.key as county.value for county in countys">
+                    <option value="">全市</option>
+                    </select>
+                    <input ng-model="code" type="text" placeholder="电表号" class="process-input supplier-parts" name="">
+                    <input ng-model="accountName" type="text" placeholder="报账点名称" class="process-input supplier-parts" name="">
+                </div>
+                <button ng-click="getData(true)" class="btn btn-primary" type="button">搜索</button>
+            </div>
+            <!-- table-content -->
+            <div class="table-content">
+                <div class="data-table">
+                    <div class="table-details">
+                        <div id="downPowertb">
+                            <table>
+
+                                <tbody class="query-date">
+                                    <tr>
+                                       <th>报账点名称</th>
+                                       <th>电表号</th>
+                                       <th>倍率</th>
+                                       <th>电表状态</th>
+                                       <th>当前读数</th>
+                                       <th>电表户号</th>
+                                       <!-- <th>电表标识符</th> -->
+                                       <th>电表类型</th>
+                                       <th>最大读数</th>
+                                       <th>所属户头</th>
+                                       <th>电费归属日期</th>
+                                       <th>单价</th>
+                                       <th>额定功率</th>
+                                       <!-- <th>时间</th> -->
+                                       <th>操作</th>
+                                    </tr>
+                                    <tr ng-repeat="item in list track by $index">
+                                       <td>{{item.accountName}}</td>
+                                        <td>{{item.code}}</td>
+                                        <td>{{item.rate}}</td>
+                                        <td>{{item.status==1 ? "正常":"损坏"}}</td>
+                                        <td>{{item.currentReadingStr}}</td>
+                                        <td>{{item.paymentAccountCode}}</td>
+                                        <!-- <td>{{item.code}}</td> -->
+                                        <td>{{item.ptype==1 ? "普通":"智能"}}</td>
+                                        <td>{{item.maxReading}}</td>
+                                        <td>{{item.belongAccount==1 ? "移动":"铁塔"}}</td>
+                                        <td>{{item.reimbursementDateStr | date:"yyyy-MM-dd"}}</td>
+                                        <td>{{item.price}}</td>
+                                        <!-- <td>{{item.updateTimeStr | date:"yyyy-MM-dd"}}</td> -->
+                                        <td></td>
+                                        <td>
+                                            <a ng-click="addOrUpdateDialog(item)" class="edit-process">修改</a>
+                                            <a ng-click="showChangeDialog(item)" class="edit-process">换表</a> 
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+    				<div class="page-foot">
+                        <im-pagination  conf="pageInfo" params="params" get-data="getData()"></im-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

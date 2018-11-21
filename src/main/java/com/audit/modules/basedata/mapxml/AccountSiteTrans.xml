@@ -1,0 +1,1033 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.basedata.dao.AccountSiteTransDao">
+	<!-- 提交时的map -->
+	<resultMap id="BaseNeedTransMap" type="com.audit.modules.basedata.entity.AccountSiteNeedTrans">
+		<result column="CITY_ID" jdbcType="VARCHAR" property="cityId" />
+		<result column="COUNTY_ID" jdbcType="VARCHAR" property="countyId" />
+		<result column="CREATE_DATE" jdbcType="DATE" property="createDate" />
+		<result column="ROOM_ID" jdbcType="VARCHAR" property="roomId" />
+		<result column="SITE_ID" jdbcType="VARCHAR" property="siteId" />
+		<result column="SITE_NAME" jdbcType="VARCHAR" property="siteName" />
+		<result column="ROOM_ELE_TYPE" jdbcType="VARCHAR" property="roomEleType" />
+		<result column="SITE_ELE_TYPE" jdbcType="VARCHAR" property="siteEleType" />
+		<result column="REMARK" jdbcType="VARCHAR" property="remark" />
+  		<result column="TRUSTEES_ID" jdbcType="VARCHAR" property="trusteesId" />
+  		<result column="TRUSTEES_NAME" jdbcType="VARCHAR" property="trusteesName" />
+  		<result column="SUPPLIER_NAMES" jdbcType="VARCHAR" property="supplierNames" />
+  		<result column="SUPPLIER_IDS" jdbcType="VARCHAR" property="supplierIds" />
+  		<result column="CONTRACT_ID" jdbcType="VARCHAR" property="contractId" />
+  		<result column="PRODUCT_NATURE" jdbcType="VARCHAR" property="properType" />
+  		<result column="ROOM_NAME" jdbcType="VARCHAR" property="roomName" />
+  		<result column="SUBMIT_STATUS" jdbcType="VARCHAR" property="submitStatus" />
+  		<result column="RESULT_STATUS" jdbcType="VARCHAR" property="resultStatus" />
+  		<result column="ONLY_ID" jdbcType="VARCHAR" property="onlyId" />
+  		<result column="INSTANCE_ID" jdbcType="VARCHAR" property="instanceId" />
+  		<!-- <result column="ATTACHMENT_ID" jdbcType="VARCHAR" property="attachmentId" /> -->
+  		<result column="ADDAPO_USER_ID" jdbcType="VARCHAR" property="addapoUserId" />
+  		<result column="ADDAPO_USER_NAME" jdbcType="VARCHAR" property="addapoUserName" />
+  		
+  		
+  		
+  		
+  		
+	</resultMap>
+	<!-- 需改造转供电map -->
+	<resultMap id="BaseResultMap" type="com.audit.modules.basedata.entity.AccountSiteTrans">
+		<result column="ID" jdbcType="VARCHAR" property="siteId" />
+		<result column="INT_ID" jdbcType="VARCHAR" property="roomId" />
+		<result column="SITE_NAME" jdbcType="VARCHAR" property="siteName" />
+		<result column="ACCOUNT_NAME" jdbcType="VARCHAR" property="accountName" />
+		<result column="CITY_ID" jdbcType="VARCHAR" property="cityId" />
+		<result column="COUNTY_ID" jdbcType="VARCHAR" property="countyId" />
+		<result column="ELECTRICITY_TYPE" jdbcType="VARCHAR" property="siteEleType" />
+		<result column="PRODUCT_NATURE" jdbcType="VARCHAR" property="properType" />
+		<result column="CITY_NAME" jdbcType="VARCHAR" property="cityName" />
+  		<result column="COUNTY_NAME" jdbcType="VARCHAR" property="countyName" />
+  		<result column="POWER_SUPPLY_TYPE" jdbcType="VARCHAR" property="roomEleType" />
+  		<result column="ZH_LABEL" jdbcType="VARCHAR" property="roomName" />
+  		<result column="SUBMIT_STATUS" jdbcType="VARCHAR" property="submitStatus" />
+  		
+  		
+	</resultMap>
+	<!-- 待改造转供电map -->
+	<resultMap id="BaseTransData" type="com.audit.modules.basedata.entity.AccountSiteTransSubmit">
+		<result column="APPLY_ID" jdbcType="VARCHAR" property="applyId" />
+		<result column="CITY_ID" jdbcType="VARCHAR" property="cityId" />
+		<result column="COUNTY_ID" jdbcType="VARCHAR" property="countyId" />
+		<result column="CREATE_DATE" jdbcType="DATE" property="createDate" />
+		<result column="TRUSTEES_ID" jdbcType="VARCHAR" property="trusteesId" />
+		<result column="SUBMIT_NO" jdbcType="VARCHAR" property="submitNo" />
+		<result column="SITE_NAME" jdbcType="VARCHAR" property="siteName" />
+		<result column="STATUS" jdbcType="VARCHAR" property="status" />
+		<result column="PRODUCT_NATURE" jdbcType="VARCHAR" property="properType" />
+  		<result column="REMARK" jdbcType="VARCHAR" property="remark" />
+		<result column="CITY_NAME" jdbcType="VARCHAR" property="cityName" />
+  		<result column="COUNTY_NAME" jdbcType="VARCHAR" property="countyName" />
+  		<result column="TRUSTEES_NAME" jdbcType="VARCHAR" property="trusteesName" />
+  		<result column="INSTANCE_ID" jdbcType="VARCHAR" property="instanceId" />
+  		<result column="SITE_ID" jdbcType="VARCHAR" property="siteId" />
+  		<result column="ROOM_ID" jdbcType="VARCHAR" property="roomId" />
+  		<result column="ROOM_NAME" jdbcType="VARCHAR" property="roomName" />
+  		<result column="APPROVE_USER_ID" jdbcType="VARCHAR" property="approveUserId" />
+  		<result column="MOBILE_TYPE" jdbcType="VARCHAR" property="mobileType" />
+  		<result column="URL" jdbcType="VARCHAR" property="url" />
+  		<result column="PARAMS" jdbcType="VARCHAR" property="params" />
+	</resultMap>
+	<!-- <select id="testxml" resultMap="BaseResultMap">
+	SELECT
+		ID, SITE_NAME
+		FROM SYS_ACCOUNT_SITE
+		WHERE 1=1
+	</select> -->
+	
+	
+	   <update id="updateTransDataTableStatus" parameterType="com.audit.modules.basedata.entity.AccountSiteTransSubmit">
+   		  UPDATE SYS_TRANSELEPOWER_SUBMIT
+		<set>
+			<if test="status != null and status !=''">
+				STATUS = #{status,jdbcType=VARCHAR}
+			</if>
+		</set>
+		WHERE
+		APPLY_ID = #{applyId,jdbcType=VARCHAR}
+	</update>
+	<!-- <insert id="insertTransData" parameterType="com.audit.modules.basedata.entity.AccountSiteTransSubmit">
+    insert into SYS_TRANSELEPOWER_SUBMIT
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="applyId != null">
+        APPLY_ID,
+      </if>
+      <if test="siteName != null">
+        SITE_NAME,
+      </if>
+      <if test="cityId != null">
+        CITY,
+      </if>
+      <if test="countyId != null">
+        COUNTY,
+      </if>
+      <if test="status != null">
+        STATUS,
+      </if>
+      <if test="trusteesId != null">
+        TRUSTEES_ID,
+      </if>
+      <if test="properType != null">
+      	PRODUCT_NATURE,
+      </if>
+      <if test="createDate != null">
+      	CREATE_DATE,
+      </if>
+      <if test="trusteesName != null">
+      	TRUSTEES_NAME,
+      </if>
+      <if test="instanceId != null">
+      	INSTANCE_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="applyId != null">
+        #{applyId,jdbcType=VARCHAR},
+      </if>
+      <if test="siteName != null">
+        #{siteName,jdbcType=VARCHAR},
+      </if>
+      <if test="cityId != null">
+        #{cityId,jdbcType=VARCHAR},
+      </if>
+      <if test="countyId != null">
+        #{countyId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="trusteesId != null">
+        #{trusteesId,jdbcType=VARCHAR},
+      </if>
+      <if test="properType != null">
+      	#{properType,jdbcType=VARCHAR},
+      </if>
+       <if test="createDate != null">
+      	#{createDate,jdbcType=DATE},
+      </if>
+      <if test="trusteesName != null">
+      	#{trusteesName,jdbcType=VARCHAR},
+      </if>
+      <if test="instanceId != null">
+      	#{instanceId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert> -->
+  
+  <insert id="transInsertSelective" parameterType="com.audit.modules.basedata.entity.AccountSiteTransSubmit">
+    insert into SYS_TRANSELEPOWER_SUBMIT
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="applyId != null">
+        APPLY_ID,
+      </if>
+      <if test="siteName != null">
+        SITE_NAME,
+      </if>
+      <if test="cityId != null">
+        CITY_ID,
+      </if>
+      <if test="countyId != null">
+        COUNTY_ID,
+      </if>
+      <if test="status != null">
+        STATUS,
+      </if>
+      <if test="trusteesId != null">
+        TRUSTEES_ID,
+      </if>
+      <if test="properType != null">
+      	PRODUCT_NATURE,
+      </if>
+      <if test="createDate != null">
+      	CREATE_DATE,
+      </if>
+      <if test="trusteesName != null">
+      	TRUSTEES_NAME,
+      </if>
+      <if test="instanceId != null">
+      	INSTANCE_ID,
+      </if>
+        <if test="siteId != null">
+      	SITE_ID,
+      </if>
+        <if test="roomId != null">
+      	ROOM_ID,
+      </if>
+       <if test="roomName != null">
+      	ROOM_NAME,
+      </if>
+       <if test="mobileType != null">
+      	MOBILE_TYPE,
+      </if>
+      <if test="approveUserId != null">
+      	APPROVE_USER_ID,
+      </if>
+      <if test="url != null">
+      	URL,
+      </if>
+      <if test="params != null">
+      	PARAMS,
+      </if>
+      
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="applyId != null">
+        #{applyId,jdbcType=VARCHAR},
+      </if>
+      <if test="siteName != null">
+        #{siteName,jdbcType=VARCHAR},
+      </if>
+      <if test="cityId != null">
+        #{cityId,jdbcType=VARCHAR},
+      </if>
+      <if test="countyId != null">
+        #{countyId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="trusteesId != null">
+        #{trusteesId,jdbcType=VARCHAR},
+      </if>
+      <if test="properType != null">
+      	#{properType,jdbcType=VARCHAR},
+      </if>
+       <if test="createDate != null">
+      	#{createDate,jdbcType=DATE},
+      </if>
+      <if test="trusteesName != null">
+      	#{trusteesName,jdbcType=VARCHAR},
+      </if>
+      <if test="instanceId != null">
+      	#{instanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="siteId != null">
+      	#{siteId,jdbcType=VARCHAR},
+      </if>
+        <if test="roomId != null">
+      	#{roomId,jdbcType=VARCHAR},
+      </if>
+       <if test="roomName != null">
+      	#{roomName,jdbcType=VARCHAR},
+      </if>
+         <if test="mobileType != null">
+      	#{mobileType,jdbcType=VARCHAR},
+      </if>
+      <if test="approveUserId != null">
+      	#{approveUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+      	#{url,jdbcType=VARCHAR},
+      </if>
+      <if test="params != null">
+      	#{params,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  	<!-- 转供电审批成功后修改流程sys_site_account 供电状态 -->
+	<update id="updateSiteAccountSuccessStatus" parameterType="com.audit.modules.site.entity.SiteInfoVO">
+		UPDATE SYS_ACCOUNT_SITE
+		<set>
+			  <if test="electricityType != null">
+		        ELECTRICITY_TYPE = #{electricityType,jdbcType=VARCHAR},
+		      </if>
+		</set>
+		WHERE
+		ID = #{id,jdbcType=VARCHAR}
+	</update>
+	
+	
+	
+<!-- 	<update id="updateTransEleStatus" parameterType="java.lang.String">
+		UPDATE SYS_ACCOUNT_SITE
+		SET ELECTRICITY_TYPE = '1'
+		WHERE
+		ID = #{siteId,jdbcType=VARCHAR}
+	</update> -->
+	
+	<!-- 根据业务id修改流程id -->
+	<update id="updateInstanceIdByApplyId" parameterType="com.audit.modules.basedata.entity.AccountSiteTransSubmit">
+		UPDATE SYS_TRANSELEPOWER_SUBMIT
+		<set>
+			  <if test="instanceId != null">
+		        INSTANCE_ID = #{instanceId,jdbcType=VARCHAR},
+		      </if>
+		</set>
+		WHERE
+		APPLY_ID = #{applyId,jdbcType=VARCHAR}
+	</update>
+	
+	<!-- 从资管机房数据中查出需要改造的站点 -->
+	<select id="findNeedTransList" parameterType="com.audit.modules.common.mybatis.PageUtil"
+		resultMap="BaseResultMap">
+		SELECT
+		zser.INT_ID,
+		sas.ID, 
+		sas.SITE_NAME,
+		sas.ACCOUNT_NAME,
+		sas.CITY_ID,
+		sas.COUNTY_ID,
+		sas.ELECTRICITY_TYPE,
+		zser.POWER_SUPPLY_TYPE,
+		zser.ZH_LABEL,
+		sas.PRODUCT_NATURE,
+		sztm.SUBMIT_STATUS,
+		ssmr.ID AS onlyId,
+		(select NAME from YDJH_AREA where id = sas.CITY_ID) AS CITYNAME,
+		(select NAME from YDJH_AREA where id = sas.COUNTY_ID) AS COUNTYNAME
+		FROM 
+		ZG_SPACE_EQUIP_ROOM zser LEFT JOIN 
+		SYS_SITE_MID_RESOURCE ssmr ON(ZSER.INT_ID=SSMR.RESOURCE_ID) LEFT JOIN
+ 		SYS_ACCOUNT_SITE sas ON(sas.id=ssmr.ACCOUNT_SITE_ID) LEFT JOIN
+ 		SYS_ZGROOM_TRANS_MID sztm ON(sas.id = sztm.site_id)
+		WHERE 1=1
+			AND sas.SUPPLY_COMPANY IS NOT NULL
+			AND sas.ELECTRICITY_TYPE IS NOT NULL
+			AND sas.SHARE_TYPE IS NOT NULL
+			AND sas.PAY_TYPE IS NOT NULL
+			AND ssmr.id is NOT NULL
+			AND zser.POWER_SUPPLY_TYPE = '转供电'
+		<if test="null != obj.siteName and obj.siteName!=''">AND (INSTR(sas.SITE_NAME,#{obj.siteName}) > 0 OR
+			INSTR(sas.SITE_NAME,#{obj.siteName}) > 0)</if>
+		<if test="null != obj.cityId and obj.cityId!=''">AND sas.CITY_ID = #{obj.cityId}</if>
+		<if test="null != obj.countyId and obj.countyId!=''">AND sas.COUNTY_ID = #{obj.countyId}</if>
+		Order By ID DESC
+	</select>
+
+	<!-- <select id="findAccountSiteByTransPage" parameterType="com.audit.modules.common.mybatis.PageUtil"
+		resultMap="BaseTransData">
+		SELECT
+		sts.APPLY_ID, 
+		sts.SITE_NAME,
+		sts.CITY_ID,
+		sts.COUNTY_ID,
+		sts.STATUS,
+		sts.PRODUCT_NATURE,
+		sts.TRUSTEES_ID,
+		sts.REMARK,
+		sts.FIRST_ID,
+		sts.SECOND_ID,
+		sts.CREATE_DATE,
+		sts.INSTANCE_ID,
+		sts.TRUSTEES_NAME,
+		(select NAME from YDJH_AREA where id = sts.CITY) AS CITYNAME,
+		(select NAME from YDJH_AREA where id = sts.COUNTY) AS COUNTYNAME
+		FROM SYS_TRANSELEPOWER_SUBMIT sts
+		WHERE 1=1
+		<if test="null != obj.siteName and obj.siteName!=''">AND (INSTR(sts.SITE_NAME,#{obj.siteName}) > 0 OR
+			INSTR(sts.SITE_NAME,#{obj.siteName}) > 0)</if>
+		<if test="null != obj.cityId and obj.cityId!=''">AND sts.CITY = #{obj.cityId}</if>
+		<if test="null != obj.countyId and obj.countyId!=''">AND sts.COUNTY = #{obj.countyId}</if>
+		<if test="null != obj.electricityType and obj.electricityType!=''">AND sts.ELECTRICITY_TYPE = #{obj.electricityType}</if>
+		<if test="null != obj.properType and obj.properType!=''">AND sts.PRODUCT_NATURE = #{obj.properType}</if>
+		<if test="null != obj.status and obj.status!=''">AND sts.STATUS = #{obj.status}</if>
+		Order By APPLY_ID DESC
+	</select> -->
+	
+<!-- 	<select id="selectTrusteesById" parameterType="java.lang.String"
+		resultMap="BaseTransData">
+		SELECT
+		sts.APPLY_ID, 
+		sts.SITE_NAME,
+		sts.CITY,
+		sts.COUNTY,
+		sts.STATUS,
+		sts.PRODUCT_NATURE,
+		sts.TRUSTEES_ID,
+		sts.REMARK,
+		sts.FIRST_ID,
+		sts.SECOND_ID,
+		sts.CREATE_DATE,
+		sts.INSTANCE_ID,
+		sts.TRUSTEES_NAME,
+		(select NAME from YDJH_AREA where id = sts.CITY) AS CITYNAME,
+		(select NAME from YDJH_AREA where id = sts.COUNTY) AS COUNTYNAME
+		FROM SYS_TRANSELEPOWER_SUBMIT sts
+		WHERE sts.TRUSTEES_ID = #{id,jdbcType=VARCHAR}
+		Order By APPLY_ID DESC
+	</select> -->
+	
+	
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="BaseTransData">
+		SELECT
+		sts.APPLY_ID, 
+		sts.SITE_NAME,
+		sts.SITE_ID,
+		sts.ROOM_ID,
+		sts.ROOM_NAME,
+		sts.MOBILE_TYPE,
+		sts.APPROVE_USER_ID,
+		sts.CITY_ID,
+		sts.COUNTY_ID,
+		sts.STATUS,
+		sts.PRODUCT_NATURE,
+		sts.TRUSTEES_ID,
+		sts.CREATE_DATE,
+		sts.INSTANCE_ID,
+		sts.TRUSTEES_NAME,
+		sts.URL,
+		sts.PARAMS,
+		(select NAME from YDJH_AREA where id = sts.CITY_ID) AS CITYNAME,
+		(select NAME from YDJH_AREA where id = sts.COUNTY_ID) AS COUNTYNAME
+		FROM SYS_TRANSELEPOWER_SUBMIT sts
+		WHERE sts.APPLY_ID = #{id,jdbcType=VARCHAR}
+		Order By APPLY_ID DESC
+	</select>
+	
+	
+	
+	<insert id="uploadFileTrans" parameterType="com.audit.modules.basedata.entity.TransEleFile">
+    insert into SYS_TRANS_FILE 
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="filename != null">
+        FILENAME,
+      </if>
+      <if test="filepath != null">
+        FILEPATH,
+      </if>
+      <if test="note != null">
+        NOTE,
+      </if>
+      <if test="creatorid != null">
+        CREATORID,
+      </if>
+      <if test="creator != null">
+        CREATOR,
+      </if>
+      <if test="totalbytes != null">
+      	TOTALBYTES,
+      </if>
+      <if test="ext != null">
+      	EXT,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="filename != null">
+       #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="filepath != null">
+        #{filepath,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null">
+        #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="creatorid != null">
+        #{creatorid,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="totalbytes != null">
+      	#{totalbytes,jdbcType=BIGINT},
+      </if>
+      <if test="ext != null">
+      	#{ext,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <!-- 新增需要改造的机房站点数据到SYS_ZGROOM_TRANS_MID -->
+  <insert id="insertNeedTransData" parameterType="com.audit.modules.basedata.entity.AccountSiteNeedTrans">
+    insert into SYS_ZGROOM_TRANS_MID 
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="cityId != null">
+        CITY_ID,
+      </if>
+      <if test="countyId != null">
+        COUNTY_ID,
+      </if>
+      <if test="createDate != null">
+        CREATE_DATE,
+      </if>
+      <if test="roomId != null">
+        ROOM_ID,
+      </if>
+      <if test="siteId != null">
+        SITE_ID,
+      </if>
+      <if test="siteName != null">
+        SITE_NAME,
+      </if>
+      <if test="roomEleType != null">
+      	ROOM_ELE_TYPE,
+      </if>
+      <if test="siteEleType != null">
+      	SITE_ELE_TYPE,
+      </if>
+      <if test="remark != null">
+        REMARK,
+      </if>
+      <if test="trusteesId != null">
+        TRUSTEES_ID,
+      </if>
+      <if test="trusteesName != null">
+      	TRUSTEES_NAME,
+      </if>
+      <if test="supplierNames != null">
+      	SUPPLIER_NAMES,
+      </if>
+       <if test="supplierIds != null">
+      	SUPPLIER_IDS,
+      </if>
+       <if test="contractId != null">
+      	CONTRACT_ID,
+      </if>
+       <if test="submitStatus != null">
+      	SUBMIT_STATUS,
+      </if>
+       <if test="properType != null">
+      	PRODUCT_NATURE,
+      </if>
+       <if test="roomName != null">
+      	ROOM_NAME,
+      </if>
+       <if test="resultStatus != null">
+      	RESULT_STATUS,
+      </if>
+      <if test="onlyId != null">
+      	ONLY_ID,
+      </if>
+      <if test="instanceId != null">
+      	INSTANCE_ID,
+      </if>
+       <!-- <if test="attachmentId != null">
+      	ATTACHMENT_ID,
+      </if> -->
+       <if test="addapoUserId != null">
+      	ADDAPO_USER_ID,
+      </if>
+       <if test="addapoUserName != null">
+      	ADDAPO_USER_NAME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="cityId != null">
+        #{cityId,jdbcType=VARCHAR},
+      </if>
+      <if test="countyId != null">
+       #{countyId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=DATE},
+      </if>
+      <if test="roomId != null">
+        #{roomId,jdbcType=VARCHAR},
+      </if>
+      <if test="siteId != null">
+        #{siteId,jdbcType=VARCHAR},
+      </if>
+      <if test="siteName != null">
+       #{siteName,jdbcType=VARCHAR},
+      </if>
+      <if test="roomEleType != null">
+      	#{roomEleType,jdbcType=VARCHAR},
+      </if>
+      <if test="siteEleType != null">
+      	#{siteEleType,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="trusteesId != null">
+        #{trusteesId,jdbcType=VARCHAR},
+      </if>
+      <if test="trusteesName != null">
+      	#{trusteesName,jdbcType=VARCHAR},
+      </if>
+      <if test="supplierNames != null">
+   		#{supplierNames,jdbcType=VARCHAR},
+      </if>
+       <if test="supplierIds != null">
+      	#{supplierIds,jdbcType=VARCHAR},
+      </if>
+       <if test="contractId != null">
+      	#{contractId,jdbcType=VARCHAR},
+      </if>
+       <if test="submitStatus != null">
+      	#{submitStatus,jdbcType=VARCHAR},
+      </if>
+       <if test="properType != null">
+      	#{properType,jdbcType=VARCHAR},
+      </if>
+       <if test="roomName != null">
+      	#{roomName,jdbcType=VARCHAR},
+      </if>
+       <if test="resultStatus != null">
+      	#{resultStatus,jdbcType=VARCHAR},
+      </if>
+       <if test="onlyId != null">
+      	#{onlyId,jdbcType=VARCHAR},
+      </if>
+      <if test="instanceId != null">
+      	#{instanceId,jdbcType=VARCHAR},
+      </if>
+      <!-- <if test="attachmentId != null">
+      	#{attachmentId,jdbcType=VARCHAR},
+      </if> -->
+        <if test="addapoUserId != null">
+      	#{addapoUserId,jdbcType=VARCHAR},
+      </if>
+       <if test="addapoUserName != null">
+     	#{addapoUserName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <!-- 修改需要改造的机房站点数据到SYS_ZGROOM_TRANS_MID -->
+  	 <update id="updateNeedTransData" parameterType="com.audit.modules.basedata.entity.AccountSiteNeedTrans">
+   		  UPDATE SYS_ZGROOM_TRANS_MID
+		<set>
+			  <if test="cityId != null">
+		        CITY_ID = #{cityId,jdbcType=VARCHAR},
+		      </if>
+		      <if test="countyId != null">
+		       COUNTY_ID = #{countyId,jdbcType=VARCHAR},
+		      </if>
+		      <if test="createDate != null">
+		        CREATE_DATE = #{createDate,jdbcType=DATE},
+		      </if>
+		      <if test="roomId != null">
+		        ROOM_ID = #{roomId,jdbcType=VARCHAR},
+		      </if>
+		      <if test="siteId != null">
+		        SITE_ID = #{siteId,jdbcType=VARCHAR},
+		      </if>
+		      <if test="siteName != null">
+		       SITE_NAME = #{siteName,jdbcType=VARCHAR},
+		      </if>
+		      <if test="roomEleType != null">
+		      	ROOM_ELE_TYPE = #{roomEleType,jdbcType=VARCHAR},
+		      </if>
+		      <if test="siteEleType != null">
+		      	SITE_ELE_TYPE = #{siteEleType,jdbcType=VARCHAR},
+		      </if>
+		      <if test="remark != null">
+		        REMARK = #{remark,jdbcType=VARCHAR},
+		      </if>
+		      <!-- <if test="remark =='nothing'.toString() ">
+		        REMARK is null,
+		      </if> -->
+		      <if test="trusteesId != null">
+		        TRUSTEES_ID = #{trusteesId,jdbcType=VARCHAR},
+		      </if>
+		      <if test="trusteesName != null">
+		      	TRUSTEES_NAME = #{trusteesName,jdbcType=VARCHAR},
+		      </if>
+		      <if test="supplierNames != null">
+		   		SUPPLIER_NAMES = #{supplierNames,jdbcType=VARCHAR},
+		      </if>
+		       <if test="supplierIds != null">
+		      	SUPPLIER_IDS = #{supplierIds,jdbcType=VARCHAR},
+		      </if>
+		       <if test="contractId != null">
+		      	CONTRACT_ID = #{contractId,jdbcType=VARCHAR},
+		      </if>
+		       <if test="submitStatus != null">
+		      	SUBMIT_STATUS = #{submitStatus,jdbcType=VARCHAR},
+		      </if>
+		       <if test="properType != null">
+		      	PRODUCT_NATURE = #{properType,jdbcType=VARCHAR},
+		      </if>
+		       <if test="roomName != null">
+		      	ROOM_NAME = #{roomName,jdbcType=VARCHAR},
+		      </if>
+		       <if test="resultStatus != null">
+		      	RESULT_STATUS = #{resultStatus,jdbcType=VARCHAR},
+      		   </if>
+      		   <if test="onlyId != null">
+		      	ONLY_ID = #{onlyId,jdbcType=VARCHAR},
+      		   </if>
+      		    <if test="instanceId != null">
+		      	INSTANCE_ID = #{instanceId,jdbcType=VARCHAR},
+      		   </if>
+      		    <!-- <if test="attachmentId != null">
+		      	ATTACHMENT_ID = #{attachmentId,jdbcType=VARCHAR},
+      		   </if> -->
+      		   <if test="addapoUserId != null">
+		      	ADDAPO_USER_ID = #{addapoUserId,jdbcType=VARCHAR},
+      		   </if>
+      		    <if test="addapoUserName != null">
+		      	ADDAPO_USER_NAME = #{addapoUserName,jdbcType=VARCHAR},
+      		   </if>
+      		   
+      		   
+		</set>
+		WHERE
+		ONLY_ID = #{onlyId,jdbcType=VARCHAR}
+	</update>
+	
+	<!-- 根据流程id修改需要改造的机房站点数据到SYS_ZGROOM_TRANS_MID -->
+  	 <update id="updateNeedTransDataByInstanceId" parameterType="com.audit.modules.basedata.entity.AccountSiteNeedTrans">
+   		  UPDATE SYS_ZGROOM_TRANS_MID
+		<set>
+			  <if test="cityId != null">
+		        CITY_ID = #{cityId,jdbcType=VARCHAR},
+		      </if>
+		      <if test="countyId != null">
+		       COUNTY_ID = #{countyId,jdbcType=VARCHAR},
+		      </if>
+		      <if test="createDate != null">
+		        CREATE_DATE = #{createDate,jdbcType=DATE},
+		      </if>
+		      <if test="roomId != null">
+		        ROOM_ID = #{roomId,jdbcType=VARCHAR},
+		      </if>
+		      <if test="siteId != null">
+		        SITE_ID = #{siteId,jdbcType=VARCHAR},
+		      </if>
+		      <if test="siteName != null">
+		       SITE_NAME = #{siteName,jdbcType=VARCHAR},
+		      </if>
+		      <if test="roomEleType != null">
+		      	ROOM_ELE_TYPE = #{roomEleType,jdbcType=VARCHAR},
+		      </if>
+		      <if test="siteEleType != null">
+		      	SITE_ELE_TYPE = #{siteEleType,jdbcType=VARCHAR},
+		      </if>
+		      <if test="remark != null">
+		        REMARK = #{remark,jdbcType=VARCHAR},
+		      </if>
+		      <if test="trusteesId != null">
+		        TRUSTEES_ID = #{trusteesId,jdbcType=VARCHAR},
+		      </if>
+		      <if test="trusteesName != null">
+		      	TRUSTEES_NAME = #{trusteesName,jdbcType=VARCHAR},
+		      </if>
+		      <if test="supplierNames != null">
+		   		SUPPLIER_NAMES = #{supplierNames,jdbcType=VARCHAR},
+		      </if>
+		       <if test="supplierIds != null">
+		      	SUPPLIER_IDS = #{supplierIds,jdbcType=VARCHAR},
+		      </if>
+		       <if test="contractId != null">
+		      	CONTRACT_ID = #{contractId,jdbcType=VARCHAR},
+		      </if>
+		       <if test="submitStatus != null">
+		      	SUBMIT_STATUS = #{submitStatus,jdbcType=VARCHAR},
+		      </if>
+		       <if test="properType != null">
+		      	PRODUCT_NATURE = #{properType,jdbcType=VARCHAR},
+		      </if>
+		       <if test="roomName != null">
+		      	ROOM_NAME = #{roomName,jdbcType=VARCHAR},
+		      </if>
+		       <if test="resultStatus != null">
+		      	RESULT_STATUS = #{resultStatus,jdbcType=VARCHAR},
+      		   </if>
+      		   <if test="onlyId != null">
+		      	ONLY_ID = #{onlyId,jdbcType=VARCHAR},
+      		   </if>
+      		    <if test="instanceId != null">
+		      	INSTANCE_ID = #{instanceId,jdbcType=VARCHAR},
+      		   </if>
+      		     <!-- <if test="attachmentId != null">
+		      	ATTACHMENT_ID = #{attachmentId,jdbcType=VARCHAR},
+      		   </if> -->
+      		   
+		</set>
+		WHERE
+		INSTANCE_ID = #{instanceId,jdbcType=VARCHAR}
+	</update>
+  
+  
+  
+  
+  <sql id="columns">
+		ID,FILENAME as filename,FILEPATH as filepath,NOTE as note,CREATOR as creator,CREATORID as creatorid,
+		TOTALBYTES as totalbytes,EXT as ext
+	</sql>
+  
+  <select id="findByIDTrans" resultType="com.audit.modules.basedata.entity.TransEleFile">
+		SELECT <include refid="columns"/> FROM SYS_TRANS_FILE where id=#{fileID,jdbcType=VARCHAR}
+  </select>
+  
+  
+  <select id="selectIsTransData" parameterType="java.lang.String" resultMap="BaseTransData">
+		SELECT SITE_NAME,STATUS FROM SYS_TRANSELEPOWER_SUBMIT where APPLY_ID=#{applyId,jdbcType=VARCHAR}
+  </select>
+  
+  
+  <!-- 可以多个删除转供电中数据 -->
+    <delete id="deleteByApplyIds" >
+	    DELETE FROM 
+	    SYS_TRANSELEPOWER_SUBMIT
+	    WHERE APPLY_ID IN
+	    <foreach collection="array" item="applyid" index="index"
+				open="(" separator="," close=")">
+				#{applyid,jdbcType=VARCHAR}
+		</foreach>
+  	</delete>
+  
+  	<!-- 根据业务id修改转供电中失败数据 -->
+  <update id="updateFailStatusByApplyIds" >
+    	UPDATE SYS_TRANSELEPOWER_SUBMIT
+     	SET   
+    	STATUS = 2
+    	where APPLY_ID IN
+    	<foreach collection="array" item="applyid" index="index"
+				open="(" separator="," close=")">
+				#{applyid,jdbcType=VARCHAR}
+		</foreach>
+  </update>
+  
+  
+  <!-- 根据iDs 删除  mybatis 传入的都为map  list:ids-->
+    <delete id="deleteByIDs">
+        DELETE FROM SYS_TRANSELEPOWER_SUBMIT WHERE INSTANCE_ID IN
+        <foreach collection="list" index="index" item="id" open="("
+                 separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    <!-- 根据onlyids 删除SYS_ZGROOM_TRANS_MID中数据  mybatis 传入的都为map  list:ids-->
+    <delete id="deleteByOnlyIds">
+        DELETE FROM SYS_ZGROOM_TRANS_MID WHERE ONLY_ID IN
+        <foreach collection="list" index="index" item="id" open="("
+                 separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    <!-- 根据流程id查询状态和业务id，基础数据中要用-->
+   <!--  <select id="checkTransDataStatus" parameterType="java.lang.String" resultMap="BaseTransData">
+		SELECT APPLY_ID,STATUS FROM SYS_TRANSELEPOWER_SUBMIT where INSTANCE_ID=#{id,jdbcType=VARCHAR}
+  	</select> -->
+  
+  <!-- 根据唯一id查询有之前有没有数据，没有就新增，有就修改 -->
+  <select id="checkNeedSubmitDataStatus" parameterType="java.lang.String" resultMap="BaseNeedTransMap">
+		SELECT SUBMIT_STATUS,ROOM_NAME FROM SYS_ZGROOM_TRANS_MID where ONLY_ID=#{onlyId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="getNeedSubmitData" parameterType="com.audit.modules.common.mybatis.PageUtil"
+		resultMap="BaseNeedTransMap">
+		SELECT
+		sts.CITY_ID,
+		sts.COUNTY_ID,
+		sts.CREATE_DATE, 
+		sts.ROOM_ID,
+		sts.SITE_ID,
+		sts.SITE_NAME,
+		sts.ROOM_ELE_TYPE,
+		sts.SITE_ELE_TYPE,
+		sts.REMARK,
+		sts.TRUSTEES_ID,
+		sts.TRUSTEES_NAME,
+		sts.SUPPLIER_NAMES,
+		sts.SUPPLIER_IDS,
+		sts.CONTRACT_ID,
+		sts.SUBMIT_STATUS,
+		sts.PRODUCT_NATURE,
+		sts.ROOM_NAME,
+		sts.RESULT_STATUS,
+		sts.INSTANCE_ID,
+		sts.ONLY_ID,
+		sts.ATTACHMENT_ID,
+		sts.ADDAPO_USER_ID,
+		sts.ADDAPO_USER_NAME,
+		(select NAME from YDJH_AREA where id = sts.CITY_ID) AS CITYNAME,
+		(select NAME from YDJH_AREA where id = sts.COUNTY_ID) AS COUNTYNAME
+		FROM SYS_ZGROOM_TRANS_MID sts
+		WHERE 1=1
+		AND sts.SUBMIT_STATUS != '2'
+		<if test="null != obj.siteName and obj.siteName!=''">AND (INSTR(sts.SITE_NAME,#{obj.siteName}) > 0 OR
+			INSTR(sts.SITE_NAME,#{obj.siteName}) > 0)</if>
+		<if test="null != obj.cityId and obj.cityId!=''">AND sts.CITY_ID = #{obj.cityId}</if>
+		<if test="null != obj.countyId and obj.countyId!=''">AND sts.COUNTY_ID = #{obj.countyId}</if>
+		<!-- <if test="null != obj.electricityType and obj.electricityType!=''">AND sts.ELECTRICITY_TYPE = #{obj.electricityType}</if> -->
+		<if test="null != obj.properType and obj.properType!=''">AND sts.PRODUCT_NATURE = #{obj.properType}</if>
+		<if test="null != obj.resultStatus and obj.resultStatus!='' and obj.resultStatus != '4'.toString() ">AND sts.RESULT_STATUS = #{obj.resultStatus}</if>
+		<if test=" obj.resultStatus == '4'.toString() ">AND sts.RESULT_STATUS is null</if>
+		Order By SITE_ID DESC
+	</select>
+	
+	  <select id="findDataByOnlyId" parameterType="java.lang.String"
+		resultMap="BaseNeedTransMap">
+		SELECT
+		sts.CITY_ID,
+		sts.COUNTY_ID,
+		sts.CREATE_DATE, 
+		sts.ROOM_ID,
+		sts.SITE_ID,
+		sts.SITE_NAME,
+		sts.ROOM_ELE_TYPE,
+		sts.SITE_ELE_TYPE,
+		sts.REMARK,
+		sts.TRUSTEES_ID,
+		sts.TRUSTEES_NAME,
+		sts.SUPPLIER_NAMES,
+		sts.SUPPLIER_IDS,
+		sts.CONTRACT_ID,
+		sts.SUBMIT_STATUS,
+		sts.PRODUCT_NATURE,
+		sts.ROOM_NAME,
+		sts.RESULT_STATUS,
+		sts.INSTANCE_ID,
+		sts.ONLY_ID,
+		sts.ATTACHMENT_ID,
+		sts.ADDAPO_USER_ID,
+		sts.ADDAPO_USER_NAME,
+		(select NAME from YDJH_AREA where id = sts.CITY_ID) AS CITYNAME,
+		(select NAME from YDJH_AREA where id = sts.COUNTY_ID) AS COUNTYNAME
+		FROM SYS_ZGROOM_TRANS_MID sts
+		WHERE
+		sts.ONLY_ID = #{onlyId,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="findDataByInstancdId" parameterType="java.lang.String"
+		resultMap="BaseNeedTransMap">
+		SELECT
+		sts.CITY_ID,
+		sts.COUNTY_ID,
+		sts.CREATE_DATE, 
+		sts.ROOM_ID,
+		sts.SITE_ID,
+		sts.SITE_NAME,
+		sts.ROOM_ELE_TYPE,
+		sts.SITE_ELE_TYPE,
+		sts.REMARK,
+		sts.TRUSTEES_ID,
+		sts.TRUSTEES_NAME,
+		sts.SUPPLIER_NAMES,
+		sts.SUPPLIER_IDS,
+		sts.CONTRACT_ID,
+		sts.SUBMIT_STATUS,
+		sts.PRODUCT_NATURE,
+		sts.ROOM_NAME,
+		sts.RESULT_STATUS,
+		sts.INSTANCE_ID,
+		sts.ONLY_ID,
+		sts.ATTACHMENT_ID,
+		sts.ADDAPO_USER_ID,
+		sts.ADDAPO_USER_NAME,
+		(select NAME from YDJH_AREA where id = sts.CITY_ID) AS CITYNAME,
+		(select NAME from YDJH_AREA where id = sts.COUNTY_ID) AS COUNTYNAME
+		FROM SYS_ZGROOM_TRANS_MID sts
+		WHERE
+		sts.INSTANCE_ID = #{instanceId,jdbcType=VARCHAR}
+	</select>
+	
+	
+	<update id="updateResultStatusByOnlyId" parameterType="com.audit.modules.basedata.entity.AccountSiteNeedTrans">
+		UPDATE SYS_ZGROOM_TRANS_MID
+		<set>
+			  <if test="resultStatus != null">
+		        RESULT_STATUS = #{resultStatus,jdbcType=VARCHAR},
+		      </if>
+		      <if test="instanceId != null">
+		        INSTANCE_ID = #{instanceId,jdbcType=VARCHAR},
+		      </if>
+		      <if test="submitStatus != null">
+		        SUBMIT_STATUS = #{submitStatus,jdbcType=VARCHAR},
+		      </if>
+		</set>
+		WHERE
+		ONLY_ID = #{onlyId,jdbcType=VARCHAR}
+	</update>
+	<update id="updateResultStatusByOnlyId2" parameterType="com.audit.modules.basedata.entity.AccountSiteNeedTrans">
+		UPDATE SYS_ZGROOM_TRANS_MID
+		<set>
+		        RESULT_STATUS = null,
+		      <if test="instanceId != null">
+		        INSTANCE_ID = #{instanceId,jdbcType=VARCHAR},
+		      </if>
+		      <if test="submitStatus != null">
+		        SUBMIT_STATUS = #{submitStatus,jdbcType=VARCHAR},
+		      </if>
+		</set>
+		WHERE
+		ONLY_ID = #{onlyId,jdbcType=VARCHAR}
+	</update>
+	
+	<!-- 保存上传附件 -->
+	<insert id="saveMiddelFile">
+		INSERT INTO SYS_TRANS_MIDDLE_FILE(ID,BUSINESS_ID,TRANS_FILE_ID)
+		<foreach collection="list" index="index" item="midlleFile" separator="union all" >
+			select #{midlleFile.id,jdbcType=VARCHAR},#{midlleFile.businessId,jdbcType=VARCHAR},#{midlleFile.transFileId,jdbcType=VARCHAR} from dual
+		</foreach>
+	</insert>
+	
+	<!-- 查询文件数据 -->
+	<select id="queryFileByOnlyId" parameterType="java.lang.String" resultType="com.audit.modules.basedata.entity.TransEleFile">
+        SELECT
+            stf.ID as id,
+            stf.FILENAME as fileName,
+            stf.EXT as ext,
+            stf.FILEPATH as filePath,
+            stf.NOTE as note,
+            stf.CREATOR as creator,
+            stf.CREATORID as creatorId,
+            stf.TOTALBYTES as totalBytes
+        FROM SYS_ZGROOM_TRANS_MID sztm
+        INNER JOIN SYS_TRANS_MIDDLE_FILE stmf ON sztm.ONLY_ID=stmf.BUSINESS_ID
+        INNER JOIN SYS_TRANS_FILE stf ON stmf.TRANS_FILE_ID = stf.ID
+        WHERE sztm.ONLY_ID = #{onlyId,jdbcType=VARCHAR}
+        
+    </select>
+    
+    <!-- 根据onlyId删除转供电附件中间表数据 -->
+    <delete id="deleteMidFileByOnlyId" parameterType="java.lang.String">
+	    DELETE FROM 
+	    SYS_TRANS_MIDDLE_FILE
+	    WHERE BUSINESS_ID = #{onlyId,jdbcType=VARCHAR}
+  	</delete>
+	
+	
+	
+  	
+	
+
+</mapper>

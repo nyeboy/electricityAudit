@@ -1,0 +1,55 @@
+﻿<div class="ledge-detail ledge-edit elec-dialog">
+    <h4  style="border-bottom: 1px solid #e1e4e6;">超标原因</h4>
+    <div class="ledge-content">
+        <div class="pannel-basic">
+            <div ng-if="tab==1" class="basic-container">
+                    <div class="invoinc-table" >
+                    <div class="ledge-table">
+                    	 <table style="border: 1px solid black;">
+                    	<tr >
+                    		<td>稽核单ID</td>
+                    		<td>稽核单流水号</td>
+                    		<td>超标杆比例</td>
+                    		<td>超标类型</td>
+                    	</tr>
+                    	<tr  ng-model="overdata" ng-repeat="item in overdata">
+                    		<td>{{item.electricityId}}</td>
+                    		<td>{{item.electricitySN}}</td>
+                    		<td>{{item.overProportion}}</td>
+                    		<td>{{item.type}}</td>
+                    	</tr>
+                    </table>
+                    
+                    </div>
+                        <div class="table-details invoinc-list">
+                        </div>
+<div class="ledge-title ledge-sub">超标原因</div>
+                    <div class="remark">
+                        <form action="" name="formText" >
+                            <!-- {{ng-minLenght}} -->
+                            <textarea
+                                ng-readonly = "flagSave"
+                                ng-model="overproofReasons"
+                                name="textear"
+                                ng-minLength="0"
+                                id="" class="textarea" required ></textarea>
+                        </form>
+                         <div ng-if="!flagSave" class="ledge-title ledge-sub">其他超标原因</div>   
+                               <select ng-change="changeOther()" name="other" ng-model="overproofReasons" ng-if="!flagSave" >
+                               	<option>系统用电量不真实（台账有误或系统问题等）</option>
+                               	<option>资管设备型号或数量不正确</option>
+                               	<option>电力公司未按时抄表或报销人员累计报销单月缴多月电费</option>
+                               	<option>基站用电被共享</option>
+                               	<option>电力公司“挱飞表”估算致部分月份电费冒高</option>
+                               	<option>一个基站报账点含多个点电费</option>
+                               	<option>老旧设备或电路有电损</option>
+                               	<option >其他</option>
+                               </select>
+                    </div>
+            </div>
+        </div>
+        <div class="reimbur-foot ledge-foot audit-page-elec">
+            <button  ng-click="sure11()" class="reimbur-save btn">提交</button>
+        </div>
+    </div>
+</div>

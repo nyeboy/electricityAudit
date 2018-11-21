@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.basedata.dao.PowerRateManageDao">
+
+<!--  <if test="obj.deviceType!=null and obj.deviceType!=''">AND DEVICE_TYPE LIKE '%'||#{obj.deviceType}||'%'</if>
+			<if test="obj.deviceModel!=null and obj.deviceModel!=''">AND DEVICE_MODEL LIKE '%'||#{obj.deviceModel}||'%'</if> -->
+		<!-- 
+		SELECT
+			sepr.POWER_RATING AS powerRating,
+			sepr.DEVICE_TYPE AS deviceType,
+			sepr.DEVICE_MODEL AS deviceModel,
+			sepr.DEVICE_VENDOR AS deviceVendor,
+			TO_CHAR(sepr.UPDATE_TIME,'yyyy-MM-dd') AS updateDate
+			FROM
+			SYS_EQUROOM_POWER_RATING sepr
+			LEFT JOIN  ZG_SPACE_EQUIP_ROOM zser ON zser.INT_ID = sepr.EQUROOM_ID
+		where 1=1 -->
+
+	<!-- 分页查找所有 -->
+   <select id="findPowerRateByPage" resultType="com.audit.modules.basedata.entity.PowerRateManage" parameterType="java.util.Map">
+		SELECT
+			DISTINCT
+			zser.INT_ID as intId,
+			(select NAME from YDJH_AREA ya where TO_CHAR(ya.ID)=zser.CITY_ID) as cityName,
+			(select NAME from YDJH_AREA yas where TO_CHAR(yas.ID)=zser.COUNTY_ID) as countyNmae,
+			zser.ZH_LABEL AS zhLabel,
+			zser.PROPERTY AS property,
+			zser.STATUS AS status
+		FROM
+			ZG_SPACE_EQUIP_ROOM zser
+		where 1=1
+	        <if test="obj.cityId!=null and obj.cityId!=''">AND zser.CITY_ID = #{obj.cityId}</if>
+	        <if test="obj.countyId!=null and obj.countyId!=''">AND zser.COUNTY_ID = #{obj.countyId}</if>
+	      	<if test="obj.zhLabel!=null and obj.zhLabel!=''">AND zser.ZH_LABEL LIKE '%'||#{obj.zhLabel}||'%'</if>
+			<if test="obj.zgProperty!=null and obj.zgProperty!=''">AND zser.PROPERTY = #{obj.zgProperty}</if> 
+			<if test="obj.zgStatus!=null and obj.zgStatus!=''">AND zser.STATUS = #{obj.zgStatus}</if> 
+			
+    </select> 
+	
+	<!-- 查询资管机房拥有者  -->
+    <select id="findProperty" resultType="java.lang.String">
+		SELECT
+			PROPERTY
+		FROM
+			ZG_SPACE_EQUIP_ROOM
+		where 1=1
+			and PROPERTY is not null
+	        GROUP BY PROPERTY
+    </select>
+	
+	<!-- 查询资管机房状态  -->
+    <select id="findStatus" resultType="java.lang.String">
+		SELECT
+			STATUS
+		FROM
+			ZG_SPACE_EQUIP_ROOM
+		where 1=1
+		and STATUS is not null
+	        GROUP BY STATUS
+    </select>
+	
+	<!-- 根据机房id查询对应设备信息 -->
+    <select id="selectFacility" resultType="com.audit.modules.basedata.entity.PowerRateManage">
+		SELECT
+			ID AS id,
+			POWER_RATING AS powerRating,
+			DEVICE_TYPE AS deviceType,
+			DEVICE_MODEL AS deviceModel,
+			DEVICE_VENDOR AS deviceVendor,
+			TO_CHAR(UPDATE_TIME,'yyyy-MM-dd') AS updateDate
+		FROM
+			SYS_EQUROOM_POWER_RATING
+		where 1=1
+			<if test="id !=null and id !=''">AND EQUROOM_ID = #{id}</if>
+	</select>
+	
+	<!-- 根据id查找 -->
+    <select id="findPowerRateById" resultType="com.audit.modules.basedata.entity.PowerRateManage">
+		SELECT
+			ID AS id,
+			POWER_RATING AS powerRating,
+			DEVICE_TYPE AS deviceType,
+			DEVICE_MODEL AS deviceModel,
+			DEVICE_VENDOR AS deviceVendor,
+			TO_CHAR(UPDATE_TIME,'yyyy-MM-dd') AS updateDate
+		FROM
+			SYS_EQUROOM_POWER_RATING
+		where 1=1
+			<if test="id !=null and id !=''">AND ID = #{id}</if>
+	</select>
+	
+	<!--查找设备类型 -->
+    <select id="findPdeviceType" resultType="String">
+		SELECT
+			DEVICE_TYPE
+		FROM
+			SYS_EQUROOM_POWER_RATING
+		GROUP BY
+			DEVICE_TYPE
+	</select>
+	
+	<!-- 更新 -->
+	<update id="updatePowerRate" parameterType="com.audit.modules.basedata.entity.PowerRateManage">
+		UPDATE SYS_EQUROOM_POWER_RATING 
+		<set>
+     	 	<if test="powerRating != null">POWER_RATING = #{powerRating,jdbcType=VARCHAR},</if>
+			<if test="deviceType != null">DEVICE_TYPE = #{deviceType,jdbcType=VARCHAR},</if>
+			<if test="deviceModel != null">DEVICE_MODEL = #{deviceModel,jdbcType=VARCHAR},</if>
+			<if test="deviceVendor != null">DEVICE_VENDOR = #{deviceVendor,jdbcType=VARCHAR},</if>
+			<if test="updateDate != null">UPDATE_TIME = TO_DATE(#{updateDate,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss'),</if>
+		</set>
+		 WHERE 
+		 	ID = #{id,jdbcType=NUMERIC} 
+		 	
+	</update>
+	
+	<!-- 删除 -->
+	<delete id="deletePowerRateById" parameterType="String" >
+		DELETE FROM 
+			SYS_EQUROOM_POWER_RATING 
+		WHERE ID = #{id}
+	</delete> 
+	
+	<!-- 添加信息  有触发器-->
+	<insert id="insertPowerRate" parameterType="com.audit.modules.basedata.entity.PowerRateManage" >
+		INSERT INTO SYS_EQUROOM_POWER_RATING
+			 <trim prefix="(" suffix=")" suffixOverrides=",">
+		      	<if test="powerRating != null">POWER_RATING,</if>
+				<if test="deviceType != null">DEVICE_TYPE,</if>
+				<if test="deviceModel != null">DEVICE_MODEL,</if>
+				<if test="deviceVendor != null">DEVICE_VENDOR,</if>
+				<if test="updateDate != null">UPDATE_TIME,</if>
+		    </trim>
+		    <trim prefix="values (" suffix=")" suffixOverrides=",">
+		    	<if test="powerRating != null">#{powerRating,jdbcType=VARCHAR},</if>
+				<if test="deviceType != null"> #{deviceType,jdbcType=VARCHAR},</if>
+				<if test="deviceModel != null">#{deviceModel,jdbcType=VARCHAR},</if>
+				<if test="deviceVendor != null">#{deviceVendor,jdbcType=VARCHAR},</if>
+				<if test="updateDate != null">TO_DATE(#{updateDate,jdbcType=VARCHAR},'yyyy-mm-dd hh24:mi:ss'),</if>
+		    </trim>
+	</insert>
+
+</mapper>

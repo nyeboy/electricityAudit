@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.audit.modules.electricity.dao.ElectricitySubmitDao">
+
+<resultMap type="com.audit.modules.electricity.entity.ElectricitySubmitVO" id="esMap">
+<id property="id" column="id"></id>
+<result property="trustees" column="TRUSTEES_ID"/>
+</resultMap>
+
+<resultMap type="com.audit.modules.electricity.entity.EleMiddleSubmitVO" id="emsMap">
+	<id property="id" column="id"></id>
+	<result property="sysEleSubmitId" column="SYS_ELE_SUBMIT_ID"/>
+	<result property="sysElectricityId" column="SYS_ELECTRICITY_ID"/>
+	<result property="submitNo" column="SUBMIT_NO"/>
+</resultMap>
+
+<resultMap type="com.audit.modules.electricity.entity.SubmitProcess" id="sp">
+	<id property="id" column="ID"></id>
+	<result property="account" column="ACCOUNT"/>
+	<result property="userName" column="USER_NAME"/>
+	<result property="nickName" column="NICK_NAME"/>
+	<result property="mobile" column="MOBILE" />
+	<result property="status" column="STATUS" />
+	<result property="time" column="TIME" />
+	<result property="submitId" column="SUBMIT_ID" />
+</resultMap>
+
+	<insert id="createEleSubmit" parameterType="com.audit.modules.electricity.entity.ElectricitySubmitVO">
+		INSERT INTO
+				SYS_ELECTRICITY_SUBMIT(ID,CITY,COUNTY,STATUS,REIMBURSEMENT_TYPE,TOTAL_AMOUNT,TAX_AMOUNT,CREATE_DATE,TRUSTEES_ID,SUBMIT_NO)
+		VALUES
+				(#{id,jdbcType=VARCHAR},#{city,jdbcType=VARCHAR},#{county,jdbcType=VARCHAR},#{status,jdbcType=INTEGER},#{reimbursementType,jdbcType=INTEGER},
+				#{totalAmount,jdbcType=VARCHAR},#{taxAmount,jdbcType=VARCHAR},#{createDate,jdbcType=TIMESTAMP},#{trustees,jdbcType=VARCHAR},#{submitNo,jdbcType=VARCHAR})
+	</insert>
+	
+	<update id="updateEleSubmit_1" parameterType="com.audit.modules.electricity.entity.ElectricitySubmitVO">
+		UPDATE 	SYS_ELECTRICITY_SUBMIT 
+			SET TOTAL_AMOUNT = #{totalAmount,jdbcType=VARCHAR},TAX_AMOUNT = #{taxAmount,jdbcType=VARCHAR} 
+			WHERE ID = #{id,jdbcType=VARCHAR}
+	</update>
+
+	<insert id="saveEleMidlleSubmit" parameterType="com.audit.modules.electricity.entity.EleMiddleSubmitVO">
+		INSERT INTO SYS_ELE_MID_SUBMIT(ID,SYS_ELE_SUBMIT_ID,SYS_ELECTRICITY_ID)
+		<foreach collection="list" index="index" item="midlle" separator="union all" >
+			select #{midlle.id,jdbcType=VARCHAR},#{midlle.sysEleSubmitId,jdbcType=VARCHAR},#{midlle.sysElectricityId,jdbcType=VARCHAR} from dual
+		</foreach>
+	</insert>
+
+<!--  地市区县改变前的sql -->
+	<!-- <select id="queryList" parameterType="java.util.Map" resultType="com.audit.modules.electricity.entity.ElectricitySubmitVO">
+		SELECT
+			seb.ID AS ID,
+			seb.CITY AS city,
+			seb.COUNTY AS county,
+			seb.STATUS AS status,
+			seb.REIMBURSEMENT_TYPE AS reimbursementType,
+			seb.TOTAL_AMOUNT AS totalAmount,
+			seb.TAX_AMOUNT AS taxAmount,
+			seb.CREATE_DATE AS createDate,
+			seb.TRUSTEES_ID AS trustees,
+			seb.SUBMIT_NO AS submitNo,
+			zsc.CITY_NAME AS cityName,
+			zsct.ZH_LABEL AS countyName
+		FROM
+			SYS_ELECTRICITY_SUBMIT seb
+		LEFT JOIN ZG_SPACE_CITY zsc ON seb.CITY = zsc.INT_ID
+		LEFT JOIN ZG_SPACE_COUNTY zsct ON seb.COUNTY = zsct.INT_ID
+		WHERE 1= 1
+			<if test="obj.submitNo!=null and obj.submitNo!=''">
+				AND  SUBMIT_NO LIKE '%'||#{obj.submitNo,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="obj.status!=null and obj.status!=''">
+				AND  STATUS = #{obj.status,jdbcType=INTEGER}
+			</if>
+			<if test="obj.startTime!=null ">
+				AND  <![CDATA[CREATE_DATE >= #{obj.startTime,jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="obj.endTime!=null ">
+				AND  <![CDATA[CREATE_DATE <= #{obj.endTime,jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="obj.trustees!=null and obj.trustees!=''">
+				AND  TRUSTEES_ID = #{obj.trustees} 
+			</if>
+		ORDER BY CREATE_DATE DESC
+	</select>
+
+	<select id="queryDetail" resultType="com.audit.modules.electricity.entity.ElectricitySubmitVO">
+		 SELECT ses.ID as id,zsc.CITY_NAME as city,zscc.ZH_LABEL as county,ses.STATUS as status,ses.REIMBURSEMENT_TYPE as reimbursementType,
+				ses.TOTAL_AMOUNT as totalAmount,ses.TAX_AMOUNT as taxAmount ,ses.CREATE_DATE as createDate,ses.TRUSTEES_ID as trustees,
+				ses.SUBMIT_NO as submitNo,(select su.USER_NAME FROM SYS_USER su WHERE su.ID = ses.TRUSTEES_ID AND ROWNUM &lt;= 1 ) as trusteesName
+		 FROM SYS_ELECTRICITY_SUBMIT ses LEFT JOIN ZG_SPACE_CITY zsc ON ses.CITY=zsc.INT_ID
+				LEFT JOIN ZG_SPACE_COUNTY zscc ON ses.COUNTY=zscc.INT_ID
+		 WHERE ID = #{subID}
+	</select> -->
+
+<select id="queryList" parameterType="java.util.Map" resultType="com.audit.modules.electricity.entity.ElectricitySubmitVO">
+		SELECT
+			seb.ID AS ID,
+			seb.CITY AS city,
+			seb.COUNTY AS county,
+			seb.STATUS AS status,
+			seb.REIMBURSEMENT_TYPE AS reimbursementType,
+			seb.TOTAL_AMOUNT AS totalAmount,
+			seb.TAX_AMOUNT AS taxAmount,
+			seb.CREATE_DATE AS createDate,
+			seb.TRUSTEES_ID AS trustees,
+			seb.SUBMIT_NO AS submitNo,
+			zsc.NAME AS cityName,
+			zsct.NAME AS countyName
+		FROM
+			SYS_ELECTRICITY_SUBMIT seb
+		LEFT JOIN YDJH_AREA zsc ON seb.CITY = zsc.ID
+		LEFT JOIN YDJH_AREA zsct ON seb.COUNTY = zsct.ID
+		WHERE 1= 1
+			<if test="obj.submitNo!=null and obj.submitNo!=''">
+				AND  seb.SUBMIT_NO LIKE '%'||#{obj.submitNo,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="obj.status!=null and obj.status!=''">
+				AND  seb.STATUS = #{obj.status,jdbcType=INTEGER}
+			</if>
+			<if test="obj.startTime!=null ">
+				AND  <![CDATA[seb.CREATE_DATE >= #{obj.startTime,jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="obj.endTime!=null ">
+				AND  <![CDATA[seb.CREATE_DATE <= #{obj.endTime,jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="obj.trustees!=null and obj.trustees!=''">
+				AND  seb.TRUSTEES_ID = #{obj.trustees} 
+			</if>
+		ORDER BY seb.CREATE_DATE DESC
+	</select>
+
+	<select id="queryListExcel" parameterType="java.util.Map" resultType="com.audit.modules.electricity.entity.ElectricitySubmitVO">
+		SELECT
+			seb.ID AS ID,
+			zsc.NAME AS city,
+			zsct.NAME AS county,
+			seb.STATUS AS status,
+			seb.REIMBURSEMENT_TYPE AS reimbursementType,
+			seb.TOTAL_AMOUNT AS totalAmount,
+			seb.TAX_AMOUNT AS taxAmount,
+			seb.CREATE_DATE AS createDate,
+			seb.TRUSTEES_ID AS trustees,
+			seb.SUBMIT_NO AS submitNo,
+			zsc.NAME AS cityName,
+			zsct.NAME AS countyName
+		FROM
+			SYS_ELECTRICITY_SUBMIT seb
+		LEFT JOIN YDJH_AREA zsc ON seb.CITY = zsc.ID
+		LEFT JOIN YDJH_AREA zsct ON seb.COUNTY = zsct.ID
+		WHERE 1= 1
+			<if test="obj.submitNo!=null and obj.submitNo!=''">
+				AND  seb.SUBMIT_NO LIKE '%'||#{obj.submitNo,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="obj.status!=null and obj.status!=''">
+				AND  seb.STATUS = #{obj.status,jdbcType=INTEGER}
+			</if>
+			<if test="obj.startTime!=null ">
+				AND  <![CDATA[seb.CREATE_DATE >= #{obj.startTime,jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="obj.endTime!=null ">
+				AND  <![CDATA[seb.CREATE_DATE <= #{obj.endTime,jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="obj.trustees!=null and obj.trustees!=''">
+				AND  seb.TRUSTEES_ID = #{obj.trustees} 
+			</if>
+		ORDER BY seb.CREATE_DATE DESC
+	</select>
+
+
+	<select id="queryDetail" resultType="com.audit.modules.electricity.entity.ElectricitySubmitVO">
+		 SELECT ses.ID as id,zsc.NAME as city,zscc.NAME as county,ses.STATUS as status,ses.REIMBURSEMENT_TYPE as reimbursementType,
+				ses.TOTAL_AMOUNT as totalAmount,ses.TAX_AMOUNT as taxAmount ,ses.CREATE_DATE as createDate,ses.TRUSTEES_ID as trustees,
+				ses.SUBMIT_NO as submitNo,(select su.USER_NAME FROM SYS_USER su WHERE su.ID = ses.TRUSTEES_ID AND ROWNUM <![CDATA[<=]]> 1 ) as trusteesName
+		 FROM SYS_ELECTRICITY_SUBMIT ses LEFT JOIN YDJH_AREA zsc ON ses.CITY=zsc.ID
+				LEFT JOIN YDJH_AREA zscc ON ses.COUNTY=zscc.ID
+		 WHERE ses.ID = #{subID}
+	</select>
+
+	<select id="queryMiddleBySubID" resultType="com.audit.modules.electricity.entity.EleMiddleSubmitVO">
+		SELECT
+			ID as id,
+			SYS_ELE_SUBMIT_ID as sysEleSubmitId,
+			SYS_ELECTRICITY_ID as sysElectricityId
+		FROM
+		 	SYS_ELE_MID_SUBMIT
+		WHERE
+		  	SYS_ELE_SUBMIT_ID = #{subID}
+	</select>
+
+	<delete id="deleteBySubID" parameterType="java.lang.String">
+		DELETE FROM SYS_ELECTRICITY_SUBMIT WHERE ID = #{subID}
+	</delete>
+
+	<delete id="deleteEleMidBySubID" parameterType="java.lang.String">
+		DELETE FROM SYS_ELE_MID_SUBMIT WHERE SYS_ELE_SUBMIT_ID = #{subID}
+	</delete>
+
+	<update id="updateStatus" parameterType="java.util.Map">
+		UPDATE SYS_ELECTRICITY_SUBMIT SET STATUS = #{map.status} WHERE ID IN 
+		<foreach collection="map.ids" index="index" item="id" open="("
+				 separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+	
+	<update id="updateStatusByNo" parameterType="java.util.Map">
+		UPDATE SYS_ELECTRICITY_SUBMIT SET STATUS = #{map.status} WHERE SUBMIT_NO IN
+		<foreach collection="map.submitNos" index="index" item="submitNo" open="("
+				 separator="," close=")">
+			#{submitNo}
+		</foreach> 
+	</update>
+	
+	<select id="queryBysubmitNo" resultType="com.audit.modules.electricity.entity.ElectricitySubmitVO">
+	    SELECT seb.ID AS ID,
+			seb.CITY AS city,
+			seb.COUNTY AS county,
+			seb.STATUS AS status,
+			seb.REIMBURSEMENT_TYPE AS reimbursementType,
+			seb.TOTAL_AMOUNT AS totalAmount,
+			seb.TAX_AMOUNT AS taxAmount,
+			seb.CREATE_DATE AS createDate,
+			seb.TRUSTEES_ID AS trustees,
+			seb.SUBMIT_NO AS submitNo
+		FROM 
+			SYS_ELECTRICITY_SUBMIT seb 
+		WHERE 
+			SUBMIT_NO = #{submitNo}
+	</select>
+	
+
+<select id="queryById" resultType="com.audit.modules.electricity.entity.ElectricitySubmitVO">
+	    SELECT seb.ID AS ID,
+			seb.CITY AS city,
+			seb.COUNTY AS county,
+			seb.STATUS AS status,
+			seb.REIMBURSEMENT_TYPE AS reimbursementType,
+			seb.TOTAL_AMOUNT AS totalAmount,
+			seb.TAX_AMOUNT AS taxAmount,
+			seb.CREATE_DATE AS createDate,
+			seb.TRUSTEES_ID AS trustees,
+			seb.SUBMIT_NO AS submitNo
+		FROM 
+			SYS_ELECTRICITY_SUBMIT seb 
+		WHERE 
+			ID= #{id}
+	</select>
+
+	
+	<!-- 根据id查找提交单号 -->
+	<select id="getCpById" parameterType="java.lang.String" resultMap="esMap">
+		select SYS_SUPPLIER_ID as supplyId from SYS_ELECTRICITY
+ where id=
+(select SYS_ELECTRICITY_ID from SYS_ELE_MID_SUBMIT where 
+SYS_ELE_SUBMIT_ID=(select SUBMIT_NO from SYS_ELECTRICITY_SUBMIT where id=#{id}))
+	</select>
+	
+	<select id="getEidBEsId" parameterType="java.lang.String" resultMap="emsMap">
+		select * from SYS_ELE_MID_SUBMIT where SYS_ELE_SUBMIT_ID=#{sysEleSubmitId}
+	</select>
+	
+	<select id="getMt" parameterType="java.lang.String" resultType="com.audit.modules.watthourmeter.entity.WatthourExtendVO">
+SELECT
+	swe.BELONG_END_TIME as belongEndTime,
+swe.END_AMMETER as endAmmeter
+FROM
+	SYS_ELE_MID_WATTHOUR semw
+LEFT JOIN SYS_ELECTRICITY se on se.id=SEMW.SYS_ELECIRICITY_ID
+left join SYS_WATTHOUR_EXTEND swe on swe.id=semw.SYS_WATTHOUR_EXTEND_ID
+where SE.SYS_ACCOUNT_SITE_ID=#{sid}
+    </select>
+    
+    <!--  -->
+    <insert id="addProcess" parameterType="com.audit.modules.electricity.entity.SubmitProcess">
+    	insert into SYS_PROCESS (ACCOUNT,USER_NAME,NICK_NAME,MOBILE,STATUS,TIME,ID,SUBMIT_ID) values(#{account},#{userName},#{nickName},#{mobile},#{status},to_date(#{time},'yyyy-mm-dd hh24:mi:ss'),#{id},#{submitId})
+    </insert>
+    
+    <update id="updateProcess" parameterType="java.util.Map">
+		UPDATE SYS_PROCESS SET STATUS = #{map.status} WHERE SUBMIT_ID IN
+		<foreach collection="map.ids" index="index" item="id" open="("
+				 separator="," close=")">
+			#{submitId}
+		</foreach>
+	</update>
+	
+	<select id="getProcessBySI" parameterType="java.lang.String" resultMap="sp">
+		select * from SYS_PROCESS where SUBMIT_ID=#{submitId}
+	</select>
+</mapper>

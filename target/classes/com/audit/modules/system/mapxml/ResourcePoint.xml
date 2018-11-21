@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.audit.modules.site.dao.ResourcePointDao">
+
+	<select id="findAllByCityID" parameterType="java.lang.String" resultType="com.audit.modules.site.entity.ResourcePointInfo">
+		SELECT
+			INT_ID AS ID,ZH_LABEL as zhLabel
+		FROM ZG_SPACE_RES_POINT WHERE CITY_ID=#{cityID}
+	</select>
+
+</mapper>

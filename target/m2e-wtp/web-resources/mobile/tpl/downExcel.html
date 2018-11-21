@@ -1,0 +1,69 @@
+ <div><button ng-click="downExcelGo()" class="btn btn-primary" type="button">导出</button></div>
+<div id="exportable" style="OVERFLOW: auto">
+	<table border="1px solid black">
+		<tr>
+			<td>流水号</td>
+			<td>稽核单状态</td>
+			<td>地市</td>
+			<td>区县</td>
+			<td>报账点名称</td>
+			<td>报账点别名</td>
+			<td>合同id</td>
+			<td>电量</td>
+			<td>金额</td>
+			<td>成本中心</td>
+			<td>铁塔站点编号</td>
+			<td>开票系数</td>
+			<td>分摊电费金额</td>
+			<td>发票类型</td>
+			<td>税率</td>
+			<td>税金金额</td>
+			<td>电费金额(不含税)</td>
+			<td>其他费用</td>
+			<td>总金额(含税)</td>
+			<td>报销总金额</td>
+			<td>支付总金额</td>
+			<!-- <td>建单时间</td> -->
+			<td>单价</td>
+			<td>提交人ID</td>
+			<td>报账组名称</td>
+			<td>备注</td>
+			<td>超标原因</td>
+			<td>部门名</td>
+			<td>总电量</td>
+			<td>建单人</td>
+		</tr>
+		<tr ng-repeat="item in excel" >
+			<td>{{item.serialNumber}}</td>
+			<td>{{item.status | ElectrictyStatusFilter}}</td>
+			<td>{{item.areas}}</td>
+			<td>{{item.counties}}</td>
+			<td>{{item.accountName}}</td>
+			<td>{{item.accountAlias}}</td>
+			<td>{{item.contractID}}</td>
+			<td>{{item.electricity}}</td>
+			<td>{{item.amount}}</td>
+			<td>{{item.costCenter}}</td>
+			<td>{{item.towerSiteNumber}}</td>
+			<td>{{item.billingCoefficient}}</td>
+			<td>{{item.shareElectricity}}</td>
+			<td>{{item.invoiceType}}</td>
+			<td>{{item.taxes}}</td>
+			<td>{{item.taxAmount}}</td>
+			<td>{{item.electricityAmount}}</td>
+			<td>{{item.otherCost}}</td>
+			<td>{{item.totalAmount}}</td>
+			<td>{{item.expenseTotalAmount}}</td>
+			<td>{{item.paymentAmount}}</td>
+			<!-- <td>{{item.createDate}}</td> -->
+			<td>{{item.price}}</td>
+			<td>{{item.submitPerson}}</td>
+			<td>{{item.sysRgName}}</td>
+			<td>{{item.remark}}</td>
+			<td>{{item.overproofReasons}}</td>
+			<td>{{item.departmentName}}</td>
+			<td>{{item.totalEleciric}}</td>
+			<td>{{item.createPerson}}</td>
+		</tr>
+	</table>
+</div>

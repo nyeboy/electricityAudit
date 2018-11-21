@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>四川移动网络业务管理稽核平台</title>
+    <link rel="stylesheet" href="css/extends/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/page/basic-date.css">
+    <link rel="stylesheet" href="css/page/under-construction.css">
+    <link rel="stylesheet" href="css/page/processManger.css">
+    <link rel="stylesheet" href="css/page/statistic-report.css">
+    <link rel="stylesheet" href="css/extends/bootstrap/bootstrap-datetimepicker.min.css">
+</head>
+<body>
+    <div id="systemBox" class="system-auit">
+        <div class="system-title">
+            <div class="title-left" id="logoBox" >
+                <a href="index.html"><img src="img/logo.png" alt="四川移动网络业务管理稽核平台" /></a>
+            </div>
+            <div class="title-right">
+                <div><i class="notices" id="notices"></i>
+                    欢迎您，<span id="userArea">xx市xx区</span><span id="userName">xx</span>&nbsp;|&nbsp;<a id="signOut">退出</a></div>
+                <div><a href="index.html" id="goIndex">首页</a>&nbsp;值班电话<span id="userMobile">879570451</span></div>
+            </div>
+        </div>
+        <div class="news" id="news">
+            <p>公告：系统2017年4月7日...</p>
+            <p>公告：四川省XXXXXXXXXX</p>
+        </div>
+        <div class="systemBox">
+            <div class="left-cont">
+                <div class="menu-box" id="menuBox"></div>
+            </div>
+            <div class="right-cont">
+                <div class="system-content" id="systemContent">
+                    <div class="index-box" id="indexBox">
+                        <div id="home-page">
+                            <div class="top-message container-fluid">
+                                <div class="message-show row">
+                                    <div class="col-md-2 message-content">
+                                        <div class="title">稽核单<span>60</span></div>
+                                        <div class="detail">
+                                            <div class="pull-left audit-pedding" id="submitContent">待处理<span class="circle">40</span></div>
+                                            <div class="pull-right audit-pedding" id="reviewContent">待审批<span class="circle">20</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 message-content">
+                                        <div class="title t2">预付单<span>8</span></div>
+                                        <div class="detail">
+                                            <div class="pull-left">待处理<span class="circle">3</span></div>
+                                            <div class="pull-right">待审批<span class="circle">5</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 message-content">
+                                        <div class="title t3">回收单<span>0</span></div>
+                                        <div class="detail">
+                                            <div class="pull-left">待处理<span class="circle">0</span></div>
+                                            <div class="pull-right">待审批<span class="circle">0</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 message-content">
+                                        <div class="title t4">转售单<span>0</span></div>
+                                        <div class="detail">
+                                            <div class="pull-left">待处理<span class="circle">0</span></div>
+                                            <div class="pull-right">待审批<span class="circle">0</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 message-content">
+                                        <div class="title t5">计提单<span>0</span></div>
+                                        <div class="detail">
+                                            <div class="pull-left">待处理<span class="circle">0</span></div>
+                                            <div class="pull-right">待审批<span class="circle">0</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 message-content">
+                                        <div class="title t6">冲销单<span>0</span></div>
+                                        <div class="detail">
+                                            <div class="pull-left">待处理<span class="circle">0</span></div>
+                                            <div class="pull-right">待审批<span class="circle">0</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="manager-pie">
+                                <div class="header-pie">
+                                    <ul>
+                                        <li class="tab-hover">稽核单状态统计</li>
+                                        <li>历史稽核单</li>
+                                    </ul>
+                                </div>
+                                <div class="manager-content" id="manager">
+                                    <div class="data-pie showIndex" id="pie-chart"></div>
+                                    <div class="data-table showIndex"></div>
+                                </div>    
+                            </div>
+                        </div>
+                    </div>
+                    <div class="business-box" id="businessBox">
+                        <div class="content-rout" id="contentRout">
+                            <span>基站电费</span>><span>电费提交</span>><span>电费录入</span>><span class="nowRout">新增稽核单</span>
+                        </div>
+                        <div class="content-box" id="contentBox">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<!-----------------------------------------------外部库---------------------------------------------------------------->
+<script src="js/extends/jquery-3.1.1.min.js"></script>
+<script src="js/extends/bootstrap.min.js"></script>
+<script src="js/extends/bootstrap-datetimepicker.min.js"></script>
+<script src="js/extends/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="js/extends/echarts.min.js"></script>
+<script src="js/extends/Blob.js"></script>
+<script src="js/extends/FileSaver.js"></script>
+<script src="js/extends/tableExport.js"></script>
+
+<!-----------------------------------------------公共js部分------------------------------------------------------------>
+<script src="config/Interface.js"></script>
+<script src="js/Menu.js"></script>
+
+<!-----------------------------------------------引入菜单js部分-------------------------------------------------------->
+<!--<script src="js/page/test.js"></script>-->
+<script src="js/page/submit-Tariff.js"></script>
+
+<script src="js/page/statistic-report.js"></script>
+<script src="js/page/home-page.js"></script>
+
+
+<script src="js/page/basicDate.js"></script>
+<script src="js/page/dialog.js"></script>
+<script src="js/page/benchmarking.js"></script>
+<script src="js/page/data-maintenance.js"></script>
+<script src="js/page/managerPie.js"></script>
+<script src="js/page/processManger.js"></script>
+
+<script>
+    initLogin(function (userData) {
+        //渲染菜单
+        MENU.render();
+        homePage.initDom(); 
+        managerPie.init({id:"manager"});
+        watermark({ watermark_txt: "四川移动网络业务管理稽核系统",watermark_width:560});
+        //你要登录后初始化首页函数；你内部要获取用户信息可以直接：getUserData()
+    });
+</script>
+</html>

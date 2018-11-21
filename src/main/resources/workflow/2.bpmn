@@ -1,0 +1,175 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="成都-龙泉驿区-mandimension" name="龙泉测试" isExecutable="true">
+    <documentation>龙泉测试</documentation>
+    <startEvent id="start"/>
+    <sequenceFlow id="sequenceFlow1" sourceRef="start" targetRef="userTask1">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${approved == 1}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="userTask1" name="流程提交人" activiti:assignee="${employee}"/>
+    <sequenceFlow id="sequenceFlow2" sourceRef="userTask1" targetRef="userTask2">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${approved == 1}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="userTask2" name="区县网络部经理审核" activiti:assignee="119">
+      <extensionElements>
+        <activiti:formProperty id="variable" name="variable" type="string"/>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="sequenceFlow3" sourceRef="userTask2" targetRef="userTask1">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${approved == -1}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sequenceFlow4" sourceRef="userTask2" targetRef="userTask3">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${approved == 1}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="userTask3" name="区县公司经理审核" activiti:assignee="448">
+      <extensionElements>
+        <activiti:formProperty id="variable" name="variable" type="string"/>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="sequenceFlow5" sourceRef="userTask3" targetRef="userTask1">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${approved == -1}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sequenceFlow6" sourceRef="userTask3" targetRef="userTask4">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${approved == 1}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="userTask4" name="dfdsfsdfsdf" activiti:assignee="121">
+      <extensionElements>
+        <activiti:formProperty id="VARIABLE" name="VARIABLE" type="string"/>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="sequenceFlow7" sourceRef="userTask4" targetRef="userTask1">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${approved == -1}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sequenceFlow8" sourceRef="userTask4" targetRef="userTask5">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${approved == 1}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="userTask5" name="市公司网络部电费管理岗审核" activiti:assignee="1085">
+      <extensionElements>
+        <activiti:formProperty id="fixed" name="fixed" type="string"/>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="sequenceFlow9" sourceRef="userTask5" targetRef="userTask1">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${approved == -1}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sequenceFlow10" sourceRef="userTask5" targetRef="end">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${approved == 2}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="sequenceFlow11" sourceRef="userTask5" targetRef="userTask6">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${approved == 1}]]></conditionExpression>
+    </sequenceFlow>
+    <userTask id="userTask6" name="市公司网络部分管经审核" activiti:assignee="1086">
+      <extensionElements>
+        <activiti:formProperty id="fixed" name="fixed" type="string"/>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="sequenceFlow12" sourceRef="userTask6" targetRef="userTask1">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${approved == -1}]]></conditionExpression>
+    </sequenceFlow>
+    <endEvent id="end"/>
+    <sequenceFlow id="sequenceFlow13" sourceRef="userTask6" targetRef="end"/>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_成都-龙泉驿区-mandimension">
+    <bpmndi:BPMNPlane bpmnElement="成都-龙泉驿区-mandimension" id="BPMNPlane_成都-龙泉驿区-mandimension">
+      <bpmndi:BPMNShape bpmnElement="start" id="BPMNShape_start">
+        <omgdc:Bounds height="30.0" width="30.0" x="0.0" y="244.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="userTask1" id="BPMNShape_userTask1">
+        <omgdc:Bounds height="60.0" width="100.0" x="80.0" y="229.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="userTask3" id="BPMNShape_userTask3">
+        <omgdc:Bounds height="60.0" width="100.0" x="380.0" y="50.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="end" id="BPMNShape_end">
+        <omgdc:Bounds height="30.0" width="30.0" x="980.0" y="200.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="userTask2" id="BPMNShape_userTask2">
+        <omgdc:Bounds height="60.0" width="100.0" x="230.0" y="100.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="userTask5" id="BPMNShape_userTask5">
+        <omgdc:Bounds height="60.0" width="100.0" x="680.0" y="150.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="userTask4" id="BPMNShape_userTask4">
+        <omgdc:Bounds height="60.0" width="100.0" x="530.0" y="100.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="userTask6" id="BPMNShape_userTask6">
+        <omgdc:Bounds height="60.0" width="100.0" x="830.0" y="250.0"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow5" id="BPMNEdge_sequenceFlow5">
+        <omgdi:waypoint x="380.0" y="67.5"/>
+        <omgdi:waypoint x="368.0" y="67.5"/>
+        <omgdi:waypoint x="368.0" y="259.0"/>
+        <omgdi:waypoint x="80.0" y="259.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow6" id="BPMNEdge_sequenceFlow6">
+        <omgdi:waypoint x="480.0" y="80.0"/>
+        <omgdi:waypoint x="492.0" y="80.0"/>
+        <omgdi:waypoint x="492.0" y="130.0"/>
+        <omgdi:waypoint x="530.0" y="130.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow3" id="BPMNEdge_sequenceFlow3">
+        <omgdi:waypoint x="230.0" y="117.5"/>
+        <omgdi:waypoint x="218.0" y="117.5"/>
+        <omgdi:waypoint x="218.0" y="259.0"/>
+        <omgdi:waypoint x="80.0" y="259.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow4" id="BPMNEdge_sequenceFlow4">
+        <omgdi:waypoint x="330.0" y="130.0"/>
+        <omgdi:waypoint x="342.0" y="130.0"/>
+        <omgdi:waypoint x="342.0" y="80.0"/>
+        <omgdi:waypoint x="380.0" y="80.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow1" id="BPMNEdge_sequenceFlow1">
+        <omgdi:waypoint x="30.0" y="259.0"/>
+        <omgdi:waypoint x="80.0" y="259.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow2" id="BPMNEdge_sequenceFlow2">
+        <omgdi:waypoint x="180.0" y="254.83333333333334"/>
+        <omgdi:waypoint x="194.0" y="254.83333333333334"/>
+        <omgdi:waypoint x="194.0" y="130.0"/>
+        <omgdi:waypoint x="230.0" y="130.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow11" id="BPMNEdge_sequenceFlow11">
+        <omgdi:waypoint x="780.0" y="192.5"/>
+        <omgdi:waypoint x="792.0" y="192.5"/>
+        <omgdi:waypoint x="792.0" y="280.0"/>
+        <omgdi:waypoint x="830.0" y="280.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow10" id="BPMNEdge_sequenceFlow10">
+        <omgdi:waypoint x="780.0" y="167.5"/>
+        <omgdi:waypoint x="792.0" y="167.5"/>
+        <omgdi:waypoint x="792.0" y="215.0"/>
+        <omgdi:waypoint x="980.0" y="215.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow9" id="BPMNEdge_sequenceFlow9">
+        <omgdi:waypoint x="680.0" y="192.5"/>
+        <omgdi:waypoint x="668.0" y="192.5"/>
+        <omgdi:waypoint x="668.0" y="259.0"/>
+        <omgdi:waypoint x="80.0" y="259.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow7" id="BPMNEdge_sequenceFlow7">
+        <omgdi:waypoint x="530.0" y="142.5"/>
+        <omgdi:waypoint x="518.0" y="142.5"/>
+        <omgdi:waypoint x="518.0" y="259.0"/>
+        <omgdi:waypoint x="80.0" y="259.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow8" id="BPMNEdge_sequenceFlow8">
+        <omgdi:waypoint x="630.0" y="130.0"/>
+        <omgdi:waypoint x="642.0" y="130.0"/>
+        <omgdi:waypoint x="642.0" y="180.0"/>
+        <omgdi:waypoint x="680.0" y="180.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow13" id="BPMNEdge_sequenceFlow13">
+        <omgdi:waypoint x="930.0" y="280.0"/>
+        <omgdi:waypoint x="942.0" y="280.0"/>
+        <omgdi:waypoint x="942.0" y="215.0"/>
+        <omgdi:waypoint x="980.0" y="215.0"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sequenceFlow12" id="BPMNEdge_sequenceFlow12">
+        <omgdi:waypoint x="830.0" y="292.5"/>
+        <omgdi:waypoint x="818.0" y="292.5"/>
+        <omgdi:waypoint x="818.0" y="259.0"/>
+        <omgdi:waypoint x="80.0" y="259.0"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

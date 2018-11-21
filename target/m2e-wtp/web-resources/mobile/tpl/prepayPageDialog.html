@@ -1,0 +1,184 @@
+<!-- 自维预付页面详情 dialog -->
+<div class="ledge-detail ledge-edit elec-dialog">
+    <h4 ng-if="flagSave" style="border-bottom: 1px solid #e1e4e6;">预付单查看页面详情</h4>
+    <h4 ng-if="flag" style="border-bottom: 1px solid #e1e4e6;">预付单修改页面详情</h4>
+    <div class="ledge-content">
+        <div class="pannel-title">
+            <ul>
+                <li ng-show="!isZWauditSave" class="pannel-curr">基本信息</li>
+
+                <li ng-show="isZWauditSave" ng-click="tab=1" ng-class="{'pannel-curr':tab==1}">基本信息</li>
+                <li ng-show="isZWauditSave" ng-click="tab=2" ng-class="{'pannel-curr':tab==2}">流转信息</li>
+                <li ng-show="isZWauditSave" ng-click="tab=3" ng-class="{'pannel-curr':tab==3}">流转图</li>
+            </ul>
+        </div>
+        <div class="pannel-basic">
+            <div ng-if="tab==1" class="basic-container">
+                <div class="basic-audit">
+                    <div class="ledge-title">明细</div>
+                    <div class="ledge-table">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <span class="table-left">预付单流水号:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="singleDetail.paymentNumber">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">地市:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="singleDetail.cityStr">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">区县:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="singleDetail.countyStr">
+                                    </td>
+                                </tr>
+                                <tr ng-if="flagSave">
+                                    <td>
+                                        <span class="sign table-left">报销部门:</span>
+                                        <input
+                                            type="text"  ng-disabled = "flagSave"
+                                            name="" class="table-right" ng-model="singleDetail.departmentName" title="{{singleDetail.accountName}}">
+                                    </td>
+									<td><span class="sign table-left">预付开始时间:</span>
+									<input type="text" ng-model="singleDetail.sDate" disabled="flagSave" readonly="readonly" class="table-right">
+									</td>
+									<td><span class="sign table-left">预付结束时间:</span> 
+									<input type="text" ng-model="singleDetail.eDate" disabled="flagSave" readonly="readonly" class="table-right">
+									</td>
+								</tr>
+								<tr ng-if="flag">
+                                    <td>
+                                        <span class="sign table-left">报销部门:</span>
+                                        <input
+                                            type="text"
+                                            disabled="flag" class="table-right" ng-model="singleDetail.departmentName" title="{{singleDetail.accountName}}">
+                                    </td>
+									<td><span class="sign table-left">预付开始时间:</span> <input
+										readOnly="true" ng-laydate id="createDate" format="YYYY-MM-DD"
+										ng-model="singleDetail.sDate" type="text"
+										placeholder="预付开始时间" name="" class="add-title">
+									</td>
+									<td><span class="sign table-left">预付结束时间:</span> <input
+										readOnly="true" ng-laydate id="eDate" format="YYYY-MM-DD"
+										ng-model="singleDetail.eDate" type="text"
+										placeholder="预付结束时间" name="" class="add-title">
+									</td>
+								</tr>
+                                <tr >
+                                    <td ng-if="flagSave">
+                                        <span class="table-left">供应商名称:</span>
+                                     <input
+                                            readOnly="true"
+                                            ng-model="singleDetail.supplyStr"
+                                            type="text"   ng-disabled = "flagSave"
+                                            name="" class="table-right " title="{{singleDetail.supplyStr}}"> 
+                                    </td>
+                                    <td ng-if="flag">
+                                        <span class="table-left">供应商名称:</span>
+                                            <input
+                                            ng-disabled = "flagSave"
+                                        title="{{singleDetail.supplyStr}}"
+                                        ng-click="choiceSupplierDialog2()"
+                                        ng-model="singleDetail.supplyStr"
+                                        type="text" name="" class="table-right "
+                                        value="中移通信技术工程(EDRD)" readOnly="true">
+                                    <i ng-click="choiceSupplierDialog2()" class="search-icon" ></i>
+                                    </td>
+                                    
+                                    
+                                     <td>
+                                        <span class="table-left">预付总金额:</span>
+                                        <input ng-if="flagSave"
+                                            type="text" name="" class="table-right"
+                                            disabled = "disabled" ng-model="singleDetail.totalMoney">
+                                            <input ng-if="flag"
+                                            type="text" name="" class="table-right"
+                                             ng-model="singleDetail.totalMoney">
+                                    </td>
+                                     <td>
+                                        <span class="table-left">合同ID:</span>
+                                        <input
+                                            readOnly="true"
+                                            ng-model="singleDetail.contractId"
+                                            type="text"   ng-disabled = "flagSave"
+                                            ng-click="choiceContractDialog()"
+                                            name="" class="table-right " title="{{singleDetail.contractID}}">
+                                    </td>
+                                </td>
+                            </tbody>
+                        </table>
+                    </div>
+                <div class="ledge-title ledge-sub">备注信息</div>
+                <div ng-if="flagSave" class="remark">
+                    <textarea disabled="flagSave" ng-model="singleDetail.remark" name="" id="" class="textarea"></textarea>
+                </div>
+                <div ng-if="flag" class="remark">
+                    <textarea ng-model="singleDetail.remark" name="" id="" class="textarea"></textarea>
+                </div>
+                    <div class="ledge-title ledge-sub">附件信息</div>
+                    <div class="upload-method">
+                        <div ng-repeat="item in singUploadFiles track by $index">
+                            附件信息：<span>{{item.filename}}</span>
+                            <a href="javascript:void(0)" ng-click="showDetailFiles(item)" >查看</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 流转信息 -->
+        <div ng-if="tab==2" class="pannel-info">
+            <div class="basic-audit">
+                <ul class="info-list">
+                    <li ng-repeat="item in ApprovalZWDetails track by $index">
+                        <p>
+                            <span>{{$index+1}}.</span>
+                            <span>{{item.time}}</span>
+                            <span>{{item.user.userName}}</span> 操作类型：<span>{{item.opType}}</span>
+                        </p>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width:15%">操作人</th>
+                                    <th style="width:25%">操作姓名</th>
+                                    <th style="width:10%">部门职位</th>
+                                    <th style="width:15%">操作人联系方式</th>
+                                    <th style="width:10%">审批意见</th>
+                                    <th style="width:25%">处理时间</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{item.user.account}}</td>
+                                    <td>{{item.user.userName}}</td>
+                                    <td>{{item.roleNameList}}</td>
+                                    <td>{{item.user.mobile}}</td>
+                                    <td>{{item.suggestion}}</td>
+                                    <td>{{item.time}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div ng-if="tab==3" class="pannel-map">
+            <ul style="overflow: auto;">
+                <li ng-repeat="item in flowChartList track by $index" style="margin-bottom: 5px">
+                        <span style="float: left" ng-class="{true:'ledge-currbg ledge-text',false:'ledge-text'}[item.active]">
+                            {{item.stepName}}<br>{{item.user.userName}}
+                        </span>
+                    <span  style="float:left;text-align:center; width:53px; height:180px; background-image: url(assets/img/arrow_icon.png); background-position:center;  background-repeat:no-repeat;" ng-if =" !$last" />
+                </li>
+                <!-- <li class="ledge-arrow"></li> -->
+            </ul>
+        </div>
+        <div class="reimbur-foot ledge-foot audit-page-elec">
+            <button ng-if="flag" ng-click="closePage()" class="reimbur-cancel btn">取消</button>
+            <button ng-if="flagSave" ng-click="closePage()" class="reimbur-save btn">关闭</button>
+            <button ng-if="flag && !isZWsubmitSave && !isZWauditSave" ng-click="editZiweiElectricty(0)" class="reimbur-save btn">保存</button>
+            <button ng-if="isZWauditSave && !flagSave" ng-click="editZiweiAudit()" class="reimbur-save btn">保存</button>
+        </div>
+    </div>
+</div>

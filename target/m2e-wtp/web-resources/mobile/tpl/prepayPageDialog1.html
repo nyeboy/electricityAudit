@@ -1,0 +1,103 @@
+<!-- 自维预付页面详情 dialog -->
+<div class="ledge-detail ledge-edit elec-dialog">
+    <h4  style="border-bottom: 1px solid #e1e4e6;">预付单查看页面详情</h4>
+
+    <div class="ledge-content">
+        <div class="pannel-basic">
+            <div  class="basic-container">
+                <div class="basic-audit">
+                    <div class="ledge-title">明细</div>
+                    <div class="ledge-table">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <span class="table-left">预付单流水号:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="singleDetail.paymentNumber">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">地市:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="singleDetail.cityStr">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">区县:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="singleDetail.countyStr">
+                                    </td>
+                                </tr>
+                                
+								<tr >
+                                    <td>
+                                        <span class="sign table-left">报销部门:</span>
+                                        <input
+                                            type="text"
+                                            disabled="true" class="table-right" ng-model="singleDetail.departmentName" title="{{singleDetail.accountName}}">
+                                    </td>
+									<td><span class="sign table-left">预付开始时间:</span> <input
+										readOnly="true" ng-laydate id="createDate" format="YYYY-MM-DD"
+										ng-model="singleDetail.sDate" type="text"
+										ng-disabled = "true"
+										placeholder="预付开始时间" name="" class="table-right">
+									</td>
+									<td><span class="sign table-left">预付结束时间:</span> <input
+										readOnly="true" ng-laydate id="eDate" format="YYYY-MM-DD"
+										ng-model="singleDetail.eDate" type="text"
+										ng-disabled = "true"
+										placeholder="预付结束时间" name="" class="table-right">
+									</td>
+								</tr>
+                                <tr >
+                                    <td >
+                                        <span class="table-left">供应商名称:</span>
+                                     <input
+                                            readOnly="true"
+                                            ng-model="singleDetail.supplyStr"
+                                            type="text"   ng-disabled = "true"
+                                            name="" class="table-right " title="{{singleDetail.supplyStr}}"> 
+                                    </td>
+                                    
+                                    
+                                    
+                                     <td>
+                                        <span class="table-left">预付总金额:</span>
+                                        <input
+                                            type="text" name="" class="table-right"
+                                            disabled = "disabled" ng-model="singleDetail.totalMoney">
+                                          
+                                    </td>
+                                     <td>
+                                        <span class="table-left">合同ID:</span>
+                                        <input
+                                            readOnly="true"
+                                            ng-model="singleDetail.contractId"
+                                            type="text"   ng-disabled = "true"
+                                           
+                                            name="" class="table-right " title="{{singleDetail.contractID}}">
+                                    </td>
+                                </td>
+                            </tbody>
+                        </table>
+                    </div>
+                <div class="ledge-title ledge-sub">备注信息</div>
+                <div  class="remark">
+                    <textarea ng-model="singleDetail.remark" name="" id="" class="textarea"></textarea>
+                </div>
+                    <div class="ledge-title ledge-sub">附件信息</div>
+                    <div class="upload-method">
+                        <div ng-repeat="item in singUploadFiles track by $index">
+                            附件信息：<span>{{item.filename}}</span>
+                            <a href="javascript:void(0)" ng-click="showDetailFiles(item)" >查看</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+        <div class="reimbur-foot ledge-foot audit-page-elec">
+            
+            <button  ng-click="closePage()" class="reimbur-save btn">确定</button>
+           
+        </div>
+    </div>
+</div>

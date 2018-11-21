@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.report.dao.ElectricPowerDao">
+	<!-- <select id="stasticCityYearPower" resultType="map">
+		SELECT
+			SUM (base.TOTAL_AMOUNT) totalAmount,
+			sas.CITY_ID regionId,
+			zsc.CITY_NAME regionName
+		FROM
+			(
+				SELECT
+					se.SYS_ACCOUNT_SITE_ID sysAccountSiteId,
+					SUM (swe.TOTAL_ELECIRIC) TOTAL_AMOUNT
+				FROM
+					SYS_WATTHOUR_EXTEND swe
+				LEFT JOIN SYS_ELE_MID_WATTHOUR semw ON swe. ID = semw.SYS_WATTHOUR_EXTEND_ID
+				LEFT JOIN SYS_ELECTRICITY se ON se. ID = semw.SYS_ELECIRICITY_ID
+				WHERE
+					TO_CHAR (se.CREATE_DATE, 'yyyy') = #{year, jdbcType=VARCHAR}
+					<if test="month != null and month != ''">
+		 				AND  <![CDATA[TO_CHAR (CREATE_DATE, 'mm') <= #{month, jdbcType=VARCHAR}]]>
+		 			</if>
+		 			<if test="auditType!=null">
+		 				and se.AUDITTYPE=#{auditType}
+		 			</if>
+				GROUP BY
+					se.SYS_ACCOUNT_SITE_ID
+			) base
+		LEFT JOIN SYS_ACCOUNT_SITE sas ON base.sysAccountSiteId = sas. ID
+		LEFT JOIN ZG_SPACE_CITY zsc ON sas.CITY_ID = zsc.CITY_ID
+		GROUP BY
+			sas.CITY_ID,
+			zsc.CITY_NAME
+	</select>
+	<select id="stasticCityYearDirectRotary" resultType="map">
+		SELECT
+			SUM (base.TOTAL_AMOUNT) totalAmount,
+			sas.CITY_ID regionId,
+			zsc.CITY_NAME regionName
+		FROM
+			(
+				SELECT
+					se.SYS_ACCOUNT_SITE_ID sysAccountSiteId,
+					SUM (swe.TOTAL_ELECIRIC) TOTAL_AMOUNT
+				FROM
+					SYS_WATTHOUR_EXTEND swe
+				LEFT JOIN SYS_ELE_MID_WATTHOUR semw ON swe. ID = semw.SYS_WATTHOUR_EXTEND_ID
+				LEFT JOIN SYS_ELECTRICITY se ON se. ID = semw.SYS_ELECIRICITY_ID
+				WHERE
+					TO_CHAR (se.CREATE_DATE, 'yyyy') = #{year, jdbcType=VARCHAR}
+					<if test="month != null and month != ''">
+		 				AND  <![CDATA[TO_CHAR (CREATE_DATE, 'mm') <= #{month, jdbcType=VARCHAR}]]>
+		 			</if>
+		 			<if test="auditType!=null">
+		 				and se.AUDITTYPE=#{auditType}
+		 			</if>
+				GROUP BY
+					se.SYS_ACCOUNT_SITE_ID
+			) base
+		LEFT JOIN SYS_ACCOUNT_SITE sas ON base.sysAccountSiteId = sas. ID
+		LEFT JOIN ZG_SPACE_CITY zsc ON sas.CITY_ID = zsc.CITY_ID
+		WHERE sas.ELECTRICITY_TYPE = #{electricityType, jdbcType=INTEGER}
+		GROUP BY
+			sas.CITY_ID ,
+			zsc.CITY_NAME 
+		
+	</select> -->
+	
+	<select id="stasticCityYearPower" resultType="map">
+		SELECT
+			SUM (base.TOTAL_AMOUNT) totalAmount,
+			sas.CITY_ID regionId,
+			zsc.NAME regionName
+		FROM
+			(
+				SELECT
+					se.SYS_ACCOUNT_SITE_ID sysAccountSiteId,
+					SUM (swe.TOTAL_ELECIRIC) TOTAL_AMOUNT
+				FROM
+					SYS_WATTHOUR_EXTEND swe
+				LEFT JOIN SYS_ELE_MID_WATTHOUR semw ON swe. ID = semw.SYS_WATTHOUR_EXTEND_ID
+				LEFT JOIN SYS_ELECTRICITY se ON se. ID = semw.SYS_ELECIRICITY_ID
+				WHERE
+					TO_CHAR (se.CREATE_DATE, 'yyyy') = #{year, jdbcType=VARCHAR}
+					<if test="month != null and month != ''">
+		 				AND  <![CDATA[TO_CHAR (CREATE_DATE, 'mm') <= #{month, jdbcType=VARCHAR}]]>
+		 			</if>
+		 			<if test="auditType!=null">
+		 				and se.AUDITTYPE=#{auditType}
+		 			</if>
+				GROUP BY
+					se.SYS_ACCOUNT_SITE_ID
+			) base
+		LEFT JOIN SYS_ACCOUNT_SITE sas ON base.sysAccountSiteId = sas. ID
+		LEFT JOIN YDJH_AREA zsc ON sas.CITY_ID = zsc.ID
+		GROUP BY
+			sas.CITY_ID,
+			zsc.NAME
+	</select>
+	<select id="stasticCityYearDirectRotary" resultType="map">
+		SELECT
+			SUM (base.TOTAL_AMOUNT) totalAmount,
+			sas.CITY_ID regionId,
+			zsc.NAME regionName
+		FROM
+			(
+				SELECT
+					se.SYS_ACCOUNT_SITE_ID sysAccountSiteId,
+					SUM (swe.TOTAL_ELECIRIC) TOTAL_AMOUNT
+				FROM
+					SYS_WATTHOUR_EXTEND swe
+				LEFT JOIN SYS_ELE_MID_WATTHOUR semw ON swe. ID = semw.SYS_WATTHOUR_EXTEND_ID
+				LEFT JOIN SYS_ELECTRICITY se ON se. ID = semw.SYS_ELECIRICITY_ID
+				WHERE
+					TO_CHAR (se.CREATE_DATE, 'yyyy') = #{year, jdbcType=VARCHAR}
+					<if test="month != null and month != ''">
+		 				AND  <![CDATA[TO_CHAR (CREATE_DATE, 'mm') <= #{month, jdbcType=VARCHAR}]]>
+		 			</if>
+		 			<if test="auditType!=null">
+		 				and se.AUDITTYPE=#{auditType}
+		 			</if>
+				GROUP BY
+					se.SYS_ACCOUNT_SITE_ID
+			) base
+		LEFT JOIN SYS_ACCOUNT_SITE sas ON base.sysAccountSiteId = sas. ID
+		LEFT JOIN YDJH_AREA zsc ON sas.CITY_ID = zsc.ID
+		WHERE sas.ELECTRICITY_TYPE = #{electricityType, jdbcType=INTEGER}
+		GROUP BY
+			sas.CITY_ID ,
+			zsc.NAME 
+		
+	</select>
+	
+	<select id="stasticDirectRotarySum" resultType="java.lang.Double">
+				SELECT
+					SUM (swe.TOTAL_ELECIRIC) totalAmount
+				FROM
+					SYS_WATTHOUR_EXTEND swe
+				LEFT JOIN SYS_ELE_MID_WATTHOUR semw ON swe.ID = semw.SYS_WATTHOUR_EXTEND_ID
+				LEFT JOIN SYS_ELECTRICITY se ON se.ID = semw.SYS_ELECIRICITY_ID
+				LEFT JOIN SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas.ID
+				WHERE
+					TO_CHAR (se.CREATE_DATE, 'yyyy') = #{year, jdbcType=VARCHAR}
+					<if test="month != null and month != ''">
+		 				AND  <![CDATA[TO_CHAR (CREATE_DATE, 'mm') <= #{month, jdbcType=VARCHAR}]]>
+		 			</if>
+					AND sas.ELECTRICITY_TYPE = #{electricityType, jdbcType=VARCHAR}
+	</select>
+	<!-- <select id="stasticCityTimePower" resultType="map">
+		SELECT
+			SUM (base.TOTAL_AMOUNT) totalAmount,
+			sas.CITY_ID regionId,
+			zsc.CITY_NAME regionName
+		FROM
+			(
+				SELECT
+					se.SYS_ACCOUNT_SITE_ID sysAccountSiteId,
+					SUM (swe.TOTAL_ELECIRIC) TOTAL_AMOUNT
+				FROM
+					SYS_WATTHOUR_EXTEND swe
+				LEFT JOIN SYS_ELE_MID_WATTHOUR semw ON swe. ID = semw.SYS_WATTHOUR_EXTEND_ID
+				LEFT JOIN SYS_ELECTRICITY se ON se. ID = semw.SYS_ELECIRICITY_ID
+				WHERE
+					1 = 1
+		 		<if test="startTime != null and startTime != ''">
+		 			 AND <![CDATA[ se.CREATE_DATE >= TO_DATE (#{startTime, jdbcType=VARCHAR},'yyyy-MM-dd')]]>
+		 		</if>
+		 		<if test="endTime != null and endTime != ''">
+		 			 AND <![CDATA[ se.CREATE_DATE <= TO_DATE (#{endTime, jdbcType=VARCHAR},'yyyy-MM-dd')]]>
+		 		</if>
+				GROUP BY
+					se.SYS_ACCOUNT_SITE_ID
+			) base
+		LEFT JOIN SYS_ACCOUNT_SITE sas ON base.sysAccountSiteId = sas. ID
+		LEFT JOIN ZG_SPACE_CITY zsc ON sas.CITY_ID = zsc.CITY_ID
+		GROUP BY
+			sas.CITY_ID,
+			zsc.CITY_NAME
+		
+	</select>
+	<select id="stasticCountyYearPower" resultType="map">
+	  SELECT
+			SUM (base.TOTAL_AMOUNT) totalAmount,
+			base.COUNTY_ID regionId,
+			base.CITY_ID cityId,
+			zsc.ZH_LABEL regionName
+		FROM
+			(
+				SELECT
+		            se.SYS_ACCOUNT_SITE_ID sysAccountSiteId,
+		            sas.COUNTY_ID COUNTY_ID,
+		            sas.CITY_ID CITY_ID,
+		            SUM (swe.TOTAL_ELECIRIC) TOTAL_AMOUNT
+		        FROM
+		            SYS_WATTHOUR_EXTEND swe
+		        LEFT JOIN SYS_ELE_MID_WATTHOUR semw ON swe. ID = semw.SYS_WATTHOUR_EXTEND_ID
+		        LEFT JOIN SYS_ELECTRICITY se ON se. ID = semw.SYS_ELECIRICITY_ID
+		        LEFT JOIN SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas.ID 
+		        WHERE
+		            TO_CHAR (se.CREATE_DATE, 'yyyy') = #{year, jdbcType=VARCHAR}
+		            <if test="month != null and month != ''">
+		 				AND  <![CDATA[TO_CHAR (CREATE_DATE, 'mm') <= #{month, jdbcType=VARCHAR}]]>
+		 	 		</if>
+		            AND CITY_ID = #{cityId, jdbcType=VARCHAR}
+		            <if test="auditType!=null">
+		            	and se.AUDITTYPE=#{auditType}
+		            </if>
+		        GROUP BY
+		            se.SYS_ACCOUNT_SITE_ID,COUNTY_ID,CITY_ID
+			) base
+		LEFT JOIN ZG_SPACE_COUNTY zsc ON base.COUNTY_ID = zsc.INT_ID
+		WHERE
+			zsc.CITY_ID = #{cityId, jdbcType=VARCHAR}
+		GROUP BY
+			base.COUNTY_ID,
+			zsc.ZH_LABEL,
+			base.CITY_ID
+	</select>
+	<select id="stasticCountyYearDirectRotary" resultType="map">
+	  SELECT
+			SUM (base.TOTAL_AMOUNT) totalAmount,
+			base.COUNTY_ID regionId,
+			base.CITY_ID cityId,
+			zsc.ZH_LABEL regionName
+		FROM
+			(
+				SELECT
+		            se.SYS_ACCOUNT_SITE_ID sysAccountSiteId,
+		            sas.COUNTY_ID COUNTY_ID,
+		            sas.CITY_ID CITY_ID,
+		            SUM (swe.TOTAL_ELECIRIC) TOTAL_AMOUNT
+		        FROM
+		            SYS_WATTHOUR_EXTEND swe
+		        LEFT JOIN SYS_ELE_MID_WATTHOUR semw ON swe. ID = semw.SYS_WATTHOUR_EXTEND_ID
+		        LEFT JOIN SYS_ELECTRICITY se ON se. ID = semw.SYS_ELECIRICITY_ID
+		        LEFT JOIN SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas.ID 
+		        WHERE
+		            TO_CHAR (se.CREATE_DATE, 'yyyy') = #{year, jdbcType=VARCHAR}
+		            <if test="month != null and month != ''">
+		 				AND  <![CDATA[TO_CHAR (CREATE_DATE, 'mm') <= #{month, jdbcType=VARCHAR}]]>
+		 			</if>
+		 			<if test="auditType!=null">
+		 				and se.AUDITTYPE=#{auditType}
+		 			</if>
+		            AND CITY_ID = #{cityId, jdbcType=VARCHAR}
+		            AND sas.ELECTRICITY_TYPE = #{electricityType, jdbcType=INTEGER}
+		        GROUP BY
+		            se.SYS_ACCOUNT_SITE_ID,COUNTY_ID,CITY_ID
+			) base
+		LEFT JOIN ZG_SPACE_COUNTY zsc ON base.COUNTY_ID = zsc.INT_ID
+		WHERE
+			zsc.CITY_ID = #{cityId, jdbcType=VARCHAR}
+		GROUP BY
+			base.COUNTY_ID,
+			zsc.ZH_LABEL,
+			base.CITY_ID
+	</select>
+	<select id="stasticCountyTimePower" resultType="map">
+	  SELECT
+			SUM (base.TOTAL_AMOUNT) totalAmount,
+			base.COUNTY_ID regionId,
+			base.CITY_ID cityId,
+			zsc.ZH_LABEL regionName
+		FROM
+			(
+				SELECT
+		            se.SYS_ACCOUNT_SITE_ID sysAccountSiteId,
+		            sas.COUNTY_ID COUNTY_ID,
+		            sas.CITY_ID CITY_ID,
+		            SUM (swe.TOTAL_ELECIRIC) TOTAL_AMOUNT
+		        FROM
+		            SYS_WATTHOUR_EXTEND swe
+		        LEFT JOIN SYS_ELE_MID_WATTHOUR semw ON swe. ID = semw.SYS_WATTHOUR_EXTEND_ID
+		        LEFT JOIN SYS_ELECTRICITY se ON se. ID = semw.SYS_ELECIRICITY_ID
+		        LEFT JOIN SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas.ID 
+		        WHERE
+		            	1 = 1
+		 		<if test="startTime != null and startTime != ''">
+		 			 AND <![CDATA[ se.CREATE_DATE >= TO_DATE (#{startTime, jdbcType=VARCHAR},'yyyy-MM-dd')]]>
+		 		</if>
+		 		<if test="endTime != null and endTime != ''">
+		 			 AND <![CDATA[ se.CREATE_DATE <= TO_DATE (#{endTime, jdbcType=VARCHAR},'yyyy-MM-dd')]]>
+		 		</if>
+		            AND CITY_ID = #{cityId, jdbcType=VARCHAR}
+		        GROUP BY
+		            se.SYS_ACCOUNT_SITE_ID,COUNTY_ID,CITY_ID
+			) base
+		LEFT JOIN ZG_SPACE_COUNTY zsc ON base.COUNTY_ID = zsc.INT_ID
+		WHERE
+			zsc.CITY_ID = #{cityId, jdbcType=VARCHAR}
+		GROUP BY
+			base.COUNTY_ID,
+			zsc.ZH_LABEL,
+			base.CITY_ID
+	</select> -->
+	
+	<select id="stasticCityTimePower" resultType="map">
+		SELECT
+			SUM (base.TOTAL_AMOUNT) totalAmount,
+			sas.CITY_ID regionId,
+			zsc.NAME regionName
+		FROM
+			(
+				SELECT
+					se.SYS_ACCOUNT_SITE_ID sysAccountSiteId,
+					SUM (swe.TOTAL_ELECIRIC) TOTAL_AMOUNT
+				FROM
+					SYS_WATTHOUR_EXTEND swe
+				LEFT JOIN SYS_ELE_MID_WATTHOUR semw ON swe. ID = semw.SYS_WATTHOUR_EXTEND_ID
+				LEFT JOIN SYS_ELECTRICITY se ON se. ID = semw.SYS_ELECIRICITY_ID
+				WHERE
+					1 = 1
+		 		<if test="startTime != null and startTime != ''">
+		 			 AND <![CDATA[ se.CREATE_DATE >= TO_DATE (#{startTime, jdbcType=VARCHAR},'yyyy-MM-dd')]]>
+		 		</if>
+		 		<if test="endTime != null and endTime != ''">
+		 			 AND <![CDATA[ se.CREATE_DATE <= TO_DATE (#{endTime, jdbcType=VARCHAR},'yyyy-MM-dd')]]>
+		 		</if>
+				GROUP BY
+					se.SYS_ACCOUNT_SITE_ID
+			) base
+		LEFT JOIN SYS_ACCOUNT_SITE sas ON base.sysAccountSiteId = sas. ID
+		LEFT JOIN YDJH_AREA zsc ON sas.CITY_ID = zsc.ID
+		GROUP BY
+			sas.CITY_ID,
+			zsc.NAME
+		
+	</select>
+	<select id="stasticCountyYearPower" resultType="map">
+	  SELECT
+			SUM (base.TOTAL_AMOUNT) totalAmount,
+			base.COUNTY_ID regionId,
+			base.CITY_ID cityId,
+			zsc.NAME regionName
+		FROM
+			(
+				SELECT
+		            se.SYS_ACCOUNT_SITE_ID sysAccountSiteId,
+		            sas.COUNTY_ID COUNTY_ID,
+		            sas.CITY_ID CITY_ID,
+		            SUM (swe.TOTAL_ELECIRIC) TOTAL_AMOUNT
+		        FROM
+		            SYS_WATTHOUR_EXTEND swe
+		        LEFT JOIN SYS_ELE_MID_WATTHOUR semw ON swe. ID = semw.SYS_WATTHOUR_EXTEND_ID
+		        LEFT JOIN SYS_ELECTRICITY se ON se. ID = semw.SYS_ELECIRICITY_ID
+		        LEFT JOIN SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas.ID 
+		        WHERE
+		            TO_CHAR (se.CREATE_DATE, 'yyyy') = #{year, jdbcType=VARCHAR}
+		            <if test="month != null and month != ''">
+		 				AND  <![CDATA[TO_CHAR (CREATE_DATE, 'mm') <= #{month, jdbcType=VARCHAR}]]>
+		 	 		</if>
+		            AND CITY_ID = #{cityId, jdbcType=VARCHAR}
+		            <if test="auditType!=null">
+		            	and se.AUDITTYPE=#{auditType}
+		            </if>
+		        GROUP BY
+		            se.SYS_ACCOUNT_SITE_ID,COUNTY_ID,CITY_ID
+			) base
+		LEFT JOIN YDJH_AREA zsc ON base.COUNTY_ID = zsc.INT_ID
+		WHERE
+			zsc.PARENT = #{cityId, jdbcType=VARCHAR}
+		GROUP BY
+			base.COUNTY_ID,
+			zsc.NAMEL,
+			base.CITY_ID
+	</select>
+	<select id="stasticCountyYearDirectRotary" resultType="map">
+	  SELECT
+			SUM (base.TOTAL_AMOUNT) totalAmount,
+			base.COUNTY_ID regionId,
+			base.CITY_ID cityId,
+			zsc.NAME regionName
+		FROM
+			(
+				SELECT
+		            se.SYS_ACCOUNT_SITE_ID sysAccountSiteId,
+		            sas.COUNTY_ID COUNTY_ID,
+		            sas.CITY_ID CITY_ID,
+		            SUM (swe.TOTAL_ELECIRIC) TOTAL_AMOUNT
+		        FROM
+		            SYS_WATTHOUR_EXTEND swe
+		        LEFT JOIN SYS_ELE_MID_WATTHOUR semw ON swe. ID = semw.SYS_WATTHOUR_EXTEND_ID
+		        LEFT JOIN SYS_ELECTRICITY se ON se. ID = semw.SYS_ELECIRICITY_ID
+		        LEFT JOIN SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas.ID 
+		        WHERE
+		            TO_CHAR (se.CREATE_DATE, 'yyyy') = #{year, jdbcType=VARCHAR}
+		            <if test="month != null and month != ''">
+		 				AND  <![CDATA[TO_CHAR (CREATE_DATE, 'mm') <= #{month, jdbcType=VARCHAR}]]>
+		 			</if>
+		 			<if test="auditType!=null">
+		 				and se.AUDITTYPE=#{auditType}
+		 			</if>
+		            AND CITY_ID = #{cityId, jdbcType=VARCHAR}
+		            AND sas.ELECTRICITY_TYPE = #{electricityType, jdbcType=INTEGER}
+		        GROUP BY
+		            se.SYS_ACCOUNT_SITE_ID,COUNTY_ID,CITY_ID
+			) base
+		LEFT JOIN YDJH_AREA zsc ON base.COUNTY_ID = zsc.ID
+		WHERE
+			zsc.PARENT = #{cityId, jdbcType=VARCHAR}
+		GROUP BY
+			base.COUNTY_ID,
+			zsc.NAME,
+			base.CITY_ID
+	</select>
+	<select id="stasticCountyTimePower" resultType="map">
+	  SELECT
+			SUM (base.TOTAL_AMOUNT) totalAmount,
+			base.COUNTY_ID regionId,
+			base.CITY_ID cityId,
+			zsc.NAME regionName
+		FROM
+			(
+				SELECT
+		            se.SYS_ACCOUNT_SITE_ID sysAccountSiteId,
+		            sas.COUNTY_ID COUNTY_ID,
+		            sas.CITY_ID CITY_ID,
+		            SUM (swe.TOTAL_ELECIRIC) TOTAL_AMOUNT
+		        FROM
+		            SYS_WATTHOUR_EXTEND swe
+		        LEFT JOIN SYS_ELE_MID_WATTHOUR semw ON swe. ID = semw.SYS_WATTHOUR_EXTEND_ID
+		        LEFT JOIN SYS_ELECTRICITY se ON se. ID = semw.SYS_ELECIRICITY_ID
+		        LEFT JOIN SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas.ID 
+		        WHERE
+		            	1 = 1
+		 		<if test="startTime != null and startTime != ''">
+		 			 AND <![CDATA[ se.CREATE_DATE >= TO_DATE (#{startTime, jdbcType=VARCHAR},'yyyy-MM-dd')]]>
+		 		</if>
+		 		<if test="endTime != null and endTime != ''">
+		 			 AND <![CDATA[ se.CREATE_DATE <= TO_DATE (#{endTime, jdbcType=VARCHAR},'yyyy-MM-dd')]]>
+		 		</if>
+		            AND CITY_ID = #{cityId, jdbcType=VARCHAR}
+		        GROUP BY
+		            se.SYS_ACCOUNT_SITE_ID,COUNTY_ID,CITY_ID
+			) base
+		LEFT JOIN YDJH_AREA zsc ON base.COUNTY_ID = zsc.ID
+		WHERE
+			zsc.PARENT = #{cityId, jdbcType=VARCHAR}
+		GROUP BY
+			base.COUNTY_ID,
+			zsc.NAME,
+			base.CITY_ID
+	</select>
+	
+</mapper>

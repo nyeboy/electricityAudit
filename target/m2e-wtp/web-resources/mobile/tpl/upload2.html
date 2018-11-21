@@ -1,0 +1,20 @@
+ <!-- 上传界面 -->
+ <div class="upload-file">
+ 	<!-- 上传图片 -->
+ 	<form action="" method="post" enctype="multipart/form-data" id="uploadForm" ng-show="tabUpload==1" >  
+	 	<div class="upload-title">上传excel</div>
+		<div class="upload-info">
+		<p style="font-size: 2em">请选择excel文件</p>
+				<input type="file" 
+					id="upload-continue" 
+					name="files" 
+					class="load-input"  
+					ng-model="upFiles" 
+					onchange="angular.element(this).scope().change(this)">
+		</div>
+		<div class="reimbur-foot ledge-foot">
+			<button ng-click="closeDialog('uploadFileDialog')" class="reimbur-cancel btn">取消</button>
+			<button ng-click="uploadType(4)" class="reimbur-save btn">确定上传</button>
+		</div>
+	</form>	
+ </div>

@@ -1,0 +1,27 @@
+<!--显示系统详情-->
+
+
+<h4 style="text-align: center">公告详情</h4>
+<style>
+.user-list li span:before {
+    content: "";
+}
+</style>
+<div class="content-box">
+    <div class="content-box">
+        <div class="add-user">
+            <form name="form">
+                <ul class="user-list">
+                    <li><span>公告标题:</span><input ng-model="notice.title" name="title" type="text" ng-readonly="true"></li>
+                    <li><span>开始时间:</span><input  ng-model="notice.startDateStr" name="startDate" ng-readonly="true" ng-readonly="true"type="text"></li>
+                    <li><span class="end-time">结束时间:</span><input  ng-model="notice.endDateStr"  ng-readonly="true" name="endDate" type="text" readonly></li>
+                    <li><span>公告内容:</span><textarea ng-readonly="true" ng-model="notice.message" name="message" id="" cols="80" rows="8" readonly style="width: 380px;"></textarea></li>
+                </ul>
+
+                   <div class="reimbur-foot ledge-foot">
+                    <button ng-click="closeDialog('showDetailDialog')" class="reimbur-save btn">关闭</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

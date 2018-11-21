@@ -1,0 +1,105 @@
+<!-- 新增稽核单 -->
+<div class="system-content" id="systemContent" style="margin-bottom: 60px;">
+    <div class="business-box" id="businessBox" style="padding-bottom: 0px;">
+        <div class="content-rout" id="contentRout">
+            <span>基础电费</span>&gt;<span>预付提交</span>&gt;<span class="now-rout">新增预付单</span>
+        </div>
+        <div class="content-box" id="contentBox">
+            <div class="ledge-detail">
+                <div class="ledge-title">预付单申请批次号</div>
+                <div class="ledge-table">
+                    <table>
+                        <tbody>
+                        	<tr>
+                                <td>
+                                    <span class="table-left">预付单申请批次号:</span>
+                                    <input ng-model="resultData.paymentNumber" type="text" disabled="disabled" name="" class="table-right">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="table-left">省:</span>
+                                    <input ng-model="resultData.provinceStr" type="text" disabled="disabled" name="" class="table-right" value="成都市">
+                                </td>
+                                <td>
+                                    <span class="table-left">地市:</span>
+                                    <input ng-model="resultData.cityStr" type="text" disabled="disabled" name="" class="table-right" value="成都市">
+                                </td>
+                                <td>
+                                    <span class="table-left">区县:</span>
+                                    <input  ng-model="resultData.countyStr" type="text" disabled="disabled" name="" class="table-right" value="武侯">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="sign table-left">报销部门:</span>
+                                   <!--  <input type="text" id="calendar" ng-model="resultData.departmentName"> -->
+                                    
+                                    <select class="table-right" 
+									ng-model="resultData.departmentName" 
+									ng-options="i for i in resultData.departmentNameSum" >	
+									<option value=""> -- 请选择部门 -- </option>										
+									</select>	
+                                </td>
+								<td><span class="sign table-left">预付开始时间:</span> <input
+									readOnly="true" ng-laydate id="id1"
+									ng-model="resultData.startDate" format="YYYY-MM-DD" type="text"
+									placeholder="开始时间" class="process-input con-parts" name="">
+
+								</td>
+								<td><span class="sign table-left">预付结束时间:</span> <input
+									readOnly="true" ng-laydate id="id2"
+									ng-model="resultData.endDate" format="YYYY-MM-DD"
+									min-date="{{resultData.startDate}}" type="text"
+									placeholder="结束时间" class="process-input con-parts" name="">
+								</td>
+							</tr>
+                            <tr>
+                                <td>
+                                    <span class="sign table-left">预付单供应商:</span>
+                                    <input
+                                        title="{{resultData.sysSupplierName}}"
+                                        ng-click="choiceSupplierDialog()"
+                                        ng-model="resultData.supplyStr"
+                                        type="text" name="" class="table-right "
+                                        value="中移通信技术工程(EDRD)" readOnly="true">
+                                    <i ng-click="choiceSupplierDialog()" class="search-icon"></i>
+                                </td>
+                                <td>
+                                    <span class="sign table-left">预付单总金额(元):</span>
+                                    <input ng-model="resultData.totalMoney" class="table-right" value="0">
+                                </td>
+                                <td>
+                                    <span class="table-left">合同号:</span>
+                                    <input ng-model="resultData.contractId" class="table-right" 
+                                    ng-click="choiceContractDialog()" readOnly="true"
+                                    >
+                                    <i ng-click="choiceContractDialog()" class="search-icon"></i>
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="ledge-title ledge-sub">备注信息</div>
+                <div class="remark">
+                    <textarea ng-model="resultData.remark" name="" id="" class="textarea"></textarea>
+                </div>
+                <div class="ledge-title ledge-sub">附件信息</div>
+                <a href="javascript:void(0)" ng-click="uploadFile()">上传附件</a>
+                <div class="upload-method">
+                    <div ng-repeat="item in uploadFiles track by $index">
+                        附件信息：<span>{{item.upName}}</span>
+                        <a href="javascript:void(0)" ng-click="showDetailFiles(item)" >查看</a>
+                        <a href="javascript:void(0)" ng-click="deleteFiles($index)">移除</a>
+                    </div>
+                </div>
+                <div class="reimbur-foot ledge-foot" style="margin-top:0px; padding-bottom:80px;">
+                    <button ng-click="submitPrepay(0)" class="reimbur-save btn">提交审批</button>
+                </div>
+               
+            </div>
+        </div>
+    </div>
+</div>
+

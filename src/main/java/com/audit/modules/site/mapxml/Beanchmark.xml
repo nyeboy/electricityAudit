@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.site.dao.BenchmarkDao">
+
+	<!-- 电表 开关关联 关系表-->
+<!-- 	<select id="querySmartMeterStandard" resultType="com.audit.modules.site.entity.SmartMeterStandard" parameterType="java.util.Map">
+		SELECT
+      		sa.id AS siteId,
+			zsy.city_name AS cityName,
+			zsc.zh_label AS countyName,
+			sa.ACCOUNT_NAME AS accountName,
+			zser.ZH_LABEL AS resourceName,
+			ssm.METER_DIAL as meterLatestNum,
+			<if test="obj.startDate != null and obj.startDate!=''">
+			(SELECT METER_DIAL FROM SYS_SMART_METER WHERE SITE_NAME=zpd.OLD_NAME and TO_CHAR(TIME_START,'yyyy-mm-dd') like '%'||#{obj.startDate,jdbcType=VARCHAR}||'%') AS startNum,
+			</if>
+			<if test="obj.endDate != null and obj.endDate!=''">
+			(SELECT METER_DIAL FROM SYS_SMART_METER WHERE SITE_NAME=zpd.OLD_NAME and TO_CHAR(TIME_START,'yyyy-mm-dd') like '%'||#{obj.endDate,jdbcType=VARCHAR}||'%') AS endNum,
+			</if>
+			ssm.METER_STATE as monitorStatus
+		FROM
+			ZG_POWER_DHCELLECTOR zpd
+			LEFT JOIN SYS_SMART_METER ssm ON zpd.OLD_NAME = SSM.SITE_NAME
+			LEFT JOIN ZG_SPACE_EQUIP_ROOM zser ON zpd.RELATED_EQUIPROOM = zser.int_id
+			LEFT JOIN SYS_SITE_MID_RESOURCE ssmr ON ssmr.RESOURCE_ID = zser.int_id
+			LEFT JOIN SYS_ACCOUNT_SITE sa ON ssmr.ACCOUNT_SITE_ID = sa.ID
+			LEFT JOIN ZG_SPACE_CITY zsy ON sa.CITY_ID=zsy.INT_ID
+			LEFT JOIN ZG_SPACE_COUNTY zsc ON sa.COUNTY_ID = zsc.INT_ID
+		WHERE 1=1
+			AND  sa.id IS NOT NULL
+			AND  to_char(ssm.TIME_START,'yyyy-mm-dd') = to_char(sysdate,'yyyy-mm-dd') 仅显示当天
+		<if test="obj.siteIds != null">
+        	AND INSTR( CONCAT(#{obj.siteIds}, ',') , CONCAT(sa.id ,',')) > 0 
+		</if>
+		<if test="obj.siteName!=null and obj.siteName!=''">
+			AND sa.ACCOUNT_NAME LIKE '%'||#{obj.siteName,jdbcType=VARCHAR}||'%'
+		</if>
+		<if test="obj.countyId!=null and obj.countyId!=''">
+			AND sa.COUNTY_ID = #{obj.countyId,jdbcType=VARCHAR}
+		</if>
+		<if test="obj.cityId!=null and obj.cityId!=''">
+			AND sa.CITY_ID = #{obj.cityId,jdbcType=VARCHAR}
+		</if>
+			 		 
+	</select>
+	
+	电表 标杆值
+	<select id="queryCurrentStandard" resultType="com.audit.modules.site.entity.SmartMeterStandard" parameterType="java.util.Map">
+		SELECT
+			zser.ZH_LABEL AS resourceName,
+			ssm.METER_DIAL AS yesterDayNum
+		FROM
+			ZG_POWER_DHCELLECTOR zpd
+			LEFT JOIN SYS_SMART_METER ssm ON zpd.OLD_NAME = SSM.SITE_NAME
+			LEFT JOIN ZG_SPACE_EQUIP_ROOM zser ON zpd.RELATED_EQUIPROOM = zser.int_id
+			LEFT JOIN SYS_SITE_MID_RESOURCE ssmr ON ssmr.RESOURCE_ID = zser.int_id
+			LEFT JOIN SYS_ACCOUNT_SITE sa ON ssmr.ACCOUNT_SITE_ID = sa.ID
+			LEFT JOIN ZG_SPACE_CITY zsy ON sa.CITY_ID=zsy.INT_ID
+			LEFT JOIN ZG_SPACE_COUNTY zsc ON sa.COUNTY_ID = zsc.INT_ID
+		WHERE 1=1
+			AND  sa.id IS NOT NULL
+			AND  to_char(ssm.TIME_START,'yyyy-mm-dd') = to_char(sysdate-1,'yyyy-mm-dd')
+			<if test="siteName!=null and siteName!=''">
+			AND sa.ACCOUNT_NAME LIKE '%'||#{siteName,jdbcType=VARCHAR}||'%'
+		</if>
+		<if test="countyId!=null and countyId!=''">
+			AND sa.COUNTY_ID = #{countyId,jdbcType=VARCHAR}
+		</if>
+		<if test="cityId!=null and cityId!=''">
+			AND sa.CITY_ID = #{cityId,jdbcType=VARCHAR}
+		</if>
+	</select>
+	
+	查询 报账点 信息
+	<select id="queryAccountInfo" resultType="com.audit.modules.site.entity.SwitchPowerStandard" parameterType="java.util.Map">
+		SELECT
+			sa.id AS siteId,
+			zser.int_id AS intId,
+			(select city_name from zg_space_city where int_id = sa.CITY_ID) AS cityName,
+			(select zh_label from zg_space_county where int_id = sa.COUNTY_ID ) AS countyName,
+			sa.ACCOUNT_NAME AS accountName,
+			zser.ZH_LABEL AS resourceName
+		FROM 
+			SYS_ACCOUNT_SITE sa
+		LEFT JOIN SYS_SITE_MID_RESOURCE ssmr ON ssmr.ACCOUNT_SITE_ID = sa.ID 
+		LEFT JOIN ZG_SPACE_EQUIP_ROOM zser ON ssmr.RESOURCE_ID = zser.int_id
+		WHERE 1=1
+		<if test="obj.siteIds != null">
+        	AND INSTR( concat(#{obj.siteIds}, ',') , CONCAT(sa.id ,',')) > 0 AND sa.id IS NOT NULL
+		</if>
+		<if test="obj.siteName!=null and obj.siteName!=''">
+			AND sa.ACCOUNT_NAME LIKE '%'||#{obj.siteName,jdbcType=VARCHAR}||'%'
+		</if>
+		<if test="obj.countyId!=null and obj.countyId!=''">
+			AND sa.COUNTY_ID = #{obj.countyId,jdbcType=VARCHAR}
+		</if>
+		<if test="obj.cityId!=null and obj.cityId!=''">
+			AND sa.CITY_ID = #{obj.cityId,jdbcType=VARCHAR}
+		</if>
+			
+	</select> -->
+	
+		<select id="querySmartMeterStandard" resultType="com.audit.modules.site.entity.SmartMeterStandard" parameterType="java.util.Map">
+		SELECT
+      		sa.id AS siteId,
+			zsy.NAME AS cityName,
+			zsc.NAME AS countyName,
+			sa.ACCOUNT_NAME AS accountName,
+			zser.ZH_LABEL AS resourceName,
+			ssm.METER_DIAL as meterLatestNum,
+			<if test="obj.startDate != null and obj.startDate!=''">
+			(SELECT METER_DIAL FROM SYS_SMART_METER WHERE SITE_NAME=zpd.OLD_NAME and TO_CHAR(TIME_START,'yyyy-mm-dd') like '%'||#{obj.startDate,jdbcType=VARCHAR}||'%') AS startNum,
+			</if>
+			<if test="obj.endDate != null and obj.endDate!=''">
+			(SELECT METER_DIAL FROM SYS_SMART_METER WHERE SITE_NAME=zpd.OLD_NAME and TO_CHAR(TIME_START,'yyyy-mm-dd') like '%'||#{obj.endDate,jdbcType=VARCHAR}||'%') AS endNum,
+			</if>
+			ssm.METER_STATE as monitorStatus
+		FROM
+			ZG_POWER_DHCELLECTOR zpd
+			LEFT JOIN SYS_SMART_METER ssm ON zpd.OLD_NAME = SSM.SITE_NAME
+			LEFT JOIN ZG_SPACE_EQUIP_ROOM zser ON zpd.RELATED_EQUIPROOM = zser.int_id
+			LEFT JOIN SYS_SITE_MID_RESOURCE ssmr ON ssmr.RESOURCE_ID = zser.int_id
+			LEFT JOIN SYS_ACCOUNT_SITE sa ON ssmr.ACCOUNT_SITE_ID = sa.ID
+			LEFT JOIN YDJH_AREA zsy ON sa.CITY_ID=zsy.ID
+			LEFT JOIN YDJH_AREA zsc ON sa.COUNTY_ID = zsc.ID
+		WHERE 1=1
+			AND  sa.id IS NOT NULL
+			<!-- AND  to_char(ssm.TIME_START,'yyyy-mm-dd') = to_char(sysdate,'yyyy-mm-dd') 仅显示当天-->
+		<if test="obj.siteIds != null">
+        	AND INSTR( CONCAT(#{obj.siteIds}, ',') , CONCAT(sa.id ,',')) > 0 
+		</if>
+		<if test="obj.siteName!=null and obj.siteName!=''">
+			AND sa.ACCOUNT_NAME LIKE '%'||#{obj.siteName,jdbcType=VARCHAR}||'%'
+		</if>
+		<if test="obj.countyId!=null and obj.countyId!=''">
+			AND sa.COUNTY_ID = #{obj.countyId,jdbcType=VARCHAR}
+		</if>
+		<if test="obj.cityId!=null and obj.cityId!=''">
+			AND sa.CITY_ID = #{obj.cityId,jdbcType=VARCHAR}
+		</if>
+			 		 
+	</select>
+	
+	<!-- 电表 标杆值-->
+	<select id="queryCurrentStandard" resultType="com.audit.modules.site.entity.SmartMeterStandard" parameterType="java.util.Map">
+		SELECT
+			zser.ZH_LABEL AS resourceName,
+			ssm.METER_DIAL AS yesterDayNum
+		FROM
+			ZG_POWER_DHCELLECTOR zpd
+			LEFT JOIN SYS_SMART_METER ssm ON zpd.OLD_NAME = SSM.SITE_NAME
+			LEFT JOIN ZG_SPACE_EQUIP_ROOM zser ON zpd.RELATED_EQUIPROOM = zser.int_id
+			LEFT JOIN SYS_SITE_MID_RESOURCE ssmr ON ssmr.RESOURCE_ID = zser.int_id
+			LEFT JOIN SYS_ACCOUNT_SITE sa ON ssmr.ACCOUNT_SITE_ID = sa.ID
+			LEFT JOIN YDJH_AREA zsy ON sa.CITY_ID=zsy.ID
+			LEFT JOIN YDJH_AREA zsc ON sa.COUNTY_ID = zsc.ID
+		WHERE 1=1
+			AND  sa.id IS NOT NULL
+			AND  to_char(ssm.TIME_START,'yyyy-mm-dd') = to_char(sysdate-1,'yyyy-mm-dd')
+			<if test="siteName!=null and siteName!=''">
+			AND sa.ACCOUNT_NAME LIKE '%'||#{siteName,jdbcType=VARCHAR}||'%'
+		</if>
+		<if test="countyId!=null and countyId!=''">
+			AND sa.COUNTY_ID = #{countyId,jdbcType=VARCHAR}
+		</if>
+		<if test="cityId!=null and cityId!=''">
+			AND sa.CITY_ID = #{cityId,jdbcType=VARCHAR}
+		</if>
+	</select>
+	
+	<!-- 查询 报账点 信息-->
+	<select id="queryAccountInfo" resultType="com.audit.modules.site.entity.SwitchPowerStandard" parameterType="java.util.Map">
+		SELECT
+			sa.id AS siteId,
+			zser.int_id AS intId,
+			(select NAME from YDJH_AREA where id = sa.CITY_ID) AS cityName,
+			(select NAME from YDJH_AREA where id = sa.COUNTY_ID ) AS countyName,
+			sa.ACCOUNT_NAME AS accountName,
+			zser.ZH_LABEL AS resourceName
+		FROM 
+			SYS_ACCOUNT_SITE sa
+		LEFT JOIN SYS_SITE_MID_RESOURCE ssmr ON ssmr.ACCOUNT_SITE_ID = sa.ID 
+		LEFT JOIN ZG_SPACE_EQUIP_ROOM zser ON ssmr.RESOURCE_ID = zser.int_id
+		WHERE 1=1
+		<if test="obj.siteIds != null">
+        	AND INSTR( concat(#{obj.siteIds}, ',') , CONCAT(sa.id ,',')) > 0 AND sa.id IS NOT NULL
+		</if>
+		<if test="obj.siteName!=null and obj.siteName!=''">
+			AND sa.ACCOUNT_NAME LIKE '%'||#{obj.siteName,jdbcType=VARCHAR}||'%'
+		</if>
+		<if test="obj.countyId!=null and obj.countyId!=''">
+			AND sa.COUNTY_ID = #{obj.countyId,jdbcType=VARCHAR}
+		</if>
+		<if test="obj.cityId!=null and obj.cityId!=''">
+			AND sa.CITY_ID = #{obj.cityId,jdbcType=VARCHAR}
+		</if>
+			
+	</select>
+	
+	<!-- 根据报账点信息  查询开关信息 -->
+	<select id="querySwitchPowerInfo" resultType="com.audit.modules.site.entity.SwitchPowerStandard">
+		SELECT
+			zpd.RELATED_EQUIPROOM relatedRoom,
+			AVG(ssmp.ELECCURRENT) as elecCurrent,
+			AVG(ssmp.OUTPUT_VOLTAGE) as outputVoltage,
+			((AVG(ssmp.ELECCURRENT)*AVG(ssmp.OUTPUT_VOLTAGE)/0.7)*24/1000) as standardNum
+		FROM
+			ZG_POWER_DHCELLECTOR zpd
+		LEFT JOIN  SYS_SWITCH_MODE_POWER ssmp ON zpd.OLD_NAME = SSMP.SITE_NAME
+		WHERE 
+			zpd.RELATED_EQUIPROOM = #{intId}
+		GROUP BY 
+			zpd.RELATED_EQUIPROOM
+	</select>
+
+
+	<sql id="benchmarkColumns">
+		id,
+		electricity_id AS electricityId,
+		electricity_SN AS electricitySN,
+		type,
+		benchmark,
+		over_proportion AS overProportion,
+		reason
+	</sql>
+
+	<insert id="saveElectricityBenchmark" parameterType="com.audit.modules.electricity.entity.ElectricityBenchmark">
+		INSERT INTO
+		SYS_ELECTRICITY_BENCHMARK(
+		ID,
+		ELECTRICITY_ID,
+		ELECTRICITY_SN,
+		TYPE,
+		BENCHMARK,
+		OVER_PROPORTION,
+		REASON
+		)
+		VALUES (
+		#{id,jdbcType=VARCHAR},
+		#{electricityId,jdbcType=VARCHAR},
+		#{electricitySN, jdbcType=VARCHAR},
+		#{type,jdbcType=VARCHAR},
+		#{benchmark,jdbcType=DOUBLE},
+		#{overProportion,jdbcType=DOUBLE},
+		#{reason,jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<select id="queryOverBenchmark" resultType="com.audit.modules.electricity.entity.ElectricityBenchmark">
+		SELECT <include refid="benchmarkColumns"/>
+		FROM
+			SYS_ELECTRICITY_BENCHMARK
+		WHERE
+			ELECTRICITY_ID = #{electricityId}
+	</select>
+	
+	<select id="queryOverBenchmarkTw" parameterType="java.lang.String" resultType="com.audit.modules.electricity.entity.TowerEleBenchmark">
+		SELECT 
+			ID as id,
+			TOWER_ELECTRICITY_ID as tower_electricityId,
+			TOWER_ELECTRICITY_SN as tower_electricitySN,
+			TYPE as type,
+			OVER_PROPORTION as overProportion
+		FROM
+			SYS_TOWER_ELE_BENCHMARK
+		WHERE
+			TOWER_ELECTRICITY_ID = #{tower_electricityId}
+	</select>
+
+	<delete id="deleteElectricityBenchmark">
+		DELETE FROM SYS_ELECTRICITY_BENCHMARK WHERE ELECTRICITY_ID = #{tower_electricityId}
+	</delete>
+
+
+
+</mapper>

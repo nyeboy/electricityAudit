@@ -1,0 +1,33 @@
+<!-- 新增电表弹框dialog -->
+<div class="add-elecontent">  
+    <form action="">
+        <ul class="user-list">
+            <li>
+                <span>电表号:</span><input type="text" name="" value="" ng-model="electrictyInfo.meterNumber">
+            </li>
+            <li>
+                <span>电表标识符:</span><input type="text" name="" value="" ng-model="electrictyInfo.meterIdentifier">
+            </li>
+            <li>
+                <span>电表户号:</span><input type="text" name="" value="" ng-model="electrictyInfo.meterAccout">
+            </li>
+            <li>
+                <span>用电类型:</span>
+                <select  name="meterListMeterType" id="" ng-model="electrictyInfo.meterType">
+                    <option value="转供电">转供电</option>
+                    <option value="自供电">自供电</option>
+                </select>
+            </li>
+            <li>
+                <span>用电用途:</span><textarea name="" id=""  ng-model="electrictyInfo.meterPurpose"></textarea>
+            </li>
+            <li>
+                <input type="hidden" ng-model="electrictyInfo.ownerId" >
+            </li>
+        </ul>
+    </form>
+    <div class="reimbur-foot ledge-foot">
+        <button ng-click="closeDialog('addElectricInfoDialog')" class="reimbur-cancel btn">取消</button>
+        <button ng-click="addElectricInfo()" class="reimbur-save btn">保存</button>
+    </div>
+</div>

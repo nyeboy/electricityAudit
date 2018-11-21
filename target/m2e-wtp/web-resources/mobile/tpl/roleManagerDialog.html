@@ -1,0 +1,305 @@
+<!-- <!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding:0;
+        }
+
+        .roleMamager{
+
+            height:auto;
+            overflow: hidden;
+            width:600px;
+            font-size: 12px;
+
+
+        }
+
+        .roleMamager h4{
+            height: 44px;
+            line-height: 44px;
+            text-align: center;
+            font-size: 18px;
+            color: #585c5e;
+        }
+
+
+        .roleMamager .form-item{
+            width: auto;
+            height: auto;
+            overflow: hidden;
+            padding: 5px 0;
+        }
+
+        .roleMamager .form-item span{
+            width: 120px;
+            height: 100%;
+            display: inline-block;
+            line-height: 100%;
+            text-align: right;
+            margin-right: 5px;
+        }
+
+        .roleMamager .form-item input[type="text"],.roleMamager .form-item select{
+            border: #eee solid 1px;
+            height: 32px;
+            border-radius: 2px;
+            width: 370px;
+            text-indent: 3px;
+        }
+
+
+        .roleTap{
+            width: auto;
+            height: auto;
+            overflow: hidden;
+        }
+
+
+        .roleTap .roleTapTitle{
+            width: auto;
+            height: 30px;
+            line-height: 30px;
+            margin-top: 30px;
+        }
+        .roleTap .roleTapTitle a{
+            display: block;
+            font-size: 16px;
+            text-align: center;
+            width: 50%;
+            float: left;
+            color: #585c5e;
+            text-decoration: none;
+            border-bottom: #ccc solid 1px;
+            cursor: pointer;
+        }
+
+        .roleTap .roleTapTitle a.on{
+            color: #4b8de6;
+            font-weight:bold;
+            border-bottom: #4b8de6 solid 1px;
+        }
+    
+        .roleTapContent{
+            width: 100%;
+            height: auto;
+            overflow: hidden;
+        }  
+
+        .roleTapContent input[type="checkbox"]{
+            vertical-align:top;
+            margin-right:3px;
+        }
+        
+        .roleTapContent .form-item{
+            margin:5px 0;
+        }
+
+         .attrName{
+            height: 40px;
+            line-height: 30px;
+            display: block;
+            float: left;
+            /*margin-top: 20px;*/
+            width: 120px;
+            text-align: right;
+            margin-right:5px;
+         }
+        .roleMenu{
+            
+            width: auto;
+            height: auto;
+            overflow: hidden;
+            margin-left: 125px;
+        }
+
+        .roleMenu label,.form-item label{
+            display: inline-block;
+            padding: 5px;
+            margin-bottom: 0;
+            font-weight: normal;
+        }
+        
+        .roleMamagerButton{
+            width: 100%;
+            text-align: center;
+            height: auto;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+
+        .btnCancel,.btnSubmit{
+            text-align: center;
+            font-weight: bold;
+            height: 40px;
+            line-height: 40px;
+            width: 150px;
+            font-size: 18px;
+            border: none;
+            color: white;
+            background: #d1d6de;
+            cursor: pointer;
+            margin:0 5px;
+        }
+
+        .btnSubmit{
+            background: #4b8de6;
+        }
+    </style>
+</head>
+<body> -->
+  <!--   
+    <div class="roleMamager" name="myform">
+         <span ng-switch on="status">
+            <h4 ng-switch-when=1>角色信息修改</h4>
+            <h4 ng-switch-when=2>角色信息查看</h4>
+            </span >
+        <form action="">
+            <p class="form-item">
+                <span>角色名称:</span>
+                <input ng-readonly="status== 2" ng-model="role.roleName" name="roleName"  type="text">
+            </p>
+            <p class="form-item">
+                <span>角色描述:</span>
+                <input ng-readonly="status== 2" ng-model="role.description" name="" type="text">
+            </p>
+            <p class="form-item" id="system">
+                <span>是否内置:</span>
+                <label><input ng-disabled="status== 2" ng-model="role.isSystem" name="isSystem" type="radio" value="1">是</label>
+                <label><input ng-disabled="status== 2" ng-model="role.isSystem" name="isSystem" type="radio" value="0">否</label>
+            </p>
+            <p class="form-item">
+                <span>角色等级:</span>
+                <select ng-disabled="status== 2" ng-model="role.roleLevel">
+                    <option value="0">省级</option>
+                    <option value="1">市级</option>
+                    <option value="2">区县级</option>
+                </select>
+            </p>
+
+            <div class="roleTap">
+                <div class="roleTapTitle">
+                     <a ng-init="showTap='self'" ng-click="showTap='self'" ng-class="{'on':showTap=='self'}">自维电费管理</a>
+                     <a  ng-click="showTap='tower'" ng-class="{'on':showTap=='tower'}">塔维电费管理</a>
+                </div>
+
+                <div ng-show="showTap=='self'" class="roleTapContent" id="roleTapContent1">
+                    <div class="form-item" ng-repeat="item in resources.self track by $index">
+                        <div class="attrName">{{item.resourceName}}:</div>
+                        <div class="roleMenu" >
+                            <label ng-repeat="item2 in item.child"><input ng-disabled="status== 2"  ng-checked="checkMe(item2.id);" value="{{item2.id}}" type="checkbox">{{item2.resourceName}}</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-show="showTap=='tower'" class="roleTapContent"  id="roleTapContent2">
+                    <div class="form-item" ng-repeat="item in resources.tower track by $index">
+                        <div class="attrName">{{item.resourceName}}:</div>
+                        <div class="roleMenu">
+                            <label ng-repeat="item2 in item.child"><input ng-disabled="status== 2"  ng-checked="checkMe(item2.id)"  value="{{item2.id}}"  type="checkbox">{{item2.resourceName}}</label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+        </form>    
+            
+        <div class="roleMamagerButton">
+            <button ng-hide="status== 2" ng-click="closeDialog('roleDialog')" class="btnCancel">取消</button>
+            <button ng-hide="status== 2" ng-click="addOrUpdate()" class="btnSubmit">确认</button>
+            <button ng-show="status== 2" ng-click="closeDialog('roleDialog')" class="btnSubmit">确认</button>
+        </div>    
+    </div>
+
+    
+
+</body>
+</html>
+ -->
+
+<!-- 角色管理查看 -->
+<div class="ngdialog-content" role="document" style="width: 800px;">
+<span ng-switch on="status">
+    <div class="reimbur-dialog-title" ng-switch-when=1>角色信息修改</div>
+    <div class="reimbur-dialog-title" ng-switch-when=2>角色信息查看</div>
+</span >
+
+
+    <div class="contract-edit">
+        <form action="">
+            <ul class="user-list">
+                <li><span style="width: 70px; text-align: left;">角色名称:</span><input ng-readonly="status== 2" ng-model="role.roleName" name="roleName"  type="text" style="width: 460px;"></li>
+                <li><span style="width: 70px; text-align: left;">角色描述:</span><input ng-readonly="status== 2" ng-model="role.description" name="" type="text" style="width: 460px;"></li>
+                <li><span style="width: 70px; text-align: left;">是否内置:</span><label><input ng-disabled="status== 2" ng-model="role.isSystem" name="isSystem" type="radio" value="1">是</label>
+                <label><input ng-disabled="status== 2" ng-model="role.isSystem" name="isSystem" type="radio" value="0">否</label></i>
+                <li><span style="width: 70px; text-align: left;">角色等级:</span><label><select ng-disabled="status== 2" ng-model="role.roleLevel" style="width: 460px;">
+                    <option value="0">省级</option>
+                    <option value="5">市领导</option>
+                    <option value="1">市级</option>
+                    <option value="3">区县级</option>
+                    <option value="4">报销发起人</option>
+                    <option value="2">经办人</option>
+                </select></label>
+                <div style="line-height: 30px; border-bottom: 1px solid #cccccc; font-size: 16px; font-weight: bolder; padding-bottom: 8px;  margin-bottom: 15px;margin-top: 10px;">自维电费管理</div>
+                <div class="form-item" ng-repeat="item in resources.self track by $index" id="roleTapContent1">
+                        <div class="attrName">{{item.resourceName}}:</div>
+                        <div class="roleMenu" >
+                            <label ng-repeat="item2 in item.child"><input ng-disabled="status== 2"  ng-checked="checkMe(item2.id);" class="role-checkbox" value="{{item2.id}}" type="checkbox">{{item2.resourceName}}</label>
+                        </div>
+                        <div style="clear: both;"></div>
+                    </div>
+                    <div style="line-height: 30px; border-bottom: 1px solid #cccccc; font-size: 16px; font-weight: bolder; padding-bottom: 8px;margin-bottom: 15px; margin-top: 10px;">塔维电费管理</div>
+                    <div class="form-item" ng-repeat="item in resources.tower track by $index" id="roleTapContent2">
+                        <div class="attrName">{{item.resourceName}}:</div>
+                        <div class="roleMenu">
+                            <label ng-repeat="item2 in item.child"><input ng-disabled="status== 2"  ng-checked="checkMe(item2.id)" class="role-checkbox" value="{{item2.id}}"  type="checkbox">{{item2.resourceName}}</label>
+                        </div>
+                         <div style="clear: both;"></div>
+                    </div>
+
+            </ul>
+            <!-- 查看时隐藏该功能 -->
+            <div class="submit-btn" style="padding-left: 0px;">
+<!--                 <button ng-click="closeDialog('addDialog')" class="reimbur-cancel btn">取消</button>
+                <button ng-click="addOrUpdate()" class="reimbur-save btn">保存</button> -->
+                 <button ng-hide="status== 2" ng-click="closeDialog('roleDialog')" class="reimbur-cancel btn">取消</button>
+            <button ng-hide="status== 2" ng-click="addOrUpdate()" class="reimbur-save btn">确认</button>
+            <button ng-show="status== 2" ng-click="closeDialog('roleDialog')" class="reimbur-save btn">关闭</button>
+            </div>
+        </form>
+    </div>
+
+     </div>
+     <style type="text/css">
+         .attrName{
+            height: 40px;
+            line-height: 35px;
+            display: block;
+            float: left;
+            /*margin-top: 20px;*/
+            width: 70px;
+            text-align: left;
+            margin-right:5px;
+            font-weight: bolder;
+         }
+         .roleMenu{
+            float: left;
+            width: auto;
+            line-height: 35px;
+            width: 350px;
+          
+        }
+        .roleMenu .role-checkbox{margin-right: 8px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-top: 0;
+}}
+        .contract-edit .user-list li span{ width: 70px !important; text-align: left !important; }
+     </style>

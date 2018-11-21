@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.report.dao.FinConsistencyDao">
+  <resultMap id="BaseResultMap" type="com.audit.modules.report.entity.FinConsistency">
+    <id column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="CITY_ID" jdbcType="VARCHAR" property="cityId" />
+    <result column="COUNTY_ID" jdbcType="VARCHAR" property="countyId" />
+    <result column="REGION_NAME" jdbcType="VARCHAR" property="regionName" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="FINANCIAL_SITE" jdbcType="VARCHAR" property="financialSite" />
+    <result column="SUCCESS_AMOUNTS" jdbcType="VARCHAR" property="successAmounts" />
+    <result column="SUCCESS_RATE" jdbcType="VARCHAR" property="successRate" />
+    <result column="AVARAGE_RATE" jdbcType="VARCHAR" property="avarageRate" />
+    <result column="TYPE_CODE" jdbcType="VARCHAR" property="typeCode" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, CITY_ID, COUNTY_ID, REGION_NAME, CREATE_TIME, FINANCIAL_SITE, SUCCESS_AMOUNTS, 
+    TYPE_CODE,AVARAGE_RATE,SUCCESS_RATE
+  </sql>
+  <select id="findByTypeAndYear"  resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from SYS_STASTIC_FIN_CONSISTENCY
+    where TYPE_CODE = #{typeCode,jdbcType=VARCHAR}
+     AND YEAR = #{year,jdbcType=VARCHAR}
+  </select>
+</mapper>

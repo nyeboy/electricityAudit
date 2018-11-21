@@ -1,0 +1,150 @@
+﻿<!-- 白名单管理页面 -->
+<!-- 
+ <script language="javascript" type="text/javascript">
+
+        $(document).ready(function () {
+           
+            $("#table1").freezeHeader({ 'height': '600px' });
+        
+        })
+    </script> -->
+	<style>
+	.search-box .title-select {
+			width: 19%;
+
+		}
+
+	.search-box .process-input {
+			width: 19%;
+		}
+	</style>
+<div class="system-content" id="systemContent">
+    <div class="business-box" id="businessBox">
+        <div class="content-rout" id="contentRout">
+            <span>基础数据</span>&gt;<span>基础数据维护</span>&gt;<span class="now-rout">白名单管理</span>
+        </div>
+        <div class="content-box trariffc-table" id="contentBox">
+            <div class="search-box">
+                <div>
+                    <select name="" id="" class="title-select"
+							ng-if="userCity==null"
+                            ng-model="$parent.cityId"
+                            ng-options="city.key as city.value for city in citys"
+                            ng-change="queryCountyList(cityId)">
+                    <option  value="">全省</option>
+                    </select>
+                    <input
+                           ng-if="userCity!=null"
+                           name="" class="title-select"
+                           disabled="disabled"
+                           ng-model="userCity"
+                           type="text">	
+                    <select class="title-select"
+							ng-if="userCounty==null"
+                            ng-model="$parent.countyId"
+                            ng-options="county.key as county.value for county in countys">
+                    <option value="" >全市</option>
+                    </select>
+					<input
+                           ng-if="userCounty!=null"
+                           name="" class="title-select"
+                           disabled="disabled"
+                           ng-model="userCounty"
+                           type="text">	
+                    <!-- <input ng-model="status" type="text" placeholder="审批状态" class="process-input con-parts" name="siteName"> -->
+                    <select ng-model="spstatus" ng-change="changespstatus()" name="spstatus">
+                    	<option ng-selected="-2" value="-2">审批状态</option>
+                    	<option value="0">驳回</option>
+                    	<option value="-1">保存</option>
+                    	<option value="1">一级审</option>
+                    	<option value="2">二级审</option>
+                    	<option value="3">出库审</option>
+                    	<option value="4">审批通过</option>
+                    </select>
+                    <input ng-model="szydNo" type="text" placeholder="三重一大会议编号" class="process-input con-parts" name="szydNo">
+                </div>
+                
+            </div>
+            <div class="search-box">
+                	<input ng-model="cperson" type="text" placeholder="创建人" class="process-input con-parts" name="siteName">
+                    <input ng-model="submitTime" type="text" placeholder="提交时间" class="process-input con-parts" name="szydNo">	
+                    <button ng-click="getData(true)" class="btn btn-primary" type="button">查询</button>
+            </div>
+            <div>
+             		<button ng-if="list[0].roleLevel==null" ng-show="showaddflag" ng-click="goAdd()" class="btn btn-primary" type="button">新增</button>
+            	 <button ng-if="list[0].roleLevel==0" ng-show="showaddflag" ng-click="goAdd()" class="btn btn-primary" type="button">新增</button>
+            	 <button ng-if="list[0].roleLevel==1||list[0].roleLevel==2"  ng-click="bachSubmit3(1)" class="btn btn-primary" type="button">批量通过</button>
+            	 <button ng-if="list[0].roleLevel==1||list[0].roleLevel==2"  ng-click="bachSubmit3(-1)" class="btn btn-primary" type="button">批量驳回</button>
+            </div>
+            <!-- table-content -->
+            <div class="table-content">
+                <!-- table -->
+                <div class="data-table">
+
+                    <div class="table-details">
+                        <div>
+                            <table >
+                          <!--   <thead>
+                                 <tr>
+                               <th>序号</th>
+                               <th>合同编号</th>
+                               <th>合同名称</th>
+                               <th>合同生效日期</th>
+                               <th>合同终止日期</th>
+                               <th>是否包干</th>
+                               <th>包干价</th>
+                               <th>缴费周期</th>
+                               <th>电表户号</th>
+                               <th>单价</th>
+                               <th>操作</th> -->
+                            </tr></thead>
+                                <tbody class="query-date" id="list">
+                                <tr>
+                                <th><input ng-click="checkAll('#checkAll','#list')" id="checkAll" type="checkbox"></th> 
+                               <th>序号</th>
+                               <th>地市</th>
+                               <th>区县</th>
+                               <th>资管站点名称</th>
+                               <th>状态</th>
+                               <th>三重一大会议编号</th>
+                               <th>有效截至时间</th>
+                               <th>录入员</th>
+                               <th>白名单场景</th>
+                               <th>操作</th> 
+                            </tr>
+                            <tr ng-repeat="item in list track by $index">
+                            			<td><input  type="checkbox" value="{{item.id}}"></td>
+                                        <td>{{$index+1}}</td>
+                                        <td>{{item.cityName}}</td>
+                                        <td>{{item.zhLabel}}</td>
+                                        <td>{{item.ziguanName}}</td>
+                                        <td>{{item.status|submitStatusType}}</td>
+                                        <td>{{item.szydNo}}</td>
+                                        <td>{{item.endTime}}</td>
+                                        <td>{{item.cperson}}</td>
+                                        <td>{{item.cj|whiteType}}</td>
+                                        <td >
+                                        	<a ng-click="showWhiteSubmitDetail(item)" class="check-detail" >详情</a>
+                                        	<a ng-if="(item.status==-1 && item.roleLevel==0)  ||(item.status==0 && item.roleLevel==0)" ng-click="delWhiteSubmit(item)" class="edit-process">取消</a>
+                                        	<a ng-if="(item.status==-1 && item.roleLevel==0)  ||(item.status==0 && item.roleLevel==0)" ng-click="modifyWhiteSubmit(item,0)" class="check-detail" >修改</a>
+                                        	<a ng-if="(item.status==-1 && item.roleLevel==0) ||(item.status==0 && item.roleLevel==0)" ng-click="updateWhiteSubmit(item,'1')" class="check-detail" >提交</a>
+                                        	<a ng-if="(item.status==1 && item.roleLevel==1)||(item.status==2 && item.roleLevel==2)||(item.status==3 && item.roleLevel==1)" ng-click="updateWhiteSubmit(item,'1')" class="check-detail" >审批通过</a>
+                                        	<a ng-if="(item.status==1 && item.roleLevel==1)||(item.status==2 && item.roleLevel==2)||(item.status==3 && item.roleLevel==1)" ng-click="updateWhiteSubmit(item,'-1')" class="check-detail" >驳回</a>
+                                        </td> 
+                              </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            
+                        </div>
+						
+                    </div>
+                    <div class="page-foot">
+                                <im-pagination  conf="pageInfo" params="params" get-data="getData()"></im-pagination>
+                            </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

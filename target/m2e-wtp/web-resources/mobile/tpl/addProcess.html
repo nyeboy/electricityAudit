@@ -1,0 +1,209 @@
+<!-- 新增审批流程 -->
+<div class="system-content" id="systemContent" style=" min-width: 1100px;">
+    <div class="business-box" id="businessBox">
+        <div class="content-rout" id="contentRout"><span>流程管理</span>&gt;<span class="now-rout">新增审批流程</span></div>
+        <div class="content-box" id="contentBox">
+            <div ng-if="status" class="add-process">
+                <form action="">
+                    <ul class="list-iteam list-ul">
+                        <li>
+                            <label>流程基本信息</label>
+                        </li>
+                        <li>
+                            <span class="sign">流程类型:</span>
+                            <select name="allType"
+                                    ng-model="allType"
+                                    ng-change="changeFlowType(allType)"
+                                    required="required"
+                                    message="请选择流程类型"
+                                    class="verification">
+                                <option value="" >请选择流程类型</option>
+                                <option value="1">电费稽核</option>
+                                <option value="2">基础数据维护变更</option>
+                                <option value="3">预付流程</option>
+                                <option value="4">综合电费流程</option>
+                                <option value="5">转供电管理</option>
+                            </select>
+                        </li>
+                        <li>
+                            <span class="sign">流程名称:</span>
+                            <input ng-model="resultData.name" type="text" placeholder="流程名字" required="required" message="请输入流程名字" class="verification">
+                        </li>
+                        <li>
+                            <span class="sign">用户地市:</span>
+                            <select name=""
+                                id="cityName"
+                                ng-model="resultData.city"
+                                ng-options="city.key as city.value for city in citys"
+                                ng-change="queryCountyList(resultData.city)"
+                                required="required"
+                                message="请选择地市"
+                                class="verification">
+                                    <option value="">全省</option>
+                            </select>
+                        </li>
+                        <li>
+                            <span class="sign">用户区县:</span>
+                            <select class="verification"
+                                id="county"
+                                ng-model="resultData.county"
+                                ng-options="county.key as county.value for county in countys"
+                                required="required"
+                                message="请选择区县"
+                                >
+                                    <option value="">全市</option>
+                            </select>
+                        </li>
+                        <li ng-if="allType!=2">
+                            <span class="sign">类&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;型:</span>
+                            <input ng-model="resultData.type" type="radio" name="" value="mandimension">自维电费管理
+                            <input ng-model="resultData.type" type="radio" name="" value="zmandimension">自维综合电费管理
+                             <input ng-model="resultData.type" type="radio" name="" value="mandimensionpre">自维预付管理
+                            <input ng-model="resultData.type" type="radio" name="" value="pagodadimension">塔维电费管理
+                            <input ng-model="resultData.type" type="radio" name="" value="transelepower">自维转供电管理
+                            <input ng-model="resultData.type" type="radio" name="" value="pagodatranselepower">塔维转供电管理 
+                        </li>
+                        <li class="list-text">
+                            <span>&nbsp;&nbsp;流程说明:</span>
+                            <textarea ng-model="resultData.desc"></textarea>
+                        </li>
+                    </ul>
+
+                    <ul class="list-iteam list-ul">
+                        <li>
+                            <label>常规审批流程</label>
+                        </li>
+                        <li class="" ng-repeat="item in resultData.variableSetps track by $index">
+                            <span class="sign">审批步骤名：</span>
+                            <input ng-model="item.stepName" type="text" placeholder="请输入步骤名" required="required" message="请输入审批步骤名" class="verification"/>
+                            <span class="sign">审批用户：</span>
+                            <input ng-model="item.user.userName" type="text" placeholder="请添加审批人" ng-click="openChoiceUser('variable',$index)" required="required" message="请输入审批人" class="verification">
+                            <label style="cursor: pointer" ng-click="removeItem($index)" ng-if="resultData.variableSetps.length > 1">删除</label>
+                            <label ng-click="addPerson()" style=" cursor: pointer" ng-if="$last">添加</label> 
+                        </li>
+                    </ul>
+                   
+
+                    <ul class="list-iteam list-ul" ng-show="allType!=2 && allType!=3 && allType!=5">
+                        <li>
+                            <label>特殊审批流程</label>
+                        </li>
+                        <li class="" ng-repeat="item in resultData.fixedSetps track by $index">
+                            <span class="sign">审批步骤名：</span>
+                            <input type="text" ng-model="item.stepName" placeholder="请输入步骤名" required="required" message="请输入审批步骤名" class="verification"/>
+                            <span class="sign">审批用户：</span>
+                            <input type="text" ng-model="item.user.userName" placeholder="请添加审批人" ng-click="openChoiceUser('fixed',$index)" required="required" message="请输入审批人" class="verification">
+                       		<!-- <label style="cursor: pointer" ng-click="removeItem1($index)" ng-if="resultData.fixedSetps.length > 1">删除</label>
+                            <label ng-click="addPerson1()" style=" cursor: pointer" ng-if="$last">添加</label> -->
+                        </li>
+                                     
+                    </ul>
+					<div class="submit-btn" style="margin-top: 20px; text-align: left; padding-left: 0px; margin-bottom: 40px;" ng-if="actionType!=1">
+						<input ng-click="save()" type="button" class="save" value="保存" style="text-align: center;">
+						<input ng-click="returnPage()" type="button" class="cancel" value="取消" style="text-align: center;">
+					</div>
+                 </form>
+            </div>
+            
+            <div ng-if="!status" class="add-process">
+                <form action="">
+                    <ul class="list-iteam list-ul">
+                        <li>
+                            <label>流程基本信息</label>
+                        </li>
+                        <li>
+                            <span class="sign">流程类型:</span>
+                            <select name="allType"
+                                    ng-model="allType"
+                                    ng-change="changeFlowType(allType)"
+                                    required="required"
+                                    message="请选择流程类型"
+                                    class="verification"
+                                    disabled="disabled">
+                                <option value="" >请选择流程类型</option>
+                                <option value="1">电费稽核</option>
+                                <option value="2">基础数据维护变更</option>
+                                 <option value="3">预付流程</option>
+                                 <option value="4">综合电费稽核</option>
+                                 <option value="5">转供电管理流程</option>
+                            </select>
+                        </li>
+                        <li>
+                            <span class="sign">流程名称:</span>
+                            <input ng-model="resultData.name" type="text" placeholder="流程名字" required="required" message="请输入流程名字" class="verification" readonly="readonly">
+                        </li>
+                        <li>
+                            <span class="sign">用户地市:</span>
+                            <select name=""
+                                id="cityName"
+                                ng-model="resultData.city"
+                                ng-options="city.key as city.value for city in citys"
+                                ng-change="queryCountyList(resultData.city)"
+                                required="required"
+                                message="请选择地市"
+                                class="verification"
+                                disabled="disabled">
+                                    <option value="">全省</option>
+                            </select>
+                        </li>
+                        <li>
+                            <span class="sign">用户区县:</span>
+                            <select class="title-select"
+                                id="county"
+                                ng-model="resultData.county"
+                                ng-options="county.key as county.value for county in countys"
+                                required="required"
+                                message="请选择区县"
+                                class="verification"
+                                disabled="disabled">
+                                    <option value="">全市</option>
+                            </select>
+                        </li>
+                        <li ng-if="allType!=2 && allType!=3">
+                            <span class="sign">类&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;型:</span>
+                            <input ng-model="resultData.type" type="radio" name="" value="mandimension" disabled="disabled">自维电费管理
+                             <input ng-model="resultData.type" type="radio" name="" value="zmandimension" disabled="disabled">自维综合电费管理
+                            <!-- <input ng-model="resultData.type" type="radio" name="" value="mandimensionpre" disabled="disabled">自维预付管理 -->
+                            <input ng-model="resultData.type" type="radio" name="" value="pagodadimension" disabled="disabled">塔维电费管理
+                            <input ng-model="resultData.type" type="radio" name="" value="transelepower">自维转供电管理
+                            <input ng-model="resultData.type" type="radio" name="" value="pagodatranselepower">塔维转供电管理
+                        </li>
+                        <li class="list-text">
+                            <span>&nbsp;&nbsp;流程说明:</span>
+                            <textarea ng-model="resultData.desc" readonly="readonly"></textarea>
+                        </li>
+                    </ul>
+
+                    <ul class="list-iteam list-ul">
+                        <li>
+                            <label>常规审批流程</label>
+                        </li>
+                        <li class="" ng-repeat="item in resultData.variableSetps track by $index">
+                            <span class="sign">审批步骤名：</span>
+                            <input ng-model="item.stepName" type="text" placeholder="请输入步骤名" required="required" message="请输入审批步骤名" class="verification" readonly="readonly"/>
+                            <span class="sign">审批用户：</span>
+                            <input ng-model="item.user.userName" type="text" placeholder="请添加审批人" required="required" message="请输入审批人" class="verification" readonly="readonly">
+                        </li>
+                    </ul>
+
+                    <ul class="list-iteam list-ul" ng-show="allType!=2 && allType!=3 && allType!=5">
+                        <li>
+                            <label>特殊审批流程</label>
+                        </li>
+                        <li class="" ng-repeat="item in resultData.fixedSetps track by $index">
+                            <span class="sign">审批步骤名：</span>
+                            <input type="text" ng-model="item.stepName" placeholder="请输入步骤名" required="required" message="请输入审批步骤名" class="verification" readonly="readonly"/>
+                            <span class="sign">审批用户：</span>
+                            <input type="text" ng-model="item.user.userName" placeholder="请添加审批人" required="required" message="请输入审批人" class="verification" readonly="readonly">
+                        </li>
+                                     
+                    </ul>
+					<div class="submit-btn" style="margin-top: 20px; text-align: left; padding-left: 0px; margin-bottom: 40px;" ng-if="actionType!=1">
+						<input ng-click="returnPage()" type="button" class="cancel" value="取消" style="text-align: center;">
+					</div>
+                 </form>
+            </div>
+            <div style="height: 60px;"></div>
+        </div>
+    </div>
+</div>

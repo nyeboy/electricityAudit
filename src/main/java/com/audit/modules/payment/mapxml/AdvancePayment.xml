@@ -1,0 +1,556 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.payment.dao.AdvancePaymentDao">
+
+<resultMap type="com.audit.modules.payment.entity.AdvancePaymentVo" id="adMap">
+	<id property="id" column="id"></id>
+	<result property="provinceId" column="province_id"/>
+	<result property="cityId" column="city_id"/>
+	<result property="countyId" column="county_id"/>
+	<result property="startDate" column="start_date"/>
+	<result property="endDate" column="end_date"/>
+	<result property="totalMoney" column="total_money"/>
+	<result property="supplyId" column="supply_id"/>
+	<result property="contractId" column="contract_id"/>
+	<result property="paymentNumber" column="payment_number"/>
+	<result property="createDate" column="create_date"/>
+	<result property="status" column="status"/>
+	<result property="remark" column="remark"/>
+	<result property="submitMan" column="submit_man"/>
+	<result property="supplyStr" column="supplyStr"/>
+	<result property="cityStr" column="cityStr"/>
+	<result property="countyStr" column="countyStr"/>
+	<result property="departmentName" column="DEPARTMENTNAME"></result>
+	<result property="talk" column="TALK"></result>
+	<result property="departmentId" column="DEPARTMENTID"/>
+	<result property="companyId" column="companyId"></result>
+	<result property="submitManId" column="SUBMIT_MAN_ID"/>
+	<result property="canceledMoney" column="CANCELED_MONEY"/>
+	<result property="cancellingMoney" column="CANCELLING_MONEY"/>
+	<result property="surplusMoney" column="SURPLUS_MONEY"/>
+	<result property="OrganizationCode" column="ORGANIZATION_CODE"/>
+	<result property="regionCode" column="REGION_CODE"/>
+</resultMap>
+
+
+
+<!-- 根据id询 -->
+<select id="getOneById" parameterType="java.lang.String" resultMap="adMap">
+	select sap.*,SS.ORGANIZATION_CODE,SS.REGION_CODE,(select scms.MIS_COMPANY_CODE 
+from SYS_COMPANY_MID_SUPPLIER scms
+where scms.MIS_ORGANIZATION_ID=
+(select SS.ORGANIZATION_CODE 
+FROM
+    SYS_SUPPLIER  SS
+LEFT JOIN SYS_ADVANCE_PAYMENT  sap on SS.id=SAP.SUPPLY_ID
+where SAP.id=#{id} and <![CDATA[rownum<=1]]> ) and <![CDATA[rownum<=1]]> )as companyId
+from 
+   SYS_ADVANCE_PAYMENT sap
+LEFT JOIN SYS_SUPPLIER ss on SAP.SUPPLY_ID=SS.id
+where SAP.id=#{id} and <![CDATA[rownum<=1]]>
+</select>
+
+<select id="getOne" parameterType="com.audit.modules.payment.entity.AdvancePaymentVo" resultType="com.audit.modules.payment.entity.AdvancePaymentVo">
+	select * from SYS_ADVANCE_PAYMENT where payment_number=#{paymentNumber} and submit_man=#{submitMan}
+</select>
+	
+	<!-- 查询预付列表-->
+	<!-- <select id="queryPaymentByPage" parameterType="com.audit.modules.common.mybatis.PageUtil" resultType="com.audit.modules.payment.entity.AdvancePaymentVo">
+		SELECT
+			sap.ID as id,
+			sap.PAYMENT_NUMBER as paymentNumber,
+			sap.TOTAL_MONEY as totalMoney,
+			ss.NAME as supplyStr,
+			sap.CONTRACT_ID as contractId,
+			TO_CHAR(sap.START_DATE, 'yyyy-mm-dd HH24:mi:ss') as startDateStr,
+			TO_CHAR(sap.END_DATE, 'yyyy-mm-dd HH24:mi:ss') as endDateStr,
+			TO_CHAR(sap.CREATE_DATE, 'yyyy-mm-dd HH24:mi:ss') as createDateStr,
+			zsc.ZH_LABEL as countyStr,
+			zsy.CITY_NAME as cityStr,
+			sas.PROVINCE_NAME as provinceStr,
+			sap.STATUS as status,
+			sap.REMARK as remark,
+			sap.SUBMIT_MAN as submitMan
+		FROM
+			SYS_ADVANCE_PAYMENT sap
+		LEFT JOIN
+            ZG_SPACE_PROVINCE sas ON sap.PROVINCE_ID = sas.INT_ID
+   	 	LEFT JOIN
+            ZG_SPACE_COUNTY zsc ON sap.COUNTY_ID = zsc.INT_ID
+    	LEFT JOIN
+            ZG_SPACE_CITY zsy ON sap.CITY_ID = zsy.INT_ID
+        LEFT JOIN
+            SYS_SUPPLIER ss ON ss.ID = sap.SUPPLY_ID
+        WHERE 1=1
+			<if test="null != obj.cityId"> AND CITY_ID = #{obj.cityId}</if>
+		    <if test="null != obj.countyId"> AND COUNTY_ID = #{obj.countyId}</if>
+		    <if test="null != obj.paymentNumber"> AND PAYMENT_NUMBER = #{obj.paymentNumber}</if>
+		    <if test="null != obj.status"> AND STATUS = #{obj.status}</if>
+		Order By PAYMENT_NUMBER DESC
+	</select> -->
+	
+	<select id="queryPaymentByPage" parameterType="com.audit.modules.common.mybatis.PageUtil" resultType="com.audit.modules.payment.entity.AdvancePaymentVo">
+		SELECT
+			sap.ID as id,
+			sap.PAYMENT_NUMBER as paymentNumber,
+			sap.TOTAL_MONEY as totalMoney,
+			ss.NAME as supplyStr,
+			sap.CONTRACT_ID as contractId,
+			TO_CHAR(sap.START_DATE, 'yyyy-mm-dd HH24:mi:ss') as startDateStr,
+			TO_CHAR(sap.END_DATE, 'yyyy-mm-dd HH24:mi:ss') as endDateStr,
+			TO_CHAR(sap.CREATE_DATE, 'yyyy-mm-dd HH24:mi:ss') as createDateStr,
+			zsc.NAME as countyStr,
+			zsy.NAME as cityStr,
+			sas.PROVINCE_NAME as provinceStr,
+			sap.STATUS as status,
+			sap.REMARK as remark,
+			sap.SUBMIT_MAN as submitMan
+		FROM
+			SYS_ADVANCE_PAYMENT sap
+		LEFT JOIN
+            ZG_SPACE_PROVINCE sas ON sap.PROVINCE_ID = sas.INT_ID
+   	 	LEFT JOIN
+            YDJH_AREA zsc ON sap.COUNTY_ID = zsc.ID
+    	LEFT JOIN
+            YDJH_AREA zsy ON sap.CITY_ID = zsy.ID
+        LEFT JOIN
+            SYS_SUPPLIER ss ON ss.ID = sap.SUPPLY_ID
+        WHERE 1=1
+			<if test="null != obj.cityId"> AND CITY_ID = #{obj.cityId}</if>
+		    <if test="null != obj.countyId"> AND COUNTY_ID = #{obj.countyId}</if>
+		    <if test="null != obj.paymentNumber"> AND PAYMENT_NUMBER = #{obj.paymentNumber}</if>
+		    <if test="null != obj.status"> AND STATUS = #{obj.status}</if>
+		Order By PAYMENT_NUMBER DESC
+	</select>
+	
+	<!-- 根据(经办人id)供应商id并且报销成功查预付单 -->
+	<select id="getOneByUserId" parameterType="java.util.Map" resultMap="adMap">
+		select * from(
+				select * 
+			from SYS_ADVANCE_PAYMENT 
+			where
+			status=5
+			<if test="supplyId!=null and supplyId!=''"> and SUPPLY_ID=#{supplyId}</if>
+			<if test="supplierRegionCode!=null and supplierRegionCode!=''"> and REGION_CODE=#{supplierRegionCode} </if>
+			<if test="cityId!=null and cityId!=''"> and CITY_ID=#{cityId}</if>
+			<if test="countyId!=null and countyId!=''"> and COUNTY_ID=#{countyId}</if>
+			ORDER BY CREATE_DATE desc
+		)
+		where <![CDATA[rownum<=1]]>
+	</select>
+	
+		
+	<!-- 删除被选中预付信息-->	
+	<delete id="deletePaymentById" parameterType="java.util.List" >
+		DELETE FROM 
+			SYS_ADVANCE_PAYMENT 
+		WHERE PAYMENT_NUMBER IN
+		<foreach collection="array" item="item" index="index" open="(" separator="," close=")"> 
+			#{item} 
+		</foreach> 
+	</delete> 
+	
+	
+	<!-- 更新预付信息 -->
+	<update id="updatePayment" parameterType="com.audit.modules.payment.entity.AdvancePaymentVo">
+		UPDATE SYS_ADVANCE_PAYMENT 
+		<set>
+     	 	<if test="paymentNumber != null">PAYMENT_NUMBER = #{paymentNumber,jdbcType=VARCHAR},</if>
+			<if test="totalMoney != null">TOTAL_MONEY = #{totalMoney,jdbcType=VARCHAR},</if>
+			<if test="supplyId != null">SUPPLY_ID = #{supplyId,jdbcType=VARCHAR},</if>
+			<if test="contractId != null">CONTRACT_ID = #{contractId,jdbcType=VARCHAR},</if>
+			<if test="startDate != null">START_DATE = #{startDate,jdbcType=TIMESTAMP},</if>
+			<if test="endDate != null">END_DATE = #{endDate,jdbcType=TIMESTAMP},</if>
+			<if test="createDate != null">CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},</if>
+			<if test="countyId != null">COUNTY_ID = #{countyId,jdbcType=VARCHAR},</if>
+			<if test="cityId != null">CITY_ID = #{cityId,jdbcType=VARCHAR},</if>
+			<if test="provinceId != null">PROVINCE_ID = #{provinceId,jdbcType=VARCHAR},</if>
+			<if test="status != null">STATUS = #{status,jdbcType=NUMERIC},</if>
+			<if test="remark != null">REMARK = #{remark,jdbcType=VARCHAR},</if>
+			<if test="submitMan != null">SUBMIT_MAN = #{submitMan,jdbcType=VARCHAR},</if>
+			<if test="canceledMoney!=null">CANCELED_MONEY=#{canceledMoney,jdbcType=VARCHAR},</if>
+			<if test="cancellingMoney!=null">CANCELLING_MONEY=#{cancellingMoney,jdbcType=VARCHAR},</if>
+			<if test="surplusMoney!=null">SURPLUS_MONEY=#{surplusMoney,jdbcType=VARCHAR},</if>
+		</set>
+		 WHERE 
+		 <if test="id ==null">PAYMENT_NUMBER = #{paymentNumber,jdbcType=VARCHAR} </if>
+		 <if test="id!=null">id=#{id}</if>
+	</update>
+	
+
+	<!-- 添加预付信息 -->
+	<insert id="addPayment" parameterType="com.audit.modules.payment.entity.AdvancePaymentVo">
+		INSERT INTO SYS_ADVANCE_PAYMENT
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">ID,</if>
+			<if test="paymentNumber != null">PAYMENT_NUMBER,</if>
+			<if test="totalMoney != null">TOTAL_MONEY,</if>
+			<if test="supplyId != null">SUPPLY_ID,</if>
+			<if test="contractId != null">CONTRACT_ID,</if>
+			<if test="startDate != null">START_DATE,</if>
+			<if test="endDate != null">END_DATE,</if>
+			<if test="createDate != null">CREATE_DATE,</if>
+			<if test="countyId != null">COUNTY_ID,</if>
+			<if test="cityId != null">CITY_ID,</if>
+			<if test="provinceId != null">PROVINCE_ID,</if>
+			<if test="status != null">STATUS,</if>
+			<if test="remark != null">REMARK,</if>
+			<if test="submitMan != null">SUBMIT_MAN,</if>
+			<if test="departmentName !=null">departmentName,</if>
+			<if test="departmentId !=null">DEPARTMENTID,</if>
+			<if test="submitManId !=null">SUBMIT_MAN_ID,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">#{id,jdbcType=VARCHAR},</if>
+			<if test="paymentNumber != null">#{paymentNumber,jdbcType=VARCHAR},</if>
+			<if test="totalMoney != null">#{totalMoney,jdbcType=VARCHAR},</if>
+			<if test="supplyId != null">#{supplyId,jdbcType=VARCHAR},</if>
+			<if test="contractId != null">#{contractId,jdbcType=VARCHAR},</if>
+			<if test="startDate != null">#{startDate,jdbcType=TIMESTAMP},</if>
+			<if test="endDate != null">#{endDate,jdbcType=TIMESTAMP},</if>
+			<if test="createDate != null">#{createDate,jdbcType=TIMESTAMP},</if>
+			<if test="countyId != null">#{countyId,jdbcType=VARCHAR},</if>
+			<if test="cityId != null">#{cityId,jdbcType=VARCHAR},</if>
+			<if test="provinceId != null">#{provinceId,jdbcType=VARCHAR},</if>
+			<if test="status != null">#{status,jdbcType=NUMERIC},</if>
+			<if test="remark != null">#{remark,jdbcType=VARCHAR},</if>
+			<if test="submitMan != null">#{submitMan,jdbcType=VARCHAR},</if>
+			<if test="departmentName !=null">#{departmentName,jdbcType=VARCHAR},</if>
+			<if test="departmentId!=null">#{departmentId,jdbcType=VARCHAR},</if>
+			<if test="submitManId!=null">#{submitManId,jdbcType=VARCHAR},</if>
+		</trim>
+	</insert>
+	
+	
+	<!-- 更新预付单状态 -->
+	<update id="submitOrReject" parameterType="java.util.Map">
+		UPDATE SYS_ADVANCE_PAYMENT SET
+			<if test="status != null">STATUS = #{status,jdbcType=NUMERIC},</if>
+			<if test="remark != null">REMARK = #{remark,jdbcType=VARCHAR},</if>
+		WHERE 
+			PAYMENT_NUMBER = #{paymentNumber}
+	</update>
+	
+	
+	
+	
+	
+	<!-- 新增预付（提交预付现在用） -->
+	<insert id="prepayAdd" parameterType="com.audit.modules.payment.entity.AdvancePaymentVo">
+		INSERT INTO SYS_ADVANCE_PAYMENT
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">ID,</if>
+			<if test="paymentNumber != null">PAYMENT_NUMBER,</if>
+			<if test="totalMoney != null">TOTAL_MONEY,</if>
+			<if test="supplyId != null">SUPPLY_ID,</if>
+			<if test="contractId != null">CONTRACT_ID,</if>
+			<if test="startDate != null">START_DATE,</if>
+			<if test="endDate != null">END_DATE,</if>
+			<if test="createDate != null">CREATE_DATE,</if>
+			<if test="countyId != null">COUNTY_ID,</if>
+			<if test="cityId != null">CITY_ID,</if>
+			<if test="provinceId != null">PROVINCE_ID,</if>
+			<if test="status != null">STATUS,</if>
+			<if test="remark != null">REMARK,</if>
+			<if test="submitMan != null">SUBMIT_MAN,</if>
+			<if test="departmentName !=null">DEPARTMENTNAME,</if>
+			<if test="submitManId !=null">SUBMIT_MAN_ID,</if>
+			<if test="surplusMoney !=null">SURPLUS_MONEY,</if>
+			<if test="ouName!=null">OUNAME,</if>
+			<if test="regionCode!=null">REGION_CODE,</if>
+			<if test="OrganizationCode!=null">ORGANIZATION_CODE</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">#{id,jdbcType=VARCHAR},</if>
+			<if test="paymentNumber != null">#{paymentNumber,jdbcType=VARCHAR},</if>
+			<if test="totalMoney != null">#{totalMoney,jdbcType=VARCHAR},</if>
+			<if test="supplyId != null">#{supplyId,jdbcType=VARCHAR},</if>
+			<if test="contractId != null">#{contractId,jdbcType=VARCHAR},</if>
+			<if test="startDate != null">#{startDate,jdbcType=TIMESTAMP},</if>
+			<if test="endDate != null">#{endDate,jdbcType=TIMESTAMP},</if>
+			<if test="createDate != null">#{createDate,jdbcType=TIMESTAMP},</if>
+			<if test="countyId != null">#{countyId,jdbcType=VARCHAR},</if>
+			<if test="cityId != null">#{cityId,jdbcType=VARCHAR},</if>
+			<if test="provinceId != null">#{provinceId,jdbcType=VARCHAR},</if>
+			<if test="status != null">#{status,jdbcType=NUMERIC},</if>
+			<if test="remark != null">#{remark,jdbcType=VARCHAR},</if>
+			<if test="submitMan != null">#{submitMan,jdbcType=VARCHAR},</if>
+			<if test="departmentName !=null">#{departmentName,jdbcType=VARCHAR},</if>
+			<if test="submitManId!=null">#{submitManId,jdbcType=VARCHAR},</if>
+			<if test="surplusMoney !=null">#{surplusMoney,jdbcType=VARCHAR},</if>
+			<if test="ouName!=null">#{ouName,jdbcType=VARCHAR},</if>
+			<if test="regionCode!=null">#{regionCode,jdbcType=VARCHAR},</if>
+			<if test="OrganizationCode!=null">#{OrganizationCode,jdbcType=VARCHAR},</if>
+		</trim>
+	</insert>
+	
+	
+	<!-- 模糊查省 id-->
+	<!-- <select id="getProId" parameterType="com.audit.modules.payment.entity.Sepcc" resultType="java.lang.String">
+		select INT_ID from ZG_SPACE_PROVINCE where province_name=#{province_name}
+	</select>
+	
+	模糊查市 id
+	<select id="getCitId" parameterType="com.audit.modules.payment.entity.Sepcc" resultType="java.lang.String">
+		select INT_ID from ZG_SPACE_CITY where city_name=#{city_name} and province_name=#{int_id}
+	</select>
+	
+	模糊查区 id
+	<select id="getCouId" parameterType="com.audit.modules.payment.entity.Sepcc" resultType="java.lang.String">
+		select INT_ID from ZG_SPACE_COUNTY where zh_label=#{zh_label} and city_id=#{int_id}
+	</select> -->
+	
+	<select id="getProId" parameterType="com.audit.modules.payment.entity.Sepcc" resultType="java.lang.String">
+		select ID from YDJH_AREA where NAME=#{province_name}
+	</select>
+	
+	<!-- 模糊查市 id-->
+	<select id="getCitId" parameterType="com.audit.modules.payment.entity.Sepcc" resultType="java.lang.String">
+		select ID from YDJH_AREA where NAME=#{city_name} and PARENT=#{int_id}
+	</select>
+	
+	<!-- 模糊查区 id-->
+	<select id="getCouId" parameterType="com.audit.modules.payment.entity.Sepcc" resultType="java.lang.String">
+		select ID from YDJH_AREA where NAME=#{zh_label} 
+	</select>
+	
+	<!-- 修改提交人信息 -->
+	   <update id="updateSubmitMan" parameterType="java.util.Map">
+		UPDATE SYS_ADVANCE_PAYMENT
+		SET
+		      SUBMIT_MAN=#{submitMan,jdbcType=VARCHAR}
+		WHERE ID=#{id}
+	</update>
+	<!-- 修改预付状态 -->
+	 <update id="updateStatus" parameterType="java.util.Map">
+		UPDATE SYS_ADVANCE_PAYMENT
+		SET
+		    STATUS=#{status,jdbcType=INTEGER}
+		WHERE ID=#{id}
+	</update>
+	
+	<!-- 查询列表 -->
+	<!-- <select id="queryList" parameterType="java.util.Map" resultMap="adMap">
+		 SELECT *  FROM
+		(SELECT rownum rsn, a1.*  FROM 
+			(select sap.*,zsy.city_name as cityStr,zsc.zh_label as countyStr,ss.name as supplyStr from SYS_ADVANCE_PAYMENT sap
+			
+		LEFT JOIN
+            ZG_SPACE_PROVINCE sas ON sap.PROVINCE_ID = sas.INT_ID
+   	 	LEFT JOIN
+            ZG_SPACE_COUNTY zsc ON sap.COUNTY_ID = zsc.INT_ID
+    	LEFT JOIN
+            ZG_SPACE_CITY zsy ON sap.CITY_ID = zsy.INT_ID
+        LEFT JOIN
+            SYS_SUPPLIER ss ON ss.CODE = sap.SUPPLY_ID
+			where 1=1
+				<if test="map.paymentNumber != null and map.paymentNumber!=''">
+                 and payment_number = #{map.paymentNumber}
+            	</if>
+            	<if test="map.status!=null and map.status!=''">
+            		and status=#{map.status}
+            	</if>
+            	<if test="map.startDate!=null">
+                	AND <![CDATA[start_date >= #{map.startDate}]]>
+            	</if>
+            	<if test="map.endDate!=null">
+                	AND <![CDATA[end_date < #{map.endDate}]]>
+            	</if>
+            	  ORDER BY CREATE_DATE DESC) a1  WHERE
+        <![CDATA[ROWNUM <= #{map.pageSize}]]> ) a2
+        WHERE <![CDATA[a2.rsn > #{map.pageNo}]]>
+	</select> -->
+	
+	<select id="queryList" parameterType="java.util.Map" resultMap="adMap">
+		 SELECT *  FROM
+		(SELECT rownum rsn, a1.*  FROM 
+			(select  DISTINCT sap.*,zsy.name as cityStr,zsc.name as countyStr,ss.name as supplyStr from SYS_ADVANCE_PAYMENT sap
+			
+		LEFT JOIN
+            YDJH_AREA sas ON sap.PROVINCE_ID = sas.ID
+   	 	LEFT JOIN
+            YDJH_AREA zsc ON sap.COUNTY_ID = zsc.ID
+    	LEFT JOIN
+            YDJH_AREA zsy ON sap.CITY_ID = zsy.ID
+        LEFT JOIN
+            SYS_SUPPLIER ss ON ss.CODE = sap.SUPPLY_ID
+			where 1=1
+				<if test="map.paymentNumber != null and map.paymentNumber!=''">
+                 and sap.payment_number = #{map.paymentNumber}
+            	</if>
+            	<if test="map.status!=null and map.status!=''">
+            		and sap.status=#{map.status}
+            	</if>
+            	<if test="map.startDate!=null">
+                	AND <![CDATA[sap.CREATE_DATE >= #{map.startDate}]]>
+            	</if>
+            	<if test="map.endDate!=null">
+                	AND <![CDATA[sap.CREATE_DATE < #{map.endDate}]]>
+            	</if>
+            	<if test="map.userID!=null">
+            		AND sap.SUBMIT_MAN_ID = #{map.userID}
+            	</if>
+            	  ORDER BY sap.CREATE_DATE DESC) a1  WHERE
+        <![CDATA[ROWNUM <= #{map.pageSize}]]> ) a2
+        WHERE <![CDATA[a2.rsn > #{map.pageNo}]]>
+	</select>
+	
+	<select id="queryListCount" parameterType="java.util.Map" resultType="java.lang.Long">
+        SELECT
+          count(*)
+        from SYS_ADVANCE_PAYMENT
+			where 1=1
+				<if test="map.paymentNumber != null and map.paymentNumber!=''">
+                 	and payment_number = #{map.paymentNumber}
+            	</if>
+            	<if test="map.status!=null and map.status!=''">
+            		and status=#{map.status}
+            	</if>
+            	<if test="map.startDate!=null">
+                	AND <![CDATA[start_date >= #{map.startDate}]]>
+            	</if>
+            	<if test="map.endDate!=null">
+                	AND <![CDATA[end_date < #{map.endDate}]]>
+            	</if>
+    </select>
+    
+    <!-- 根据id查找预付详情 -->
+    <select id="getViewPrepayDetails" parameterType="java.lang.String" resultMap="adMap">
+    	select sap.*,ss.name as supplyStr ,zsc.city_name as cityStr,zsco.zh_label as countyStr 
+	from
+		SYS_ADVANCE_PAYMENT  sap 
+	left join SYS_SUPPLIER ss on SAP.supply_id=ss.CODE
+	left join ZG_SPACE_CITY zsc on sap.city_id=zsc.int_id
+	left join ZG_SPACE_COUNTY zsco on sap.county_id=zsco.int_id
+	where
+		SAP.id=#{id} and ss.REGION_CODE=sap.REGION_CODE
+    </select>
+    
+<!--      <select id="getViewPrepayDetails" parameterType="java.lang.String" resultMap="adMap">
+    	select sap.*,ss.name as supplyStr ,zsc.NAME as cityStr,zsco.NAME as countyStr 
+	from
+		SYS_ADVANCE_PAYMENT  sap 
+	left join SYS_SUPPLIER ss on SAP.supply_id=ss.CODE
+	left join YDJH_AREA zsc on sap.city_id=zsc.id
+	left join YDJH_AREA zsco on sap.county_id=zsco.id
+	where
+		SAP.id=#{id}
+    </select> -->
+    
+    <!-- 查附件信息 -->
+     <select id="findFileByPrepayID" parameterType="java.util.Map" resultType="com.audit.modules.system.entity.SysFileVO">
+        SELECT
+        DISTINCT
+            sf.ID as id,
+            sf.FILENAME as filename,
+            sf.EXT as ext
+        FROM SYS_ADVANCE_PAYMENT sap
+        INNER JOIN SYS_MIDDLE_FILE smf ON sap.ID=smf.BUSINESS_ID
+        INNER JOIN SYS_FILE sf ON smf.SYS_FILE_ID = sf.ID
+        WHERE 1=1
+        <if test="id!=null and id!=''">
+            AND sap.ID = #{id}
+        </if>
+    </select>
+    
+    <!-- 修改预付状态 -->
+    <update id="upPreStatus" parameterType="java.util.Map">
+    	update SYS_ADVANCE_PAYMENT set STATUS=#{status}
+    	where ID=#{id}
+    </update>
+	
+	<!-- 根据id修改意见 -->
+	<update id="upTalk" parameterType="java.util.Map">
+		update SYS_ADVANCE_PAYMENT set Talk=#{talk} 
+		where id=#{id}
+	</update>
+	
+	
+	
+	<!-- <select id="queryByIDs" parameterType="java.util.List"
+            resultMap="adMap">
+        SELECT
+           se.*, zsc.city_name as cityStr,zsco.zh_label as countyStr 
+        FROM SYS_ADVANCE_PAYMENT se
+        left join ZG_SPACE_CITY zsc on se.city_id=zsc.int_id
+		left join ZG_SPACE_COUNTY zsco on se.county_id=zsco.int_id
+        WHERE se.id IN
+        <foreach collection="list" index="index" item="id" open="("
+                 separator="," close=")">
+            #{id,jdbcType=VARCHAR}
+        </foreach>
+    </select> -->
+    
+    <select id="queryByIDs" parameterType="java.util.List"
+            resultMap="adMap">
+        SELECT
+           se.*, zsc.NAME as cityStr,zsco.NAME as countyStr,ss.NAME as supplyStr
+        FROM SYS_ADVANCE_PAYMENT se
+        left join YDJH_AREA zsc on se.city_id=zsc.id
+		left join YDJH_AREA zsco on se.county_id=zsco.id
+		left join SYS_SUPPLIER ss on se.SUPPLY_ID = ss.CODE
+        WHERE se.id IN
+        <foreach collection="list" index="index" item="id" open="("
+                 separator="," close=")">
+            #{id,jdbcType=VARCHAR}
+        </foreach>
+    </select>
+    
+    <delete id="delPreByPaymetNumber" parameterType="java.lang.String">
+    	delete from SYS_ADVANCE_PAYMENT where PAYMENT_NUMBER=#{paymentNumber}
+    </delete>
+	
+	<select id="getOneBySupplyId" parameterType="java.lang.String" resultMap="adMap">
+		select * from SYS_ADVANCE_PAYMENT where SUPPLY_ID=#{supplyId}
+	</select>
+	
+	<!-- 查找登录人预付要处理预付单总量 -->
+	<select id="getPreNum" parameterType="java.lang.String" resultType="java.lang.Integer" >
+		select count(*) from SYS_ADVANCE_PAYMENT where SUBMIT_MAN_ID=#{submitManId} and (status=0 or status=1 or status=3)  
+	</select>
+	
+	<!-- 查找登录人预付要审批预付单 -->
+	<select id="getPreSNum" parameterType="java.lang.String" resultType="java.lang.Integer" >
+		select count(*) from SYS_ADVANCE_PAYMENT where SUBMIT_MAN_ID=#{submitManId} and (status=1)  
+	</select>
+	
+	<!-- 查找登录人预付要处理预付单 -->
+	<select id="getPreCNum" parameterType="java.lang.String" resultType="java.lang.Integer" >
+		select count(*) from SYS_ADVANCE_PAYMENT where SUBMIT_MAN_ID=#{submitManId} and (status=0 or status=3)  
+	</select>
+	
+	  <!-- 查询原有数据库的稽核单数据 -->
+     <select id="getOldEle" parameterType="com.audit.modules.payment.entity.ElectricityFlowVo" resultType="java.lang.String">
+         SELECT se.ID 
+			FROM SYS_ADVANCE_PAYMENT se
+		WHERE
+            1=1
+			AND se.ISOLD = 1
+			<if test="curOpUserID != null and curOpUserID!=''">
+                AND se.SUBMIT_MAN = #{curOpUserID}
+            </if>
+            
+			<if test="flowState != null and flowState!=''">
+                AND se.STATUS = #{flowState}
+            </if>
+            
+			<if test="qSerialNumber != null and qSerialNumber!=''">
+                AND se.SERIAL_NUMBER LIKE '%'||#{qSerialNumber}||'%'
+			</if>
+
+            	
+		 <if test="qStartTime!=null">
+				AND  <![CDATA[se.CREATE_DATE >= #{qStartTime,jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="qEndTime!=null">
+				AND  <![CDATA[se.CREATE_DATE <= #{qEndTime,jdbcType=TIMESTAMP}]]>
+			</if>
+
+
+			
+            
+			ORDER BY se.CREATE_DATE DESC
+        
+    </select>
+</mapper>

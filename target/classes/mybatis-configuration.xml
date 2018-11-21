@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		 <!-- 设置但JDBC类型为空时,某些驱动程序 要指定值,default: OTHER 默认为OTHER，我们指定为NULL --> 
+		 <!-- oracle -->
+         <!-- <setting name="jdbcTypeForNull" value="VARCHAR"/>  -->
+         <!--表明重用预编译的SQL语句-->
+         <setting name="defaultExecutorType" value="REUSE"/>
+         <setting name="logImpl" value="LOG4J"/> 
+	</settings>
+	
+	<!-- 注册 ibaste 配置文件 -->
+	<mappers>
+		<mapper resource="com/audit/modules/system/mapxml/EquRoomDevice.xml" />
+		<mapper resource="com/audit/modules/system/mapxml/File.xml" />
+		<mapper resource="com/audit/modules/system/mapxml/Login.xml" />
+		<mapper resource="com/audit/modules/system/mapxml/OperationLog.xml" />
+		<mapper resource="com/audit/modules/system/mapxml/SysMiddleFile.xml" />
+		<mapper resource="com/audit/modules/system/mapxml/SysRole.xml" />
+		<mapper resource="com/audit/modules/system/mapxml/SystemData.xml" />
+		<mapper resource="com/audit/modules/system/mapxml/User.xml" /> 
+		<mapper resource="com/audit/modules/system/mapxml/SysResource.xml" />
+		<mapper resource="com/audit/modules/system/mapxml/SysRoleResource.xml" />
+		<mapper resource="com/audit/modules/system/mapxml/ZgSpaceCounty.xml" />
+		<mapper resource="com/audit/modules/system/mapxml/SysNotic.xml" />
+		<mapper resource="com/audit/modules/system/mapxml/SysNoticReaded.xml" />
+		<mapper resource="com/audit/modules/system/mapxml/ResourcePoint.xml" />
+		<mapper resource="com/audit/modules/system/mapxml/Department.xml" />
+		
+		<mapper resource="com/audit/modules/contract/mapxml/Contract.xml" />
+		<mapper resource="com/audit/modules/costcenter/mapxml/CostCenter.xml" />
+		<mapper resource="com/audit/modules/electricity/mapxml/ElectricitySubmit.xml" />
+		<mapper resource="com/audit/modules/electricity/mapxml/InputElectricity.xml" />
+		<mapper resource="com/audit/modules/electricity/mapxml/EleCpower.xml" />
+		<mapper resource="com/audit/modules/electricity/mapxml/RoomLocking.xml" />
+		
+		<mapper resource="com/audit/modules/invoice/mapxml/Invoice.xml" />
+		<mapper resource="com/audit/modules/site/mapxml/SiteInfo.xml" />
+		<mapper resource="com/audit/modules/supplier/mapxml/Supplier.xml" />
+		<mapper resource="com/audit/modules/watthourmeter/mapxml/WatthourMeter.xml" />
+		<mapper resource="com/audit/modules/testdemo/mapxml/TestDemo.xml" />
+		<mapper resource="com/audit/modules/payment/mapxml/AdvancePayment.xml" />
+		<mapper resource="com/audit/modules/payment/mapxml/EleMidPayment.xml" />
+		<mapper resource="com/audit/modules/reimbursementgroup/mapxml/ReimbursementGroup.xml"/> 
+		
+		<mapper resource="com/audit/modules/report/mapxml/ElectricCharge.xml" />
+	    <mapper resource="com/audit/modules/report/mapxml/ElectricPower.xml" />	 
+		<mapper resource="com/audit/modules/report/mapxml/BeyondMeSwiRate.xml" />	 
+		<mapper resource="com/audit/modules/report/mapxml/BeyondSwiRate.xml" />	 
+		<mapper resource="com/audit/modules/report/mapxml/ECScare.xml" />	 
+		<mapper resource="com/audit/modules/report/mapxml/FinConsistency.xml" />	 
+		<mapper resource="com/audit/modules/report/mapxml/SingleCarrierCharge.xml" />	 
+		<mapper resource="com/audit/modules/report/mapxml/SmartUsable.xml" />	 
+		<mapper resource="com/audit/modules/report/mapxml/UnitPrice.xml" />	 
+		<mapper resource="com/audit/modules/report/mapxml/SiteSwitchRate.xml" />
+		<mapper resource="com/audit/modules/report/mapxml/StasticRank.xml" />
+		
+		<mapper resource="com/audit/modules/electricity/mapxml/owner.xml" />
+		<mapper resource="com/audit/modules/electricity/mapxml/meter.xml"/>
+	
+		<mapper resource="com/audit/modules/data/mapxml/data.xml"/>
+		
+		<mapper resource="com/audit/modules/basedata/mapxml/AccountSiteManage.xml" />	  
+		<mapper resource="com/audit/modules/basedata/mapxml/AccountSitePSU.xml" />	  
+		<mapper resource="com/audit/modules/basedata/mapxml/AccountSiteOther.xml" />
+		<mapper resource="com/audit/modules/basedata/mapxml/SupplierManage.xml"/>
+		<mapper resource="com/audit/modules/basedata/mapxml/ContractManage.xml"/>
+		<mapper resource="com/audit/modules/basedata/mapxml/PowerRateManage.xml"/>	
+		<mapper resource="com/audit/modules/basedata/mapxml/DataModifyApply.xml"/>	 
+		<mapper resource="com/audit/modules/basedata/mapxml/DataModifyLog.xml"/>
+		<mapper resource="com/audit/modules/basedata/mapxml/AccountSiteTrans.xml"/>	 
+		
+		<mapper resource="com/audit/file/excel/mapxml/SiteStatistic.xml" />
+		<mapper resource="com/audit/file/excel/mapxml/SmartMeter.xml" />
+		<mapper resource="com/audit/file/excel/mapxml/PowerRating.xml" />		
+		
+		<mapper resource="com/audit/modules/dataimport/mapxml/ZgDataImport.xml"/>
+		<mapper resource="com/audit/modules/site/mapxml/Beanchmark.xml"/>
+
+
+		<mapper resource="com/audit/modules/tower/mapxml/TowerSite.xml"/>
+		<mapper resource="com/audit/modules/electricity/mapxml/TowerElectricity.xml"/>
+		<mapper resource="com/audit/modules/electricity/mapxml/TowerReimburse.xml"/>
+		<mapper resource="com/audit/modules/towerbasedata/datashow/mapxml/TowerBaseData.xml"/>
+		<mapper resource="com/audit/modules/towerbasedata/datashow/mapxml/TowerPowerRated.xml"/>
+		
+        <mapper resource="com/audit/modules/towerbasedata/contract/mapxml/TowerContract.xml"/>
+        <mapper resource="com/audit/modules/towerbasedata/other/mapxml/TowerOther.xml"/>
+        <mapper resource="com/audit/modules/towerbasedata/powerrate/mapxml/TowerPowerRate.xml"/>
+        <mapper resource="com/audit/modules/towerbasedata/psu/mapxml/TowerPSU.xml"/>
+        <mapper resource="com/audit/modules/towerbasedata/trans/mapxml/TowerTrans.xml"/>
+        
+ 		<mapper resource="com/audit/modules/towerReport/mapxml/ElectricChargeTower.xml" />
+	    <mapper resource="com/audit/modules/towerReport/mapxml/ElectricPowerTower.xml" />	 
+		<mapper resource="com/audit/modules/towerReport/mapxml/BeyondMeSwiRateTower.xml" />	 
+		<mapper resource="com/audit/modules/towerReport/mapxml/BeyondSwiRateTower.xml" />	 
+		<mapper resource="com/audit/modules/towerReport/mapxml/ECScareTower.xml" />	 
+		<mapper resource="com/audit/modules/towerReport/mapxml/FinConsistencyTower.xml" />	 
+		<mapper resource="com/audit/modules/towerReport/mapxml/SingleCarrierChargeTower.xml" />	 
+		<mapper resource="com/audit/modules/towerReport/mapxml/SmartUsableTower.xml" />	 
+		<mapper resource="com/audit/modules/towerReport/mapxml/UnitPriceTower.xml" />	 
+		<mapper resource="com/audit/modules/towerReport/mapxml/SiteSwitchRateTower.xml" />
+		
+		<mapper resource="com/audit/modules/workflow/mapper/workflow.xml" />
+		<mapper resource="com/audit/modules/payment/mapxml/PreSubmit.xml"></mapper>
+		
+		<!-- 白名单xml -->
+		<mapper resource="com/audit/modules/basedata/mapxml/WhiteMg.xml"/>
+		<mapper resource="com/audit/modules/basedata/mapxml/WhiteDataMg.xml"/>
+		
+       </mappers>
+</configuration>

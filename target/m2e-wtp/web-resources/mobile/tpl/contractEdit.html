@@ -1,0 +1,30 @@
+﻿ <!-- 
+    合同详情查看
+  -->
+<div class="ngdialog-content" role="document" style="width: 605px;">
+<div class="reimbur-dialog-title">合同信息管理详情</div>
+<div class="business-box" id="businessBox">
+    <div class="contract-edit">
+        <form action="">
+            <ul class="user-list">
+                <li><span>合同编号:</span><input  type="text" name="" value="{{contract.contractNumber}}" readonly="readonly"><i class="error" ></i></li>
+                <li><span>合同名称:</span><input  type="text" name="" value="{{contract.contractName}}" readonly="readonly"><i class="error" ></i></li>
+                <li><span>所属分公司:</span><input type="text" name="" value="{{contract.companyName}}" readonly="readonly"><i class="error" ></i></li>
+                <li><span>合同状态:</span><input type="text" name="" value="{{contract.contractStatus}}" readonly="readonly"><i class="error" ></i></li>
+				<li><span>合同生效日期:</span><input type="text" name="" class="table-right " value="{{contract.startDateStr | date:'yyyy-MM-dd'}}" readonly="readonly"><i class="error"></i></li>
+                <li><span>合同终止日期:</span><input type="text" name="" class="table-right " value="{{contract.endDateStr | date:'yyyy-MM-dd'}}" readonly="readonly"><i class="error"></i></li>
+                <li><span>包干类型:</span><input type="text" name="" value="" readonly="readonly"><i class="error"></i></li>
+                <li><span>单价:</span><input  type="text" name="" value="{{contract.unitPrice}}" readonly="readonly"><i class="error"></i></li>
+               <li><span>缴费周期:</span><input type="text" name="" value="{{contract.paymentCycle}}" ><i class="error"></i></li> 
+			   <li><span>电表户号:</span><input type="text" name="" value="{{contract.paymentAccountCode}}" ><i class="error"></i></li> 
+				<li><span>缴费站点:</span><input type="text" name="" value="{{contract.siteName}}" ><i class="error"></i></li>
+				<li><span>分级审批记录:</span><input type="text" name="" value="{{contract.isUploadOverproof}}" ><i class="error"></i></li>
+				<li><span>包干价:</span><input type="text" name="" value="{{contract.cludPrice}}" ><i class="error"></i></li>
+		   </ul>
+            <div class="submit-btn" style="padding-left: 0px;">
+                <button ng-click="closeDialog('openContractDetail')" type="button"  class="reimbur-save btn">关闭</button>
+            </div>
+        </form>
+    </div>
+</div>
+     </div>

@@ -1,0 +1,149 @@
+/*
+	*@description: 添加用户
+	*@author: tmliua
+	*@data: 2017.4.17
+ */
+.add-user {
+	height: 100%;
+	overflow: auto;
+	background-color: #fff;
+}
+.user-list {
+	padding: 20px;
+	overflow: auto;
+}
+.user-list li {
+	position: relative;
+	margin-bottom: 20px;
+}
+/* 错误提示 */
+.user-list .error {
+	color: red;
+	padding: 10px 0px 10px 100px;
+	box-sizing: border-box;
+} 
+.user-list li span {
+	display: inline-block;
+	vertical-align: middle;
+	width: 74px;
+	text-align: right;
+	margin-right: 12px;
+}
+.user-list li span:before {
+	content: "*";
+	margin-right: 5px;
+	color: red;
+}
+.user-list li:nth-of-type(2) span:before {
+	content:"";
+}
+.user-list li:nth-of-type(4) span:before {
+	content:"";
+}
+.user-list li:nth-of-type(5) span:before {
+	content:"";
+}
+.user-list li input[type="text"],
+.user-list li .select {
+	width: 380px;
+	height: 38px;
+	line-height: 38px;
+	padding-left: 5px;
+	box-sizing: border-box;
+	border: none;
+	border: 1px solid #d3d4d6;
+}
+/* 省市区县下拉框 */
+.user-list li .select {
+	position: relative;
+	margin-right: 0;
+	margin-left: -4px;
+	text-align: left;
+}
+.user-list li .select:before {
+	content: "";
+}
+.user-list li .select:after {
+	content: "";
+    position: absolute;
+    right: 10px;
+    top: 14px;
+    display: inline-block;
+    vertical-align: middle;
+    height: 0;
+    width: 0;
+    border-top: 4px dashed #000000;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+}
+.sub-select {
+	display: none;
+	position: absolute;
+	width: 380px;
+	left: 86px;
+	overflow: auto;
+	max-height: 200px;
+	background-color: #fff;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	-ms-border-radius: 4px;
+	-o-border-radius: 4px;
+	border-radius: 4px;
+    box-shadow: 0 1px 10px #999;
+    z-index:10;
+}
+.sub-select li {
+	padding: 10px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #fdf7f7;
+    margin-bottom: 0;
+}
+.sub-select li:hover {
+	background-color: #f9fbfe;
+}
+/* 角色选择 */ 
+.role-check {
+	display: inline-block;
+	vertical-align: top;
+}
+.role-check li {
+	float: left;
+	margin-right: 30px;
+}
+.role-check .role-checkbox {
+	margin-right: 8px;
+}
+/* 账号单选 */
+.normal-btn,
+.locking-btn {
+	margin-right: 5px !important; 
+}
+.user-list li label {
+	font-weight: normal;
+	margin-right: 10px;
+	cursor: pointer;
+}
+/* 提交按钮 */
+.submit-btn {
+	padding-left: 100px;
+} 
+.submit-btn .save,
+.submit-btn .cancel {
+	display: inline-block;
+	vertical-align: middle;
+	width: 94px;
+    height: 38px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    -ms-border-radius: 2px;
+    -o-border-radius: 2px;
+    border-radius: 2px;
+    background: #4b8de6;
+    color: #fff;
+    font-weight: 700;
+    margin-right: 12px;
+    border: none;
+}
+.submit-btn .cancel {
+	background: #d2d6df;
+}

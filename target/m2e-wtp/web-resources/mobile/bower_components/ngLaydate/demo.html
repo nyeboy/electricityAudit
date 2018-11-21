@@ -1,0 +1,30 @@
+﻿<!doctype html>
+<html ng-app="app">
+<head>
+<meta charset="utf-8">
+<title>layDate Demo</title>
+
+<script src="laydate/laydate.js"></script>
+
+<script src="angular.min.js"></script> 
+
+<script src="ngLaydate.js"></script>
+
+<body ng-controller="appCtrl">
+
+date: <input type="date" ng-model="state" />	
+
+<button ng-click="test()">获取值</button>
+
+<!-- <input def-laydate type="text" id="id1" ng-model="startTime"/>  -->
+
+
+<input ng-laydate type="text" id="id1"
+       ng-model="startTime"
+       format="YYYY-MM-DD hh:mm:ss"
+       max-date="{{model.max}}"
+       min-date="{{model.min}}"/>
+
+<script src="app.js"></script>
+</body>
+</html>

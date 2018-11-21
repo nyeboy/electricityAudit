@@ -1,0 +1,78 @@
+﻿<!-- 用户切换列表  弹框形式-->
+<style>
+.search-box {
+ border: 0px solid #edf0f0;
+ background-color:transparent;
+}
+
+.search-box .title-select {
+width: 16%;
+
+}
+
+.search-box .process-input {
+width: 18%;
+
+}
+
+</style>
+
+<div class="reimbur-dialog">
+    <div class="search-box">     
+              <div>    
+                    <select name="" id="" class="title-select" >                           
+                    <option  value="">四川省</option>
+                    </select>
+                    <select name="" id="" class="title-select"
+                            ng-model="$parent.cityId"
+                            ng-options="city.key as city.value for city in citys"
+                            ng-change="queryCountyList(cityId)">
+                    <option  value="">全省</option>
+                    </select>
+                    <select name="" id="" class="title-select"
+                    		ng-model="$parent.countyId"
+                            ng-options="county.key as county.value for county in countys">
+                    <option value="" >全市</option>
+                    </select>
+                    <span class="btn btn-primary" >角色</span>
+                    <select name="" id="roleId" class="title-select"
+                    		ng-model="$parent.roleId"
+                            ng-options="role.roleId as role.roleName for role in roles">
+                    <option value="" > -- 请选择角色 -- </option>
+                    </select>	
+                    <span class="btn btn-primary" >用户名</span>             
+                    <input id="name" ng-model="name" type="text" placeholder="请输入用户名" name="" class="process-input con-parts" >               
+               </div> 
+                <button ng-click="getAccountData(true)" class="btn btn-primary" type="button">搜索</button>
+    </div>
+    <div class="table-details">
+        <div>
+            <table id="table_list">
+                <tbody class="query-date" id="ContractList">
+                    <tr>
+                        <th>序号</th>
+                        <th>城市</th>
+                        <th>区县</th>
+                        <th>角色</th>
+                        <th>登录名</th>
+                        <th>操作</th>
+                    </tr>
+                    <tr ng-repeat="item in list track by $index">
+                       <td>{{((params.pageNo-1)*params.pageSize) +1*($index+1)}}</td>
+                        <td>{{item.areas}}</td>
+                        <td>{{item.counties}}</td>
+                        <td>{{item.roleName}}</td>
+                        <td>{{item.account}}</td>  
+                        <td><a ng-click="shift(item)" class="check-detail" >切换</a></td>                    
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div style="text-align: right;">
+        <im-pagination conf="sApageInfo" params="params" get-data="getAccountData()"></im-pagination>
+    </div>
+    <div class="reimbur-foot">
+        <button ng-click="closeDialogs('shiftAccountDialogs')" class="reimbur-save btn">关闭</button> 
+    </div>
+</div>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.basedata.dao.WhiteDataMgDao">
+
+	<resultMap type="com.audit.modules.system.entity.WhiteMg" id="whiteMap" >
+		<id property="id" column="ID"></id>
+		<result property="cityId" column="CITY_ID"/>
+		<result property="countyId" column="COUNTY_ID"/>
+		<result property="siteName" column="SITE_NAME"/>
+		<result property="ziguanName" column="ZIGUAN_NAME"/>
+		<result property="siteNo" column="SITE_NO"/>
+		<result property="tsiteNo" column="TSITE_NO"/>
+		<result property="status" column="STATUS"/>
+		<result property="szydNo" column="SZYD_NO"/>
+		<result property="endTime" column="END_TIME"/>
+		<result property="cj" column="CJ"/>
+		<result property="fj" column="FJ"/>
+		<result property="cperson" column="CPERSON"/>
+		<result property="siteId" column="SITE_ID"/>
+		<result property="sureTime" column="SURE_TIME"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="updateTime" column="UPDATE_TIME"/>
+		<result property="contractId" column="CONTRACT_ID"/>
+		<result property="cityName" column="CITY_NAME"/>
+		<result property="zhLabel" column="ZH_LABEL"/>
+		<result property="contractName" column="CONTRACT_NAME"/>
+		<result property="contractDate" column="CONTRACT_DATE"/>
+		<result property="payType" column="PAYTYPE"/>
+		<result property="price" column="PRICE"/>
+		<result property="fTan" column="FTAN"/>
+		<result property="contractStatus" column="CONTRACT_STATUS"/>
+		<result property="supplyName" column="SUPPLIER_NAME"/>
+		<result property="supplySiteId" column="SUPPLIER_SITE_ID"/>
+		<result property="supplyerOrganizationId" column="SUPPLIER_ORGANIZATION_ID"/>
+		<result property="bankName" column="BANK_NAME"/>
+		<result property="bankacName" column="BANKAC_NAME"/>
+		<result property="bankNum" column="BANK_NUM"/>
+		<result property="contractEndTime" column="CONTRACT_END_TIME"/>
+	</resultMap>
+	
+	<resultMap type="com.audit.modules.basedata.entity.WhiteSubmit" id="whiteSubmitMap" >
+		<id property="id" column="ID"></id>
+		<result property="cityId" column="CITY_ID"/>
+		<result property="countyId" column="COUNTY_ID"/>
+		<result property="siteName" column="SITE_NAME"/>
+		<result property="ziguanName" column="ZIGUAN_NAME"/>
+		<result property="siteNo" column="SITE_NO"/>
+		<result property="tsiteNo" column="TSITE_NO"/>
+		<result property="status" column="STATUS"/>
+		<result property="szydNo" column="SZYD_NO"/>
+		<result property="endTime" column="END_TIME"/>
+		<result property="cj" column="CJ"/>
+		<result property="fj" column="FJ"/>
+		<result property="cperson" column="CPERSON"/>
+		<result property="siteId" column="SITE_ID"/>
+		<result property="sureTime" column="SURE_TIME"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="updateTime" column="UPDATE_TIME"/>
+		<result property="contractId" column="CONTRACT_ID"/>
+		<result property="cityName" column="CITY_NAME"/>
+		<result property="zhLabel" column="ZH_LABEL"/>
+		<result property="contractName" column="CONTRACT_NAME"/>
+		<result property="contractDate" column="CONTRACT_DATE"/>
+		<result property="payType" column="PAYTYPE"/>
+		<result property="price" column="PRICE"/>
+		<result property="fTan" column="FTAN"/>
+		<result property="contractStatus" column="CONTRACT_STATUS"/>
+		<result property="supplyName" column="SUPPLIER_NAME"/>
+		<result property="supplySiteId" column="SUPPLIER_SITE_ID"/>
+		<result property="supplyerOrganizationId" column="SUPPLIER_ORGANIZATION_ID"/>
+		<result property="bankName" column="BANK_NAME"/>
+		<result property="bankacName" column="BANKAC_NAME"/>
+		<result property="bankNum" column="BANK_NUM"/>
+		<result property="contractEndTime" column="CONTRACT_END_TIME"/>
+		<result property="szydBeginTime" column="SZYD_BEGIN_TIME"/>
+		<result property="submitStatus" column="SUBMIT_STATUS"/>
+		<result property="userRoleLevel" column="USER_ROLE_LEVEL"/>
+	</resultMap>
+	
+	<resultMap type="com.audit.modules.basedata.entity.whiteSubmitMg" id="whiteSubmitMgMap">
+		<id property="id" column="ID"></id>
+		<result property="cityName" column="CITY_NAME"/>
+		<result property="zhLabel" column="ZH_LABEL"/>
+		<result property="status" column="STATUS"/>
+		<result property="szydNo" column="SZYD_NO"/>
+		<result property="endTime" column="END_TIME"/>
+		<result property="cperson" column="CPERSON"/>
+		<result property="cj" column="CJ"/>
+		<result property="submitTime" column="SUBMIT_TIME"/>
+		<result property="updateTime" column="UPDATE_TIME"/>
+		<result property="ziguanName" column="ZIGUAN_NAME"/>
+		<result property="szydBeginTime" column="SZYD_BEGIN_TIME"/>
+	</resultMap>
+	
+	<resultMap type="com.audit.modules.basedata.entity.WhiteCpersonFile" id="whiteCpersonFileMap">
+		<id property="id" column="ID"></id>
+		<result property="fileId" column="FILE_ID"/>
+		<result property="cperson" column="CPERSON"/>
+	</resultMap>
+	
+<select id="getWhiteSubmitByPage"  resultMap="whiteSubmitMap">
+	select * from sys_white_submit
+</select>
+
+<select id="getWhiteSubmitTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
+	select count(*) from sys_white_submit
+	 where 1=1
+	 and city_id=#{cityId}
+	 <if test="obj.siteName!=null and obj.siteName!=''">and site_name=#{obj.siteName}</if>
+	 <if test="obj.szydNo!=null and obj.szydNo!=''">and szyd_no=#{obj.szydNo}</if>
+</select>
+
+
+</mapper>

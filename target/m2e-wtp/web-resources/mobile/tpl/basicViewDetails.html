@@ -1,0 +1,235 @@
+ <!-- 基础数据查看详情 -->
+ <div class="view-details">
+    <div class="details-tab">
+         <span ng-click="showAll(true)" class="open-menu">全部展开</span>
+         <span ng-click="showAll(false)"  class="stop-menu">全部收起</span>
+    </div>
+    <ul class="basic-details">
+        <li class="list list-hover" ng-click="basicinfo(1)" >
+            <span>报账点信息</span>
+            <i class="arrow"></i>
+            <table class="Reimbursement">
+                <thead>
+                    <tr>
+                        <th>地市</th>
+                        <th>区县</th>
+                        <th>报账点名称</th>
+                        <th>报账点别名</th>
+                        <th>原财务站点名称</th>
+                        <th>产权性质</th>
+                        <th>缴费类别</th>
+                        <th>所属专业</th>
+                    </tr>
+                </thead>
+                <tbody>
+                     <tr> 
+                         <td>{{object.siteInfoVO.area}}</td>
+                         <td>{{object.siteInfoVO.county}}</td>
+                         <td>{{object.siteInfoVO.accountName}}</td>
+                         <td>{{object.siteInfoVO.accountAlias}}</td>
+                         <td>{{object.siteInfoVO.oldFinanceName}}</td>
+                         <td>{{object.siteInfoVO.productNature == 0?"自维":"塔维"}}</td>
+                         <td>{{object.siteInfoVO.payTypee | jfType}}</td>
+                         <td>{{object.siteInfoVO.professional}}</td>
+                     </tr>
+                </tbody>
+            </table>
+        </li>
+         <li class="list list-hover" ng-click="basicinfo(8)">
+            <span>机房信息</span>
+            <i class="arrow"></i>
+            <table class="eqRoom">
+                <thead>
+                    <tr>
+                        <th>机房名称</th>
+                        <th>在网状态</th>
+                        <th>供电类型</th>
+                        <th>所属类型</th>
+                    </tr>
+                </thead>
+                <tbody>
+                     <tr ng-repeat="item in object.eqRoomVO track by $index"> 
+                         <td>{{item.zhLable}}</td>
+                         <td>{{item.status}}</td>
+                         <td>{{item.PSType}}</td>
+                         <td>{{item.property}}</td>
+                     </tr>
+                </tbody>
+            </table>
+        </li>
+        <li class="list list-hover" ng-click="basicinfo(9)">
+            <span>资源点信息</span>
+            <i class="arrow"></i>
+            <table class="rePoint">
+                <thead>
+                    <tr>
+                        <th>资源点名称</th>
+                        <th>在网状态</th>
+                        <th>所属类型</th>
+                    </tr>
+                </thead>
+                <tbody>
+                     <tr ng-repeat="item in object.rePointVO track by $index"> 
+                         <td>{{item.zhLable}}</td>
+                         <td>{{item.status}}</td>
+                         <td>{{item.property}}</td>
+                     </tr>
+                </tbody>
+            </table>
+        </li>
+        <li class="list list-hover" ng-click="basicinfo(2)">
+            <span>合同信息</span>
+            <i class="arrow"></i>
+            <table class="contract">
+                <thead>
+                    <tr>
+                        <th>合同ID</th>
+                        <th>合同名称</th>
+                        <th>合同生效日期</th>
+                        <th>合同终止日期</th>
+                        <th>是否包干</th>
+                        <th>包干价</th>
+                        <th>缴费周期</th>
+                        <th>电表户号</th>
+                        <th>单价</th>
+                    </tr>
+                </thead>
+                <tbody>
+                     <tr> 
+                         <td>{{object.contractVO.id}}</td>
+                         <td>{{object.contractVO.name}}</td>
+                         <td>{{object.contractVO.startDate | date:"yyyy-MM-dd" }}</td>
+                         <td>{{object.contractVO.endDate | date:"yyyy-MM-dd" }}</td>
+                         <td>{{object.contractVO.isClud | isCludFilter}}</td>
+                         <td>{{object.contractVO.cludPrice}}</td>
+                         <td>{{object.contractVO.paymentCycle | paymentCycleFilter}}</td>
+                         <td>{{object.contractVO.paymentAccountCode}}</td>
+                         <td>{{object.contractVO.unitPrice}}</td>
+                     </tr>
+                </tbody>
+            </table>
+        </li>
+        <li class="list list-hover" ng-click="basicinfo(3)">
+            <span>供应商信息</span>
+            <i class="arrow"></i>
+            <table class="Supplier">
+                <thead>
+                    <tr>
+                        <th>供应商名称</th>
+                        <th>供应商ID</th>
+                        <th>供应商组织结构代码</th>
+                        <th>供应商地点ID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                     <tr> 
+                         <td>{{object.supplierVO.name}}</td>
+                         <td>{{object.supplierVO.code}}</td>
+                         <td>{{object.supplierVO.organizationCode}}</td>
+                         <td>{{object.supplierVO.regionCode}}</td>
+                     </tr>
+                </tbody>
+            </table>
+        </li>
+        <li class="list list-hover" ng-click="basicinfo(4)">
+            <span>供电信息</span>
+            <i class="arrow"></i>
+            <table class="Power">
+                <thead>
+                    <tr>
+                        <th>用电类型</th>
+                        <th>供电公司/业主</th>
+                        <th>共享方式</th>
+                        <th>电费缴纳方式</th>
+                    </tr>
+                </thead>
+                <tbody>
+                     <tr> 
+                         <td>{{object.siteInfoVO.electricityType==1?"直供电":object.siteInfoVO.electricityType==2?"转供电":null}}</td>
+                         <td>{{object.siteInfoVO.supplyCompany==1?"供电公司":object.siteInfoVO.supplyCompany==2?"业主":null}}</td>
+                         <td>{{object.siteInfoVO.shareType==1?"共享":object.siteInfoVO.shareType==2?"独享":null}}</td>
+                         <td>{{object.siteInfoVO.payType | payTypeFilter}}</td>
+                     </tr>
+                </tbody>
+            </table>
+        </li>
+        <li class="list list-hover" ng-click="basicinfo(5)">
+            <span>电表信息</span>
+            <i class="arrow"></i>
+            <table class="Table">
+                <thead>
+                    <tr>
+                        <th>电表号</th>
+                        <th>电表编号</th>
+                        <th>电表户号</th>
+                        <th>电表类型</th>
+                        <th>电表状态</th>
+                        <th>倍率</th>
+                        <th>最大读数</th>
+                        <th>当前读数</th>
+                        <th>当前电费归属日期</th>
+                        <th>所属户头</th>
+                    </tr>
+                </thead>
+                <tbody>
+                     <tr ng-repeat="item in object.watthourMeterVO track by $index"> 
+                         <td>{{item.id}}</td>
+                         <td>{{item.code}}</td>
+                         <td>{{item.paymentAccountCode}}</td>
+                         <td>{{item.ptype == 1?"普通":item.ptype == 2?"智能":null}}</td>
+                         <td>{{item.status == 1?"正常":item.status == 1?"损坏":null}}</td>
+                         <td>{{item.rate}}</td>
+                         <td>{{item.maxReading}}</td>
+                         <td>{{item.currentReadingStr}}</td>
+                         <td>{{item.reimbursementDateStr | date:"yyyy-MM-dd"}}</td>
+                         <td>{{item.belongAccount==1?"移动":item.belongAccount==2?"铁塔":null}}</td>
+                     </tr>
+                </tbody>
+            </table>
+        </li>
+        <li class="list list-hover" ng-click="basicinfo(6)">
+            <span>机房设备信息</span>
+            <i class="arrow"></i>
+            <table class="Computer">
+                <thead>
+                    <tr>
+                        <th>机房或资源点名称</th>
+                        <th>机房类型</th>
+                        <th>网元状态</th>
+                        <th>设备专业</th>
+                        <th>设备类型</th>
+                        <th>型号</th>
+                        <th>生产厂家</th>
+                        <th>数量</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="item in object.deviceVO track by $index">
+                        <td>{{item.equipmentRoomName}}</td>
+                        <td>{{item.equipmentRoomType}}</td>
+                        <td>{{item.deviceStatus}}</td>
+                        <td>{{item.deviceBelong}}</td>
+                        <td>{{item.deviceType}}</td>
+                        <td>{{item.deviceModel}}</td>
+                        <td>{{item.deviceVendor}}</td>
+                        <td>{{item.number}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </li>
+        <li class="list list-hover" ng-click="basicinfo(7)">
+            <span>其他信息</span>
+            <i class="arrow"></i>
+            <table class="other">
+                <thead>
+                    <tr>
+                        <th>报销周期</th>
+                     </tr>
+                </thead>
+                <tbody>
+                	<td>{{object.siteInfoVO.cycle | paymentCycleFilter}}</td>
+                </tbody> 
+            </table>
+        </li>                 
+    </ul>
+</div>

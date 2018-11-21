@@ -1,0 +1,91 @@
+ <!-- 基础数据维护--额定功率管理 -->
+<div class="system-content" id="systemContent" style="overflow: hidden">
+    <div class="business-box" id="businessBox">
+        <div class="content-rout" id="contentRout">
+            <span>基础数据</span>&gt;<span>基础数据维护</span>&gt;<span class="now-rout">额定功率管理</span>
+            <button ng-click="downRateExcelGo()" class="btn btn-primary" type="button">导出excel</button>
+        </div>
+        <div class="content-box basic-display" id="contentBox">
+            <div class="search-box">
+                <div>
+                    <select
+                        name="" id="" class="title-select"
+                        ng-model="cityId"
+                        ng-options="city.key as city.value for city in citys"
+                        ng-change="queryCountyList(cityId)">
+                        <option value="">全省</option>
+                    </select>
+                    <select class="title-select"
+                            ng-model="countyId"
+                            ng-options="county.key as county.value for county in countys">
+                        <option value="">全市</option>
+                    </select>
+                    <input ng-model="deviceType" type="text" placeholder="设备类型" class="process-input con-parts">
+                    <input ng-model="deviceModel" type="text" placeholder="设备型号" class="process-input con-parts">
+                </div>
+                <button ng-click="getData(true)" class="btn btn-primary import" type="button">搜索</button>
+            </div>
+            <!-- table-content -->
+            <div class="table-content">
+                <!-- table -->
+                <div class="data-table">
+                    <!--<table class="table-result">-->
+                        <!--<colgroup>-->
+                            <!--<col style="width:8%">-->
+                            <!--<col style="width:14.25%">-->
+                            <!--<col style="width:14.25%">-->
+                            <!--<col style="width:16.25%">-->
+                            <!--<col style="width:16.25%">-->
+                            <!--<col style="width:16.25%">-->
+                            <!--<col style="width:14.5%">-->
+                        <!--</colgroup>-->
+                        <!--<thead>-->
+                        <!---->
+                        <!--</thead>-->
+                    <!--</table>-->
+                    <div class="table-details">
+                        <div id="exportable">
+                            <table>
+                                <!--<colgroup>-->
+                                    <!--<col style="width:8%">-->
+                                    <!--<col style="width:14.25%">-->
+                                    <!--<col style="width:14.25%">-->
+                                    <!--<col style="width:16.25%">-->
+                                    <!--<col style="width:16.25%">-->
+                                    <!--<col style="width:16.25%">-->
+                                    <!--<col style="width:14.5%">-->
+                                <!--</colgroup>-->
+                                <tbody class="query-date">
+                                <tr>
+                                    <th>序号</th>
+                                    <th>设备类型</th>
+                                    <th>型号</th>
+                                    <th>生产厂家</th>
+                                    <th>额定功率</th>
+                                    <th>时间</th>
+                                    <th>操作</th>
+                                </tr>
+                                    <tr ng-repeat="item in list track by $index">
+                                        <td>{{((params.pageNo-1)*params.pageSize)+1*(1+$index)}}</td>
+                                        <td>{{item.deviceType}}</td>
+                                        <td>{{item.deviceModel}}</td>
+                                        <td>{{item.deviceVendor}}</td>
+                                        <td>{{item.powerRating}}</td>
+                                        <td>{{item.updateDateStr}}</td> 
+                                        <td>
+                                            <a ng-click="editedRMS(item)" href="javascript:void(0)" class="edit-process">修改</a>
+                                            <a ng-click="deleteRMS(item)" href="javascript:void(0)" class="delete">删除</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="page-foot">
+                        <im-pagination conf="pageInfo" params="params" get-data="getData()"></im-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

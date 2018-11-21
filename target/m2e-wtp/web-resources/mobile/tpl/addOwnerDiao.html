@@ -1,0 +1,142 @@
+<!-- 新增业主信息弹框 dialog -->
+<div class="ledge-detail add-details">
+    <div class="ledge-title">业主信息管理</div>
+    <div class="ledge-table">
+        <form action="" name="angularForm" novalidate="novalidate">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>
+                            <span class="table-left sign sign">地市:</span>
+                            <select name="" id="" class="table-right" required="required" 
+                                ng-model="resultData.cityId"
+                                ng-options="city.key as city.value for city in citys"
+                                ng-change="queryCountyList(resultData.cityId)" style="padding-left: 0px;padding-right: 0px;">
+                            </select>
+                        </td>
+                        <td>
+                            <span class="table-left sign">区县:</span>
+                            <select class="table-right" required="required" 
+                                ng-model="resultData.countyId"
+                                ng-options="county.key as county.value for county in countys" style="padding-left: 0px;padding-right: 0px;">
+                            </select>
+                        </td>
+                        <td>
+                            <span class="table-left sign">业主名称:</span>
+                            <input type="text" name="" class="table-right" value="" required="required"  ng-model="resultData.ownerName">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="table-left sign">业主开户银行:</span>
+                            <input type="text" name="" class="table-right" value="" required="required"  ng-model="resultData.bankName" >
+                        </td>
+                        <td>
+                            <span class="table-left sign">业主银行账号:</span>
+                            <input type="text" name="" class="table-right" value="" required="required"  ng-model="resultData.bankAccount" ng-blur="checkBankAccount(resultData)">
+                        </td>
+                        <td>
+                            <span class="table-left sign">供应商:</span>
+                            <input type="text" name="" class="table-right" value="" required="required"  ng-model="resultData.supplier" >
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="table-left sign">用电协议单位:</span>
+                            <input type="text" name="" class="table-right" value="" required="required"  ng-model="resultData.useCompany">
+                        </td>
+                        <td>
+                            <span class="table-left sign">用电协议起始日期:</span>
+                            <input 
+                                ng-laydate
+                                id="id1" 
+                                ng-model="resultData.startTimeStr"
+                                format="YYYY-MM-DD"
+                                type="text" name="" class="table-right" value="" required="required" >
+                        </td>
+                        <td>
+                            <span class="table-left sign">用电协议终止日期:</span>
+                            <input 
+                                ng-laydate
+                                id="id2"
+                                format="YYYY-MM-DD"
+                                min-date="{{resultData.startTimeStr}}"
+                                ng-model="resultData.endTimeStr"
+                                type="text" name="" class="table-right " value="" required="required" >
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="table-left sign">用电协议单价:</span>
+                            <input type="text" name="" class="table-right"  value="" ng-model="resultData.price"  ng-change="checkPrice(resultData)" >
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+    <!-- 稽核单列表-->
+    <div class="ledge-title ledge-sub">
+        电表明细 <span ng-click="addElectricInfoDetail()" class="add-btn" >新增电表</span>
+    </div>
+    <div class="invoinc-table">
+<!--         <table class="table-result">
+            <colgroup>
+                <col style="width:15%" />
+                <col style="width:15%" />
+                <col style="width:15%" />
+                <col style="width:15%" />
+                <col style="width:20%" />
+                <col style="width:20%" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>电表号</th>
+                    <th>电表标识符</th>
+                    <th>电表户号</th>
+                    <th>用电类型</th>
+                    <th>用电用途</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+        </table> -->
+        <div class="table-details invoinc-list">
+            <div>
+                <table>
+               <!--      <colgroup>
+                        <col style="width:15%" />
+                        <col style="width:15%" />
+                        <col style="width:15%" />
+                        <col style="width:15%" />
+                        <col style="width:20%" />
+                        <col style="width:20%" />
+                    </colgroup> -->
+                    <tbody class="query-date" >
+                    <th>电表号</th>
+                    <th>电表标识符</th>
+                    <th>电表户号</th>
+                    <th>用电类型</th>
+                    <th>用电用途</th>
+                    <th>操作</th>
+                        <tr ng-repeat="item in resultData.meterList track by $index">
+                            <td>{{item.meterNumber}}</td>
+                            <td>{{item.meterIdentifier}}</td>
+                            <td>{{item.meterAccout}}</td>
+                            <td>{{item.meterType}}</td>
+                            <td>{{item.meterPurpose}}</td>
+                            <td>
+                                <!-- <a ng-click="queryElectricInfoDetail(item)" class="check-detail">查看</a> -->
+                                <a ng-click="modifyElectrictySingle(item,$index)" class="edit-process">修改</a>
+                                <a ng-click="deleteElectrictySingle(item,$index)" class="delete">删除</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+<div class="reimbur-foot ledge-foot">
+        <button ng-click="closeDialog('addOwnerInfoDialog')" class="reimbur-cancel btn">取消</button>
+        <button ng-click="addOwnerInfo()" class="reimbur-save btn">提交</button> 
+    </div>
+</div>

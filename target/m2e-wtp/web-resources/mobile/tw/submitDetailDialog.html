@@ -1,0 +1,180 @@
+﻿<!-- 塔维电费录入页面 查看详情及修改弹框 -->
+<div class="ledge-detail add-details">
+<div class="reimbur-dialog-title">电费录入页面详情</div>
+    
+    <div class="ledge-title">台账明细</div>
+    <div class="ledge-table">
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                        <span class="table-left">稽核单流水号:</span>
+                        <input ng-model="object.serialNumber" type="text" disabled="disabled" name="" class="table-right">
+                    </td>
+                    <td>
+                        <span class="table-left">地市:</span>
+                        <input type="text" ng-model="object.areas" disabled="disabled" name="" class="table-right" value="成都_后勤服务中心_彭郎" >
+                    </td>
+                    <td>
+                        <span class="table-left">区县:</span>
+                        <input type="text" ng-model="object.counties" disabled="disabled" name="" class="table-right" value="">
+                    </td>
+                </tr>
+                <tr>
+                
+                    <td>
+                        <span class="table-left">铁塔站址编号:</span>
+                        <input 
+                            ng-readonly= "true"
+                            ng-model="object.sysTowerSitNo"
+                            ng-click="getTowerSite()"
+                            type="text" ng-disabled = "flagSave" name="" class="table-right" value="">
+                        <i ng-if="flag" ng-click="getTowerSite()" class="search-icon"></i>
+                    </td>
+                    <td>
+                        <span class="table-left">资管站点名称:</span>
+                        <input
+                            ng-readonly= "true"
+                            ng-disabled = "flagSave" 
+                            ng-model="object.zgSpaceSiteName"
+                            type="text"  name="" class="table-right" value="">
+                    </td>
+                    <td>
+                        <span class="table-left">铁塔站址名称:</span>
+                        <input 
+                            ng-readonly= "true"
+                            ng-disabled = "flagSave"
+                            ng-model="object.zgTowerSiteName"
+                            type="text"  name="" class="table-right" value="">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="table-left">是否包干:</span>
+                     <!--   <input 
+                            ng-readonly= "true"
+                            ng-disabled = "flagSave"
+                            ng-model="object.isClud"
+                            type="text"  name="" class="table-right" value=""> -->
+							 <input value="否" type="text" name="" class="table-right" disabled="disabled" >
+                    </td>
+                    <td>
+                        <span class="table-left">成本中心:</span>
+                        <input ng-if="flagSave" type="text" ng-model="object.costCenterName" disabled="disabled" name="" class="table-right " value="">
+                        <select  
+                                ng-if="flag"
+                                name="costCenterID" id="" class="table-right"
+                                ng-model="resultData.costCenterID"
+                                ng-options="i.id as i.costCenterName for i in costCeterVOs"
+                                ng-change="">
+                            <option value="">请选择</option>
+                        </select>
+                    </td>
+                    <td>
+                        <span class="table-left">供应商名称:</span>
+                        <input 
+                            ng-readonly= "true"
+                            ng-disabled = "flagSave"
+                            ng-model="object.supplierName" 
+                            ng-click="choiceSupplierDialog()"
+                            type="text"  name="" class="table-right " value="">
+                        <i ng-if="flag" ng-click="choiceSupplierDialog()" class="search-icon"></i>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="table-left">分摊电费总金额:</span>
+                        <input ng-model="object.shareAmount" type="text" name="" class="table-right" disabled="disabled">
+                    </td>
+				<!--	<td>
+                        <span class="table-left">供应商地点ID:</span>
+                        <input ng-model="regionCode" type="text" name="" class="table-right" disabled="disabled"> 
+                    </td> -->
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- 超标显示 -->
+    <div ng-if="object.overProofReasons!=null && object.overProofReasons!=''" class="ledge-title ledge-sub">超标原因</div>
+    <div ng-if="object.overProofReasons!=null && object.overProofReasons!=''" class="remark">
+        <form action="" name="formText" >
+            <!-- {{ng-minLenght}} -->
+            <textarea
+                ng-readonly = "flagSave"
+                ng-model="object.overProofReasons"
+                name="textear"
+                ng-minLength="0"
+                id="" class="textarea" required ></textarea>
+        </form>
+         <div ng-if="flag" class="ledge-title ledge-sub">其他超标原因</div>   
+               <select ng-change="changeOther()" name="other" ng-model="object.overProofReasons" ng-if="flag" >
+              	<option>系统用电量不真实（台账有误或系统问题等）</option>
+               	<option>资管设备型号或数量不正确</option>
+               	<option>电力公司未按时抄表或报销人员累计报销单月缴多月电费</option>
+               	<option>基站用电被共享</option>
+               	<option>电力公司“挱飞表”估算致部分月份电费冒高</option>
+               	<option>一个基站报账点含多个点电费</option>
+               	<option>老旧设备或电路有电损</option>
+               	<option >其他</option>
+               </select>
+    </div>
+    <!-- 稽核单列表-->
+    <div ng-if="object.isClud=='不包干' || object.isClud == null" class="ledge-title ledge-sub">
+        稽核单列表 <span ng-click="addElecDialog(true)" class="add-btn" ng-if="flag && isElectric">新增电表</span>
+    </div>
+    <div ng-if="object.isClud=='不包干' || object.isClud == null" class="invoinc-table">
+        <div class="table-details invoinc-list" id="listDetail">
+            <div>
+                <table>
+                    <colgroup>
+                        <col style="width:5%" />
+                        <col style="width:8%" />
+                        <col style="width:10%" />
+                        <col style="width:15%" />
+                        <col style="width:15%" />
+                        <col style="width:10%" />
+                        <col style="width:12%" />
+                        <col style="width:12%" />
+                        <col style="width:10%" />
+                        <col style="width:10%" />
+                    </colgroup>
+                    <tbody class="query-date">
+                    <tr>
+                        <th>序号</th>
+                        <th>电表编码</th>
+                        <th>缴费户号</th>
+                        <th>电费归属地起始日期</th>
+                        <th>电费归属终止日期</th>
+                        <th>总电量(度)</th>
+                        <th>实际支付电费(元)</th>
+                        <th>分摊比例</th>
+                        <th>分摊电费金额</th>
+                        <th>操作</th>
+                    </tr>
+                        <tr ng-repeat="item in listDetail track by $index">
+                            <td>{{$index+1}}</td>
+                            <td>{{item.code}}</td>
+                            <td>{{item.paymentAccountCode}}</td>
+                            <td>{{item.belongStartTime | date:"yyyy-MM-dd HH:mm:ss"}}</td>
+                            <td>{{item.belongEndTime | date:"yyyy-MM-dd HH:mm:ss"}}</td>
+                            <td>{{item.totalEleciric}}</td>
+                            <td>{{item.actualAmount}}</td>
+                            <td>{{item.shareProportion}}</td>
+                            <td>{{item.shareAmount}}</td>
+                            <td>
+                                <a ng-if="flagSave" ng-click="queryElectricDetail($index,false)" class="check-detail">查看</a>
+                                <a ng-if="flag" ng-click="editedElectrictPage($index,true)" href="javascript:void(0)" class="edit-process">修改</a>
+                                <a ng-if="flag" ng-click="deleteEletrcInfo($index)" href="javascript:void(0)" class="delete">删除</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="reimbur-foot ledge-foot">
+        <button ng-if="flag" ng-click="closeDialog('showDetailDialog')" class="reimbur-cancel btn">取消</button>
+        <button ng-if="flagSave" ng-click="closeDialog('showDetailDialog')" class="reimbur-save btn">关闭</button>
+        <button ng-if="flag" ng-click="saveTowerEditPage(0)" class="reimbur-save btn">保存</button>
+    </div>
+</div>

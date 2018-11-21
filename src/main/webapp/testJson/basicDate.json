@@ -1,0 +1,127 @@
+{
+    "totalData": 19,
+    "pageNo": 1,
+    "pageSize": 10,
+    "data": [
+        {
+            "id": "1",
+            "accountName": "泸州叙永滨江商城基站001",
+            "accountAlias": "滨江商城",
+            "productNature": "0",
+            "allocationProportion": null,
+            "area": "泸州",
+            "county": "叙永县",
+            "resourceName": "泸州叙永滨江商城基站综合机房",
+            "oldFinanceName": "滨江商城",
+            "cycle": null
+        },
+        {
+            "id": "2",
+            "accountName": "泸州叙永黄角坪收费站基站001",
+            "accountAlias": "黄角坪收费站",
+            "productNature": "0",
+            "allocationProportion": null,
+            "area": "泸州",
+            "county": "叙永县",
+            "resourceName": "泸州叙永黄角坪收费站基站综合机房",
+            "oldFinanceName": "黄角坪收费站",
+            "cycle": null
+        },
+        {
+            "id": "3",
+            "accountName": "泸州叙永观兴基站001",
+            "accountAlias": "观兴二",
+            "productNature": "0",
+            "allocationProportion": null,
+            "area": "泸州",
+            "county": "叙永县",
+            "resourceName": "泸州叙永观兴基站综合机房",
+            "oldFinanceName": "观兴二",
+            "cycle": null
+        },
+        {
+            "id": "4",
+            "accountName": "泸州叙永石龙村基站001",
+            "accountAlias": "石龙村",
+            "productNature": "0",
+            "allocationProportion": null,
+            "area": "泸州",
+            "county": "叙永县",
+            "resourceName": "泸州叙永石龙村基站综合机房",
+            "oldFinanceName": "石龙村",
+            "cycle": null
+        },
+        {
+            "id": "5",
+            "accountName": "泸州叙永龙凤二基站001",
+            "accountAlias": "龙凤二",
+            "productNature": "0",
+            "allocationProportion": null,
+            "area": "泸州",
+            "county": "叙永县",
+            "resourceName": "泸州叙永龙凤二基站综合机房",
+            "oldFinanceName": "龙凤二",
+            "cycle": null
+        },
+        {
+            "id": "6",
+            "accountName": "泸州叙永长秧坝基站001",
+            "accountAlias": "长秧坝",
+            "productNature": "0",
+            "allocationProportion": null,
+            "area": "泸州",
+            "county": "叙永县",
+            "resourceName": "泸州叙永长秧坝基站综合机房",
+            "oldFinanceName": "长秧坝",
+            "cycle": null
+        },
+        {
+            "id": "7",
+            "accountName": "泸州叙永叙江大厦基站001",
+            "accountAlias": "叙江大厦",
+            "productNature": "0",
+            "allocationProportion": null,
+            "area": "泸州",
+            "county": "叙永县",
+            "resourceName": "泸州叙永叙江大厦基站综合机房",
+            "oldFinanceName": "叙江大厦",
+            "cycle": null
+        },
+        {
+            "id": "8",
+            "accountName": "泸州叙永馨雅苑基站001",
+            "accountAlias": "馨雅苑",
+            "productNature": "0",
+            "allocationProportion": null,
+            "area": "泸州",
+            "county": "叙永县",
+            "resourceName": "泸州叙永馨雅苑基站综合机房",
+            "oldFinanceName": "馨雅苑",
+            "cycle": null
+        },
+        {
+            "id": "9",
+            "accountName": "泸州大石堡基站001",
+            "accountAlias": "大石堡（国网）",
+            "productNature": "0",
+            "allocationProportion": null,
+            "area": "泸州",
+            "county": "龙马潭区",
+            "resourceName": "泸州大石墓基站综合机房",
+            "oldFinanceName": "大石堡（国网）",
+            "cycle": null
+        },
+        {
+            "id": "10",
+            "accountName": "泸州栀子园基站001",
+            "accountAlias": "泸州栀子园",
+            "productNature": "0",
+            "allocationProportion": null,
+            "area": "泸州",
+            "county": "龙马潭区",
+            "resourceName": "泸州栀子园基站综合机房",
+            "oldFinanceName": "泸州栀子园",
+            "cycle": null
+        }
+    ]
+}

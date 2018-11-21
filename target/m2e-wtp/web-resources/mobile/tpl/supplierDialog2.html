@@ -1,0 +1,66 @@
+﻿<!-- 供应商列表  弹框形式-->
+<div class="reimbur-dialog">
+<div class="reimbur-dialog-title">供应商列表信息</div>
+    <div class="reimbur-search" style="padding: 10px 0px;">     
+        <input ng-model="supplierName" type="text"  placeholder="供应商名称">
+        <button ng-click="getData2(supplierName,true)"  class="reimbur-btn" >搜索</button>
+    </div>
+   <!--  <table class="table-result" id="tableResult">
+        <colgroup>
+            <col style="width:6%" />
+            <col style="width:20%" />
+            <col style="width:15%" />
+            <col style="width:15%" />
+            <col style="width:14%" />
+            <col style="width:15%" />
+            <col style="width:15%" />
+        </colgroup>
+        <thead>
+            
+        </thead>
+    </table> -->
+    <div class="table-details">
+        <div>
+            <table id="table_list">
+              <!--   <colgroup>
+                    <col style="width:6%" />
+                    <col style="width:20%" />
+                    <col style="width:15%" />
+                    <col style="width:15%" />
+                    <col style="width:14%" />
+                    <col style="width:15%" />
+                    <col style="width:15%" />
+                </colgroup> -->
+                <tbody class="query-date" id="SupplieList">
+                    <tr>
+                        <th style="width: 80px; text-align: center;">选择</th>
+                        <th>供应商名称</th>
+                        <th>供应商ID</th>
+                        <th>供应地点ID</th>
+                        <th>公司名字</th>
+                        <th>银行名称</th>
+                        <th>银行账号</th>
+                    </tr>
+                    <tr ng-repeat="item in suppliers track by $index">
+                        <td style="width: 80px; text-align: center;">
+                            <input type="radio" name="reimbur" value="{{item}}" ng-model="$parent.confs[$index]">
+                        </td>
+                        <td>{{item.name}}</td>
+                        <td>{{item.code}}</td>
+                        <td>{{item.vendorCode}}</td>
+                        <td>{{item.ouName}}</td>
+                        <td>{{item.bankBranchName}}</td>
+                        <td>{{item.bankNum}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div style="text-align: right;">
+        <im-pagination conf="suPpageInfo" params="getSparams" get-data="getData2()"></im-pagination>
+    </div>
+    <div class="reimbur-foot">
+        <button ng-click="closeDialog('choiceSupplierDialogs')" class="reimbur-cancel btn">取消</button>
+        <button ng-click="choiceSupplier2()" class="reimbur-save btn">确定</button>
+    </div>
+</div>

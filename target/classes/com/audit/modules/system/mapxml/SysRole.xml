@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.system.dao.SysRoleDao">
+
+	<sql id="columns">
+		SYS_ROLE.ID,SYS_ROLE.CREATE_DATE,SYS_ROLE.MODIFY_DATE,SYS_ROLE.DESCRIPTION,SYS_ROLE.IS_SYSTEM,SYS_ROLE.ROLE_NAME,SYS_ROLE.ROLE_LEVEL
+	</sql>
+	<resultMap id="getRoleListResult" type="com.audit.modules.system.entity.SysRoleVo">
+		<id column="ID" property="roleId" jdbcType="NUMERIC" />
+		<result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+		<result column="MODIFY_DATE" property="updateDate" jdbcType="TIMESTAMP" />
+		<result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />
+		<result column="IS_SYSTEM" property="isSystem" jdbcType="NUMERIC" />
+		<result column="ROLE_NAME" property="roleName" jdbcType="VARCHAR" />
+		<result column="ROLE_LEVEL" property="roleLevel" jdbcType="NUMERIC" />
+	</resultMap>
+	<!-- 查询所有角色列表 -->
+	<select id="getRoleList" parameterType="com.audit.modules.system.entity.SysRoleVo"
+		resultMap="getRoleListResult">
+		SELECT
+		<include refid="columns" />
+		FROM SYS_ROLE 
+		WHERE 1 = 1
+		<choose>
+			<when test="supAdminTag !=null and supAdminTag != ''">		
+			</when>
+			<otherwise>
+				AND ID &lt;&gt; 180
+			</otherwise>
+		</choose>
+		ORDER BY ID ASC
+	</select>
+	<!--  通过用户Id查询角色-->
+	<select id="queryRoleByUserId" parameterType="com.audit.modules.system.entity.SysRoleVo"
+		resultMap="getRoleListResult">
+		SELECT
+		<include refid="columns" />
+		FROM SYS_ROLE
+		LEFT JOIN SYS_USER_ROLE ON SYS_USER_ROLE.ROLE_ID = SYS_ROLE.ID
+		WHERE SYS_USER_ROLE.USER_ID = #{userId, jdbcType=VARCHAR}
+	</select>
+	<!-- 分页搜索角色列表 -->
+	<select id="getPageRoleList" parameterType="java.util.Map"
+		resultMap="getRoleListResult">
+		SELECT
+		<include refid="columns" />
+		FROM SYS_ROLE
+		WHERE 1= 1
+		<if test="obj.isSystem != null and obj.isSystem != ''">
+			AND IS_SYSTEM = #{obj.isSystem,jdbcType=INTEGER}
+		</if>
+		<if test="obj.roleLevel != null and obj.roleLevel != ''">
+			AND ROLE_LEVEL = #{obj.roleLevel,jdbcType=INTEGER}
+		</if>
+		<if test="obj.roleName != null and obj.roleName != ''">
+			AND INSTR(ROLE_NAME,#{obj.roleName,jdbcType=VARCHAR}) > 0
+		</if>
+			AND ID &lt;&gt; 180
+		ORDER BY SYS_ROLE.ID DESC
+	</select>
+	<!-- 添加角色 -->
+	<insert id="insertSelective" parameterType="com.audit.modules.system.entity.SysRoleVo">
+		INSERT INTO SYS_ROLE
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+		ID,
+			<if test="createDate != null">
+				CREATE_DATE,
+			</if>
+			<if test="updateDate != null">
+				MODIFY_DATE,
+			</if>
+			<if test="description != null">
+				DESCRIPTION,
+			</if>
+			<if test="isSystem != null">
+				IS_SYSTEM,
+			</if>
+			<if test="roleName != null">
+				ROLE_NAME,
+			</if>
+			<if test="roleLevel != null">
+				ROLE_LEVEL,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+		GET_SEQ('SEQ_SYS_ROLE'),
+			<if test="createDate != null">
+				#{createDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateDate != null">
+				#{updateDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="description != null">
+				#{description,jdbcType=VARCHAR},
+			</if>
+			<if test="isSystem != null">
+				#{isSystem,jdbcType=INTEGER},
+			</if>
+			<if test="roleName != null">
+				#{roleName,jdbcType=VARCHAR},
+			</if>
+			<if test="roleLevel != null">
+				#{roleLevel,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<!-- 根据角色名查询角色信息 -->
+	<select id="getRoleListByRoleName" parameterType="com.audit.modules.system.entity.SysRoleVo"
+		resultMap="getRoleListResult">
+		SELECT
+		<include refid="columns" />
+		FROM
+		SYS_ROLE
+		WHERE 1=1
+		AND INSTR(ROLE_NAME,#{roleName,jdbcType=VARCHAR}) > 0
+	</select>
+	<!-- 根据角色ID查询角色信息 -->
+	<select id="getRoleListByRoleId" parameterType="java.lang.Integer"
+		resultMap="getRoleListResult">
+		SELECT
+		<include refid="columns" />
+		FROM
+		SYS_ROLE
+		WHERE
+		ID = #{roleId}
+	</select>
+	<!-- 根据角色ID查询资源权限name -->
+	<select id="findPermissionsByRoleId" parameterType="java.lang.Integer"
+		resultType="java.lang.String">
+		SELECT
+		SYS_RESOURCE.RESOURCE_NAME AS resourceName
+		FROM
+		SYS_RESOURCE, SYS_ROLE_RESOURCE
+		WHERE
+		SYS_RESOURCE.ID = SYS_ROLE_RESOURCE.RESOURCE_ID
+		AND SYS_ROLE_RESOURCE.ROLE_ID = #{roleId}
+	</select>
+	<!-- 根据用户账户查角色最高等级 -->
+	<select id="queryMaxRoleLevelByAccount" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT 
+			MIN(SYS_ROLE.ROLE_LEVEL) 
+		FROM
+			SYS_ROLE, SYS_USER_ROLE, SYS_USER
+		WHERE
+		 SYS_USER.ACCOUNT = #{account}
+		 AND SYS_USER.ID = SYS_USER_ROLE.USER_ID
+		 AND SYS_ROLE.ID = SYS_USER_ROLE.ROLE_ID
+	</select>
+	<!-- 根据角色ID删除角色 -->
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		DELETE from
+		SYS_ROLE
+		WHERE ID = #{roleId}
+	</delete>
+	<!-- 根据角色IDs删除角色 -->
+	<delete id="deleteByRoleIds" >
+		DELETE from
+		SYS_ROLE
+		WHERE 
+			ID IN
+		<foreach collection="array" item="roleid" index="index"
+			open="(" separator="," close=")">
+			#{roleid,jdbcType=VARCHAR}
+		</foreach>
+	</delete>
+	<!-- 根据角色ID删除用户角色中间表信息 -->
+	<delete id="deleteUserRoleByRoleIds" >
+		DELETE from
+		SYS_USER_ROLE
+		WHERE ROLE_ID IN
+		<foreach collection="array" item="roleid" index="index"
+			open="(" separator="," close=")">
+			#{roleid,jdbcType=VARCHAR}
+		</foreach>
+	</delete>
+	<!-- 修改角色信息 -->
+	<update id="updateRole" parameterType="com.audit.modules.system.entity.SysRoleVo">
+		UPDATE SYS_ROLE 
+		<set>
+			<if test="updateDate != null">
+				MODIFY_DATE = #{updateDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="description != null">
+				 DESCRIPTION = #{description,jdbcType=VARCHAR},
+			</if>
+			<if test="roleName != null">
+				 ROLE_NAME = #{roleName,jdbcType=VARCHAR},
+			</if>
+			<if test="roleLevel != null">
+				 ROLE_LEVEL = #{roleLevel,jdbcType=INTEGER},
+			</if>
+			<if test="isSystem != null">
+				 IS_SYSTEM = #{isSystem,jdbcType=INTEGER},
+			</if>
+		</set>
+		WHERE ID = #{roleId,jdbcType=INTEGER}
+	</update>
+</mapper>

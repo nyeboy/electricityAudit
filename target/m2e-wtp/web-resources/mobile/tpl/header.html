@@ -1,0 +1,25 @@
+﻿
+<div class="system-title">
+    <div class="title-left" id="logoBox" >
+        <a href="index.html"><img src="./assets/img/logo.png" alt="四川移动网络业务管理稽核平台" /></a>
+    </div>
+    <div class="title-right">
+        <div style="position: relative;"> <i ng-click="showOrcloseNotice()" class="notices" id="notices"></i>
+            <img ng-show="unreadNotice>0" ng-click="showOrcloseNotice()" src="./assets/img/tips_icon.png" alt="" style="height: 10px; width: 10px; margin-left:-10px; margin-top: -10px;">
+
+            
+            欢迎您，<span id="userArea" ng-show="!(loginUser.isSupperAdmin && loginUser.isSupperAdmin == 0)">{{loginUser.provinceStr}}{{loginUser.cityStr}}市{{loginUser.countyStr}}</span> <span id="userName">{{(loginUser.isSupperAdmin == 0)?'超级管理员':loginUser.userName}}</span>&nbsp;|&nbsp;<a ng-click="logout()" id="signOut">退出</a>
+        <div ng-if="showNotice" class="news" id="news">
+            <p style="cursor: pointer" ng-click="showDetail(item)" ng-repeat="item in notices track by $index  ">公告：{{item.title}}</p>
+            <!--<p>公告：四川省XXXXXXXXXX</p>-->
+            <!-- {{item.title.substr(0,15)}} -->
+        </div>
+        </div>
+        <div><a ng-click="goLogin()" id="goLogin">主页</a>&nbsp;<a href="index.html" id="goIndex">首页</a>&nbsp;值班电话<span id="userMobile">879570451</span>
+		&nbsp;<a ng-if="loginUser.isSupperAdmin == 0" ng-click="shiftAccount()" id="shift">切换</a>
+        </div>
+    </div>
+</div>
+
+
+

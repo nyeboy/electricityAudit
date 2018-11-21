@@ -1,0 +1,475 @@
+﻿<!-- 电费稽核电表明细dialog 弹框 验证-->
+<div class="detial-inside detial-source">
+    <div class="ledge-table meter-details">
+    <div class="reimbur-dialog-title">电表明细信息</div>
+    <div class="reimbur-search" style="padding: 10px 0px;">
+        <div class="electricty-info">
+            <form action="" name="electrictyForm">
+                <ul>
+                    <!-- 查看 -->
+                    <li ng-if="flagSave" ng-repeat="item in watthourMeterVOs track by $index">
+                        <p>电表号{{item.code}}<img src="./assets/img/drop-down.png" alt=""></p>
+                        <table>
+                            <tbody>
+                                  <tr>
+                                    <td>
+                                <span class="sign table-left">电表类型:</span>
+                                <input readonly ng-if="item.ptype ==1 || item.ptype == 2"  type="text" name="" class="table-right" value="{{item.ptype==1?'普通电表':'智能电表'}}" disabled>
+                                
+                                
+                            </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="table-left">电表号:</span>
+                                        <input readonly ng-model="item.code" type="text" name="" class="table-right" value="DB201732222224612" disabled="disabled">
+
+                                    </td>
+                                    <td>
+                                        <span class="table-left">电表户号:</span>
+                                        <input readonly ng-model="item.paymentAccountCode" type="text" name="" class="table-right" value="" disabled="disabled">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">电表标识符:</span>
+                                        <input ng-readonly="true" ng-model="item.code" type="text" name="" class="table-right" value="武侯" disabled="disabled">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="table-left">倍率(倍):</span>
+                                        <input ng-readonly="true" ng-model="item.rate" type="text" name="" class="table-right" value="" disabled="disabled">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">是否翻表:</span>
+                                        <input
+                                            ng-readonly="true"
+                                            ng-value="item.whetherMeter==0?'否':'是'"
+                                            type="text" name="" class="table-right" value="" disabled="disabled">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">电表最大度数:</span>
+									<!-- ng-value="item.whetherMeter==0?'':item.maxReading" 改动前-->                                       
+									   <input
+                                            ng-readonly="true"                                          
+											ng-value="item.maxReadings"
+                                            type="text" name="" class="table-right" value="" disabled="disabled">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="table-left">电表归属起始日期:</span>
+                                        <input
+                                                readOnly="true"
+                                                ng-model="item.belongStartTime"
+                                                 type="text"  name="" class="table-right" value="2016-12-1" disabled="disabled">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">电表归属终止日期:</span>
+                                        <input
+                                            ng-readonly="true"
+                                            ng-model="item.belongEndTime" name="" class="table-right " value="2017-12-31" disabled="disabled">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">用电天数</span>
+                                        <input type="text" ng-readonly="true" ng-model="item.dayAmmeter" name="" class="table-right " value="30" disabled="disabled">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="table-left">用电起度(度):</span>
+                                        <input ng-readonly="true" type="text" ng-model="item.startAmmeter" name="" class="table-right" disabled="disabled">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">用电止度(度):</span>
+                                        <input ng-readonly="true" type="text" ng-model="item.endAmmeter" name="" class="table-right" disabled="disabled">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">总用电量(度):</span>
+                                        <input ng-readonly="true" type="text" ng-model="item.totalEleciric" name="" class="table-right" value="84564.00" disabled="disabled">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="table-left">单价(元):</span>
+                                        <input ng-readonly="true" type="text" ng-model="item.unitPrice" name="" class="table-right" disabled="disabled">
+                                    </td>
+
+                                    <td>
+                                        <span class="table-left">电表总金额(含税):</span>
+                                        <input type="text" ng-readonly="true"  ng-model="item.totalAmount" name="" class="table-right" disabled="disabled">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">电损(度):</span>
+                                        <input ng-readonly="true" type="text" ng-model="item.electricLoss" name="" class="table-right" disabled="disabled">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="ledge-list">
+                                        <span class="table-left">备注:</span>
+                                        <input ng-readonly="true" type="text" ng-model="item.remarks" name="" class="table-right" disabled="disabled">
+                                    </td>
+									<td>
+                                        <span class="table-left ">上次拍照时间:</span>
+											<input
+                                                ng-laydate type="text" id="'lastTakePhotosTime_'+{{$index}}"
+                                                format="YYYY-MM-DD"
+                                                ng-readonly="true"
+												max-date="{{nowTime}}"
+                                                ng-model="item.lastTakePhotosTime"
+                                                type="text"  name="" class="table-right" value="" disabled="disabled">
+                                    </td>
+                                    <td>
+                                        <span class="table-left ">本次拍照时间:</span>
+                                        <input
+                                            ng-laydate type="text" id="'takePhotosTime1_'+{{$index}}"
+                                            ng-readonly="true"
+                                            format="YYYY-MM-DD"
+                                            min-date="{{item.lastTakePhotosTime}}"
+											max-date="{{nowTime}}"
+											ng-model="item.theTakePhotosTime"
+											ng-blur="bTheTakePhotosTime(item,$index)"
+                                            type="text"
+                                            name="" class="table-right " value="" disabled="disabled">
+                                    </td>
+                                </tr>
+								<tr>
+								 <td>
+                                        <span class="table-left ">拍照电表读数:</span>
+                                        <input type="text" disabled="disabled"  ng-readonly="true" ng-model="item.electricMeterDeg" ng-blur="bElectricMeterDeg(item,$index)" name="" class="table-right" id="electricMeterDeg">
+                                 </td>
+								 <td>
+                                        <span class="table-left ">拍照人员名称:</span>
+                                        <input type="text" disabled="disabled"  ng-readonly="true" ng-model="item.takePhotosPeopleInfo" name="" class="table-right" id="takePhotosPeopleInfo">
+                                 </td>
+								 <td>
+                                        <span class="table-left ">拍照图片:</span>  
+                                        <input id="upfile"  ng-readonly="true" ng-model="item.accessories" type="text" name="file" ng-click="showImg(item)" class="table-right" />                                     
+									<!--  	<input id="upfile" ng-model="item.accessories" type="file" name="file" class="table-right"/>  -->
+                                 </td>
+								</tr>
+                                <tr ng-if="item.ptype==2">
+                                 <td>
+                                        <span class="table-left ">历史平均单价:</span> 
+                                        <input type="text" ng-model="item.histUnitPrice"  name="" class="table-right" value="0" >
+                                 </td>
+                                 <td>
+                                        <span class="table-left ">历史平均日电量:</span> 
+                                        <input type="text" ng-model="item.histDayEleNum" name="" class="table-right" value="0" >
+                                 </td>
+                                 <td>
+                                        <span class="table-left ">历史平均日电费:</span>  
+                                        <input  ng-model="item.histDayElePrice" type="text" value="0" name=""  readonly class="table-right"/>                                     
+                                    <!--    <input id="upfile" ng-model="item.accessories" type="file" name="file" class="table-right"/>  -->
+                                 </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </li>
+                    <!-- 修改 新增-->
+                    
+                     <table ng-if="!flagSave">
+                        	<tr>
+                                    <td>
+                                        <span  class="table-left sign">电表归属起始日期:</span>
+                                        <input  ng-if="bbelongStartTime || !flagSave"
+                                                ng-laydate type="text" id="belongStartTime"
+                                                format="YYYY-MM-DD"
+                                                readonly
+                                                ng-model="bbelongStartTime"
+                                                ng-change="countTime()" type="text"  name="" class="table-right" value="2016-12-1" >
+                                                
+                                                 <input  ng-if="!bbelongStartTime && flagSave"
+                                                ng-laydate type="text" id="belongStartTime"
+                                                format="YYYY-MM-DD"
+                                                readonly
+                                                ng-model="bbelongStartTime"
+                                                ng-change="countTime()" type="text"  name="" class="table-right" value="2016-12-1" >
+                                                
+                                                
+                                    </td>
+                                    <td>
+                                        <span class="table-left sign">电表归属终止日期:</span>
+                                         <input
+                                            ng-if="eleTableType==1 "
+                                            ng-laydate type="text" id="belongEndTime"
+                                            readonly
+                                            format="YYYY-MM-DD"
+                                            min-date="{{bbelongStartTime}}"
+                                            max-date="{{nowTime}}"
+                                            ng-change="countTime()" type="text"
+                                            ng-model="bbelongEndTime" name="" class="table-right " value="2017-12-31" > 
+                                             <input
+                                            ng-if="eleTableType==2 "
+                                            ng-laydate type="text" id="belongEndTime"
+                                            readonly
+                                            format="YYYY-MM-DD"
+                                            min-date="{{bbelongStartTime}}"
+                                            max-date= "{{ptype2EndTime}}"
+                                            ng-change="countTime()" type="text"
+                                            ng-model="bbelongEndTime" name="" class="table-right " value="2017-12-31" > 
+                                    </td>
+                                    
+                                </tr>
+                        </table>
+                    
+                    <li ng-if="!flagSave" ng-repeat="item in watthourMeterVOs track by $index">
+                        <p>电表号{{item.code}}<img src="./assets/img/drop-down.png" alt=""></p>
+                       
+                        <table>
+                            <tbody>
+                                 <tr>
+                                    <td>
+                                <span class="sign table-left">电表类型:</span>
+                                <input readonly ng-if="item.ptype ==1 || item.ptype == 2"  type="text" name="" class="table-right" value="{{item.ptype==1?'普通电表':'智能电表'}}" disabled>
+                                
+                                <select ng-if="item.ptype != 1 && item.ptype != 2" ng-model="eleTableType" 
+                                        ng-change="choiceType(eleTableType)"
+                                name="" id="" class="title-select con-parts">
+                                    <option value="">请选择电表类型</option>
+                                    <option value="1">普通电表</option>
+                                    <option value="2">智能电表</option>
+                                </select>
+                            </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="table-left sign">电表号:</span>
+                                        <input readonly ng-model="item.code" type="text" name="" class="table-right" value="DB201732222224612">
+
+                                    </td>
+                                    <td>
+                                        <span class="table-left">电表户号:</span>
+                                        <input readonly ng-model="item.paymentAccountCode" type="text" name="" class="table-right" value="">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">电表标识符:</span>
+                                        <input readonly ng-model="item.code" type="text" name="" class="table-right" value="武侯">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="table-left sign">倍率(倍):</span>
+                                        <input readonly ng-model="item.rate" type="text" name="" class="table-right" value="">
+                                    </td>
+                                    <td>
+                                        <span class="table-left sign">是否翻表:</span>
+                                        <select
+                                            style="padding-right:0;"
+                                            ng-if="isNew"
+                                            ng-change="countPowerSize(item,$index)"
+                                            ng-init ="item.whetherMeter=0"
+                                            ng-disabled="!item.maxReading && item.maxReading != 0"
+                                            ng-model="item.whetherMeter" class="table-right">
+                                            <option ng-selected = "item.whetherMeter == 1" value="1">是</option>
+                                            <option ng-selected = "item.whetherMeter == 0" value="0">否</option>
+                                        </select>
+                                        <select
+                                            ng-if="!isNew"
+                                            ng-change="countPowerSize(item,$index)"
+                                            ng-disabled="!item.maxReading && item.maxReading != 0"
+                                            ng-model="item.whetherMeter" class="table-right">
+                                            <option ng-selected = "item.whetherMeter == 1" value="1">是</option>
+                                            <option ng-selected = "item.whetherMeter == 0" value="0">否</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <span class="table-left">电表最大度数:</span>
+                                        <!-- 新增 -->
+                                      <!--   <input
+                                            ng-if="isNew"
+                                            ng-init = "!item.whetherMeter?item.viewMaxReading:(item.viewMaxReading=item.maxReading)"
+                                            readonly ng-model="item.viewMaxReading"
+                                            type="text" name="" class="table-right" value="">   ng-change="maxReadingsChange()"-->
+							<select ng-if="isNew&&(item.maxReadingStatus==false)" ng-model="item.maxReadings" ng-change="maxReadingsChange(item,$index)" name="" id="maxReadings" class="table-right">
+                            <option value="">请选择最大读数</option>
+                            <option value="999">999</option>
+                            <option value="9999">9999</option>
+                            <option value="99999">99999</option>
+                            <option value="999999">999999</option>
+                        </select>
+						<input readonly ng-if="isNew&&(item.maxReadingStatus==true)" ng-model="item.maxReadings" type="text" name="" class="table-right" value="" disabled>
+											
+                                        <!-- 查看 -->
+                                      <!--  <input
+                                            ng-if="!isNew"
+                                            ng-init = "item.whetherMeter==1?item.viewMaxReading=item.maxReading:''"
+                                            readonly ng-model="item.viewMaxReading"
+                                            type="text" name="" class="table-right" value=""> -->
+										<!--	<input
+                                            ng-if="!isNew"                                            
+                                            readonly ng-model="item.maxReadings"
+                                            type="text" name="" class="table-right" value="">  -->
+							<select ng-if="!isNew" ng-model="item.maxReadings" ng-change="maxReadingsChange(item,$index)" name="" id="maxReadings" class="table-right" disabled>
+                            <option value="">请选择最大读数</option>
+                            <option value="999">999</option>
+                            <option value="9999">9999</option>
+                            <option value="99999">99999</option>
+                            <option value="999999">999999</option>
+                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="table-left sign">电表归属起始日期:</span>
+                                        <input
+                                                ng-laydate type="text" id="'belongStartTime_'+{{$index}}"
+                                                format="YYYY-MM-DD"
+                                                readonly
+                                                ng-model="item.belongStartTime"
+                                                ng-change="countDays(item,$index)" type="text"  name="" class="table-right" value="2016-12-1"  disabled="disabled">
+                                    </td>
+                                    <td>
+                                        <span class="table-left sign">电表归属终止日期:</span>
+                                        <input
+                                            ng-laydate type="text" id="'belongEndTime_'+{{$index}}"
+                                            readonly
+                                            format="YYYY-MM-DD"
+                                            min-date="{{item.belongStartTime}}"
+                                            ng-change="countDays(item,$index)" type="text"
+                                            ng-model="item.belongEndTime" name="" class="table-right " value="2017-12-31"  disabled="disabled">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">用电天数</span>
+                                        <input type="text" readonly ng-model="item.dayAmmeter" name="" class="table-right " value="30"  disabled="disabled">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="table-left sign">用电起度(度):</span>
+                                        <input ng-if="item.ishave==true || !flagSave"
+                                            ng-blur="countPowerSize(item,$index)"
+                                            type="text" ng-model="item.startAmmeter"
+                                            name="startAmmeter" class="table-right" disabled="disabled" required>
+                                            
+                                            
+                                            <input ng-if="item.ishave==false"
+                                            ng-blur="countPowerSize(item,$index)"
+                                            type="text" ng-model="item.startAmmeter"
+                                            name="startAmmeter" class="table-right"  required>
+
+                                    </td>
+                                    <td>
+                                        <span class="table-left sign">用电止度(度):</span>
+                                        <input ng-blur="countPowerSize(item,$index)" type="text" ng-model="item.endAmmeter" name="endAmmeter" class="table-right" required>
+                                    </td>
+                                    <td>
+                                        <span class="table-left">总用电量(度):</span>
+                                        <input readonly type="text" ng-model="item.totalEleciric" name="" class="table-right" value="84564.00">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="table-left sign">单价(元):</span>										
+										<input ng-if="isNew&&xIsClud=='bbg'" ng-readonly="true"  type="text" ng-model="item.unitPrice" name="unitPrice" class="table-right" required>
+										<input ng-if="isNew&&xIsClud=='bg'" ng-readonly="true"  type="text" ng-model="item.backcalculationPrice" name="unitPrice" class="table-right" required>			
+										<input ng-if="!isNew" ng-readonly="true"  type="text" ng-model="item.unitPrice" name="unitPrice" class="table-right" required>
+									<!--	<input ng-if="!isNew&&xIsClud=='bg'" ng-readonly="true"  type="text" ng-model="item.backcalculationPrice" name="unitPrice" class="table-right" required> -->
+									<!--  <input ng-blur="countElectrictyItemPrice(item,$index)"  type="text" ng-model="item.unitPrice" name="unitPrice" class="table-right" required>  -->
+                                    </td>
+
+                                    <td>
+                                        <span class="table-left sign">电表总金额(含税):</span>
+                                        <input ng-if="isNew&&xIsClud=='bbg'" ng-readonly="true" type="text" ng-model="item.totalAmount"  name="" class="table-right" required>
+										<input ng-if="isNew&&xIsClud=='bg'" ng-blur="backcalculationPrice(item,$index)" type="text" ng-model="item.totalAmount"  name="" class="table-right" required>
+										<input ng-if="!isNew" ng-readonly="true" type="text" ng-model="item.totalAmount"  name="" class="table-right" required>
+									<!--	<input ng-if="!isNew&&xIsClud=='bg'" ng-blur="backcalculationPrice(item,$index)" type="text" ng-model="item.totalAmount"  name="" class="table-right" required> -->
+									</td>
+                                    <td>
+                                        <span class="table-left ">电损(度):</span>
+                                        <input type="text" ng-model="item.electricLoss" ng-blur="bElectricLoss(item,$index)"   name="" class="table-right">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="ledge-list">
+                                        <span class="table-left ">备注:</span>
+                                        <input type="text" ng-model="item.remarks" name="" class="table-right" ng-blur="checkNumber(item)">
+                                    </td>
+									 <td>
+                                        <span class="table-left ">上次拍照时间:</span>
+                                        <input ng-if="isNew&&item.photosStatus==true"
+                                                ng-laydate type="text" id="'lastTakePhotosTime_'+{{$index}}"
+                                                format="YYYY-MM-DD"
+                                                readonly
+												max-date="{{nowTime}}"
+                                                ng-model="item.lastTakePhotosTime"
+                                                type="text"  name="" class="table-right" value="" disabled>
+											<input ng-if="isNew&&item.photosStatus==false"
+                                                ng-laydate type="text" id="'lastTakePhotosTime_'+{{$index}}"
+                                                format="YYYY-MM-DD"
+                                                readonly
+												max-date="{{nowTime}}"
+                                                ng-model="item.lastTakePhotosTime"
+                                                type="text"  name="" class="table-right" value="" disabled>	
+											<input ng-if="!isNew&&item.lastTakePhotosTime!=''"
+                                                ng-laydate type="text" id="'lastTakePhotosTime_'+{{$index}}"
+                                                format="YYYY-MM-DD"
+                                                readonly
+												max-date="{{nowTime}}"
+                                                ng-model="item.lastTakePhotosTime"
+                                                type="text"  name="" class="table-right" value="" disabled>
+											<input ng-if="!isNew&&item.lastTakePhotosTime==''"
+                                                ng-laydate type="text" id="'lastTakePhotosTime_'+{{$index}}"
+                                                format="YYYY-MM-DD"
+                                                readonly
+												max-date="{{nowTime}}"
+                                                ng-model="item.lastTakePhotosTime"
+                                                type="text"  name="" class="table-right" value="" disabled>
+                                    </td>
+                                    <td>
+                                        <span class="table-left ">本次拍照时间:</span>
+                                        <input
+                                            ng-laydate type="text" id="'takePhotosTime1_'+{{$index}}"
+                                            readonly
+                                            format="YYYY-MM-DD"
+                                            min-date="{{item.lastTakePhotosTime}}"
+											max-date="{{nowTime}}"
+											ng-model="item.theTakePhotosTime"
+											ng-change="bTheTakePhotosTime(item,$index)"
+                                            type="text"
+                                            name="" class="table-right abc" value="">
+                                    </td>
+                                </tr>								
+								<tr>
+								 <td>
+                                        <span class="table-left ">拍照电表读数:</span>
+                                        <input type="text" ng-model="item.electricMeterDeg" ng-change="bElectricMeterDeg(item,$index)" name="" class="table-right" id="electricMeterDeg">
+                                 </td>
+								 <td>
+                                        <span class="table-left ">拍照人员名称:</span>
+                                        <input type="text" ng-model="item.takePhotosPeopleInfo" name="" class="table-right" id="takePhotosPeopleInfo">
+                                 </td>
+								 <td>
+                                        <span class="table-left ">拍照图片:</span>  
+                                        <input id="upfile" ng-model="item.accessories" type="text" name="file" ng-click="uploadImg(item)" readonly class="table-right"/>                                     
+									<!--  	<input id="upfile" ng-model="item.accessories" type="file" name="file" class="table-right"/>  -->
+                                 </td>
+								</tr>
+                                <tr ng-if="item.ptype==2">
+                                 <td>
+                                        <span class="table-left ">历史平均单价:</span> 
+                                        <input type="text" ng-model="item.histUnitPrice"  name="" class="table-right" value="0" >
+                                 </td>
+                                 <td>
+                                        <span class="table-left ">历史平均日电量:</span> 
+                                        <input type="text" ng-model="item.histDayEleNum" name="" class="table-right" value="0" >
+                                 </td>
+                                 <td>
+                                        <span class="table-left ">历史平均日电费:</span>  
+                                        <input  ng-model="item.histDayElePrice" type="text" value="0" name=""  readonly class="table-right"/>                                     
+                                    <!--    <input id="upfile" ng-model="item.accessories" type="file" name="file" class="table-right"/>  -->
+                                 </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </div>
+    <!--totalAmount:{{resultData.totalAmount}}-->
+    <div class="reimbur-foot ledge-foot audit-dialog">
+        <button ng-if="!flagSave" ng-click="closeDialog('accountSiteDialog')" class="reimbur-cancel btn" style="width: 100px">取消</button>
+        <button ng-if="isEditAudit || !flagSave" ng-click="submitDetail('accountSiteDialog')" class="reimbur-save btn" style="width: 100px">提交</button>
+        <button ng-if="isAudit && flagSave" ng-click="closeDialog('accountSiteDialog')" class="reimbur-save btn" style="width: 100px">确定</button>
+    </div>
+</div>

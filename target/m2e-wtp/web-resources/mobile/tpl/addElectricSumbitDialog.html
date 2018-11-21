@@ -1,0 +1,91 @@
+﻿<!-- 自维生成电费提交单 dialog弹框 -->
+<style>
+.search-box .title-select{
+width: 24.35%;
+}
+
+</style>
+<div class="add-submit" >
+    <div class="reimbur-dialog-title" style="padding: 10px 0px;">电费提交单</div>
+    <div class="search-box"> 
+    	<span>稽核类型:</span>
+        	<select ng-model="$parent.auditType" ng-change="seAuditType(auditType)">
+        		<option value="0">基站电费</option>
+        		<option value="1">综合费</option>
+        	</select>
+     </div>
+    <div class="search-box">
+        <div>
+            <input ng-model="$parent.serialNumber" type="text" placeholder="稽核单流水号" name="" class="add-title" >
+            <input ng-model="$parent.accountName" type="text" placeholder="报账点名称" name="" class="add-title">
+            <input 
+                readOnly="true"
+                ng-laydate
+                id="createDate"
+                format="YYYY-MM-DD"
+                ng-model="$parent.createStartDate" 
+                type="text" placeholder="建单时间（起）" 
+                name="" class="add-title">
+            <input 
+                readOnly="true"
+                ng-laydate
+                id="endDate"
+                format="YYYY-MM-DD"
+                ng-model="$parent.createEndDate" 
+                type="text" placeholder="建单时间（止）" 
+                name="" class="add-title">
+				<br>
+				<select name="" id="" class="title-select"
+                        ng-model="$parent.sysRgName"
+                        ng-options="sysRgName for sysRgName in sysRgs">                      
+                <option value=""> -- 请选择报账组 -- </option>
+                </select>
+        </div>
+        <button class="btn btn-primary" type="button" ng-click="getElectricDialog()">搜索</button>
+    </div>
+    <!-- table-content -->
+    <div class="table-content">
+        <div class="table-title">
+            <button ng-click="createSubmitOrder()" class="btn btn-blue">生成电费提交单</button>
+        </div>
+        <!-- table -->
+        <div class="invoinc-table">
+            <div class="table-details">
+                <div>
+                    <table class="table-result" id="tableResult">
+                        <tbody class="query-date" id="SubmitOrder">
+                        <tr>
+                            <th><input ng-click="checkAll('#checkAll2','#SubmitOrder')" id="checkAll2"  type="checkbox"  type="checkbox" ></th>
+                            <th>稽核单流水号</th>
+                            <th>地区</th>
+                            <th>区县</th>
+                            <th>稽核单状态</th>
+                            <th>报账点名称</th>
+                            <th>建单时间</th>
+                            <th>电量(度)</th>
+                            <th>金额(元)</th>
+                            <th>同比上个月涨幅</th>
+                        </tr>
+                            <tr ng-repeat="item in waitList track by $index">
+                                <td><input type="checkbox" value="{{item.id}}"></td>
+                                <td>{{item.serialNumber}}</td>
+                                <td>{{item.areas}}</td>
+                                <td>{{item.counties}}</td>
+                                <td>{{item.status | ElectrictyStatusFilter}}</td>
+                                <td>{{item.accountName}}</td>
+                                <td>{{item.createDate|date:"yyyy-MM-dd HH:mm:ss"}}</td>
+                                <td>{{item.electricity}}</td>
+                                <td>{{item.amount}}</td>
+                                <td>{{}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- 分页 -->
+        <div class="page-foot">
+            <im-pagination conf="generatedPageInfo" params="generatedParams" get-data="getGeneratedData()"></im-pagination>
+        </div>
+    </div>
+</div>

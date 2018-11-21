@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.system.dao.OperationLogDao">
+
+	<sql id="columns">
+		ID,USER_ID,USER_ACCOUNT,USER_NAME,URI,TYPE,PARAMETERS,CREATE_TIME,USER_IP
+	</sql>
+	
+	<!-- 查询所有  -->
+	<select id="queryAll" parameterType="com.audit.modules.system.entity.OperationLogVo" resultMap="getLogListResult">
+		SELECT 
+			<include refid="columns"/> 
+		FROM SYS_OPERATION_LOG
+	</select>
+	
+	<!-- 分页搜索查询  -->
+	<select id="getPageLogList" parameterType="com.audit.modules.system.entity.OperationLogVo" resultMap="getLogListResult">
+		SELECT 
+			<include refid="columns"/> 
+		FROM SYS_OPERATION_LOG
+		WHERE 1= 1
+		<if test="obj.account != null and obj.account != ''">
+			AND (INSTR(USER_ACCOUNT,#{obj.account,jdbcType=VARCHAR}) > 0 OR INSTR(USER_NAME,#{obj.account,jdbcType=VARCHAR}) > 0)
+		</if>
+		<if test="obj.startTime!=null ">
+			AND  <![CDATA[CREATE_TIME >= #{obj.startTime,jdbcType=TIMESTAMP}]]>
+		</if>
+		<if test="obj.endTime!=null ">
+			AND  <![CDATA[CREATE_TIME <= #{obj.endTime,jdbcType=TIMESTAMP}]]>
+		</if>
+		ORDER BY CREATE_TIME DESC
+	</select>
+   <resultMap id="getLogListResult" type="com.audit.modules.system.entity.OperationLogVo">
+		<id column="ID" property="logId" jdbcType="NUMERIC" />
+		<result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+		<result column="USER_ACCOUNT" property="account" jdbcType="VARCHAR" />
+        <result column="USER_NAME" property="userName" jdbcType="VARCHAR" />
+       <result column="URI" property="uri" jdbcType="VARCHAR" />
+       <result column="TYPE" property="type" jdbcType="VARCHAR" />
+       <result column="PARAMETERS" property="parameters" jdbcType="VARCHAR" />
+       <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+       <result column="USER_IP" property="loginIp" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<!-- 添加信息 -->
+	<insert id="createLog" parameterType="com.audit.modules.system.entity.OperationLogVo">
+ 		<selectKey resultType="INTEGER" order="BEFORE" keyProperty="logId">
+			SELECT MAX(ID)+1 AS ID FROM SYS_OPERATION_LOG
+		</selectKey> 
+		insert into SYS_OPERATION_LOG (<include refid="columns"/>)
+		 values (#{logId,jdbcType=NUMERIC}, #{userId,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR},
+		 #{uri,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{parameters,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},#{loginIp,jdbcType=VARCHAR})
+	</insert>
+	
+	
+</mapper>

@@ -1,0 +1,24 @@
+<!-- 报账点列表  弹框形式-->
+<div class="reimbur-dialog">
+    <div class="reimbur-dialog-title">月用电量Top100</div>
+    <div class="table-details">
+        <div>
+            <table>
+                <tbody class="query-date" id="siteList">
+                    <tr>
+                        <th>报账点名称</th>
+                        <th>资源站点名</th>
+                        <th>电量</th>
+                    </tr>
+                    <tr ng-repeat="item in list track by $index">
+                        <td>{{item.accountName}}</td>
+                        <td>
+                        {{item.siteName}}
+                        </td>
+                        <td>{{item.totalE}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

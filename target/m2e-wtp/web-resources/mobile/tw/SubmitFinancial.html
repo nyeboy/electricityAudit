@@ -1,0 +1,129 @@
+<!--塔维电费稽核--提交财务 -->
+<div class="system-content" id="systemContent">
+    <div class="business-box" id="businessBox">
+        <div class="content-rout" id="contentRout">
+            <span>铁塔电费</span>&gt;<span>电费提交</span>&gt;<span class="now-rout">提交财务</span>
+        </div>
+        <div class="content-box" id="contentBox">
+            <div class="power-table">
+                <div class="search-box">
+                    <div>
+                        <select name="" id="" class="title-select" ng-model="status">
+                            <option value="">请选择报销单状态</option>
+                            <option value="0">等待推送报销发起人</option>
+                            <option value="1">等待推送财务</option>
+                            <option value="2">等待财务报销</option>
+                            <option value="3">报销成功</option>
+                            <option value="4">报销失败</option>
+                        </select>
+                        <input type="text" placeholder="电费提交单号" class="process-input con-parts" name="" ng-model="reimburseNo">
+                        <input ng-laydate
+                               id="id1"
+                               format="YYYY-MM-DD"
+                               type="text" placeholder="起始时间" class="process-input con-parts" name="" ng-model="startCreateDate">
+                        <input ng-laydate
+                               id="id2"
+                               format="YYYY-MM-DD"
+                               type="text" placeholder="截止时间" class="process-input con-parts" name="" ng-model="endCreateDate">
+                    </div>
+                    <button class="btn btn-primary" type="button" ng-click="getData()">搜索</button>
+                </div>
+                <!-- table-content -->
+                <div class="table-content">
+                    <div class="table-title">
+                        <button ng-show="userLevel!=undefined && userLevel == 2" ng-click="createSubmission()" class="btn btn-blue">生成电费提交单</button>
+                        <button ng-show="userLevel!=undefined && userLevel == 4" class="btn btn-blue" type="button" ng-click="batchPushManager()">批量推送财务</button>
+                        <button ng-show="userLevel!=undefined && userLevel == 2" class="btn btn-blue" type="button" ng-click="batchPushManager()"  style="width: 160px;">批量推送报销发起人</button>
+                    </div>
+                    <!-- table -->
+                    <!-- <div class="data-table">
+                        <table class="table-result">
+                            <colgroup>
+                                <col style="width:5%">
+                                <col style="width:12%">
+                                <col style="width:12%">
+                                <col style="width:5%">
+                                <col style="width:5%">
+                                <col style="width:10%">
+                                <col style="width:10%">
+                                <col style="width:9%">
+                                <col style="width:9%">
+                                <col style="width:28%">
+                            </colgroup>
+                            <thead> -->
+                       <!--      <tr>
+                                <th><input type="checkbox"></th>
+                                <th>电费提交单号</th>
+                                <th>制单时间</th>
+                                <th>地市</th>
+                                <th>区县</th>
+                                <th>用推送类型</th>
+                                <th>报销状态</th>
+                                <th>付款金额</th>
+                                <th>税金金额</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                        </table> -->
+                        <div class="table-details basic-table">
+                            <div>
+                                <table>
+                                  <!--   <colgroup>
+                                        <col style="width:5%">
+                                        <col style="width:12%">
+                                        <col style="width:12%">
+                                        <col style="width:5%">
+                                        <col style="width:5%">
+                                        <col style="width:10%">
+                                        <col style="width:10%">
+                                        <col style="width:9%">
+                                        <col style="width:9%">
+                                        <col style="width:28%">
+                                    </colgroup> -->
+                                    <tbody class="query-date" id="submitList">
+                                         <tr>
+                                            <th><input ng-click="checkAll('#checkAll','#submitList')" id="checkAll" type="checkbox"></th>
+                                            <th>电费提交单号</th>
+                                            <th>制单时间</th>
+                                            <th>地市</th>
+                                            <th>区县</th>
+                                            <th>用推送类型</th>
+                                            <th>报销状态</th>
+                                            <th>付款金额</th>
+                                            <th>税金金额</th>
+                                            <th style="width:224px;" >操作</th>
+                                        </tr>
+                                        <tr ng-repeat="item in submitFinancialList track by $index">
+                                            <td><input type="checkbox" value="{{item.id}}"></td>
+                                            <td>{{item.reimburseNo}}</td>
+                                            <td>{{item.timeStr}}</td>
+                                            <td>{{item.cityName}}</td>
+                                            <td>{{item.countyName}}</td>
+                                            <td>{{item.reimburseType==0?"报销":""}}</td>
+                                            <td>{{item.status | pushType}}</td>
+                                            <td>{{item.priceAmount}}</td>
+                                            <td>{{item.taxAmount}}</td>
+                                            <td style="width:224px;" >
+                                                <a ng-click="showFinancialDetail(item)" class="check-detail">查看</a>
+                                                <a 
+                                                   ng-if="item.status == 1 && item.operation && userLevel!=undefined && userLevel == 4"
+                                                   ng-click="pushManager(item)" class="finance">推送财务</a>
+                                                <a 
+                                                   ng-if="item.status == 0 && item.operation && userLevel!=undefined && userLevel == 2"
+                                                   ng-click="pushManager(item)" class="reimbur">推送报销发起人</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 分页 -->
+                    <div class="page-foot">
+                        <im-pagination conf="frincePageInfo" params="params" get-data="getData()"></im-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.towerbasedata.psu.dao.TowerPSUDao">
+	
+	<sql id="columns">
+		stas.ID AS id,stas.CITY_ID AS cityId, stas.COUNTY_ID AS countyId, stas.ZY_CODE AS code, ZSS.ZH_LABEL AS label, stas.ELECTRICITY_TYPE as electricityType,
+		stas.SHARE_TYPE as shareType,  stas.ZZ_TYPE as zzType, stas.UPDATE_TIME as updateTime
+	</sql>
+	
+	 <!-- 依据ID查询 -->
+	<!-- <select id="selectById"  resultType="com.audit.modules.towerbasedata.psu.entity.TowerPSUVO">		
+		SELECT 
+		(SELECT zsc.CITY_NAME FROM ZG_SPACE_CITY zsc WHERE  zsc.INT_ID = stas.CITY_ID) AS cityStr,
+		 (SELECT zsct.ZH_LABEL FROM ZG_SPACE_COUNTY zsct WHERE zsct.INT_ID = stas.COUNTY_ID) AS countyStr,
+		<include refid="columns" />
+        FROM SYS_TOWER_ACCOUNT_SITE stas 
+        LEFT JOIN ZG_TOWER_SITE zts ON stas.ZY_CODE = ZTS.ZY_CODE  
+		LEFT JOIN ZG_SPACE_SITE zss ON ZTS.YW_CODE = ZSS.TOWER_SITE_CODE
+        WHERE stas.ID = #{Id} 
+	</select>
+
+	 分页搜索查询
+	<select id="getPageList" resultType="com.audit.modules.towerbasedata.psu.entity.TowerPSUVO">
+		SELECT 
+		(SELECT zsc.CITY_NAME FROM ZG_SPACE_CITY zsc WHERE  zsc.INT_ID = stas.CITY_ID) AS cityStr,
+		(SELECT zsct.ZH_LABEL FROM ZG_SPACE_COUNTY zsct WHERE zsct.INT_ID = stas.COUNTY_ID) AS countyStr,
+		<include refid="columns" />
+		FROM SYS_TOWER_ACCOUNT_SITE stas
+		LEFT JOIN ZG_TOWER_SITE zts ON stas.ZY_CODE = ZTS.ZY_CODE  
+		LEFT JOIN ZG_SPACE_SITE zss ON ZTS.YW_CODE = ZSS.TOWER_SITE_CODE
+        WHERE 1=1
+			<if test="obj.CityId != null and obj.CityId!=''">
+				AND  stas.CITY_ID = #{obj.CityId,jdbcType=VARCHAR}
+			</if>
+			<if test="obj.CountyId != null and obj.CountyId!=''">
+				AND  stas.COUNTY_ID = #{obj.CountyId,jdbcType=VARCHAR}
+			</if>
+			<if test="obj.Code != null and obj.Code!=''">
+				AND  stas.ZY_CODE LIKE '%'||#{obj.Code,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="obj.Label != null and obj.Label!=''">
+				AND  ZSS.ZH_LABEL  LIKE '%'||#{obj.Label,jdbcType=VARCHAR}||'%'
+			</if>
+			AND stas.ELECTRICITY_TYPE IS NOT NULL
+			AND stas.SHARE_TYPE IS NOT NULL
+			AND stas.ZZ_TYPE IS NOT NULL
+	</select> -->
+	
+	<select id="selectById"  resultType="com.audit.modules.towerbasedata.psu.entity.TowerPSUVO">		
+		SELECT 
+		(SELECT zsc.NAME FROM YDJH_AREA zsc WHERE  zsc.ID = stas.CITY_ID) AS cityStr,
+		 (SELECT zsct.NAME FROM YDJH_AREA zsct WHERE zsct.ID = stas.COUNTY_ID) AS countyStr,
+		<include refid="columns" />
+        FROM SYS_TOWER_ACCOUNT_SITE stas 
+        LEFT JOIN ZG_TOWER_SITE zts ON stas.ZY_CODE = ZTS.ZY_CODE  
+		LEFT JOIN ZG_SPACE_SITE zss ON ZTS.YW_CODE = ZSS.TOWER_SITE_CODE
+        WHERE stas.ID = #{Id} 
+	</select>
+
+	 <!-- 分页搜索查询 -->
+	<select id="getPageList" resultType="com.audit.modules.towerbasedata.psu.entity.TowerPSUVO">
+		SELECT 
+		(SELECT zsc.NAME FROM YDJH_AREA zsc WHERE  zsc.ID = stas.CITY_ID) AS cityStr,
+		(SELECT zsct.NAME FROM YDJH_AREA zsct WHERE zsct.ID = stas.COUNTY_ID) AS countyStr,
+		<include refid="columns" />
+		FROM SYS_TOWER_ACCOUNT_SITE stas
+		LEFT JOIN ZG_TOWER_SITE zts ON stas.ZY_CODE = ZTS.ZY_CODE  
+		LEFT JOIN ZG_SPACE_SITE zss ON ZTS.YW_CODE = ZSS.TOWER_SITE_CODE
+        WHERE 1=1
+			<if test="obj.CityId != null and obj.CityId!=''">
+				AND  stas.CITY_ID = #{obj.CityId,jdbcType=VARCHAR}
+			</if>
+			<if test="obj.CountyId != null and obj.CountyId!=''">
+				AND  stas.COUNTY_ID = #{obj.CountyId,jdbcType=VARCHAR}
+			</if>
+			<if test="obj.Code != null and obj.Code!=''">
+				AND  stas.ZY_CODE LIKE '%'||#{obj.Code,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="obj.Label != null and obj.Label!=''">
+				AND  ZSS.ZH_LABEL  LIKE '%'||#{obj.Label,jdbcType=VARCHAR}||'%'
+			</if>
+			AND stas.ELECTRICITY_TYPE IS NOT NULL
+			AND stas.SHARE_TYPE IS NOT NULL
+			AND stas.ZZ_TYPE IS NOT NULL
+	</select>
+	
+	<!--修改信息 -->
+	<update id="update" parameterType="com.audit.modules.towerbasedata.psu.entity.TowerPSUVO">
+	    UPDATE SYS_TOWER_ACCOUNT_SITE 
+		<set>
+		<if test="electricityType != null">
+			ELECTRICITY_TYPE = #{electricityType,jdbcType=VARCHAR},
+		</if>
+		<if test="shareType != null">
+			 SHARE_TYPE = #{shareType,jdbcType=VARCHAR},
+		</if>
+		<if test="zzType != null">
+			 ZZ_TYPE = #{zzType,jdbcType=VARCHAR},
+		</if>
+		<if test="updateTime != null">
+			 UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+		</if>
+		</set>
+		WHERE ID = #{id}
+    </update>
+
+	<!--删除信息 -->
+	<update id="updateRemove" >
+	    UPDATE SYS_TOWER_ACCOUNT_SITE 
+		set	ELECTRICITY_TYPE = NULL,
+			 SHARE_TYPE = NULL,
+			 ZZ_TYPE = NULL
+		WHERE ID in
+		<foreach collection="array" item="siteId" index="index"
+			open="(" separator="," close=")">
+			#{siteId}
+		</foreach>
+    </update>
+    
+   <!--  <select id="exportExcel" parameterType="java.util.Map" resultType="com.audit.modules.towerbasedata.psu.entity.TowerPSUVO">
+		SELECT * FROM(
+		SELECT 
+		rownum rn,
+		(SELECT zsc.CITY_NAME FROM ZG_SPACE_CITY zsc WHERE  zsc.INT_ID = stas.CITY_ID) AS cityStr,
+		(SELECT zsct.ZH_LABEL FROM ZG_SPACE_COUNTY zsct WHERE zsct.INT_ID = stas.COUNTY_ID) AS countyStr,
+		<include refid="columns" />		
+		FROM SYS_TOWER_ACCOUNT_SITE stas
+		LEFT JOIN ZG_TOWER_SITE zts ON stas.ZY_CODE = ZTS.ZY_CODE  
+		LEFT JOIN ZG_SPACE_SITE zss ON ZTS.YW_CODE = ZSS.TOWER_SITE_CODE
+        WHERE 1=1			
+			AND stas.ELECTRICITY_TYPE IS NOT NULL
+			AND stas.SHARE_TYPE IS NOT NULL
+			AND stas.ZZ_TYPE IS NOT NULL 
+			and rownum &lt; #{page})
+		WHERE rn &gt; #{rows}
+	</select> -->
+	
+	 <select id="exportExcel" parameterType="java.util.Map" resultType="com.audit.modules.towerbasedata.psu.entity.TowerPSUVO">
+		SELECT * FROM(
+		SELECT 
+		rownum rn,
+		(SELECT zsc.NAME FROM YDJH_AREA zsc WHERE  zsc.ID = stas.CITY_ID) AS cityStr,
+		(SELECT zsct.NAME FROM YDJH_AREA zsct WHERE zsct.ID = stas.COUNTY_ID) AS countyStr,
+		<include refid="columns" />		
+		FROM SYS_TOWER_ACCOUNT_SITE stas
+		LEFT JOIN ZG_TOWER_SITE zts ON stas.ZY_CODE = ZTS.ZY_CODE  
+		LEFT JOIN ZG_SPACE_SITE zss ON ZTS.YW_CODE = ZSS.TOWER_SITE_CODE
+        WHERE 1=1			
+			AND stas.ELECTRICITY_TYPE IS NOT NULL
+			AND stas.SHARE_TYPE IS NOT NULL
+			AND stas.ZZ_TYPE IS NOT NULL 
+			and rownum &lt; #{page})
+		WHERE rn &gt; #{rows}
+	</select>
+	
+    <select id="listCount" resultType="java.lang.Long">
+    SELECT
+			COUNT(stas.ID)
+			FROM SYS_TOWER_ACCOUNT_SITE stas
+		LEFT JOIN ZG_TOWER_SITE zts ON stas.ZY_CODE = ZTS.ZY_CODE  
+		LEFT JOIN ZG_SPACE_SITE zss ON ZTS.YW_CODE = ZSS.TOWER_SITE_CODE
+        WHERE 1=1
+        AND stas.ELECTRICITY_TYPE IS NOT NULL
+			AND stas.SHARE_TYPE IS NOT NULL
+			AND stas.ZZ_TYPE IS NOT NULL 	
+    </select>
+    
+</mapper>

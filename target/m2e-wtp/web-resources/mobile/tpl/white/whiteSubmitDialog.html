@@ -1,0 +1,237 @@
+﻿<!-- 自维电费稽核页面详情 dialog -->
+<div class="ledge-detail ledge-edit elec-dialog">
+    <h4 style="border-bottom: 1px solid #e1e4e6;">白名单详情</h4>
+    <div class="ledge-content">
+        <div class="pannel-title">
+            <ul>
+                <li ng-model="tab"  ng-click="tab=1" ng-class="{'pannel-curr':tab==1}">基本信息</li>
+                <li ng-model="tab" ng-click="tab=2" ng-class="{'pannel-curr':tab==2}">审批流程</li>
+            </ul>
+        </div>
+        <div class="pannel-basic">
+            <div ng-if="tab==1" class="basic-container">
+                <div class="basic-audit">
+                    <div class="ledge-title">站点信息</div>
+                    <div class="ledge-table">
+                        <table>
+                            <tbody>
+                            	<tr>
+                                    <td>
+                                        <span class="table-left">地市:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="siteInfo1.cityName">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">区县:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="siteInfo1.zhLabel">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="table-left">三重一大会议编号:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="siteInfo1.szydNo">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">有效截止时间:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="dataEndTime">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="table-left">资管名称:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="siteInfo1.ziguanName">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">站点名称:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="siteInfo1.siteName">
+                                    </td>
+                                </tr>
+                                <tr>
+                                	<td>
+                                        <span class="table-left">移动编号:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="siteInfo1.siteNo">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">铁塔站址编号:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="siteInfo1.tsiteNo">
+                                    </td>
+                                    </tr>
+                                    <tr>
+                                    	<td>
+                                        <span class="table-left">白名单场景:</span>
+                                        <input
+                                            disabled="disabled"
+                                            type="text"
+                                            name="" class="table-right" ng-model="siteInfo1.cj">
+                                    </td>
+                                    </tr>
+                                    <tr>
+                                    	<td>
+                                        <span class="table-left">三重一大附件:</span>
+                                        <select ng-change="downFj()" ng-model="szydFj" id="szydFj">
+                                        	<option selected="selected">-已上传附件-</option>
+                                        	<option ng-repeat="szydFj in szydFjs" value="{{szydFj}}" >{{szydFj.filename}}.{{szydFj.ext}}</option>
+                                        </select>
+                                        <!--  <select ng-model="szydFj"
+										ng-options="value.filepath as value.filename for value in szydFjs"
+										ng-change="downFj()"
+										name="szydFj">
+										<option >--</option>
+										<option value="">--已上传附件--</option>
+								</select>  -->
+                                    </td>
+                                    </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- 发票信息-->
+                    <div class="ledge-title ledge-sub">
+                       		合同信息
+                    </div>
+                     <div class="ledge-table">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <span class="table-left">合同号:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="siteInfo1.contractId">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">合同名称:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="siteInfo1.contractName">
+                                    </td>
+                                </tr>
+                                <tr>
+                                	<td>
+                                        <span class="table-left">公司名称:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right">
+                                    </td>
+                                    <td>
+                                        <span class=" table-left">合同类型:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" value="虚拟合同">
+                                    </td>
+                                    </tr>
+                                    <tr>
+                                    	<td>
+                                        <span class="table-left">合同状态:</span>
+                                        <input
+                                            disabled="disabled"
+                                            type="text"
+                                            name="" class="table-right" value="有效">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">缴费周期:</span>
+                                        <input
+                                            disabled="disabled"
+                                            type="text"
+                                            name="" class="table-right" ng-model="siteInfo1.payType">
+                                    </td>
+                                    </tr>
+                                    <tr>
+                                    	<td>
+                                        <span class="table-left">单价或包干价:</span>
+                                        <input
+                                            disabled="disabled"
+                                            type="text"
+                                            name="" class="table-right" ng-model="siteInfo1.price">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">分摊比例:</span>
+                                        <input
+                                            disabled="disabled"
+                                            type="text"
+                                            name="" class="table-right" ng-model="siteInfo1.fTan">
+                                    </td>
+                                    </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    
+                    
+                    
+                    <!-- 供应商信息-->
+                    <div class="ledge-title ledge-sub">
+                       		供应商信息
+                    </div>
+                     <div class="ledge-table">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <span class="table-left">供应商名称:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="siteInfo1.supplyName">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">供应商地点ID:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="siteInfo1.supplySiteId">
+                                    </td>
+                                </tr>
+                                <tr>
+                                	<td>
+                                        <span class="table-left">供应商组织ID:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="siteInfo1.supplyerOrganizationId">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">开户行:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="siteInfo1.bankName">
+                                    </td>
+                                    </tr>
+                                    <tr>
+                                    	<td>
+                                        <span class="table-left">账户号:</span>
+                                        <input
+                                            disabled="disabled"
+                                            type="text"
+                                            name="" class="table-right" ng-model="siteInfo1.bankacName">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">银行账号:</span>
+                                        <input
+                                            disabled="disabled"
+                                            type="text"
+                                            name="" class="table-right" ng-model="siteInfo1.bankNum">
+                                    </td>
+                            </tbody>
+                        </table>
+                    </div>
+            </div>
+        </div>
+        <div ng-if="tab==2" class="pannel-info">
+            <div class="basic-audit">
+                <ul class="info-list">
+                    <li ng-repeat="item in whiteFlow track by $index">
+                        <p>
+                            <span>{{$index+1}}.</span>
+                            <span>{{item.time}}</span>
+                            <span>{{item.user.userName}}</span>
+                        </p>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width:25%">操作</th>
+                                    <th style="width:30%">操作姓名</th>
+                                    <th style="width:30%">审批意见</th>
+                                    <th style="width:30%">处理时间</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{item.status |whiteFlowType}}</td>
+                                    <td>{{item.person}}</td>
+                                    <td>{{item.remark}}</td>
+                                    <td>{{item.time}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="reimbur-foot ledge-foot audit-page-elec">
+            <button ng-if="flag" ng-click="closePage()" class="reimbur-cancel btn">取消</button>
+            <button ng-if="flagSave" ng-click="closePage()" class="reimbur-save btn">关闭</button>
+            <button ng-if="flag && !isZWsubmitSave && !isZWauditSave" ng-click="editZiweiElectricty(0)" class="reimbur-save btn">保存</button>
+            <button ng-if="isZWauditSave && !flagSave" ng-click="editZiweiAudit()" class="reimbur-save btn">保存</button>
+        </div>
+    </div>
+</div>

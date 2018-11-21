@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.electricity.dao.MeterDao">
+	<sql id="columns">
+		METER_ID AS meterId,OWNER_ID AS ownerId,METER_NUMBER AS meterNumber,
+		METER_IDENTIFIER AS meterIdentifier,METER_ACCOUT AS meterAccout,METER_TYPE AS meterType,
+		METER_PURPOSE AS meterPurpose
+	</sql>
+	<select id="queryMeter" parameterType="Integer" resultType="com.audit.modules.electricity.entity.MeterVo">
+		SELECT 
+			<include refid="columns"/>
+		FROM 
+			SYS_METER
+		WHERE 1=1 AND METER_ID = #{meterId,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="queryMeterList" parameterType="Integer" resultType="com.audit.modules.electricity.entity.MeterVo">
+		SELECT 
+			<include refid="columns"/>
+		FROM 
+			SYS_METER
+		WHERE 1=1
+			<if test="ownerId !=null and ownerId !=''">
+				AND  OWNER_ID = #{ownerId,jdbcType=VARCHAR}
+			</if>
+	</select>
+	<insert id="saveMeter" parameterType="com.audit.modules.electricity.entity.MeterVo">
+		INSERT INTO SYS_METER(
+			METER_ID,OWNER_ID,METER_NUMBER,METER_IDENTIFIER,METER_ACCOUT,METER_TYPE,METER_PURPOSE
+		)
+		VALUES(
+			#{meterId,jdbcType=VARCHAR},#{ownerId,jdbcType=VARCHAR},#{meterNumber,jdbcType=VARCHAR},#{meterIdentifier,jdbcType=VARCHAR},
+			#{meterAccout,jdbcType=VARCHAR},#{meterType,jdbcType=VARCHAR},#{meterPurpose,jdbcType=VARCHAR}
+		)
+	</insert>
+	<update id="updateMeter" parameterType="com.audit.modules.electricity.entity.MeterVo">
+		UPDATE 
+			SYS_METER
+		SET
+			OWNER_ID = #{ownerId,jdbcType=VARCHAR},
+			METER_NUMBER = #{meterNumber,jdbcType=VARCHAR},
+			METER_IDENTIFIER = #{meterIdentifier,jdbcType=VARCHAR},
+			METER_ACCOUT = #{meterAccout,jdbcType=VARCHAR},
+			METER_TYPE = #{meterType,jdbcType=VARCHAR},
+			METER_PURPOSE = #{meterPurpose,jdbcType=VARCHAR}
+		WHERE 
+			METER_ID = #{meterId}
+	</update>
+	<delete id="deleteMeter">
+        DELETE FROM SYS_METER WHERE METER_ID = #{meterId}
+    </delete>
+    
+    <delete id="deleteMeterByOwnerId">
+        DELETE FROM SYS_METER WHERE OWNER_ID = #{ownerId}
+    </delete>
+</mapper>

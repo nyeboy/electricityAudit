@@ -1,0 +1,68 @@
+<style>
+    .nav ul{
+
+    }
+    .nav ul li a{
+        cursor: pointer;
+    }
+    .nav>li>a:hover, .nav>li>a:focus {
+        text-decoration: none;
+        background-color: #fff;
+    }
+    .myclass {
+        background-color: #f8fcff;
+        font-weight: bold;
+        color: #1a62c4 !important;
+        border-left: 4px solid #0775ca !important;
+    }
+</style>
+
+<div class="aside-wrap" >
+    <div class="navi-wrap">
+
+        <!-- nav -->
+        <nav class="navi">
+            <!-- list -->
+            <ul class="nav menu-box">
+                <li ng-repeat="item in menu track by $index" style="display: {{item.display}}" class="first-level">
+                    <!-- <a ui-sref="{{item.state}}" class="auto"> -->
+                    <a ng-click="goPage(item,$event)" href="" class="auto menu-nav sub-level">
+                        {{item.value}}
+                    </a>
+
+                    <ul style="display: block " class="menu-ul" >
+                        <li ng-repeat="item2 in item.child">
+                            <!-- <img ng-src="{{item2.icon}}" alt=""> -->
+                            <a ng-click="goPage(item2,$event)" href="" class="auto"  ng-class="{'show-menu':item2.child.length >0,'myclass':selectedMenu==item2.id}">
+
+                                <!-- <i class="{{item2.icon}}"></i> -->
+                                {{item2.value}}
+                            </a>
+
+                            <ul class="menu-level">
+                                <li ng-repeat="item3 in item2.child">
+                                    <a ng-click="goPage(item3,$event)" href="" class="auto third-level"  ng-class="{'show-menu':item3.child.length>0,'myclass':selectedMenu==item3.id}" >
+
+                                        {{item3.value}}
+                                    </a>
+                                    <ul>
+                                        <li ng-repeat="item4 in item3.child">
+                                            <a ng-click="goPage(item4,$event)" href="" class="auto fourth-level" ng-class="{'show-menu':item4.child.length>0,'myclass':selectedMenu==item4.id}">
+
+                                               {{item4.value}}
+                                            </a>
+
+
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <!-- / list -->
+        </nav>
+        <!-- nav -->
+    </div>
+</div>

@@ -1,0 +1,50 @@
+<!-- 其他信息管理 dialog弹框修改 -->
+<div class="ngdialog-content" role="document" style="width: 605px;">
+<div ng-show="status=='update'" class="reimbur-dialog-title">报账点信息修改</div>
+<div ng-show="status=='view'" class="reimbur-dialog-title">报账点信息查看</div>
+<div class="business-box" id="businessBox">
+    <div class="contract-edit">
+        <form action="">
+            <ul class="user-list">
+                <li><span>报账点名称:</span><input ng-model="siteInfo.accountName" type="text" name="" value="" ng-disabled="status=='view'"></li>
+                <li><span>报账点别名:</span><input ng-model="siteInfo.accountAlias" type="text" name="" value="" ng-disabled="status=='view'"></li>
+                <li ng-show="status=='view'"><span>缴费类型:</span><input ng-model="siteInfo.payTypee" type="text" name="" value=""  ng-disabled="status=='view'"></li>
+                
+                <li ng-show="status!='view'"><span>缴费类型:</span> <select  name="payTypee" class="title-select"
+										ng-model="siteInfo.payTypee" 
+										ng-change="modifyChangePayTyp(siteInfo.payTypee)">	
+										<option value="-1"> -- 请选择部门 -- </option>
+										<option value="2">WLAN</option>
+										<option value="3">小区宽带</option>
+										<option value="4">天网</option>
+										<option value="0">直放站</option>
+										<option value="1">干放站</option>
+										<option value="5">智能交通</option>
+										<option value="6">雪亮工程</option>
+									</select>	
+				</li>
+                
+				<li><span>所属专业:</span><input ng-model="siteInfo.professional" type="text" name="" value="" ng-disabled="status=='view'"></li>
+                <li><span>资管站点名称:</span><input ng-model="siteInfo.siteName" type="text" name="" value="" ng-disabled="status=='view'"></li>
+                <li><span>原财务站点名称:</span><input ng-model="siteInfo.oldFinanceName" type="text" name="" value="" ng-disabled="status=='view'"></li>
+                <li><span>站点状态:</span> <select  name="islock" class="title-select"
+										ng-model="siteInfo.islock" 
+										ng-change="modifyChangeIslock()">	
+										<option value="-1">{{siteInfo.islock |asiteType}}</option>
+										<option value="0">正常</option>
+										<option value="1">锁定</option>
+									</select>	
+				</li>
+                
+                 
+            </ul>
+            <!-- 查看时隐藏该功能 -->
+            <div class="submit-btn" style="padding-left: 0px;">
+                <button ng-show="status=='update'" ng-click="closeDialog('showDetailDialog')" class="reimbur-cancel btn">取消</button>
+                <button ng-show="status=='update'" ng-click="updateSite()" class="reimbur-save btn">保存</button>
+                 <button ng-show="status=='view'" ng-click="closeDialog('showDetailDialog')" class="reimbur-cancel btn">确定</button>
+            </div>
+        </form>
+    </div>
+</div>
+</div>

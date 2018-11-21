@@ -1,0 +1,39 @@
+﻿<!-- 白名单配置dialog -->
+<div class="ledge-detail ledge-edit elec-dialog">
+   <!--  <h4  style="border-bottom: 1px solid #e1e4e6;">驳回原因</h4> -->
+    <div class="ledge-content">
+    	<div class="table-details">
+    	<span>地市：</span>
+    		<select id="citycity" ng-change="cb()" ng-model="citycitycity">
+    			<option value="831">宜宾</option>
+    			<option value="837">阿坝</option>
+    			<option value="818">达州</option>
+    			<option value="836">甘孜</option>
+    			<option value="839">广元</option>
+    			<option value="834">凉山</option>
+    			<option value="830">泸州</option>
+    			<option value="833">眉山</option>
+    			<option value="816">绵阳</option>
+    			<option value="842">内江</option>
+    			<option value="817">南充</option>
+    			<option value="813">自贡</option>
+    			<option value="825">遂宁</option>
+    			<option value="835">雅安</option>
+    			<option value="832">资阳</option>
+    			<option value="812">攀枝花</option>
+    			<option value="826">广安</option>
+    			<option value="843">乐山</option>
+    			<option value="827">巴中</option>
+    			<option value="28">成都</option>
+    			<option value="838">德阳</option>
+    		</select>
+    	<span>比例：</span>
+    		<select ng-show="!setflag" ng-model="biliset" id="bilibili"  ng-change="changebili()">
+    			<option ng-repeat="item in zbis" value="{{item}}">{{item}}</option>
+    			<option>其他</option>
+    		</select>
+    		<input ng-show="setflag" type="text" id="setbilinum">
+    		<button ng-click="sureChangeBi()">变更</button>
+    	</div>
+    	
+	</div>

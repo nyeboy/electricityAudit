@@ -1,0 +1,87 @@
+<!-- 自维页面基础数据呈现 -->
+<div class="system-content" id="systemContent">
+    <div class="business-box" id="businessBox">
+        <div class="content-rout" id="contentRout">
+            <span>基础数据</span>&gt;<span class="now-rout">基础数据呈现</span>
+            <button ng-click="downDataExcel()" class="btn btn-primary" type="button">导出excel</button>
+            <div class="right-router">报账点 | <span>共<i class="number">{{pageInfo.totalCount}}</i>个</span></div>
+        </div>
+        <div class="content-box" id="contentBox">
+            <div class="search-box">
+                <div>
+                    <select ng-readonly="userLevel==1" name="" id="" class="title-select con-parts"
+                            ng-model="cityId"
+                            ng-options="city.key as city.value for city in citys"
+                            ng-change="queryCountyList(cityId)"
+
+                    ><option value="">全省</option></select>
+
+                    <!--//-->
+
+
+                    <select class="title-select con-parts"
+                            ng-model="countyId"
+                            ng-options="county.key as county.value for county in countys"
+                    ><option value="">全市</option></select>
+                    <input ng-model="siteName" type="text" placeholder="报账点" class="process-input con-parts">
+                    <input ng-model="meterCode" type="text" placeholder="电表户号" class="process-input con-parts">
+                </div>
+                <button ng-click="getData(true)" class="btn btn-primary" type="button">搜索</button>
+            </div>
+            <!-- table-content -->
+            <div class="table-content">
+                <!-- table -->
+                <div class="data-table">
+
+
+                    <div class="table-details">
+                        <div>
+                            <table>
+
+                                <tbody class="query-date">
+                                <tr>
+                                <th>序号</th>
+                                <th>地区</th>
+                                <th>区县</th>
+                                <th>报账点名称</th>
+                                <th>报账点别名</th>
+                                <th>缴费类别</th>
+                                <th>所属专业</th>
+                                <th>资管站点名称</th>
+                                <th>原财务站点名称</th>
+                                <th>产权性质</th>
+                                <th>详细信息</th>
+                            </tr>
+                                    <tr ng-repeat="item in list track by $index">
+                                        <td>{{((params.pageNo-1)*params.pageSize)+1*(1+$index)}}</td>
+                                        <td>{{item.area}}</td>
+                                        <td>{{item.county}}</td> 
+                                        <td>{{item.accountName}}</td>
+                                        <td>{{item.accountAlias}}</td>
+                                        <td>{{item.payTypee | jfType}}</td>
+                                        <td>{{item.professional}}</td>
+                                        <td>{{item.resourceName}}</td>
+                                        <td>{{item.oldFinanceName}}</td>
+                                        <td>{{item.productNature == 0?"自维":"塔维"}}</td>
+                                        <td>
+                                            <a ng-click="showDetail(item)" href="javascript:void(0)" class="check-detail">查看</a>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                       
+                    </div>
+					 
+                </div>
+                <div  class="page-foot">
+                        <im-pagination conf="pageInfo" params="params" get-data="getData()"></im-pagination>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

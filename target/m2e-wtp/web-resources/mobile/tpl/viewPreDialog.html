@@ -1,0 +1,91 @@
+<!-- 预付单查看详情弹框 -->
+<div class="ledge-detail add-details">
+    <div class="ledge-title">预付提交详情</div>
+    <div class="ledge-table">
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                        <span class="table-left">预付提交单号:</span>
+                        <input type="text" disabled="disabled" name="" class="table-right" value="{{details.submitNo}}">
+                    </td>
+                    <td>
+                        <span class="table-left">区县经办人:</span>
+                        <input type="text" disabled="disabled" name="" class="table-right" value="{{details.trusteesName}}">
+                    </td>
+                    <td>
+                        <span class="table-left">制单时间:</span>
+                        <input type="text" disabled="disabled" name="" class="table-right" value="{{details.createDate | date:'yyyy-MM-dd hh:mm:ss'}}">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="table-left">地市:</span>
+                        <input type="text" disabled="disabled" name="" class="table-right" value="{{details.cityName}}">
+                    </td>
+                    <td>
+                        <span class="table-left">区县:</span>
+                        <input type="text" disabled="disabled" name="" class="table-right" value="{{details.countyName}}">
+                    </td>
+                    <td>
+                        <span class="table-left">推送类型:</span>
+                        <input type="text" disabled="disabled" name="" class="table-right" value="{{details.reimbursementType}}">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="table-left">报销状态:</span>
+                        <input type="text" disabled="disabled" name="" class="table-right" value="{{details.status | pushType}}">
+                    </td>
+                    
+                    <td>
+                        <span class="table-left">总金额:</span>
+                        <input type="text" disabled="disabled" name="" class="table-right" value="{{details.moneyAmount}}">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+<!-- ********************************* -->
+  <!-- 稽核单列表-->
+    <div class="ledge-title ledge-sub">预付单列表</div>
+    <div class="invoinc-table">
+        <div class="table-details invoinc-list" id="listDetail">
+            <div>
+                <table>
+                    <tbody class="query-date">
+                    <tr>
+                    <th>预付单批次号</th>
+                    <th>制单人</th>
+                    <th>供应商</th>
+                    <th>预付金额</th>
+                    <th>制单时间</th>
+                    <th>操作</th>
+                </tr>
+                         <tr  ng-repeat="item in details.adpv track by $index">
+                            <td>{{item.paymentNumber}}</td>
+                            <td>{{item.submitMan}}</td>
+                            <td>{{item.supplyStr}}</td>
+                            <td>{{item.totalMoney}}</td>
+                            <td>{{item.createDate | date:"yyyy-MM-dd hh:mm:ss"}}</td>
+                          
+                            <td>
+                            
+                 				<a ng-click="getPreDetail(item.id)" class="check-detail" >详情</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- **************************************************** -->
+    <div class="reimbur-foot ledge-foot">
+       <!--  <button ng-if="!isZWfrinc" ng-click="revocationProcess(details.id)" class="reimbur-cancel btn">取消</button> -->
+        <button ng-if="!isZWfrinc" ng-click="saveDialog()" class="reimbur-save btn">确定</button>
+        <button ng-if="isZWfrinc" ng-click="closeDialog('SubmitDialog')" class="reimbur-save btn">关闭</button>
+    </div>
+</div>
+<style type="text/css">
+.invoinc-list .query-date td{ width: auto; }
+</style>

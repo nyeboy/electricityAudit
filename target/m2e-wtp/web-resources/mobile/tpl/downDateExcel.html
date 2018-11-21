@@ -1,0 +1,60 @@
+ <div><button ng-click="downDataExcelGo()" class="btn btn-primary" type="button">导出</button></div>
+<div id="exportable">
+	<table border="1px solid black">
+    
+		<tr>
+			<td>站点ID</td>
+			<td>报账点名称</td>
+			<td>报账点别名</td>
+			<td>地市</td>
+			<td>区县</td>
+			<td>机房或资源点名称</td>
+			<td>原财务点名称</td>
+			<td>报销周期</td>
+			<td>供应商名称</td>
+			<td>站点名称</td>
+			<td>用电类型</td>
+			<td>供电公司</td>
+			<td>共享方式</td>
+			<td>电费缴纳方式</td>
+			<td>合同ID</td>
+			<td>合同名称</td>
+			<td>是否包干</td>
+			<td>包干价</td>
+			<td>电表户号</td>
+			<td>单价（不含税)</td>
+			<td>组织结构id</td>
+			<td>供应商ou名称</td>
+			<td>供应商地址</td>
+			<td>个人供应商名称</td>
+			<td>电话</td>
+		</tr>
+		<tr ng-repeat="item in excel" >
+			<td>{{item.siteInfoVO.id}}</td>
+			<td>{{item.siteInfoVO.accountName}}</td>
+			<td>{{item.siteInfoVO.accountAlias}}</td>
+			<td>{{item.siteInfoVO.area}}</td>
+			<td>{{item.siteInfoVO.county}}</td>
+			<td>{{item.siteInfoVO.resourceName}}</td>
+			<td>{{item.siteInfoVO.oldFinanceName}}</td>
+			<td>{{item.siteInfoVO.cycle}}</td>
+			<td>{{item.siteInfoVO.supplierName}}</td>
+			<td>{{item.siteInfoVO.siteName}}</td>
+			<td>{{item.siteInfoVO.electricityType}}</td>
+			<td>{{item.siteInfoVO.supplyCompany}}</td>
+			<td>{{item.siteInfoVO.shareType}}</td>
+			<td>{{item.siteInfoVO.payType}}</td>
+			<td>{{item.contractVO.id}}</td>
+			<td>{{item.contractVO.name}}</td>
+			<td>{{item.contractVO.isClud}}</td>
+			<td>{{item.contractVO.cludPrice}}</td>
+			<td>{{item.contractVO.paymentAccountCode}}</td>
+			<td>{{item.contractVO.unitPrice}}</td>
+			<td>{{item.supplierVO.organizationCode}}</td>
+			<td>{{item.supplierVO.ouName}}</td>
+			<td>{{item.supplierVO.address}}</td>
+			<td>{{item.supplierVO.employeeName}}</td>
+			<td>{{item.supplierVO.phone}}</td>
+		</tr>
+	</table>
+</div>

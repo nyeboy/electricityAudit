@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.tower.dao.TowerSiteDao">
+
+    <select id="queryzhLabelByTowerSiteCode" parameterType="java.lang.String" resultType="com.audit.modules.tower.entity.TowerSiteVO">
+		SELECT
+		    stas.ID AS id,
+			stas.ZY_CODE AS zyCode,
+			zss.ZH_LABEL AS zhLabel,
+			stas.ZY_NAME AS zyName,
+			stc.IS_CLUD AS isClud
+		FROM
+			SYS_TOWER_ACCOUNT_SITE stas
+		LEFT JOIN ZG_TOWER_SITE zts ON zts.ZY_CODE = stas.ZY_CODE
+		LEFT JOIN ZG_SPACE_SITE zss ON zss.TOWER_SITE_CODE = zts.YW_CODE
+		LEFT JOIN SYS_TOWER_SITE_MID_CONTRACT stsmc ON stsmc.SYS_TOWER_SITE_ID=stas.ID
+		LEFT JOIN SYS_TOWER_CONTRACT stc ON  stsmc.SYS_TOWER_CONTRACT_ID = stc.CONTRACT_NO
+		WHERE stas.ZY_CODE = #{code}
+	</select>
+	
+	
+	  <!--   <select id="queryzhLabelByTowerSiteId" parameterType="java.lang.String" resultType="com.audit.modules.tower.entity.TowerSiteVO">
+			SELECT
+		    stas.ID AS id,
+			stas.ZY_CODE AS zyCode,
+			zss.ZH_LABEL AS zhLabel,
+			stas.ZY_NAME AS zyName,
+			stc.IS_CLUD AS isClud,
+			zsc.CITY_NAME AS cityName,
+			zscc.ZH_LABEL AS countyName
+		FROM
+			SYS_TOWER_ACCOUNT_SITE stas
+		LEFT JOIN ZG_TOWER_SITE zts ON zts.ZY_CODE = stas.ZY_CODE
+		LEFT JOIN ZG_SPACE_SITE zss ON zss.TOWER_SITE_CODE = zts.YW_CODE
+		LEFT JOIN SYS_TOWER_SITE_MID_CONTRACT stsmc ON stsmc.SYS_TOWER_SITE_ID=stas.ID
+		LEFT JOIN SYS_TOWER_CONTRACT stc ON  stsmc.SYS_TOWER_CONTRACT_ID = stc.CONTRACT_NO
+		LEFT JOIN ZG_SPACE_CITY zsc on zsc.INT_ID=stas.CITY_ID
+		LEFT JOIN ZG_SPACE_COUNTY zscc on zscc.INT_ID=stas.COUNTY_ID
+		WHERE stas.ID = #{id}
+	</select> -->
+
+  <select id="queryzhLabelByTowerSiteId" parameterType="java.lang.String" resultType="com.audit.modules.tower.entity.TowerSiteVO">
+			SELECT
+		    stas.ID AS id,
+			stas.ZY_CODE AS zyCode,
+			zss.ZH_LABEL AS zhLabel,
+			stas.ZY_NAME AS zyName,
+			stc.IS_CLUD AS isClud,
+			zsc.NAME AS cityName,
+			zscc.NAME AS countyName
+		FROM
+			SYS_TOWER_ACCOUNT_SITE stas
+		LEFT JOIN ZG_TOWER_SITE zts ON zts.ZY_CODE = stas.ZY_CODE
+		LEFT JOIN ZG_SPACE_SITE zss ON zss.TOWER_SITE_CODE = zts.YW_CODE
+		LEFT JOIN SYS_TOWER_SITE_MID_CONTRACT stsmc ON stsmc.SYS_TOWER_SITE_ID=stas.ID
+		LEFT JOIN SYS_TOWER_CONTRACT stc ON  stsmc.SYS_TOWER_CONTRACT_ID = stc.CONTRACT_NO
+		LEFT JOIN YDJH_AREA zsc on zsc.ID=stas.CITY_ID
+		LEFT JOIN YDJH_AREA zscc on zscc.ID=stas.COUNTY_ID
+		WHERE stas.ID = #{id}
+	</select>
+
+    <select id="queryTowerSite" parameterType="java.util.Map" resultType="com.audit.modules.tower.entity.TowerSiteVO">
+        SELECT
+            stas.ID AS id,
+            stas.ZY_CODE AS zyCode,
+            zss.ZH_LABEL AS zhLabel,
+            stas.ZY_NAME AS zyName,
+            zts.YW_CODE AS ywCode,
+            stc.IS_CLUD AS isClud
+        FROM
+            SYS_TOWER_ACCOUNT_SITE stas
+            LEFT JOIN ZG_TOWER_SITE zts ON zts.ZY_CODE = stas.ZY_CODE
+            LEFT JOIN ZG_SPACE_SITE zss ON zss.TOWER_SITE_CODE = zts.YW_CODE
+            LEFT JOIN SYS_TOWER_SITE_MID_CONTRACT stsmc ON stsmc.SYS_TOWER_SITE_ID=stas.ID
+            LEFT JOIN SYS_TOWER_CONTRACT stc ON  stsmc.SYS_TOWER_CONTRACT_ID = stc.ID
+        WHERE
+        1=1
+        <if test="obj.zyName!=null and obj.zyName!=''">
+            AND (
+                  stas.ZY_NAME LIKE '%'||#{obj.zyName}||'%'
+                  OR stas.ZY_CODE LIKE '%'||#{obj.zyName}||'%'
+                  OR zss.ZH_LABEL LIKE '%'||#{obj.zyName}||'%' )
+        </if>
+         <if test="obj.isSfSite!=null and obj.isSfSite == '1'.toString()">
+            AND (stas.IS_SFSITE IS NULL OR stas.IS_SFSITE = #{obj.isSfSite})
+        </if> 
+        <if test="obj.isSfSite!=null and obj.isSfSite == '2'.toString()">
+            AND stas.IS_SFSITE = #{obj.isSfSite}
+        </if>
+        <if test="obj.cityId!=null and obj.cityId!=''">
+            AND stas.CITY_ID = #{obj.cityId}
+        </if>  
+        <if test="obj.countyId!=null and obj.countyId!=''">
+            AND stas.COUNTY_ID = #{obj.countyId}
+        </if>
+    </select>
+
+ 	<select id="selectWatthourCode" parameterType="java.lang.String" resultType="java.lang.String">
+      SELECT
+         STWM.CODE 
+      FROM
+         SYS_TOWER_WATTHOUR_METER STWM
+         LEFT JOIN SYS_TOWER_ELE_MID_WATTHOUR STEMW ON STEMW.SYS_TOWER_WATTHOUR_ID = STWM.ID
+         LEFT JOIN SYS_TOWER_ELECTRICITY STE ON STE.ID = STEMW.SYS_TOWER_ELE_ID
+       WHERE STE.SYS_TOWER_SIT_NO=#{zyCode}
+       GROUP BY STWM.CODE
+    </select>
+    
+    <select id="selectWatthour" parameterType="java.lang.String" resultType="com.audit.modules.electricity.entity.TowerWatthourMeterVO">
+       SELECT * FROM (
+             SELECT
+                 STWM.CODE as code,
+                 STWM.PAYMENT_ACCOUNT_CODE as paymentAccountCode,
+                 STWM.MAX_READING as maxReading,
+                 STWM.RATE as rate,
+                 STWM.END_MMETER as startAmmeter,
+                 STWM.BELONG_END_TIME as belongStartTime
+             FROM
+                 SYS_TOWER_WATTHOUR_METER STWM
+                 LEFT JOIN SYS_TOWER_ELE_MID_WATTHOUR STEMW ON STEMW.SYS_TOWER_WATTHOUR_ID = STWM.ID
+                 LEFT JOIN SYS_TOWER_ELECTRICITY STE ON STE.ID = STEMW.SYS_TOWER_ELE_ID
+             WHERE
+                STWM.CODE=#{watthourMeterCode}
+             ORDER BY 
+               STWM.BELONG_END_TIME DESC )
+        WHERE ROWNUM=1
+    </select>
+
+    <select id="queryZyCode" resultType="String" fetchSize="512">
+      SELECT DISTINCT ZY_CODE FROM ZG_TOWER_SITE 
+      	WHERE ZY_CODE in
+		<foreach collection="list" item="code" index="index"
+			open="(" separator="," close=")">
+			#{code,jdbcType=VARCHAR}
+		</foreach>
+    </select>
+    
+    <select id="queryZgName" resultType="String" fetchSize="512">
+      SELECT DISTINCT ZH_LABEL FROM ZG_SPACE_SITE 
+      	WHERE ZH_LABEL in
+		<foreach collection="list" item="code" index="index"
+			open="(" separator="," close=")">
+			#{code,jdbcType=VARCHAR}
+		</foreach>
+    </select>
+
+    <insert id="batchSaveTowerSiteInfo" parameterType="com.audit.modules.tower.entity.TowerSiteVO">
+        INSERT INTO
+                SYS_TOWER_ACCOUNT_SITE(
+                  ID,
+                  CITY_ID,
+                  COUNTY_ID,
+                  ZY_CODE,
+                  ZY_NAME,
+                  ELECTRICITY_TYPE,
+                  SHARE_TYPE,
+                  CYCLE,
+                  ZZ_TYPE,
+                  CREATE_TIME,
+                  CREATE_PERSON,
+                  IS_SFSITE,
+                  ZG_NAME,
+                  ZG_CODE
+                )
+        <foreach collection="list" index="index" item="site" separator="union all">
+            select
+              #{site.id,jdbcType=VARCHAR},
+              #{site.cityId,jdbcType=VARCHAR},
+              #{site.countyId,jdbcType=VARCHAR},
+              #{site.zyCode,jdbcType=VARCHAR},
+              #{site.zyName,jdbcType=VARCHAR},
+              #{site.electricityType,jdbcType=VARCHAR},
+              #{site.shareType,jdbcType=VARCHAR},
+              #{site.cycle,jdbcType=INTEGER},
+              #{site.zzType,jdbcType=VARCHAR},
+              #{site.createTime,jdbcType=TIMESTAMP},
+              #{site.createPerson,jdbcType=VARCHAR},
+              #{site.isSfSite,jdbcType=VARCHAR},
+              #{site.zhLabel,jdbcType=VARCHAR},
+              #{site.ywCode,jdbcType=VARCHAR}
+            from dual
+        </foreach>
+    </insert>
+
+    <insert id="batchSaveContractInfo" parameterType="com.audit.modules.towerbasedata.contract.entity.TowerContractVO">
+        INSERT INTO
+          SYS_TOWER_CONTRACT(
+            ID,
+            CONTRACT_NO,
+            NAME,
+            START_TIME,
+            END_TIME,
+            IS_CLUD,
+            CLUD_PRICE,
+            PAYMENT_CYCLE,
+            PRICE
+        )
+        <foreach collection="list" index="index" item="site" separator="union all">
+            select
+                #{site.id,jdbcType=VARCHAR},
+                #{site.contractNo,jdbcType=VARCHAR},
+                #{site.name,jdbcType=VARCHAR},
+                #{site.startDate,jdbcType=TIMESTAMP},
+                #{site.endDate,jdbcType=TIMESTAMP},
+                #{site.isClud,jdbcType=VARCHAR},
+                #{site.cludPrice,jdbcType=VARCHAR},
+                #{site.paymentCycle,jdbcType=VARCHAR},
+                #{site.unitPrice,jdbcType=VARCHAR}
+            from dual
+        </foreach>
+    </insert>
+
+    <insert id="batchSaveTowerMidContractInfo" parameterType="com.audit.modules.electricity.entity.SysTowerSiteMidContract">
+        INSERT INTO
+        SYS_TOWER_SITE_MID_CONTRACT(
+            ID,
+            SYS_TOWER_SITE_ID,
+            SYS_TOWER_CONTRACT_ID
+        )
+        <foreach collection="list" index="index" item="site" separator="union all">
+            select
+                #{site.id,jdbcType=VARCHAR},
+                #{site.sysTowerSiteId,jdbcType=VARCHAR},
+                #{site.sysContractId,jdbcType=VARCHAR}
+            from dual
+        </foreach>
+    </insert>
+
+	
+</mapper>

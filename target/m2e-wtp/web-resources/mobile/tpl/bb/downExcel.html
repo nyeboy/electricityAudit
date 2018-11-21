@@ -1,0 +1,19 @@
+ <div><button ng-click="downExcelGo()" class="btn btn-primary" type="button">导出</button></div>
+<div id="exportable">
+	<table border="1px solid black">
+		<tr>
+			<td>站点名</td>
+			<td>报账点名称</td>
+			<td>报账点别名</td>
+			<td>用电类型</td>
+			<td>产权性质</td>
+		</tr>
+		<tr ng-repeat="item in excel" >
+			<td>{{item.siteName}}</td>
+			<td>{{item.accountName}}</td>
+			<td>{{item.accountAlias}}</td>
+			<td>{{item.electricityType | gdType}}</td>
+			<td>{{item.productNature | cqType}}</td>
+		</tr>
+	</table>
+</div>

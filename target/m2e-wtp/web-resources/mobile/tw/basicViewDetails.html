@@ -1,0 +1,128 @@
+ <!-- 基础数据呈现查看详情 -->
+<div class="view-details">
+    <div class="details-tab">
+         <span ng-click="showAll(true)"  class="open-menu">全部展开</span>
+         <span ng-click="showAll(false)" class="stop-menu">全部收起</span>
+    </div>
+    <ul class="basic-details">
+        <li class="list list-hover" ng-click="basicinfo(1)" >
+            <span>基础信息</span>
+            <i class="arrow"></i>
+            <table class="Reimbursement">
+                <thead>
+                    <tr>
+                        <th>地市</th>
+                        <th>区县</th>
+                        <th>资管站点名称</th>
+                    </tr>
+                </thead>
+                <tbody>
+                     <tr> 
+                         <td>{{object.towerSiteInfo.cityName}}</td>
+                         <td>{{object.towerSiteInfo.countyName}}</td>
+                         <td>{{object.towerSiteInfo.zhLabel}}</td>
+                     </tr>
+                </tbody>
+            </table>
+        </li>
+        <li class="list list-hover" ng-click="basicinfotw(1)">
+            <span>合同信息</span>
+            <i class="arrow"></i>
+            <table id="header">
+                <thead>
+                    <tr>
+                        <th>合同ID</th>
+                        <th>合同名称</th>
+                        <th>合同生效日期</th>
+                        <th>合同终止日期</th>
+                        <th>是否包干</th>
+                        <th>包干价</th>
+                        <th>缴费周期</th>
+                        <th>单价</th>
+                    </tr>
+                </thead>
+                <tbody>
+                     <tr ng-repeat="item in object.towerContractVO track by $index"> 
+                         <td>{{item.id}}</td>
+                         <td>{{item.name}}</td>
+                         <td>{{item.startDate |date:"yyyy-MM-dd"}}</td>
+                         <td>{{item.endDate |date:"yyyy-MM-dd"}}</td>
+                         <td>{{item.isClud}}</td>
+                         <td>{{item.cludPrice}}</td>
+                         <td>{{item.paymentCycle}}</td>
+                         <td>{{item.unitPrice}}</td>
+                     </tr>
+                </tbody>
+            </table>
+        </li>
+      
+        <li class="list list-hover" ng-click="basicinfotw(2)">
+            <span>供电信息</span>
+            <i class="arrow"></i>
+            <table id="epyte">
+                <thead>
+                    <tr>
+                        <th>用电类型</th>
+                        <th>站址类型</th>
+                        <th>共享方式</th>
+                    </tr>
+                </thead>
+                <tbody>
+                     <tr> 
+                         <td>{{object.towerDataShow.elecType}}</td>
+                         <td>{{object.towerDataShow.zzType}}</td>
+                         <td>{{object.towerDataShow.shareType}}</td>
+                     </tr>
+                </tbody>
+            </table>
+        </li>
+      
+        <li class="list list-hover" ng-click="basicinfotw(3)">
+            <span>机房设备信息</span>
+            <i class="arrow"></i>
+            <table id="info">
+                <thead>
+                    <tr>
+                        <th>机房或资源点名称</th>
+                        <th>机房类型</th>
+                        <th>网元状态</th>
+                        <th>设备专业</th>
+                        <th>设备类型</th>
+                        <th>设备型号</th>
+                        <th>生产厂家</th>
+                        <th>数量</th>
+                    </tr>
+                </thead>
+                <tbody>
+                 <tr ng-repeat="item in object.deviceVO track by $index"> 
+                    <td>{{item.equipmentRoomName}}</td>
+                    <td>{{item.equipmentRoomType}}</td>
+                    <td>{{item.deviceStatus}}</td>
+                    <td>{{item.deviceBelong}}</td>
+                    <td>{{item.deviceType}}</td>
+                    <td>{{item.deviceModel}}</td>
+                    <td>{{item.deviceVendor}}</td>
+                    <td>{{item.number}}</td>
+                 </tr>
+                </tbody>
+            </table>
+        </li>
+        <li class="list list-hover" ng-click="basicinfotw(4)">
+            <span>其他信息</span>
+            <i class="arrow"></i>
+            <table id="otherinfotw">
+                <thead>
+                    <tr>
+                        <th>报销周期</th>
+                        <!-- <th>分摊比例</th> -->
+                </thead>
+                <tbody>
+                 <tr> 
+                    <td>{{object.towerDataShow.cycle}}</td>
+                   <!--  <td>{{object.towerDataShow.proportion}}</td> -->
+                 </tr>
+                </tbody>
+            </table>
+        </li>                 
+    </ul>
+</div>

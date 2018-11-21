@@ -1,0 +1,61 @@
+<!-- 电表信息管理修改 新增页面共用 -->
+<div class="system-content" style="background: #ffffff">
+<div class="business-box" id="businessBox">
+<div class="reimbur-dialog-title">电表信息管理修改</div>
+    <div class="electricity-edit">
+        <form action="">
+            <ul class="user-list" style="padding-top: 0px;">
+           		<li><span ng-if="watthour.mark">坏表电表号:</span><input ng-model="watthour.damageMeterNum" type="text" ng-if="watthour.mark" name="" value="" disabled="disabled"></li>
+                <li><span>报账点:</span><input ng-model="watthour.accountName" type="text" name="" value="移动办公楼" disabled="disabled"></li>
+                <li><span>财务报账点名称:</span><input ng-model="watthour.oldFinanceName" type="text" name="" value="" disabled="disabled"></li>
+				<li><span>当前电费归属日期:</span>
+				<input ng-laydate
+                       id="id1"
+                       ng-model="watthour.reimbursementDateStr"
+                       format="YYYY-MM-DD"
+                       type="text" class="process-input con-parts" name=""/>
+				</li> 
+                <li><span>电表标识符:</span><input ng-model="watthour.code" type="text" name="" value=""><i class="error"></i></li>
+
+                <li><span>电表户号:</span><input ng-model="watthour.paymentAccountCode" type="text" name="" value=""><i class="error"></i></li>
+                <li>
+                    <span>电表类型:</span>
+                    <select ng-model="watthour.ptype" name="" id="">
+                        <option value="1">普通</option>
+                        <option value="2">智能</option>
+                    </select>
+                </li>
+                <li>
+                    <span>电表状态:</span>
+                    <select ng-model="watthour.status" name="" id="">
+                        <option value="1">正常</option>
+                        <option value="0">损坏</option>
+                    </select>
+                </li>
+				<li><span>倍率:</span><input ng-model="watthour.rate" type="text" name="" value="20" ><i class="error"></i></li>
+                <li><span>最大读数:</span><input ng-model="watthour.maxReading" type="text" name="" value=""><i class="error"></i></li>
+                <li><span>当前读数:</span><input  ng-model="watthour.currentReadingStr"  type="text" name="" value=""><i class="error"></i></li>
+                <li><span>所属户头:</span>
+                	<select ng-model="watthour.belongAccount" name="" id="">
+                        <option value="1">移动</option>
+                        <option value="2">铁搭</option>
+                    </select>
+              	</li>
+              	<!-- <li><span>单价:</span><input ng-model="watthour.price" type="text" name="" value=""><i class="error"></i></li>  -->
+                <li style="display: none"><span>归属日期:</span>
+                <input ng-laydate
+                       id="id2"
+                       placeholder="电费最后一次报销的归属日期"
+                       ng-model="watthour.updateTimeStr"
+                       format="YYYY-MM-DD"
+                       type="text" class="process-input con-parts" name=""/>
+                 </li>
+            </ul>
+            <div class="submit-btn" style="padding-left: 0px;">
+            	<button ng-click="closeDialog('showDetailDialog')" class="reimbur-cancel btn">取消</button>
+        		<button ng-click="saveOrUpdate()" class="reimbur-save btn">保存</button>
+            </div>
+        </form>
+    </div>
+</div>
+    </div>

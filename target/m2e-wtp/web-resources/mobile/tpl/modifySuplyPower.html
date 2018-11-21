@@ -1,0 +1,53 @@
+<!-- 修改供电信息-->
+<div class="add-elecontent" style="padding-bottom: 0px;">  
+<div class="reimbur-dialog-title">供电信息修改</div>
+    <form action="">
+        <ul class="user-list" style="padding-bottom: 0px;">
+            <li>
+                <span>供电类型:</span>
+                <select  name="" id="" ng-model="supplyPower.electricityType">
+                    <option value="1">直供电</option>
+                    <option value="2">转供电</option>
+                </select>
+            </li>
+            <li>
+                <span>共享方式:</span>
+                <select  name="" id="" ng-model="supplyPower.shareType">
+                    <option value="1">共享</option>
+                    <option value="2">独享</option>
+                </select>
+            </li>
+            <li>
+                <span>供电公司\业主:</span>
+                <select  name="" id="" ng-model="supplyPower.supplyCompany">
+                    <option value="1">供电公司</option>
+                    <option value="2">业主</option>
+                </select>
+            </li>
+            <li>
+                <span>电费缴纳方式:</span>
+                <select  name="" id="" ng-model="supplyPower.payType">
+                    <option value="1">代维代缴</option>
+                    <option value="2">铁塔代缴</option>
+                    <option value="3">自缴</option>
+                </select>
+            </li>
+            <li>
+                <span>报账点名称:</span>
+               	<input type="text" ng-model="supplyPower.accountName" disabled="disabled">
+            </li>
+            <li>
+                <input type="hidden" ng-model="supplyPower.id" >
+            </li>
+            <div class="submit-btn" style="padding-left: 0px;">
+                      <button ng-click="closeDialog('showDetailDialog')" class="reimbur-cancel btn">取消</button>
+        <button ng-click="updateSupplyPower()" class="reimbur-save btn">保存</button>
+                    </div>
+        </ul>
+    </form>
+
+<!--     <div class="reimbur-foot ledge-foot">
+        <button ng-click="closeDialog('showDetailDialog')" class="reimbur-cancel btn">取消</button>
+        <button ng-click="updateSupplyPower()" class="reimbur-save btn">保存</button>
+    </div> -->
+</div>

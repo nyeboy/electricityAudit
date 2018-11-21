@@ -1,0 +1,221 @@
+﻿<!-- 电费稽核  -->
+<div class="system-content" id="systemContent">
+    <div class="business-box" id="businessBox">
+        <div class="content-rout" id="contentRout">
+            <span>基础电费</span>&gt;<span>电费提交</span>&gt;<span class="now-rout">电费稽核</span>
+        </div>
+        <div class="content-box" id="contentBox">
+            <div class="trariffc-table tariffc-page zw-search">
+                <div ng-if="!operation" class="search-box ">
+				   <div>
+                    <select name="" id="" class="title-select con-parts" >                           
+						<option  value="">四川省</option>
+                    </select>
+                    <select name="" id="" class="title-select con-parts"
+                            ng-model="$parent.cityId"
+                            ng-options="city.key as city.value for city in citys"
+                            ng-change="queryCountyList(cityId)">
+							<option  value="">全省</option>
+                    </select>
+                    <select name="" id="" class="title-select con-parts"
+                    		ng-model="$parent.countyId"
+                            ng-options="county.key as county.value for county in countys">
+							<option value="" >全市</option>
+                    </select>
+                        <input type="text" placeholder="录入人员" class="process-input con-parts" name="" id="inputPerson">
+						<input type="text" placeholder="报账点名称" class="process-input con-parts" name="" id="siteName">
+						<br />
+                        <select ng-model="$parent.flowState" name="" id="" class="title-select con-parts">
+                            <option value="">请选择稽核单状态</option>
+                            <option value="1">等待提交审批</option>
+                            <option value="2">审批中</option>
+                            <option value="-1">审批通过</option>
+                            <option value="0">被驳回</option>
+                        </select>
+                        <input type="text" placeholder="稽核单号" class="process-input con-parts" name="" ng-model="$parent.qSerialNumber">
+
+                        <input 
+                           readOnly="true"
+                           ng-laydate
+                           id="id1"
+                           ng-model="$parent.qStartTime"
+                           format="YYYY-MM-DD"
+                           type="text" placeholder="建单时间(起)" class="process-input con-parts" name="">
+                        <input 
+                           readOnly="true"
+                           ng-laydate
+                           id="id2"
+                           ng-model="$parent.qEndTime"
+                           format="YYYY-MM-DD"
+                           min-date="{{$parent.qStartTime}}"
+                           type="text" placeholder="建单时间(至)" class="process-input con-parts" name="">
+                        <select  
+                                name="name" 
+                                id="" class="title-select con-parts"
+                                ng-model="$parent.qAccount"
+                                ng-options="i.name as i.name for i in sysRgList">
+                                <option value="">请选择报账组</option>
+                        </select>
+                    </div> 
+                  
+                    <button ng-click="getZwAuditDetail()" class="btn btn-primary" type="button">搜索</button>
+                    
+                     <p class="data-info">
+                    <!--  ng-repeat="item in list track by $index" -->
+                        <strong>总金额:&nbsp;<span>{{list[list.length-1].amount}}</span>&nbsp;元</strong>
+                        <strong>电费金额(不含税):&nbsp;<span>{{list[list.length-1].electricityAmountSum}}</span>&nbsp;元</strong>
+                        <strong>税金金额:&nbsp;<span>{{list[list.length-1].taxAmountSum}}</span>&nbsp;元</strong>
+                        <strong>其他费用总额:&nbsp;<span>{{list[list.length-1].otherCostSum}}</span>&nbsp;元</strong>
+                    </p> 
+                </div>
+                <div><button ng-click="downExcel()" class="btn btn-primary" type="button">导出excel</button></div>
+                <!-- table-content -->
+                <div class="table-content">
+                    <div class="table-title">
+
+                        <button ng-show="list!=null && (list[0].rolelevel == 2 || list[0].rolelevel == 4)" ng-click="createSubmitOrderDialog()" class="btn btn-blue">生成电费提交单</button>
+                        <button ng-show="list!=null && (list[0].rolelevel == 2 || list[0].rolelevel == 4)" ng-click="bachSubmit2(1)" class="btn btn-blue">批量提交</button>
+                        <button ng-show="list!=null && (list[0].rolelevel == 2 || list[0].rolelevel == 4)" ng-click="bachDeleteTaskList()" class="btn btn-blue">批量撤销</button>
+                        <button ng-show="list!=null && (list[0].rolelevel == 1 || list[0].rolelevel == 3)" ng-click="bachSubmit3(1)" class="btn btn-blue">批量通过</button>
+                        <button ng-show="list!=null && (list[0].rolelevel == 1 || list[0].rolelevel == 3)" ng-click="bachSubmit3(-1)" class="btn btn-blue">批量驳回</button>
+                    </div>
+                    <!-- table -->
+                   <!--  <table class="table-result" id="tableResult">
+                        <colgroup>
+                            <col style="width:5%" />
+                            <col style="width:12%" />
+                            <col style="width:5%" />
+                            <col style="width:5%" />
+                            <col style="width:8%" />
+                            <col style="width:8%" />
+                            <col style="width:8%" />
+                            <col style="width:5%" />
+                            <col style="width:8%" />
+                            <col style="width:8%" />
+                            <col style="width:25%" />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th><input ng-click="checkAll('#checkAll','#list')" id="checkAll" type="checkbox"></th>
+                                <th>稽核单号</th>
+                                <th>地区</th>
+                                <th>区县</th>
+                                <th>稽核单状态</th>
+                                <th>报账点名称</th>
+                                <th>建单时间</th>
+                                <th>电量</th>
+                                <th>金额（元）</th>
+                                <th>同比上个月涨幅</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                    </table> -->
+                    <div style="font-size: 10px" class="table-details">
+                        <div>
+                            <table>
+                                 <colgroup>
+                                    <col style="width:4%" />
+                                    <col style="width:7%" />
+                                    <col style="width:7%" />
+                                    <col style="width:7%" />
+                                    <col style="width:7%" />
+                                    <col style="width:7%" />
+                                    <col style="width:7%" />
+                                    <col style="width:7%" />
+                                    <col style="width:7%" />
+                                    <col style="width:7%" />
+                                    <col style="width:7%" />
+                                    <col style="width:7%" />
+                                    <col style="width:7%" />
+                                    <col style="width:7%" />
+                                    <col style="width:7%" />
+                                    <col style="width:7%" />
+                                    <col style="width:7%" />
+                                    
+
+                                    
+                                </colgroup> 
+                                <tbody class="query-date" id="list">
+                                <tr>
+                                    <th><input ng-click="checkAll('#checkAll','#list')" id="checkAll" type="checkbox"></th>
+                                    <th>稽核单号</th>
+                                    <th>地区</th>
+                                    <th>区县</th>
+                                    <th>报账点名称</th>
+                                    <th>电量(度)</th>
+                                    <th>单价(元)</th>
+                                    <th>电费金额(不含税)</th>
+                                    <th>税金金额(元)</th>
+                                    <th>其他费用(元)</th>
+                                    <th>金额(元)</th>
+                                    <th>同比上个月涨幅</th>
+                                    <th>供应商</th>
+                                    <th>稽核单状态</th>
+                                    <th>录入员</th>
+                                    <th>建单时间</th>
+                                    <th>操作</th>
+                                </tr>
+                               <!--  稽核单号 地市 区县 报账点名称 电量 单价 电费金额不含税 税金金额 其他费用 金额 同比上个月涨幅 供应商 稽核单状态 录入员 建单时间 -->   
+                                    <tr ng-repeat="item in list track by $index" >
+                                        <td><input type="checkbox" value="{{item.instanceId}}"></td>
+                                        <td>{{item.electricty.serialNumber}}</td>
+                                        <td>{{item.electricty.areas}}</td>
+                                        <td>{{item.electricty.counties}}</td>
+                                        <td>{{item.electricty.accountName}}</td>
+                                        <td>{{item.electricty.totalEleciric }}</td>
+										<td>{{item.electricty.price}}</td><!-- 单价noone -->
+                                        <td>{{item.electricty.totalAmount}}</td>
+                                        <td>{{item.electricty.taxAmount}}</td>
+										<td>{{item.electricty.otherCost}}</td>
+                                        <td>{{item.electricty.electricityAmount}}</td>
+                                        <td></td>
+										<td>{{item.electricty.supplierName}}</td>
+                                        <td>{{item.flowState | flowStateFilter : item.electricty.status}}</td>
+										<td>{{item.electricty.createPerson}}</td>
+                                        <td>{{item.electricty.createDate|date:"yyyy-MM-dd HH:mm:ss"}}</td>
+                                        <!-- 新增字段 -->
+                                        
+										
+                                        <td >
+                                            <!--{{item}}-->
+                                            <a ng-click="showDetail(item,false,true)" class="check-detail">查看</a>
+
+                                            <a 
+                                                ng-click="showDetail(item,true,false)"
+                                                ng-if="!(item.flowState == -1 && item.electricty.status != 2) && (item.rolelevel
+                                                ==2 || item==4)"
+                                                class="edit-process">修改</a>
+
+                                            <a 
+                                                ng-if="item.operation == true && item.flowState <= 1"
+                                                ng-click = "bachSubmit(1,item.instanceId)" 
+                                                class="submit-icon">提交</a>
+                                            <a
+                                                ng-if="item.operation == true && item.flowState == 2"
+                                                ng-click = "bachSubmit(1,item.instanceId)"
+                                                class="submit-icon">同意</a>   
+                                            <a 
+                                                ng-if="item.flowState > 1 && item.operation == true"
+                                                ng-click = "bachSubmit(-1,item.instanceId)"
+                                                class="submit-icon">驳回</a>
+
+                                            <a  
+                                                ng-if="!(item.flowState == -1 && item.electricty.status != 2) && (item.rolelevel
+                                                ==2 || item==4)" ng-click="deleteSelected(item)"
+                                                class="delete">撤销</a>   
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                    <div class="page-foot">
+                        <im-pagination conf="pageInfo" params="params" get-data="getZwAuditDetail()"></im-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

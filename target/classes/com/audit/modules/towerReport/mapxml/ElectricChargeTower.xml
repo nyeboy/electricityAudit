@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.towerReport.dao.ElectricChargeTowerDao">
+
+	<!-- <select id="stasticCityYearMoneyAll" resultType="map">
+		SELECT
+			SUM (stmw.ACTUAL_AMOUNT) totalAmount,
+			zsc.INT_ID regionId,
+			zsc.CITY_NAME regionName
+		FROM
+			SYS_TOWER_WATTHOUR_METER stmw
+		LEFT JOIN SYS_TOWER_ELE_MID_WATTHOUR stemw ON stmw. ID = stemw.SYS_TOWER_WATTHOUR_ID
+		LEFT JOIN SYS_TOWER_ELECTRICITY ste ON ste.ID = stemw.SYS_TOWER_ELE_ID
+		LEFT JOIN SYS_TOWER_ACCOUNT_SITE stas ON ste.SYS_TOWER_SIT_ID = stas. ID
+		LEFT JOIN ZG_SPACE_CITY zsc ON stas.CITY_ID = zsc.CITY_ID
+		WHERE
+			TO_CHAR (ste.CREATE_DATE, 'yyyy') = #{year, jdbcType=VARCHAR}
+			<if test="month != null and month != ''">
+				AND  <![CDATA[TO_CHAR (ste.CREATE_DATE, 'mm') <= #{month, jdbcType=VARCHAR}]]>
+			</if>
+		GROUP BY
+			zsc.INT_ID,
+			zsc.CITY_NAME
+	</select>
+	<select id="stasticCityYearMoneyNoTax" resultType="map">
+		SELECT
+			SUM (stmw.PAY_AMOUNT) totalAmount,
+			zsc.INT_ID regionId,
+			zsc.CITY_NAME regionName
+		FROM
+			SYS_TOWER_WATTHOUR_METER stmw
+		LEFT JOIN SYS_TOWER_ELE_MID_WATTHOUR stemw ON stmw. ID = stemw.SYS_TOWER_WATTHOUR_ID
+		LEFT JOIN SYS_TOWER_ELECTRICITY ste ON ste.ID = stemw.SYS_TOWER_ELE_ID
+		LEFT JOIN SYS_TOWER_ACCOUNT_SITE stas ON ste.SYS_TOWER_SIT_ID = stas. ID
+		LEFT JOIN ZG_SPACE_CITY zsc ON stas.CITY_ID = zsc.CITY_ID
+		WHERE
+			TO_CHAR (ste.CREATE_DATE, 'yyyy') = #{year, jdbcType=VARCHAR}
+			<if test="month != null and month != ''">
+				AND  <![CDATA[TO_CHAR (ste.CREATE_DATE, 'mm') <= #{month, jdbcType=VARCHAR}]]>
+			</if>
+		GROUP BY
+			zsc.INT_ID,
+			zsc.CITY_NAME
+	</select>
+	
+	<select id="stasticCountyYearMoneyAll" resultType="map">
+	 SELECT	
+	    	zsc.INT_ID regionId,
+	    	zsc.ZH_LABEL regionName,
+	    	zsc.CITY_Id cityId,
+	        SUM (stmw.ACTUAL_AMOUNT) totalAmount
+	    FROM
+	        SYS_TOWER_WATTHOUR_METER stmw
+	    LEFT JOIN SYS_TOWER_ELE_MID_WATTHOUR stemw ON stmw. ID = stemw.SYS_TOWER_WATTHOUR_ID		     
+	    LEFT JOIN SYS_TOWER_ELECTRICITY ste ON ste.ID = stemw.SYS_TOWER_ELE_ID
+	    LEFT JOIN SYS_TOWER_ACCOUNT_SITE stas ON stas.ID = ste. SYS_TOWER_SIT_ID
+	    LEFT JOIN ZG_SPACE_COUNTY zsc ON stas.COUNTY_ID = zsc.INT_ID
+	    WHERE
+	       TO_CHAR (ste.CREATE_DATE, 'yyyy') = #{year, jdbcType=VARCHAR}
+		   <if test="month != null and month != ''">
+		      AND  <![CDATA[TO_CHAR (ste.CREATE_DATE, 'mm') <= #{month, jdbcType=VARCHAR}]]>
+		   </if>
+		    AND ste.CITY_ID = #{cityId, jdbcType=VARCHAR}
+	    GROUP BY
+	       zsc.INT_ID,
+	       zsc.ZH_LABEL,
+	       zsc.CITY_Id
+	</select>
+	<select id="stasticCountyYearMoneyNoTax" resultType="map">
+	 SELECT	
+	    	zsc.INT_ID regionId,
+	    	zsc.ZH_LABEL regionName,
+	    	zsc.CITY_Id cityId,
+	        SUM (stmw.PAY_AMOUNT) totalAmount
+	    FROM
+	        SYS_TOWER_WATTHOUR_METER stmw
+	    LEFT JOIN SYS_TOWER_ELE_MID_WATTHOUR stemw ON stmw. ID = stemw.SYS_TOWER_WATTHOUR_ID		     
+	    LEFT JOIN SYS_TOWER_ELECTRICITY ste ON ste.ID = stemw.SYS_TOWER_ELE_ID
+	    LEFT JOIN SYS_TOWER_ACCOUNT_SITE stas ON stas.ID = ste. SYS_TOWER_SIT_ID
+	    LEFT JOIN ZG_SPACE_COUNTY zsc ON stas.COUNTY_ID = zsc.INT_ID
+	    WHERE
+	       TO_CHAR (ste.CREATE_DATE, 'yyyy') = #{year, jdbcType=VARCHAR}
+		   <if test="month != null and month != ''">
+		      AND  <![CDATA[TO_CHAR (ste.CREATE_DATE, 'mm') <= #{month, jdbcType=VARCHAR}]]>
+		   </if>
+		    AND ste.CITY_ID = #{cityId, jdbcType=VARCHAR}
+	    GROUP BY
+	       zsc.INT_ID,
+	       zsc.ZH_LABEL,
+	       zsc.CITY_Id
+	</select> -->
+	
+	<select id="stasticCityYearMoneyAll" resultType="map">
+		SELECT
+			SUM (stmw.ACTUAL_AMOUNT) totalAmount,
+			zsc.ID regionId,
+			zsc.NAME regionName
+		FROM
+			SYS_TOWER_WATTHOUR_METER stmw
+		LEFT JOIN SYS_TOWER_ELE_MID_WATTHOUR stemw ON stmw. ID = stemw.SYS_TOWER_WATTHOUR_ID
+		LEFT JOIN SYS_TOWER_ELECTRICITY ste ON ste.ID = stemw.SYS_TOWER_ELE_ID
+		LEFT JOIN SYS_TOWER_ACCOUNT_SITE stas ON ste.SYS_TOWER_SIT_ID = stas. ID
+		LEFT JOIN YDJH_AREA zsc ON stas.CITY_ID = zsc.ID
+		WHERE
+			TO_CHAR (ste.CREATE_DATE, 'yyyy') = #{year, jdbcType=VARCHAR}
+			<if test="month != null and month != ''">
+				AND  <![CDATA[TO_CHAR (ste.CREATE_DATE, 'mm') <= #{month, jdbcType=VARCHAR}]]>
+			</if>
+		GROUP BY
+			zsc.ID,
+			zsc.NAME
+	</select>
+	<select id="stasticCityYearMoneyNoTax" resultType="map">
+		SELECT
+			SUM (stmw.PAY_AMOUNT) totalAmount,
+			zsc.ID regionId,
+			zsc.NAME regionName
+		FROM
+			SYS_TOWER_WATTHOUR_METER stmw
+		LEFT JOIN SYS_TOWER_ELE_MID_WATTHOUR stemw ON stmw. ID = stemw.SYS_TOWER_WATTHOUR_ID
+		LEFT JOIN SYS_TOWER_ELECTRICITY ste ON ste.ID = stemw.SYS_TOWER_ELE_ID
+		LEFT JOIN SYS_TOWER_ACCOUNT_SITE stas ON ste.SYS_TOWER_SIT_ID = stas. ID
+		LEFT JOIN YDJH_AREA zsc ON stas.CITY_ID = zsc.ID
+		WHERE
+			TO_CHAR (ste.CREATE_DATE, 'yyyy') = #{year, jdbcType=VARCHAR}
+			<if test="month != null and month != ''">
+				AND  <![CDATA[TO_CHAR (ste.CREATE_DATE, 'mm') <= #{month, jdbcType=VARCHAR}]]>
+			</if>
+		GROUP BY
+			zsc.ID,
+			zsc.NAME
+	</select>
+	
+	<select id="stasticCountyYearMoneyAll" resultType="map">
+	 SELECT	
+	    	zsc.ID regionId,
+	    	zsc.NAME regionName,
+	    	zsc.PARENT cityId,
+	        SUM (stmw.ACTUAL_AMOUNT) totalAmount
+	    FROM
+	        SYS_TOWER_WATTHOUR_METER stmw
+	    LEFT JOIN SYS_TOWER_ELE_MID_WATTHOUR stemw ON stmw. ID = stemw.SYS_TOWER_WATTHOUR_ID		     
+	    LEFT JOIN SYS_TOWER_ELECTRICITY ste ON ste.ID = stemw.SYS_TOWER_ELE_ID
+	    LEFT JOIN SYS_TOWER_ACCOUNT_SITE stas ON stas.ID = ste. SYS_TOWER_SIT_ID
+	    LEFT JOIN YDJH_AREA zsc ON stas.COUNTY_ID = zsc.ID
+	    WHERE
+	       TO_CHAR (ste.CREATE_DATE, 'yyyy') = #{year, jdbcType=VARCHAR}
+		   <if test="month != null and month != ''">
+		      AND  <![CDATA[TO_CHAR (ste.CREATE_DATE, 'mm') <= #{month, jdbcType=VARCHAR}]]>
+		   </if>
+		    AND ste.CITY_ID = #{cityId, jdbcType=VARCHAR}
+	    GROUP BY
+	       zsc.ID,
+	       zsc.NAME,
+	       zsc.PARENT
+	</select>
+	<select id="stasticCountyYearMoneyNoTax" resultType="map">
+	 SELECT	
+	    	zsc.ID regionId,
+	    	zsc.NAME regionName,
+	    	zsc.PARENT cityId,
+	        SUM (stmw.PAY_AMOUNT) totalAmount
+	    FROM
+	        SYS_TOWER_WATTHOUR_METER stmw
+	    LEFT JOIN SYS_TOWER_ELE_MID_WATTHOUR stemw ON stmw. ID = stemw.SYS_TOWER_WATTHOUR_ID		     
+	    LEFT JOIN SYS_TOWER_ELECTRICITY ste ON ste.ID = stemw.SYS_TOWER_ELE_ID
+	    LEFT JOIN SYS_TOWER_ACCOUNT_SITE stas ON stas.ID = ste. SYS_TOWER_SIT_ID
+	    LEFT JOIN YDJH_AREA zsc ON stas.COUNTY_ID = zsc.ID
+	    WHERE
+	       TO_CHAR (ste.CREATE_DATE, 'yyyy') = #{year, jdbcType=VARCHAR}
+		   <if test="month != null and month != ''">
+		      AND  <![CDATA[TO_CHAR (ste.CREATE_DATE, 'mm') <= #{month, jdbcType=VARCHAR}]]>
+		   </if>
+		    AND ste.CITY_ID = #{cityId, jdbcType=VARCHAR}
+	    GROUP BY
+	       zsc.ID,
+	       zsc.NAME,
+	       zsc.PARENT
+	</select>
+	
+</mapper>

@@ -1,0 +1,70 @@
+ <!-- 异常 (报账点电表度数超标杆)-->
+ <style>
+ 
+.heading {
+padding-left: 0px;
+color:#4b8de6;
+}
+
+.content {
+padding-left: 10%;
+padding-top:5%;
+color:red;
+}
+
+.causes {
+height: 100px;
+padding-left: 10%;
+}
+
+.causes .cause {
+height:100%;
+width: 85%;
+
+}
+
+ .causes .required {
+ font-size:25px;
+	color:red;
+}
+
+.checkstyle{
+	height: 30px;
+    margin-left: 71px;
+}
+.othertitle{
+	padding-top:5%;
+	padding-left: 10%;
+	font-size:25px;
+	padding-bottom:5%;
+}
+</style>
+ 	<div class="heading">
+ 	<h3>异常提示</h3>	
+ 	</div>
+ 	<div class="content">
+ 	<h3>发现数据异常: </h3><br><br><br>
+ 	
+ 	<h3>{{twSubErrData}}</h3><br><br><br>
+ 	</div>
+ 	<div class="causes">
+ 	<textarea class="cause" placeholder="异常原因说明(必填):" id="cause1" ng-model="resultData.overProoFreAsons"></textarea>&nbsp;<span class="required">*</span>
+ 	</div>
+ 	<div class="othertitle">其他超标原因</div>   
+       <select ng-change="changeOther()" name="other" ng-model="resultData.overProoFreAsons" class="checkstyle" >
+	      	<option>系统用电量不真实（台账有误或系统问题等）</option>
+	      	<option>资管设备型号或数量不正确</option>
+	      	<option>电力公司未按时抄表或报销人员累计报销单月缴多月电费</option>
+	      	<option>基站用电被共享</option>
+	      	<option>电力公司“挱飞表”估算致部分月份电费冒高</option>
+	      	<option>一个基站报账点含多个点电费</option>
+	      	<option>老旧设备或电路有电损</option>
+	      	<option >其他</option>
+       </select>
+	
+ 	
+<div class="reimbur-foot ledge-foot audit-dialog">
+<button ng-if="!isFlag" ng-click="ack1()" class="reimbur-save btn">确认</button>
+<button ng-if="isFlag" ng-click="ack()" class="reimbur-save btn">确认</button>
+<button ng-click="closeDialog('twSubErrDialog')" class="reimbur-save btn">取消</button>
+</div>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.audit.modules.costcenter.dao.CostCenterDao">
+
+<!-- 	<select id="findByLoginUser" resultType="com.audit.modules.costcenter.entity.CostCeterVO" parameterType="java.util.Map">
+		SELECT
+				scc.id as id,
+				scc.COST_CENTER_NAME as costCenterName
+		FROM
+			  SYS_COST_CENTER scc INNER JOIN OA_DEPARTMENT_DATA odd ON SCC.DEPLOYMENT_NO = odd.DEPARTMENT_NO
+		WHERE
+			1=1
+		<choose>
+			<when test="departmentNo !=null and departmentNo != ''">
+				AND odd.id = #{departmentNo}
+			</when>
+			<otherwise>
+				and scc.ID = '-1'
+			</otherwise>
+		</choose>
+		ORDER BY scc.SORT_NO asc
+	</select> -->
+	
+<select id="findByLoginUser" resultType="com.audit.modules.costcenter.entity.CostCeterVO" parameterType="java.util.Map">
+	   	SELECT scc.id as id,
+	   			scc.COST_CENTER_NAME as costCenterName
+	   			 FROM 
+	   			 OA_EMPLOYEE_DATA oed
+              LEFT JOIN OA_EMPLOYEE_OWN_DEPARTMENTS oeod ON oed.ID = oeod.OA_EMPLOYEE_DATA
+              LEFT JOIN OA_OWN_DEPARTMENT ood ON oeod.OWN_DEPARTMENTS = ood.ID
+              LEFT JOIN OA_DEPARTMENT_DATA odd ON odd.DEPARTMENT_NO = ood.DEPARTMENT_ID
+              LEFT JOIN SYS_cost_center scc ON scc.DEPLOYMENT_NO = odd.DEPARTMENT_PARENT_NO
+              WHERE oed.LOGIN_NAME = #{account,jdbcType = VARCHAR}
+	</select>
+	
+	<delete id="deleteAll">
+		truncate table SYS_COST_CENTER
+	</delete>
+	
+	<insert id="batchSave" parameterType="com.audit.modules.costcenter.entity.CostCeterEntity">
+		INSERT INTO SYS_COST_CENTER(ID,DEPLOYMENT_NO,MIS_CONPANY_NO,COST_CENTER_NO,COST_CENTER_NAME,SORT_NO)
+		<foreach collection="list" index="index" item="costCeter" separator="union all" >
+			select
+				#{costCeter.id,jdbcType=VARCHAR},#{costCeter.deploymentNo,jdbcType=VARCHAR},
+				#{costCeter.misConpanyNo,jdbcType=VARCHAR},#{costCeter.costCenterNo,jdbcType=VARCHAR},
+				#{costCeter.costCenterName,jdbcType=VARCHAR},#{costCeter.sortNo,jdbcType=INTEGER}
+			from dual
+		</foreach>
+	</insert>
+
+</mapper>

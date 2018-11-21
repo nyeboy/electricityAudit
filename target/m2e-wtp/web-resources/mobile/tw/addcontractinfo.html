@@ -1,0 +1,58 @@
+<!--新增合同信息-->
+<div class="business-box" id="businessBox">
+    <div class="contract-edit">
+        <h4 style="text-align:center; padding-top:10px;">合同信息</h4>
+        <form action="">
+            <ul class="user-list">
+                <li><span>铁塔站址编号:</span><input ng-model="object.code" type="text" name=""  ng-disabled="disabled"></li>
+                <li><span>资管站点名称:</span><input ng-model="object.label" type="text" name=""  ng-disabled="disabled"></li>
+                <li><span>合同编号:</span><input ng-model="object.contractNo" type="text" name="" value="" ng-disabled="disabled"></li>
+                <li><span>合同名称:</span><input ng-model="object.name" type="text" name="" value="" ng-disabled="disabled"></li>
+                <li>
+                    <span>合同生效日期:</span>
+                    <input
+                        ng-laydate type="text" 
+                        id="startDate"
+                        format="YYYY-MM-DD"
+                        readonly
+                        ng-change="countDays(item,$index)" type="text" ng-model="object.startDate" name=""  value=""
+                        ng-disabled="disabled">
+                </li>
+                <li>
+                    <span>合同终止日期:</span>
+                    <input
+                        ng-laydate type="text" 
+                        id="endDate"
+                        format="YYYY-MM-DD"
+                        readonly
+                        ng-change="countDays(item,$index)" type="text" ng-model="object.endDate" name=""  value=""
+                        ng-disabled="disabled"> 
+                </li>
+                <li>
+                    <span>是否包干:</span>
+                    <select name="" id="" ng-model="object.isClud" ng-if="queryDetail" >
+                        <option value="0">包干</option>
+                        <option value="1">不包干</option>
+                    </select>
+                    <input ng-model="object.isClud" ng-if="save" type="text" name="" value="" ng-disabled="disabled">
+                </li>
+                <li><span>包干价:</span><input ng-model="object.cludPrice" type="text" name="" value="" ng-disabled="disabled"></li>
+                <li>
+                    <span>缴费周期:</span>
+                    <select name="" id="" ng-model="object.paymentCycle" ng-if="queryDetail">
+                        <option value="1">月</option>
+                        <option value="3">季度</option>
+                        <option value="6">半年</option>
+                        <option value="12">年</option>
+                    </select>
+                    <input ng-model="object.paymentCycle" ng-if="save" type="text" name="" value="" ng-disabled="disabled"></li>
+                <li><span>单价:</span><input ng-model="object.unitPrice" type="text" name="" value="" ng-disabled="disabled"></li>
+            </ul>
+            <div class="reimbur-foot ledge-foot">
+                <button ng-click="closeDialog()" ng-if="queryDetail" class="reimbur-cancel btn">取消</button>
+                <button ng-click="saveContractInfo(object)" ng-if="queryDetail" class="reimbur-save btn">保存</button>
+                <button ng-click="closeDialog()" ng-if="save" class="reimbur-save btn">关闭</button>
+            </div>
+        </form>
+    </div>
+</div>

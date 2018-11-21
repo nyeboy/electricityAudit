@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.towerbasedata.other.dao.TowerOtherDao">
+   
+    <sql id="columns">
+		stas.ID AS id, stas.CITY_ID AS cityId, stas.COUNTY_ID AS countyId, stas.ZY_CODE AS code, stas.ZY_NAME AS name, ZSS.ZH_LABEL AS label, stas.CYCLE as cycle
+	</sql>
+	
+	 <!-- 依据ID查询 -->
+	<!-- <select id="selectById"  resultType="com.audit.modules.towerbasedata.other.entity.TowerOtherVO">		
+		SELECT 
+		(SELECT zsc.CITY_NAME FROM ZG_SPACE_CITY zsc WHERE  zsc.INT_ID = stas.CITY_ID) AS cityStr,
+		 (SELECT zsct.ZH_LABEL FROM ZG_SPACE_COUNTY zsct WHERE zsct.INT_ID = stas.COUNTY_ID) AS countyStr,
+		<include refid="columns" />
+        FROM SYS_TOWER_ACCOUNT_SITE stas,  ZG_SPACE_SITE zss
+        WHERE STAS.ZY_CODE = ZSS.TOWER_SITE_CODE and stas.ID = #{Id} 
+	</select>
+
+	 分页搜索查询
+	<select id="getPageList" resultType="com.audit.modules.towerbasedata.other.entity.TowerOtherVO">
+		SELECT 
+		(SELECT zsc.CITY_NAME FROM ZG_SPACE_CITY zsc WHERE  zsc.INT_ID = stas.CITY_ID) AS cityStr,
+		(SELECT zsct.ZH_LABEL FROM ZG_SPACE_COUNTY zsct WHERE zsct.INT_ID = stas.COUNTY_ID) AS countyStr,
+		<include refid="columns" />
+        FROM SYS_TOWER_ACCOUNT_SITE stas 
+        LEFT JOIN ZG_SPACE_SITE zss ON STAS.ZY_CODE = ZSS.TOWER_SITE_CODE
+        WHERE 1=1
+			<if test="obj.CityId != null and obj.CityId!=''">
+				AND  stas.CITY_ID = #{obj.CityId,jdbcType=VARCHAR}
+			</if>
+			<if test="obj.CountyId != null and obj.CountyId!=''">
+				AND  stas.COUNTY_ID = #{obj.CountyId,jdbcType=VARCHAR}
+			</if>
+			<if test="obj.Code != null and obj.Code!=''">
+				AND  stas.ZY_CODE LIKE '%'||#{obj.Code,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="obj.name != null and obj.name!=''">
+				AND  stas.ZY_NAME LIKE '%'||#{obj.name,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="obj.Label != null and obj.Label!=''">
+				AND  ZSS.ZH_LABEL LIKE '%'||#{obj.Label,jdbcType=VARCHAR}||'%'
+			</if>
+		
+	</select> -->
+	
+	<select id="selectById"  resultType="com.audit.modules.towerbasedata.other.entity.TowerOtherVO">		
+		SELECT 
+		(SELECT zsc.NAME FROM YDJH_AREA zsc WHERE  zsc.ID = stas.CITY_ID) AS cityStr,
+		 (SELECT zsct.NAME FROM YDJH_AREA zsct WHERE zsct.ID = stas.COUNTY_ID) AS countyStr,
+		<include refid="columns" />
+        FROM SYS_TOWER_ACCOUNT_SITE stas,  ZG_SPACE_SITE zss
+        WHERE STAS.ZY_CODE = ZSS.TOWER_SITE_CODE and stas.ID = #{Id} 
+	</select>
+
+	 <!-- 分页搜索查询 -->
+	<select id="getPageList" resultType="com.audit.modules.towerbasedata.other.entity.TowerOtherVO">
+		SELECT 
+		(SELECT zsc.NAME FROM YDJH_AREA zsc WHERE  zsc.ID = stas.CITY_ID) AS cityStr,
+		(SELECT zsct.NAME FROM YDJH_AREA zsct WHERE zsct.ID = stas.COUNTY_ID) AS countyStr,
+		<include refid="columns" />
+        FROM SYS_TOWER_ACCOUNT_SITE stas 
+        LEFT JOIN ZG_SPACE_SITE zss ON STAS.ZY_CODE = ZSS.TOWER_SITE_CODE
+        WHERE 1=1
+			<if test="obj.CityId != null and obj.CityId!=''">
+				AND  stas.CITY_ID = #{obj.CityId,jdbcType=VARCHAR}
+			</if>
+			<if test="obj.CountyId != null and obj.CountyId!=''">
+				AND  stas.COUNTY_ID = #{obj.CountyId,jdbcType=VARCHAR}
+			</if>
+			<if test="obj.Code != null and obj.Code!=''">
+				AND  stas.ZY_CODE LIKE '%'||#{obj.Code,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="obj.name != null and obj.name!=''">
+				AND  stas.ZY_NAME LIKE '%'||#{obj.name,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="obj.Label != null and obj.Label!=''">
+				AND  ZSS.ZH_LABEL LIKE '%'||#{obj.Label,jdbcType=VARCHAR}||'%'
+			</if>
+		
+	</select>
+	
+	<!--修改信息 -->
+	<update id="update" parameterType="com.audit.modules.towerbasedata.other.entity.TowerOtherVO">
+	    UPDATE SYS_TOWER_ACCOUNT_SITE 
+		<set>
+		<if test="cycle != null">
+			CYCLE = #{cycle,jdbcType=VARCHAR},
+		</if>
+		</set>
+		WHERE ID = #{id}
+    </update>
+    
+    <update id="updateRemove" >
+	    UPDATE SYS_TOWER_ACCOUNT_SITE 
+		set	CYCLE = NULL		
+		WHERE ID in
+		<foreach collection="array" item="siteId" index="index"
+			open="(" separator="," close=")">
+			#{siteId}
+		</foreach>
+    </update>
+</mapper>

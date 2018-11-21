@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.basedata.dao.AccountSiteManageDao">
+  <resultMap id="BaseResultMap" type="com.audit.modules.basedata.entity.AccountSiteManage">
+    <result column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="SITE_NAME" jdbcType="VARCHAR" property="siteName" />
+    <result column="ACCOUNT_NAME" jdbcType="VARCHAR" property="accountName" />
+    <result column="ACCOUNT_ALIAS" jdbcType="VARCHAR" property="accountAlias" />
+    <result column="OLD_FINANCE_NAME" jdbcType="VARCHAR" property="oldFinanceName" />
+    <result column="PRODUCT_NATURE" jdbcType="VARCHAR" property="productNature" />
+    <result column="CITY_ID" jdbcType="VARCHAR" property="cityId" />
+    <result column="COUNTY_ID" jdbcType="VARCHAR" property="countyId" />
+    <result column="CYCLE" jdbcType="INTEGER" property="cycle" />
+    <result column="ELECTRICITY_TYPE" jdbcType="VARCHAR" property="electricityType" />
+    <result column="SUPPLY_COMPANY" jdbcType="VARCHAR" property="supplyCompany" />
+    <result column="SHARE_TYPE" jdbcType="VARCHAR" property="shareType" />
+    <result column="PAY_TYPE" jdbcType="VARCHAR" property="payType" />
+    <result column="CODE" jdbcType="VARCHAR" property="meterCode" />
+    <result column="METER_ID" jdbcType="VARCHAR" property="meterId" />
+    <result column="CLUD_PRICE" jdbcType="VARCHAR" property="clubPrice" />
+    <result column="CONTRACT_ID" jdbcType="VARCHAR" property="contractId" />
+    <result column="RESOURCE_NAME" jdbcType="VARCHAR" property="resourceName" />
+    <result property="payTypee" column="PAYTYPE"/>
+    <result property="professional" column="PROFESSIONAL"/>
+    <result property="totalE" column="TOTAL_ELECIRIC"></result>
+    <result property="totalAmount" column="TOTALAMOUNT"></result>
+    <result property="eCreateTime" column="eCreateTime"/>
+    <result property="islock" column="ISLOCK"/>
+  </resultMap>
+  <select id="queryPageAccountSiteManage" parameterType="com.audit.modules.common.mybatis.PageUtil"
+		resultMap="BaseResultMap">
+		SELECT
+			sas.PAYTYPE,
+			sas.PROFESSIONAL,
+			sas.ID,
+			sas.SITE_NAME,
+			sas.ACCOUNT_NAME,
+			sas.ACCOUNT_ALIAS,
+			sas.OLD_FINANCE_NAME,
+			sas.CITY_ID,
+			sas.COUNTY_ID,
+			sas.ELECTRICITY_TYPE,
+			sas.SUPPLY_COMPANY,
+			sas.SHARE_TYPE,
+			sas.PAY_TYPE,
+			sas.ISLOCK,
+			swm.ID AS CODE,
+			swm.ID METER_ID,
+			sc. ID CONTRACT_ID,
+			CASE ssmr. TYPE
+				WHEN 1 THEN
+					zser.ZH_LABEL
+				WHEN 2 THEN
+					zsrp.ZH_LABEL
+				END AS RESOURCE_NAME,
+		 	sc.CLUD_PRICE
+		FROM
+			  SYS_ACCOUNT_SITE sas
+		LEFT JOIN SYS_SITE_MID_METER ssmm ON ssmm.ACCOUNT_SITE_ID = sas. ID
+		LEFT JOIN SYS_WATTHOUR_METER swm ON ssmm.WATTHOUR_METER_ID = swm. ID
+		LEFT JOIN SYS_SITE_MID_CONTRACT ssmc ON ssmc.ACCOUNT_SITE_ID = sas. ID
+		LEFT JOIN SYS_CONTRACT sc ON ssmc.CONTRACT_ID = sc. ID
+		LEFT JOIN SYS_SITE_MID_RESOURCE ssmr ON ssmr.ACCOUNT_SITE_ID = sas. ID
+		LEFT JOIN ZG_SPACE_RES_POINT zsrp ON ssmr.RESOURCE_ID = zsrp.INT_ID
+		LEFT JOIN ZG_SPACE_EQUIP_ROOM zser ON ssmr.RESOURCE_ID = zser.INT_ID
+		WHERE 1=1
+		AND sas.SITE_NAME IS NOT NULL
+		<if test="null !=obj.payTypee and obj.payTypee!=''">AND sas.PAYTYPE=#{obj.payTypee}</if>
+		<if test="null !=obj.professional and obj.professional!=''">AND sas.PROFESSIONAL=#{obj.professional}</if>
+		<if test="null != obj.accountName and obj.accountName!=''">AND INSTR(sas.ACCOUNT_NAME,#{obj.accountName,jdbcType=VARCHAR}) > 0 </if>
+		<if test="null != obj.siteName and obj.siteName!=''">AND INSTR(sas.SITE_NAME,#{obj.siteName,jdbcType=VARCHAR}) > 0 </if>
+		<if test="null != obj.accountAlias and obj.accountAlias!=''">AND INSTR(sas.ACCOUNT_ALIAS,#{obj.accountAlias,jdbcType=VARCHAR}) > 0</if>
+		<if test="null != obj.oldFinanceName and obj.oldFinanceName!=''">AND INSTR(sas.OLD_FINANCE_NAME,#{obj.oldFinanceName}) > 0</if>
+		<if test="null != obj.cityId and obj.cityId!=''">AND sas.CITY_ID = #{obj.cityId,jdbcType=VARCHAR}</if>
+		<if test="null != obj.countyId and obj.countyId!=''">AND sas.COUNTY_ID = #{obj.countyId,jdbcType=VARCHAR}</if>
+		<if test="null != obj.resourceName and obj.resourceName!=''">
+		AND (INSTR(zser.ZH_LABEL,#{obj.resourceName,jdbcType=VARCHAR}) > 0 OR INSTR(zsrp.ZH_LABEL,#{obj.resourceName,jdbcType=VARCHAR}) > 0 )</if>
+		<if test="null != obj.selectTime and obj.selectTime!=''">
+			AND <![CDATA[ sc.START_DATE <= TO_DATE (#{obj.selectTime, jdbcType=VARCHAR},'yyyy-MM-dd')]]>
+			AND <![CDATA[ sc.END_DATE >= TO_DATE (#{obj.selectTime, jdbcType=VARCHAR},'yyyy-MM-dd')]]>
+		</if>
+		Order By sas.ID DESC
+   </select>
+   
+   
+   
+   <select id="geteletop11" resultType="com.audit.modules.basedata.entity.AccountSiteManage">
+    select sas.site_name as siteName ,sas.ACCOUNT_NAME as accountName,swe.TOTAL_ELECIRIC as totalE from SYS_ELECTRICITY se
+LEFT JOIN SYS_ELE_MID_WATTHOUR semw on semw.SYS_ELECIRICITY_ID=se.id
+LEFT JOIN SYS_WATTHOUR_EXTEND swe on swe.id=semw.SYS_WATTHOUR_EXTEND_ID
+LEFT JOIN SYS_ACCOUNT_SITE sas on sas.id=se.sys_account_site_id 
+where sas.site_name is not null
+GROUP BY sas.site_name ,sas.ACCOUNT_NAME,swe.TOTAL_ELECIRIC  ORDER BY swe.TOTAL_ELECIRIC desc
+   </select>
+   
+   
+   
+   
+   
+    <select id="queryASENTop100" resultMap="BaseResultMap">
+   	SELECT
+   	DISTINCT
+			sas.ACCOUNT_NAME
+		FROM
+			  SYS_ACCOUNT_SITE sas
+WHERE 1=1
+		AND sas.SITE_NAME IS NOT NULL
+   </select>
+   
+   
+   
+   <select id="queryAccountSiteManageBYId" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		SELECT
+			sas. ID,
+			sas.SITE_NAME,
+			sas.ACCOUNT_NAME,
+			sas.ACCOUNT_ALIAS,
+			sas.OLD_FINANCE_NAME,
+			sas.CITY_ID,
+			sas.COUNTY_ID,
+			sas.ELECTRICITY_TYPE,
+			sas.SUPPLY_COMPANY,
+			sas.SHARE_TYPE,
+			sas.PAY_TYPE,
+			swm.ID AS CODE,
+			swm.ID METER_ID,
+			sc. ID CONTRACT_ID,
+			CASE ssmr. TYPE
+				WHEN 1 THEN
+					zser.ZH_LABEL
+				WHEN 2 THEN
+					zsrp.ZH_LABEL
+				END AS RESOURCE_NAME,
+		 	sc.CLUD_PRICE
+		FROM
+			  SYS_ACCOUNT_SITE sas
+		LEFT JOIN SYS_SITE_MID_METER ssmm ON ssmm.ACCOUNT_SITE_ID = sas. ID
+		LEFT JOIN SYS_WATTHOUR_METER swm ON ssmm.WATTHOUR_METER_ID = swm. ID
+		LEFT JOIN SYS_SITE_MID_CONTRACT ssmc ON ssmc.ACCOUNT_SITE_ID = sas. ID
+		LEFT JOIN SYS_CONTRACT sc ON ssmc.CONTRACT_ID = sc. ID
+		LEFT JOIN SYS_SITE_MID_RESOURCE ssmr ON ssmr.ACCOUNT_SITE_ID = sas. ID
+		LEFT JOIN ZG_SPACE_RES_POINT zsrp ON ssmr.RESOURCE_ID = zsrp.INT_ID
+		LEFT JOIN ZG_SPACE_EQUIP_ROOM zser ON ssmr.RESOURCE_ID = zser.INT_ID
+		WHERE 1=1
+		AND sas.SITE_NAME IS NOT NULL
+		AND	sas. ID = #{accountSiteManageId,jdbcType=VARCHAR}
+		Order By sas.ID DESC
+   </select>
+    <select id="queryAccountSiteManageBYMeterCode" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		SELECT
+			sas. ID,
+			sas.SITE_NAME,
+			sas.ACCOUNT_NAME,
+			sas.OLD_FINANCE_NAME,
+			sas.CITY_ID,
+			sas.COUNTY_ID,
+			sas.ELECTRICITY_TYPE,
+			sas.SUPPLY_COMPANY,
+			sas.SHARE_TYPE,
+			sas.PAY_TYPE,
+			swm.CODE,
+			CASE ssmr. TYPE
+				WHEN 1 THEN
+					zser.ZH_LABEL
+				WHEN 2 THEN
+					zsrp.ZH_LABEL
+				END AS resourceName,
+		 	sc.CLUD_PRICE,
+			sc. ID
+		FROM
+			  SYS_ACCOUNT_SITE sas
+		LEFT JOIN SYS_SITE_MID_METER ssmm ON ssmm.ACCOUNT_SITE_ID = sas. ID
+		LEFT JOIN SYS_WATTHOUR_METER swm ON ssmm.WATTHOUR_METER_ID = swm. ID
+		LEFT JOIN SYS_SITE_MID_CONTRACT ssmc ON ssmc.ACCOUNT_SITE_ID = sas. ID
+		LEFT JOIN SYS_CONTRACT sc ON ssmc.CONTRACT_ID = sc. ID
+		LEFT JOIN SYS_SITE_MID_RESOURCE ssmr ON ssmr.ACCOUNT_SITE_ID = sas. ID
+		LEFT JOIN ZG_SPACE_RES_POINT zsrp ON ssmr.RESOURCE_ID = zsrp.INT_ID
+		LEFT JOIN ZG_SPACE_EQUIP_ROOM zser ON ssmr.RESOURCE_ID = zser.INT_ID
+		WHERE swm.CODE = #{meterCode,jdbcType=VARCHAR}
+		AND sas.SITE_NAME IS NOT NULL
+   </select>
+    <select id="querySelfSiteNum" resultType="java.lang.Double" >
+		SELECT
+			count(1)
+		FROM
+			SYS_ACCOUNT_SITE 
+   </select>
+   <update id="updateSelective" parameterType="com.audit.modules.basedata.entity.AccountSiteManage">
+   	  UPDATE SYS_ACCOUNT_SITE
+		<set>
+			<if test="siteName != null">
+				SITE_NAME = #{siteName,jdbcType=VARCHAR},
+			</if>
+			<if test="accountName != null">
+				ACCOUNT_NAME = #{accountName,jdbcType=VARCHAR},
+			</if>
+			<if test="accountAlias != null">
+				ACCOUNT_ALIAS = #{accountAlias,jdbcType=VARCHAR},
+			</if>
+			<if test="oldFinanceName != null">
+			    OLD_FINANCE_NAME = #{oldFinanceName,jdbcType=VARCHAR},
+			</if>
+			<if test="payTypee!=null">PAYTYPE=#{payTypee},</if>
+			<if test="professional!=null">PROFESSIONAL=#{professional},</if>
+			<if test="islock!=null">islock=#{islock}</if>
+		</set>
+		WHERE
+		ID = #{id,jdbcType=VARCHAR}
+	</update>
+	
+  <delete id="clearByMeterIds">
+	DELETE FROME SYS_SITE_MID_METER  
+		WHERE WATTHOUR_METER_ID IN
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+            #{item,jdbcType=VARCHAR}
+        </foreach>
+  </delete>
+  <delete id="deleteByIDs">
+	BEGIN
+	DELETE FROM SYS_ACCOUNT_SITE  
+		WHERE ID IN
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item,jdbcType=VARCHAR}
+        </foreach>
+	;
+	DELETE FROM SYS_SITE_MID_METER  
+		WHERE ACCOUNT_SITE_ID IN
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item,jdbcType=VARCHAR}
+        </foreach>
+	;
+	DELETE FROM SYS_SITE_MID_CONTRACT  
+		WHERE ACCOUNT_SITE_ID IN
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item,jdbcType=VARCHAR}
+        </foreach>
+	;
+	DELETE FROM SYS_SITE_MID_SUPPLIER  
+		WHERE ACCOUNT_SITE_ID IN
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item,jdbcType=VARCHAR}
+        </foreach>
+	; END;
+  </delete>
+  <insert id="insertSelective" parameterType="com.audit.modules.basedata.entity.AccountSiteManage">
+    insert into SYS_ACCOUNT_SITE
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="siteName != null">
+        SITE_NAME,
+      </if>
+      <if test="accountName != null">
+        ACCOUNT_NAME,
+      </if>
+      <if test="accountAlias != null">
+        ACCOUNT_ALIAS,
+      </if>
+      <if test="oldFinanceName != null">
+        OLD_FINANCE_NAME,
+      </if>
+      <if test="productNature != null">
+        PRODUCT_NATURE,
+      </if>
+      <if test="cityId != null">
+        CITY_ID,
+      </if>
+      <if test="countyId != null">
+        COUNTY_ID,
+      </if>
+      <if test="cycle != null">
+        CYCLE,
+      </if>
+      <if test="electricityType != null">
+        ELECTRICITY_TYPE,
+      </if>
+      <if test="supplyCompany != null">
+        SUPPLY_COMPANY,
+      </if>
+      <if test="shareType != null">
+        SHARE_TYPE,
+      </if>
+      <if test="payType != null">
+        PAY_TYPE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="siteName != null">
+        #{siteName,jdbcType=VARCHAR},
+      </if>
+      <if test="accountName != null">
+        #{accountName,jdbcType=VARCHAR},
+      </if>
+      <if test="accountAlias != null">
+        #{accountAlias,jdbcType=VARCHAR},
+      </if>
+      <if test="oldFinanceName != null">
+        #{oldFinanceName,jdbcType=VARCHAR},
+      </if>
+      <if test="productNature != null">
+        #{productNature,jdbcType=VARCHAR},
+      </if>
+      <if test="cityId != null">
+        #{cityId,jdbcType=VARCHAR},
+      </if>
+      <if test="countyId != null">
+        #{countyId,jdbcType=VARCHAR},
+      </if>
+      <if test="cycle != null">
+        #{cycle,jdbcType=INTEGER},
+      </if>
+      <if test="electricityType != null">
+        #{electricityType,jdbcType=VARCHAR},
+      </if>
+      <if test="supplyCompany != null">
+        #{supplyCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="shareType != null">
+        #{shareType,jdbcType=VARCHAR},
+      </if>
+      <if test="payType != null">
+        #{payType,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  
+  
+  <select id="getAllAcount" resultMap="BaseResultMap">
+		select * from SYS_ACCOUNT_SITE order by ELECTRICITY_TYPE desc
+  </select>
+</mapper>

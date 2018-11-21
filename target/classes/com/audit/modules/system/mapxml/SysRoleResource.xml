@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.system.dao.SysRoleResourceDao">
+	<resultMap id="getRoleResourceResult" type="com.audit.modules.system.entity.SysRoleResource">
+		<id column="ID" jdbcType="INTEGER" property="id" />
+		<result column="ROLE_ID" jdbcType="INTEGER" property="roleId" />
+		<result column="RESOURCE_ID" jdbcType="INTEGER" property="resourceId" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		ID, ROLE_ID, RESOURCE_ID
+	</sql>
+	<!-- 根据角色IdList查询资源IdList -->
+	<select id="selectByRoleIdList" resultMap="getRoleResourceResult">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM SYS_ROLE_RESOURCE
+		WHERE ROLE_ID IN
+		<foreach collection="list" item="roleId" index="index" open="("
+			separator="," close=")">
+			#{roleId}
+		</foreach>
+	</select>
+	<delete id="delete">
+		DELETE
+		from SYS_ROLE_RESOURCE
+		WHERE
+		ROLE_ID = #{roleId,jdbcType=INTEGER}
+		AND RESOURCE_ID IN
+		<foreach collection="list" item="resourceid" index="index"
+			open="(" separator="," close=")">
+			#{resourceid,jdbcType=INTEGER}
+		</foreach>
+	</delete>
+	<delete id="deletByRoleIds">
+		DELETE
+		from SYS_ROLE_RESOURCE
+		WHERE
+		ROLE_ID IN
+		<foreach collection="array" item="roleid" index="index" open="("
+			separator="," close=")">
+			#{roleid,jdbcType=VARCHAR}
+		</foreach>
+	</delete>
+	<delete id="deletByResourceId">
+		DELETE from
+		SYS_Role_RESOURCE
+		WHERE
+		RESOURCE_ID = #{resourceid}
+	</delete>
+	<!-- 通过resId批量删除角色资源信息 -->
+	<delete id="deletRoleResByResIdList" parameterType="java.math.BigDecimal">
+		DELETE from
+		SYS_ROLE_RESOURCE
+		WHERE
+		RESOURCE_ID IN
+		<foreach collection="list" item="resourceid" index="index"
+			open="(" separator="," close=")">
+			#{resourceid}
+		</foreach>
+	</delete>
+	<insert id="insert">
+		insert into SYS_ROLE_RESOURCE
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			ID,
+			<if test="roleId != null">
+				ROLE_ID,
+			</if>
+			<if test="resourceId != null">
+				RESOURCE_ID,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+		GET_SEQ('SEQ_SYS_ROLE_RESOURCE'),
+			<if test="roleId != null">
+				#{roleId,jdbcType=INTEGER},
+			</if>
+			<if test="resourceId != null">
+				#{resourceId,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+</mapper>

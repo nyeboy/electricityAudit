@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.basedata.dao.AccountSiteOtherDao">
+  <resultMap id="BaseResultMap" type="com.audit.modules.basedata.entity.AccountSiteOther">
+    <result column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="SITE_NAME" jdbcType="VARCHAR" property="siteName" />
+    <result column="ACCOUNT_NAME" jdbcType="VARCHAR" property="accountName" />
+    <result column="ACCOUNT_ALIAS" jdbcType="VARCHAR" property="accountAlias" />
+    <result column="OLD_FINANCE_NAME" jdbcType="VARCHAR" property="oldFinanceName" />
+    <result column="PRODUCT_NATURE" jdbcType="VARCHAR" property="productNature" />
+    <result column="CITY_ID" jdbcType="VARCHAR" property="cityId" />
+    <result column="COUNTY_ID" jdbcType="VARCHAR" property="countyId" />
+    <result column="CYCLE" jdbcType="INTEGER" property="cycle" />
+    <result column="CITYNAME" jdbcType="VARCHAR" property="cityName" />
+    <result column="COUNTYNAME" jdbcType="VARCHAR" property="countyName" />
+ </resultMap>
+ <!--  <select id="queryPageAccountSiteOther" parameterType="com.audit.modules.common.mybatis.PageUtil"
+		resultMap="BaseResultMap">
+		SELECT
+			sas.ID, 
+			sas.SITE_NAME, 
+			sas.ACCOUNT_NAME,
+			sas.OLD_FINANCE_NAME,
+			sas.ACCOUNT_ALIAS, 
+			sas.CITY_ID, 
+			sas.COUNTY_ID,
+			(select city_name from zg_space_city where int_id = sas.CITY_ID) AS CITYNAME,
+			(select zh_label from zg_space_county where int_id = sas.COUNTY_ID) AS COUNTYNAME,
+			sas.CYCLE
+		FROM SYS_ACCOUNT_SITE sas
+		WHERE 1=1
+		<if test="null != obj.siteName and obj.siteName !=''">AND (INSTR(sas.SITE_NAME,#{obj.siteName}) > 0 OR
+			INSTR(sas.ACCOUNT_ALIAS,#{obj.siteName}) > 0)</if>
+		<if test="null != obj.cityId and obj.cityId !=''">AND sas.CITY_ID = #{obj.cityId}</if>
+		<if test="null != obj.countyId and obj.countyId !=''">AND sas.COUNTY_ID = #{obj.countyId}</if>
+		<if test="null != obj.productNature and obj.productNature !=''">AND sas.ELECTRICITY_TYPE = #{obj.productNature}</if>
+		<if test="null != obj.accountName and obj.accountName!=''">AND sas.ACCOUNT_NAME LIKE '%'||#{obj.accountName}||'%' </if>
+		Order By ID DESC
+   </select> -->
+   
+     <select id="queryPageAccountSiteOther" parameterType="com.audit.modules.common.mybatis.PageUtil"
+		resultMap="BaseResultMap">
+		SELECT
+			sas.ID, 
+			sas.SITE_NAME, 
+			sas.ACCOUNT_NAME,
+			sas.OLD_FINANCE_NAME,
+			sas.ACCOUNT_ALIAS, 
+			sas.CITY_ID, 
+			sas.COUNTY_ID,
+			(select NAME from YDJH_AREA where id = sas.CITY_ID) AS CITYNAME,
+			(select NAME from YDJH_AREA where id = sas.COUNTY_ID) AS COUNTYNAME,
+			sas.CYCLE
+		FROM SYS_ACCOUNT_SITE sas
+		WHERE 1=1
+		<if test="null != obj.siteName and obj.siteName !=''">AND (INSTR(sas.SITE_NAME,#{obj.siteName}) > 0 OR
+			INSTR(sas.ACCOUNT_ALIAS,#{obj.siteName}) > 0)</if>
+		<if test="null != obj.cityId and obj.cityId !=''">AND sas.CITY_ID = #{obj.cityId}</if>
+		<if test="null != obj.countyId and obj.countyId !=''">AND sas.COUNTY_ID = #{obj.countyId}</if>
+		<if test="null != obj.productNature and obj.productNature !=''">AND sas.ELECTRICITY_TYPE = #{obj.productNature}</if>
+		<if test="null != obj.accountName and obj.accountName!=''">AND sas.ACCOUNT_NAME LIKE '%'||#{obj.accountName}||'%' </if>
+		Order By ID DESC
+   </select>
+   
+   <select id="queryAccountSiteOtherBYId" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		SELECT
+			ID, 
+			SITE_NAME, 
+			ACCOUNT_NAME,
+			OLD_FINANCE_NAME,
+			ACCOUNT_ALIAS, 
+			CITY_ID, 
+			COUNTY_ID, 
+			CYCLE
+		FROM SYS_ACCOUNT_SITE
+		WHERE 
+			ID = #{accountSiteManageId,jdbcType=VARCHAR}
+   </select>
+   <update id="updateSelective" parameterType="com.audit.modules.basedata.entity.AccountSiteOther">
+   	  UPDATE SYS_ACCOUNT_SITE
+		<set>
+			<if test="siteName != null and siteName !=''">
+				SITE_NAME = #{siteName,jdbcType=VARCHAR},
+			</if>
+			<if test="accountName != null and accountName !=''">
+				ACCOUNT_NAME = #{accountName,jdbcType=VARCHAR},
+			</if>
+			<if test="accountAlias != null and accountAlias !=''">
+				ACCOUNT_ALIAS = #{accountAlias,jdbcType=VARCHAR},
+			</if>
+			<if test="oldFinanceName != null and oldFinanceName !=''">
+			    OLD_FINANCE_NAME = #{oldFinanceName,jdbcType=VARCHAR},
+			</if>
+			<if test="cycle != null and cycle !=''">
+			    CYCLE = #{cycle,jdbcType=VARCHAR},
+			</if>
+		</set>
+		WHERE
+		ID = #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.basedata.dao.ContractManageDao">
+
+	<!-- 分页查找所有 -->
+    <select id="findContractByPage" resultType="com.audit.modules.basedata.entity.ContractManage" parameterType="java.util.Map">
+		SELECT
+			ID as id,
+			NAME as name,
+			START_DATE as startDate,
+			END_DATE as endDate,
+			IS_CLUD as isClud,
+			CLUD_PRICE as cludPrice,
+			PAYMENT_CYCLE as paymentCycle,
+			PRICE as price 
+		FROM SYS_CONTRACT
+		WHERE 1=1
+		<if test="obj.name!=null and obj.name!=''">AND NAME LIKE '%'||#{obj.name}||'%'</if>
+    </select>
+    
+    <!-- 分页查找(去重)-->
+    <select id="onlyFindContractByPage" resultType="com.audit.modules.basedata.entity.ContractManage" parameterType="java.util.Map">
+		SELECT
+			DISTINCT SS.ID as id,
+			SS.CODE as code,
+			SS.ORGANIZATION_CODE as organizationCode,
+			SS.OU_NAME as ouName,
+			SS.NAME as name,
+			SS.VENDOR_CODE as vendorCode,
+			SS.ADDRESS as address,
+			SS.BANK_BRANCH_NAME as bankBranchName,
+			SS.BANK_NUM as bankNum
+		FROM SYS_Contract SS
+			LEFT JOIN SYS_SITE_MID_Contract SMS ON SMS.Contract_ID=SS.ID
+			LEFT JOIN SYS_ACCOUNT_SITE SAS ON SMS.ACCOUNT_SITE_ID=SAS.ID 
+		WHERE 1=1
+        <if test="obj.name!=null and obj.name!=''">AND SS.NAME LIKE '%'||#{obj.name}||'%'</if>
+        <if test="obj.cityId!=null and obj.cityId!=''">AND SAS.CITY_Id = #{obj.cityId} </if>
+        <if test="obj.countyId!=null and obj.countyId!=''">AND SAS.COUNTY_ID = #{obj.countyId}</if>
+        <if test="obj.organizationCode!=null and obj.organizationCode!=''">AND SS.ORGANIZATION_CODE LIKE '%'||#{obj.organizationCode}||'%'</if>
+    </select>
+	<!-- 根据id查找 -->
+   <!--  <select id="findContractById" resultType="com.audit.modules.basedata.entity.ContractManage">
+		SELECT
+			ID as id,
+			CODE as code,
+			ORGANIZATION_CODE as organizationCode,
+			OU_NAME as ouName,
+			NAME as name,
+			VENDOR_CODE as vendorCode,
+			ADDRESS as address,
+			BANK_BRANCH_NAME as bankBranchName,
+			BANK_NUM as bankNum
+		FROM SYS_CONTRACT
+		WHERE 1=1
+		<if test="id !=null and id !=''">AND ID = #{id}</if>
+	</select> -->
+	
+	<select id="findwhiteContractById" resultType="com.audit.modules.basedata.entity.ContractManage">
+		SELECT
+			sc.ID as id,
+			sc.NAME as name,
+			sc.START_DATE as startDate,
+			sc.END_DATE as endDate,
+			sc.IS_CLUD as isClud,
+			sc.CLUD_PRICE as cludPrice,
+			sc.PAYMENT_CYCLE as paymentCycle,
+			sc.PRICE as price,
+			sc.EXECUTION_BEGIN_DATE as executionBeginDate,
+			sc.EXECUTION_END_DATE as executionEndDate,
+			sc.PRICE_OR_LUMP_SUM_PRICE as priceOrLumpSumPrice,
+			sc.VENDOR_NAME as vendorName,
+			sc.CONTRACT_NUMBER as contractNumber,
+			sc.ASSET_MANAGEMENT_SITE_NAME as assetManagementSiteName,
+			sc.IS_UPLOAD_OVERPROOF as isUploadOverproof,
+			ss.CODE as vendorId,
+			ss.ID as supplierId,
+			ss.REGION_CODE as supplierRegionCode
+		FROM SYS_CONTRACT sc
+			LEFT JOIN SYS_SUPPLIER ss ON ss.ORGANIZATION_CODE=sc.ORGANIZATION_ID and ss.REGION_CODE=sc.VENDOR_SITE_ID
+		WHERE 1=1
+		<if test="id !=null and id !=''">AND CONTRACTID = #{id}</if>
+		and  (sc.ISWHITE=1 or sc.ISWHITE IS NULL)
+		and ROWNUM=1
+	</select>
+	
+	
+	 <select id="findContractById" resultType="com.audit.modules.basedata.entity.ContractManage">
+		SELECT
+			sc.ID as id,
+			sc.NAME as name,
+			sc.START_DATE as startDate,
+			sc.END_DATE as endDate,
+			sc.IS_CLUD as isClud,
+			sc.CLUD_PRICE as cludPrice,
+			sc.PAYMENT_CYCLE as paymentCycle,
+			sc.PRICE as price,
+			sc.EXECUTION_BEGIN_DATE as executionBeginDate,
+			sc.EXECUTION_END_DATE as executionEndDate,
+			sc.PRICE_OR_LUMP_SUM_PRICE as priceOrLumpSumPrice,
+			sc.VENDOR_NAME as vendorName,
+			sc.CONTRACT_NUMBER as contractNumber,
+			sc.ASSET_MANAGEMENT_SITE_NAME as assetManagementSiteName,
+			sc.IS_UPLOAD_OVERPROOF as isUploadOverproof,
+			ss.CODE as vendorId,
+			ss.ID as supplierId,
+			ss.REGION_CODE as supplierRegionCode
+		FROM SYS_CONTRACT sc
+			LEFT JOIN SYS_SUPPLIER ss ON ss.ORGANIZATION_CODE=sc.ORGANIZATION_ID and ss.REGION_CODE=sc.VENDOR_SITE_ID
+		WHERE 1=1
+		<if test="id !=null and id !=''">AND sc.id = #{id}</if>
+		and  (sc.ISWHITE=1 or sc.ISWHITE IS NULL)
+		and ROWNUM=1
+	</select>
+	
+	 <select id="findUnitPrice" resultType="java.lang.Double">
+		SELECT
+			UNIT_PRICE
+		FROM AREA_DIRECTPOWERSUPPLY_PRICE
+		WHERE 1=1
+		<if test="cityId !=null and cityId !=''">AND CITY = #{cityId}</if>
+		<if test="countyId !=null and countyId !=''">AND COUNTY = #{countyId}</if>
+		and ROWNUM=1
+	</select>
+	
+	<!-- 更新 -->
+	<update id="updateContract" parameterType="com.audit.modules.basedata.entity.ContractManage">
+		UPDATE SYS_Contract 
+		<set>
+     	 	<if test="code != null">CODE = #{code,jdbcType=NUMERIC},</if>
+			<if test="organizationCode != null">ORGANIZATION_CODE = #{organizationCode,jdbcType=NUMERIC},</if>
+			<if test="ouName != null">OU_NAME = #{ouName,jdbcType=VARCHAR},</if>
+			<if test="name != null">NAME = #{name,jdbcType=VARCHAR},</if>
+			<if test="vendorCode != null">VENDOR_CODE = #{vendorCode,jdbcType=NUMERIC},</if>
+			<if test="address != null">ADDRESS = #{address,jdbcType=VARCHAR},</if>
+			<if test="bankBranchName != null">BANK_BRANCH_NAME = #{bankBranchName,jdbcType=VARCHAR},</if>
+			<if test="bankNum != null">BANK_NUM = #{bankNum,jdbcType=VARCHAR},</if>
+		</set>
+		 WHERE
+		 	ID = #{id,jdbcType=VARCHAR}
+	</update>
+	
+	<!-- 删除 -->
+	<delete id="deleteContractById" parameterType="String" >
+		DELETE FROM 
+			SYS_Contract 
+		WHERE CODE = #{id}
+	</delete> 
+	
+	<!-- 添加信息 -->
+	<insert id="insertContract" parameterType="com.audit.modules.basedata.entity.ContractManage" >
+		<selectKey keyProperty="id" resultType="String" order="BEFORE">
+			SELECT MAX(TO_NUMBER(ID))+1 FROM SYS_Contract
+		</selectKey>
+		INSERT INTO SYS_Contract
+			 <trim prefix="(" suffix=")" suffixOverrides=",">
+			 	<if test="id != null">ID,</if>
+		      	<if test="code != null">CODE,</if>
+				<if test="organizationCode != null">ORGANIZATION_CODE,</if>
+				<if test="name != null">NAME,</if>
+				<if test="ouName != null">OU_NAME,</if>
+				<if test="vendorCode != null">VENDOR_CODE,</if>
+				<if test="address != null">ADDRESS,</if>
+				<if test="bankBranchName != null">BANK_BRANCH_NAME,</if>
+				<if test="bankNum != null">BANK_NUM,</if>
+		    </trim>
+		    <trim prefix="values (" suffix=")" suffixOverrides=",">
+		    	<if test="id != null">#{id,jdbcType=VARCHAR},</if>
+		      	<if test="code != null">#{code,jdbcType=NUMERIC},</if>
+				<if test="organizationCode != null">#{organizationCode,jdbcType=NUMERIC},</if>
+				<if test="name != null">#{name,jdbcType=VARCHAR},</if>
+				<if test="ouName != null">#{ouName,jdbcType=VARCHAR},</if>
+				<if test="vendorCode != null">#{vendorCode,jdbcType=NUMERIC},</if>
+				<if test="address != null">#{address,jdbcType=VARCHAR},</if>
+				<if test="bankBranchName != null">#{bankBranchName,jdbcType=VARCHAR},</if>
+				<if test="bankNum != null">#{bankNum,jdbcType=VARCHAR},</if>
+		    </trim>
+	</insert>
+
+</mapper>

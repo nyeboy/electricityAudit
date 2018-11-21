@@ -1,0 +1,148 @@
+<!-- 电费提交单查看详情-->
+
+<div class="business-box" id="businessBox">
+    <div class="content-box" id="contentBox">
+        <div class="ledge-detail">
+            <div class="ledge-title">电费提交单详情</div>
+            <div class="ledge-table">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <span class="table-left">电费提交单号:</span>
+                                <input type="text" name="" class="table-right" ng-model="generatedInfo.reimburseNo" disabled="disabled">
+                            </td>
+                            <td>
+                                <span class="table-left">区县经办人:</span>
+                                <input id="userId" type="text" name="" class="table-right" ng-model="generatedInfo.userName" disabled="disabled">
+                            </td>
+                            <td>
+                                <span class="table-left">制单时间:</span>
+                                <input id="createDate" ng-model="generatedInfo.timeStr" class="table-right" type="text" disabled="disabled">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="sign table-left">地市:</span>
+                                <input id="userId" type="text" name="" class="table-right" ng-model="generatedInfo.cityName" disabled="disabled">
+                            </td>
+                            <td>
+                                <span class="table-left">区县:</span>
+                                <input id="userId" type="text" name="" class="table-right" ng-model="generatedInfo.countyName" disabled="disabled">
+                            </td>
+                            <td>
+                                <span class="table-left">推送类型:</span>
+                                <input type="text" name="" class="table-right" ng-model="generatedInfo.reimburseTypeName" disabled="disabled">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="sign table-left">报销状态:</span>
+                                <input type="text" name="" class="table-right" ng-model="generatedInfo.statusName" disabled="disabled">
+                            </td>
+                            <td>
+                                <span class="sign table-left">发票类型:</span>
+                                <input  id="invoiceType" 
+                                        ng-model="generatedInfo.invoiceTypeName" 
+                                        class="table-right" disabled="disabled">
+                            </td>
+                            <td>
+                                <span class="table-left">价款金额(元):</span>
+                                <input type="text" name="" class="table-right" ng-model="generatedInfo.priceAmount" ng-change="generatedpriceAmountChange(generatedInfo.priceAmount,generatedInfo.totalAmount)" disabled="disabled">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="table-left">税金金额（元）:</span>
+                                <input type="text" name="" class="table-right" ng-model="generatedInfo.taxAmount" ng-change="generatedtaxAmountChange(generatedInfo.taxAmount,generatedInfo.totalAmount)" disabled="disabled">
+                            </td>
+                            <td>
+                                <span class="table-left">报销总金额(元):</span>
+                                <input type="text" name="" class="table-right" ng-model="generatedInfo.totalAmount" ng-change="generatedInvoiceType(generatedInfo.invoiceType, invoiceTypeList, generatedInfo.totalAmount)" disabled="disabled">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- 发票信息-->
+            <div class="ledge-title ledge-sub" >
+              <span>稽核单列表</span>
+            </div >
+            <!--<div class="invoinc-table">-->
+                <!--<table class="table-result">-->
+                    <!--<colgroup>-->
+                        <!--<col style="width:5%" />-->
+                        <!--<col style="width:9%" />-->
+                        <!--<col style="width:9%" />-->
+                        <!--<col style="width:9%" />-->
+                        <!--<col style="width:9%" />-->
+                        <!--<col style="width:9%" />-->
+                        <!--<col style="width:10%" />-->
+                        <!--<col style="width:10%" />-->
+                        <!--<col style="width:10%" />-->
+                        <!--<col style="width:10%" />-->
+                        <!--<col style="width:10%" />-->
+                    <!--</colgroup>-->
+                    <!--<thead>-->
+                  <!---->
+                    <!--</thead>-->
+                <!--</table>-->
+                <div class="table-details" style="overflow:hidden;">
+                    <div>
+                        <table>
+                            <!-- <colgroup>
+                                <col style="width:5%" />
+                                <col style="width:9%" />
+                                <col style="width:9%" />
+                                <col style="width:9%" />
+                                <col style="width:9%" />
+                                <col style="width:9%" />
+                                <col style="width:10%" />
+                                <col style="width:10%" />
+                                <col style="width:10%" />
+                                <col style="width:10%" />
+                                <col style="width:10%" />
+                            </colgroup> -->
+                            <tbody class="query-date">
+                                <tr>
+                                    <th><input type="checkbox"></th>
+                                    <th>稽核单号</th>
+                                    <th>铁塔站址名称</th>
+                                   <!--  <th>费用类别</th>
+                                    <th>业务类别</th> -->
+                                    <th>金额</th>
+                                    <th>报账管理</th>
+                                    <th>合同</th>
+                                    <th>建单时间</th>
+                                    <!-- <th>结束时间</th> -->
+                                    <th>操作</th>
+                                </tr>
+                                <tr ng-repeat="item in list track by $index">
+                                    <td><input type="checkbox" value="{{item.instanceId}}"></td>
+                                    <td>{{item.serialNumber}}</td>
+                                    <td>{{item.zgTowerSiteName}}</td>
+                                   <!--  <td></td>
+                                    <td></td> -->
+                                    <td>{{item.totalAmount}}</td>
+                                    <td>{{generatedInfo.reimburseTypeName}}</td>
+                                    <td>{{item.contractNo?'有': '无'}}</td>
+                                    <td>{{item.createDate | date:"yyyy-MM-dd HH:mm:ss"}}</td>
+                                    <!-- <td></td> -->
+                                    <td>
+                                        <a ng-click="showDetail(item,false,true)" href="javascript:void(0)" class="check-detail">查看</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="reimbur-foot ledge-foot">
+                <button ng-if="!isTWfrinceBtn" class="reimbur-save btn" ng-click="closeGeneratedDig()">关闭</button>
+                <button ng-if="isTWfrinceBtn" class="reimbur-save btn" ng-click="closedElectricDig()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>

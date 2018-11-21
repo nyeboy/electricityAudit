@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<script src="../config.js"></script>
+	<script src="../assets/js/extends/jquery-3.1.1.min.js"></script>
+	<script src="../bower_components/layer/layer.js" ></script>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+	<body>
+		<div class="loginmain">
+			<div>当前登录已失效，请重新登录！</div>
+		</div>
+<script type="text/javascript">
+    var base_url=CONFIG.BASE_URL;
+    $('#goLogin').click(function(){
+    	var account = $("#account").val();
+    	var word = $("#word").val();
+    	if(!account){
+    		layer.msg("请输入超级管理员用户名。");
+    		return;
+    	}
+    	if(!account.match('[a-zA-Z0-9_]+')){
+    		layer.msg("用户名由英文字母、数字或下划线组成。");
+    		return;
+    	}
+    	if(!word){
+    		layer.msg("请输入密码");
+    		return;
+    	}
+	    	  //登录
+	    $.get(base_url+"/loginController/login.do",{
+	        "loginAccountParam":account,
+	        "fromPage":1,
+	        "word":word
+	    },function(data){
+	        if(data.code==200){
+	            layer.msg("登录成功！");
+	            window.location.href='../login.html';
+	        }else{
+	            layer.msg(data.message);
+	        }
+	    });
+    })
+</script>
+	</body>
+</html>
+<style type="text/css">
+.loginmain input { width: 360px; padding: 12px;border: 1px solid #cccccc; margin: 10px 0px; font-size: 14px; }
+.loginmain .btn{ width: 388px; background: #3982f1; color: #ffffff; font-size: 16px; border: none; margin-top: 15px; cursor:pointer; font-size: 16px; font-weight: bolder; }
+.loginmain .btn:hover { background: #3476d9; }
+</style>

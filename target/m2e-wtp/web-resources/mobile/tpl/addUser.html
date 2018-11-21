@@ -1,0 +1,76 @@
+
+<!--用户管理《添加用户》  -->
+<div class="system-content" style="margin-bottom: 60px;">
+    <div class="business-box" id="businessBox">
+        <div id="contentRout" class="content-rout" >
+            <span >系统管理</span>&gt;<span>用户/角色</span>&gt;<span>用户管理</span>&gt;<span class="now-route">添加用户</span>
+        </div>
+        <div class="content-box" id="contentBox">
+            <div class="add-user">
+            <div>
+                <form action="" ng-readonly="status=='view'" name="myform" novalidate>
+                    <ul class="user-list">
+                        <li><span>登录名:</span><input ng-model="user.account" ng-pattern="/^[a-zA-Z0-9_]*$/" name="account" type="text" required ng-readonly="status=='view'" ng-Blur="queryOA(user.account)"><!-- <span  ng-show="myform.account.$dirty && myform.account.$invalid"> --><span style="color:red" ng-show="myform.account.$error.required">登录名是必须的。</span><span  style="color:red" ng-show="!myform.account.$error.required && myform.account.$invalid">登录名只能由字母、数字、下划线组成。</span></li>
+
+                        <li><span>备注:</span><input ng-model="user.remark" type="text" ng-readonly="status=='view'"></li>
+                        <li><span>真实姓名:</span><input ng-model="user.userName" name="userName" required type="text" ng-readonly="status=='view'"><span style="color:red" ng-show="myform.userName.$error.required">姓名是必须的。</span></li>
+                        <li><span>邮箱:</span><input ng-model="user.email" required name="email" ng-pattern="/^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/" type="text" ng-readonly="status=='view'"><span style="color:red" ng-show="!myform.email.$error.required && myform.email.$invalid">邮箱格式不正确。</span></li>
+                        <li><span>电话号码:</span><input ng-model="user.mobile" 
+                        type="text" ng-pattern="/^[0-9_\s+-]*$/" ng-readonly="status=='view'"></li><span style="color:red" ng-show="!myform.mobile.$error.required && myform.mobile.$invalid">电话号码格式不正确。</span></li>
+                        <li>
+                            <span ng-init="user.province=1">省:</span>
+                            <select name="province" required ng-model="user.province"  >
+                                <option ng-selected="true" value="1">四川省</option>
+                            </select>
+                        </li>
+                        <li>
+                            <span>市:</span>
+                            <select ng-model="user.city"
+                                    name="city"
+                                    ng-disabled="status=='view'"
+                                    ng-change="queryCountyList(user.city)"
+                                    
+                            >
+                                <option ng-disabled="status=='view'" ng-selected="user.city==test.key" ng-repeat="test in tests" value="{{test.key}}">{{test.value}}</option>
+                            </select>
+                        </li>
+                        <li>
+                            <span>区/县:</span>
+                            <select name="county"
+                                    ng-disabled="status=='view'"
+                                    ng-model="user.county"
+                                    
+                            >
+                                <option ng-disabled="status=='view'"  ng-selected="user.county==county.key" ng-repeat="county in countys" value="{{county.key}}">{{county.value}}</option>
+                            </select> 
+                        </li>
+                        <li class="role" ng-init="checkRoles()">
+                            <span class="role-span">角色:</span>
+                            <ul class="role-check" required name="rolecheck" id="userRoles">
+                                <li ng-repeat="role in roles track by $index" style="margin-bottom: 10px;"><label><input ng-disabled="status=='view'"  ng-click="checkRoles()"
+                                ng-checked="hasRole(role.roleId)" type="checkbox"  name="roleIds" value="{{role.roleId}}" class="role-checkbox">{{role.roleName}}</label></li>
+                            </ul>
+                        </li>
+                        <li >
+                            <span>账号状态:</span>
+                            <label for="normal" ng-init="user.userStatus=1">
+                            <input ng-disabled="status=='view'" ng-model="user.userStatus" type="radio" value="0" name="state" id="normal" class="normal-btn"/>正常</label>
+                            <label for="locking">
+                            <input ng-disabled="status=='view'"  type="radio" ng-model="user.userStatus" value="1" name="state" id="locking" class="locking-btn" />锁定</label> 
+                        </li>
+                        <!-- <li class="error">用户输入</li> -->
+                    </ul>
+                    <div class="submit-btn" style="text-align: left;">
+                        <input ng-click="saveUser(form,user,'add')" type="button" value="提交" class="save" ng-hide="status=='view'">
+                        <input ng-click="backUser()" type="button" value="确定" class="save" ng-show="status=='view'">
+                        <input type="button" ng-click="backUser()" value="取消" class="cancel" ng-hide="status=='view'">
+                    </div>
+                </form>
+                </div>
+                <div style="height: 80px;">
+            </div>
+        </div>
+    </div>
+</div>
+<style type="text/css">
+</style>

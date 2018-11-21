@@ -1,0 +1,30 @@
+<!-- 预付单查看详情弹框 -->
+<div class="ledge-detail add-details">
+    <div class="ledge-title">报销流程</div>
+    <div class="ledge-table" >
+       <table border="soild 1px" ng-repeat="sp in submitProcess1">
+       	<thead>
+       		<tr>
+       			<td colspan="6">{{sp.account}}{{sp.time}}{{sp.status | sType}}</td>
+       		</tr>
+       		<tr>
+       			<td>操作人</td>
+       			<td>操作人姓名</td>
+       			<td>部门职位</td>
+       			<td>操作人联系方式</td>
+       			<td>状态</td>
+       			<td>处理时间</td>
+       		</tr>
+       	</thead>
+       	<tbody>
+       		<td>{{sp.account}}</td>
+       		<td>{{sp.userName}}</td>
+       		<td>{{sp.nickName}}</td>
+       		<td>{{sp.mobile}}</td>
+       		<td>{{sp.status| sType}}</td>
+       		<td>{{sp.time}}</td>
+       	</tbody>
+       </table>
+    </div>
+
+</div>

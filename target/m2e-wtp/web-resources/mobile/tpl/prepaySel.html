@@ -1,0 +1,116 @@
+﻿<!-- 电费稽核  -->
+<div class="system-content" id="systemContent">
+    <div class="business-box" id="businessBox">
+        <div class="content-rout" id="contentRout">
+            <span>基础电费</span>&gt;<span>预付提交</span>&gt;<span class="now-rout">预付单查询</span>
+        </div>
+        <div class="content-box" id="contentBox">
+            <div class="trariffc-table tariffc-page zw-search">
+                <div  class="search-box ">
+                    <div>
+                        <select ng-model="$parent.flowState" name="" id="" class="title-select con-parts">
+                            <option value="">预付单状态</option>
+                            <option value="1">等待提交审批</option>
+                            <option value="2">审批中</option>
+                            <option value="-1">审批通过</option>
+                            <option value="0">被驳回</option>
+                        </select>
+                        <input type="text" placeholder="预付单号" class="process-input con-parts" name="paymentNumber" ng-model="paymentNumber">
+
+                        <input 
+                           readOnly="true"
+                           ng-laydate
+                           id="id1"
+                           ng-model="$parent.startDate"
+                           format="YYYY-MM-DD"
+                           type="text" placeholder="创建时间（从开始）" class="process-input con-parts" name="">
+                        <input 
+                           readOnly="true"
+                           ng-laydate
+                           id="id2"
+                           ng-model="$parent.endDate"
+                           format="YYYY-MM-DD"
+                           min-date="{{$parent.startDate}}"
+                           type="text" placeholder="创建时间(至结束)" class="process-input con-parts" name="">
+                    </div>
+                  
+                    <button ng-click="getZwAuditDetail()" class="btn btn-primary" type="button">搜索</button>                 
+                </div>
+                <!-- table-content -->
+                <div class="table-content">
+                	<div class="table-title">
+                        <button ng-show="userLevel!=undefined && (userLevel == 2 || userLevel == 4)" ng-click="createPreSubmitOrderDialog()" class="btn btn-blue">生成预付提交单</button>
+                        <button ng-show="userLevel!=undefined && (userLevel == 2 || userLevel == 4)" ng-click="bachSubmit2(1)" class="btn btn-blue">批量提交</button>
+                        <button ng-show="userLevel!=undefined && (userLevel == 2 || userLevel == 4)" ng-click="bachDeleteTaskList()" class="btn btn-blue">批量撤销</button>
+                        <button ng-show="userLevel!=undefined && (userLevel == 1 || userLevel == 3)" ng-click="bachSubmit3(1)" class="btn btn-blue">批量通过</button>
+                        <button ng-show="userLevel!=undefined && (userLevel == 1 || usserLevel == 3)" ng-click="bachSubmit3(-1)" class="btn btn-blue">批量驳回</button>
+                    </div>
+                    <div class="table-details">
+                        <div>
+                            <table>
+                                <tbody class="query-date" id="list">
+                                <tr>
+                                    <th><input ng-click="checkAll('#checkAll','#list')" id="checkAll" type="checkbox"></th>
+                                    <th>预付单批次号</th>
+                                    <th>制单人</th>
+                                    <th>供应商</th>
+                                    <th>预付单金额</th>
+                                    <th>审批状态</th>
+                                    <th>制单时间</th>
+                                    <th style="width: 304px">操作</th>
+                                </tr>
+                                    <tr ng-repeat="item in list track by $index">
+                                        <td><input type="checkbox" value="{{item.instanceId}}" id="{{item.adpv.paymentNumber}}"></td>
+                                        <td>{{item.adpv.paymentNumber}}</td>
+                                        <td>{{item.adpv.submitMan}}</td>
+                                        <td>{{item.adpv.supplyStr}}</td>
+                                        <td>{{item.adpv.totalMoney}}</td>
+                                        <td>{{item.flowState | flowStateFilter}}</td>
+                                        <td>{{item.adpv.createDate|date:"yyyy-MM-dd HH:mm:ss"}}</td>
+                                       <td style="width: 304px">
+                                            <!--{{item}}-->
+                                            <a ng-click="showDetail(item,false,true)" class="check-detail">查看</a>
+
+                                            <!-- <a 
+                                                ng-click="showDetail(item,true,false)"
+                                                ng-if="item.flowState <= 1 && item.operation == true"
+                                                class="edit-process">修改</a> -->
+
+                                            <a 
+                                                ng-if="item.operation == true && item.flowState <= 1"
+                                                ng-click = "bachSubmit(1,item.instanceId)" 
+                                                class="submit-icon">提交</a>
+                                            <a
+                                                ng-if="item.operation == true && item.flowState == 2"
+                                                ng-click = "bachSubmit(1,item.instanceId)"
+                                                class="submit-icon">同意</a>   
+                                            <a 
+                                                ng-if="item.flowState > 1 && item.operation == true"
+                                                ng-click = "bachSubmit(-1,item.instanceId)"
+                                                class="submit-icon">驳回</a>
+
+                                            <a  
+                                                ng-if="item.flowState <=1  && item.operation == true" ng-click="deleteSelected(item)"
+                                                class="delete">撤销</a>
+                                           <a  
+                                                ng-if="item.flowState ==-1  && item.operation == false && item.adpv.status==2" ng-click="talkInfo(item.adpv.id)"
+                                                class="delete">意见</a>   
+                                         <!--  
+                                           <a ng-if="userLevel!=undefined && (userLevel == 2 || userLevel == 4) && item.adpv.status==2" ng-click="createSubmitOrder(item.adpv.id)" class="submit-icon">提交财务</a>   
+                                       		-->
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                    <div class="page-foot">
+                        <im-pagination conf="pageInfo" params="params" get-data="getZwAuditDetail()"></im-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

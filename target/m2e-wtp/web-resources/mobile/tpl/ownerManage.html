@@ -1,0 +1,130 @@
+﻿<!-- 业主信息管理 -->
+<div class="system-content" id="systemContent" style="overflow: hidden;">
+    <div class="business-box" id="businessBox">
+        <div class="content-rout" id="contentRout">
+            <span>基础数据维护</span>&gt;<span class="now-rout">业主信息管理</span>
+        </div>
+        <div class="content-box" id="contentBox">
+            <div class="search-box">
+                <div>
+                    <select name="" id="" class="title-select" 
+                        ng-model="$parent.cityId"
+						ng-options="city.key as city.value for city in citys"
+                        ng-change="queryCountyList(cityId)">
+                       <!-- 原来的代码： ng-options="city.key disable when city.notAnOption for city in citys"
+                        ng-change="queryCountyList(cityId)" -->
+						
+               	 		<option value="">全省</option>
+                </select>
+                <select class="title-select" 
+                        ng-model="$parent.countyId"
+                        ng-options="county.key as county.value for county in countys">
+                		<option value="">全市</option>
+                </select>
+                    <input type="text" placeholder="业主名称/业主开户银行/业主账号/供应商" class="process-input" ng-model="vague">
+                </div>
+                <button ng-click="getData(true)" class="btn btn-primary" type="button">搜索</button>
+            </div>
+            <!-- table-content -->
+            <div class="table-content">
+                <div class="table-title">
+                    <button ng-click="addOwnerInfoDetal()" class="btn btn-blue">+ 新增</button>
+					<button href="javascript:void(0);" ng-click="exportExcel()" class="btn btn-blue">导出</button>
+                </div>
+                <!-- table -->
+                <div class="data-table">
+                  <!--   <table class="table-result">
+                        <colgroup>
+                            <col style="width:5%" />
+                            <col style="width:4%" />
+                            <col style="width:4%" />
+                            <col style="width:10%" />
+                            <col style="width:10%" />
+                            <col style="width:10%" />
+                            <col style="width:11%" />
+                            <col style="width:12%" />
+                            <col style="width:6%" />
+                            <col style="width:6%" />
+                            <col style="width:6%" />
+                            <col style="width:16%" />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>地区</th>
+                                <th>区县</th>
+                                <th>业主名称</th>
+                                <th>业主开户银行</th>
+                                <th>业主银行账号</th>
+                                <th>供应商</th>
+                                <th>用电协议单位</th>
+                                <th>用电协议起始日期</th>
+                                <th>用电协议终止日期</th>
+                                <th>用电协议单价</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                    </table> -->
+
+                    <div class="table-details basic-table" style="    padding-bottom: 141px;">
+                        <div>
+                            <table>
+<!--                                 <colgroup>
+                                    <col style="width:5%" />
+                                    <col style="width:4%" />
+                                    <col style="width:4%" />
+                                    <col style="width:10%" />
+                                    <col style="width:10%" />
+                                    <col style="width:10%" />
+                                    <col style="width:11%" />
+                                    <col style="width:12%" />
+                                    <col style="width:6%" />
+                                    <col style="width:6%" />
+                                    <col style="width:6%" />
+                                    <col style="width:16%" />
+                                </colgroup> -->
+                                <tbody class="query-date">
+                                <tr>
+                                <th>序号</th>
+                                <th>地区</th>
+                                <th>区县</th>
+                                <th>业主名称</th>
+                                <th>业主开户银行</th>
+                                <th>业主银行账号</th>
+                                <th>供应商</th>
+                                <th>用电协议单位</th>
+                                <th>用电协议起始日期</th>
+                                <th>用电协议终止日期</th>
+                                <th>用电协议单价</th>
+                                <th>操作</th>
+                            </tr>
+                                    <tr ng-repeat="item in list track by $index">
+                                        <td>{{$index+1}}</td>
+                                        <td>{{item.cityName}}</td>
+                                        <td>{{item.countyName}}</td>
+                                        <td>{{item.ownerName}}</td>
+                                        <td>{{item.bankName}}</td>
+                                        <td>{{item.bankAccount}}</td>
+                                        <td>{{item.supplier}}</td>
+                                        <td>{{item.useCompany}}</td>
+                                        <td>{{item.startTime | date:"yyyy-MM-dd"}}</td>
+                                        <td>{{item.endTime | date:"yyyy-MM-dd"}}</td>  
+                                        <td>{{item.price}}</td>
+                                        <td>
+                                            <a ng-click="queryOwnerInfoDetal(item)" class="check-detail" >查看</a>
+                                            <a ng-click="modifyOwnerInfoDetal(item)" class="edit-process">修改</a>
+                                            <a ng-click="deleteOwnerInfo(item)" class="delete">删除</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="page-foot">
+                    <im-pagination conf="pageInfo" params="params" get-data="getData()"></im-pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,859 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.basedata.dao.WhiteMgDao">
+
+	<resultMap type="com.audit.modules.system.entity.WhiteMg" id="whiteMap" >
+		<id property="id" column="ID"></id>
+		<result property="cityId" column="CITY_ID"/>
+		<result property="countyId" column="COUNTY_ID"/>
+		<result property="siteName" column="SITE_NAME"/>
+		<result property="ziguanName" column="ZIGUAN_NAME"/>
+		<result property="siteNo" column="SITE_NO"/>
+		<result property="tsiteNo" column="TSITE_NO"/>
+		<result property="status" column="STATUS"/>
+		<result property="szydNo" column="SZYD_NO"/>
+		<result property="endTime" column="END_TIME"/>
+		<result property="cj" column="CJ"/>
+		<result property="fj" column="FJ"/>
+		<result property="cperson" column="CPERSON"/>
+		<result property="siteId" column="SITE_ID"/>
+		<result property="sureTime" column="SURE_TIME"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="updateTime" column="UPDATE_TIME"/>
+		<result property="contractId" column="CONTRACT_ID"/>
+		<result property="cityName" column="CITY_NAME"/>
+		<result property="zhLabel" column="ZH_LABEL"/>
+		<result property="contractName" column="CONTRACT_NAME"/>
+		<result property="contractDate" column="CONTRACT_DATE"/>
+		<result property="payType" column="PAYTYPE"/>
+		<result property="price" column="PRICE"/>
+		<result property="fTan" column="FTAN"/>
+		<result property="contractStatus" column="CONTRACT_STATUS"/>
+		<result property="supplyName" column="SUPPLIER_NAME"/>
+		<result property="supplySiteId" column="SUPPLIER_SITE_ID"/>
+		<result property="supplyerOrganizationId" column="SUPPLIER_ORGANIZATION_ID"/>
+		<result property="bankName" column="BANK_NAME"/>
+		<result property="bankacName" column="BANKAC_NAME"/>
+		<result property="bankNum" column="BANK_NUM"/>
+		<result property="contractEndTime" column="CONTRACT_END_TIME"/>
+		<result property="supplyId" column="SUPPLY_ID"></result>
+	</resultMap>
+	
+	<resultMap type="com.audit.modules.basedata.entity.WhiteSubmit" id="whiteSubmitMap" >
+		<id property="id" column="ID"></id>
+		<result property="cityId" column="CITY_ID"/>
+		<result property="countyId" column="COUNTY_ID"/>
+		<result property="siteName" column="SITE_NAME"/>
+		<result property="ziguanName" column="ZIGUAN_NAME"/>
+		<result property="siteNo" column="SITE_NO"/>
+		<result property="tsiteNo" column="TSITE_NO"/>
+		<result property="status" column="STATUS"/>
+		<result property="szydNo" column="SZYD_NO"/>
+		<result property="endTime" column="END_TIME"/>
+		<result property="cj" column="CJ"/>
+		<result property="fj" column="FJ"/>
+		<result property="cperson" column="CPERSON"/>
+		<result property="siteId" column="SITE_ID"/>
+		<result property="sureTime" column="SURE_TIME"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="updateTime" column="UPDATE_TIME"/>
+		<result property="contractId" column="CONTRACT_ID"/>
+		<result property="cityName" column="CITY_NAME"/>
+		<result property="zhLabel" column="ZH_LABEL"/>
+		<result property="contractName" column="CONTRACT_NAME"/>
+		<result property="contractDate" column="CONTRACT_DATE"/>
+		<result property="payType" column="PAYTYPE"/>
+		<result property="price" column="PRICE"/>
+		<result property="fTan" column="FTAN"/>
+		<result property="contractStatus" column="CONTRACT_STATUS"/>
+		<result property="supplyName" column="SUPPLIER_NAME"/>
+		<result property="supplySiteId" column="SUPPLIER_SITE_ID"/>
+		<result property="supplyerOrganizationId" column="SUPPLIER_ORGANIZATION_ID"/>
+		<result property="bankName" column="BANK_NAME"/>
+		<result property="bankacName" column="BANKAC_NAME"/>
+		<result property="bankNum" column="BANK_NUM"/>
+		<result property="contractEndTime" column="CONTRACT_END_TIME"/>
+		<result property="szydBeginTime" column="SZYD_BEGIN_TIME"/>
+		<result property="submitStatus" column="SUBMIT_STATUS"/>
+		<result property="userRoleLevel" column="USER_ROLE_LEVEL"/>
+	</resultMap>
+	
+	<resultMap type="com.audit.modules.basedata.entity.whiteSubmitMg" id="wsmMap">
+		<id property="id" column="ID"/>
+		<result property="cityName" column="CITY_NAME"/>
+		<result property="zhLabel" column="ZH_LABEL"/>
+		<result property="status" column="STATUS"/>
+		<result property="szydNo" column="SZYD_NO"/>
+		<result property="endTime" column="END_TIME"/>
+		<result property="cperson" column="CPERSON"/>
+		<result property="cj" column="CJ"/>
+		<result property="submitTime" column="SUBMIT_TIME"/>
+		<result property="ziguanName" column="ZIGUAN_NAME"/>
+	</resultMap>	
+	
+	<resultMap type="com.audit.modules.basedata.entity.whiteSubmitMg" id="whiteSubmitMgMap">
+		<id property="id" column="ID"></id>
+		<result property="cityName" column="CITY_NAME"/>
+		<result property="zhLabel" column="ZH_LABEL"/>
+		<result property="status" column="STATUS"/>
+		<result property="szydNo" column="SZYD_NO"/>
+		<result property="endTime" column="END_TIME"/>
+		<result property="cperson" column="CPERSON"/>
+		<result property="cj" column="CJ"/>
+		<result property="submitTime" column="SUBMIT_TIME"/>
+		<result property="updateTime" column="UPDATE_TIME"/>
+		<result property="ziguanName" column="ZIGUAN_NAME"/>
+		<result property="szydBeginTime" column="SZYD_BEGIN_TIME"/>
+		<result property="isdo" column="ISDO"/>
+		<result property="bz" column="BZ"/>
+	</resultMap>
+	
+	<resultMap type="com.audit.modules.basedata.entity.WhiteCpersonFile" id="whiteCpersonFileMap">
+		<id property="id" column="ID"></id>
+		<result property="fileId" column="FILE_ID"/>
+		<result property="cperson" column="CPERSON"/>
+	</resultMap>
+	
+	<resultMap type="com.audit.modules.basedata.entity.WhiteCityNum" id="whiteCityNumMap">
+		<id property="id" column="ID"></id>
+		<result property="cityName" column="CITY_NAME"/>
+		<result property="cityId" column="CITY_ID"/>
+		<result property="siteNum" column="SITE_NUM"/>
+		<result property="whiteSiteNum" column="WHITE_SITE_NUM"/>
+		<result property="bi" column="BI"/>
+		<result property="yu" column="YU"/>
+		<result property="zbi" column="ZBI"/>
+	</resultMap>
+	
+	<resultMap type="com.audit.modules.basedata.entity.WhiteCountyNum" id="whiteCountyNumMap">
+		<id property="id" column="ID"></id>
+		<result property="zhLabel" column="ZH_LABEL"/>
+		<result property="zhId" column="ZH_ID"/>
+		<result property="cityId" column="CITY_ID"/>
+		<result property="siteNum" column="SITE_NUM"/>
+		<result property="whiteSiteNum" column="WHITE_SITE_NUM"/>
+		<result property="bi" column="BI"/>
+		<result property="yu" column="YU"/>
+		<result property="zbi" column="ZBI"/>
+	</resultMap>
+	
+	<insert id="addWhite" parameterType="com.audit.modules.system.entity.WhiteMg">
+		insert into sys_white
+		 (ID,
+		 CITY_NAME,
+		 ZH_LABEL,
+		 ZIGUAN_NAME,
+		 CJ,
+		 SITE_NAME,
+		 CONTRACT_NAME,
+		<if test="contractDate!=null and contractDate!=''">CONTRACT_DATE,</if>
+		<if test="contractEndTime!=null and contractEndTime!=''">CONTRACT_END_TIME,</if>
+		PAYTYPE,
+		PRICE,
+		FTAN,
+		<if test="contractStatus!=null and contractStatus!=''">CONTRACT_STATUS,</if>
+		SUPPLIER_NAME,
+		SUPPLIER_SITE_ID,
+		SUPPLIER_ORGANIZATION_ID,
+		BANK_NAME,
+		<if test="bankacName!=null and bankacName!=''">BANKAC_NAME,</if>
+		BANK_NUM,
+		CONTRACT_ID,
+		SUPPLY_ID)
+		 values
+			(#{id},
+			#{cityName},
+			#{zhLabel},
+			#{ziguanName},
+			#{cj},
+			#{siteName},
+			#{contractName},
+			<if test="contractDate!=null and contractDate!=''">#{contractDate},</if>
+			<if test="contractEndTime!=null and contractEndTime!=''">#{contractEndTime},</if>
+			#{payType},
+			#{price},
+			#{fTan},
+			<if test="contractStatus!=null and contractStatus!=''">#{contractStatus},</if>
+			#{supplyName},
+			#{supplySiteId},
+			#{supplyerOrganizationId},
+			#{bankName},
+			<if test="bankacName!=null and bankacName!=''">#{bankacName},</if>
+			#{bankNum},
+			#{contractId},
+			#{supplyId}
+			)
+	</insert>
+	
+	<!-- 分页查找submitMg -->
+	<select id="getSubmitMgByPage" parameterType="java.util.Map" resultMap="wsmMap">
+		select * from sys_white_submit_mg
+		where 1=1
+		<if test="obj.szydNo!=null and obj.szydNo!=''">and SZYD_NO=#{obj.szydNo}</if>
+		<if test="obj.status!=null and obj.status!=''">and status=#{obj.status}</if>
+		<if test="obj.submitTime!=null and obj.submitTime!=''">and submit_time=#{obj.submitTime}</if>
+		<if test="obj.cperson !=null and obj.cperson!=''">and cperson=#{obj.cperson}</if>
+		order by create_time desc
+	</select>
+	<!-- 分页查询导入白名单站点 -->
+	<select id="findByPage" resultMap="whiteMap">
+		select * from sys_white 
+	</select>
+	
+	<select id="findWhitMg" resultMap="whiteMap">
+		select * from sys_white
+	</select>
+	
+	<!-- 查找白名单提交页总条数 -->
+	<select id="getTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
+		select count(*) from sys_white_submit
+		WHERE 1=1
+        <if test="cityId!=null and cityId!=''">AND city_id=#{cityId}</if>
+        <if test="siteName!=null and siteName!=''">AND ziguan_name LIKE '%'||#{siteName}||'%'</if>
+        <if test="szydNo!=null and szydNo!=''">AND szyd_no=#{szydNo}</if>
+	</select>
+	
+	<!-- 查找白名单提交页总条数 -->
+	<select id="getTotals" parameterType="java.util.Map" resultType="java.lang.Integer">
+		select count(*) from sys_white_submit_mg
+		WHERE 1=1
+        <if test="obj.szydNo!=null and obj.szydNo!=''">and SZYD_NO=#{obj.szydNo}</if>
+		<if test="obj.status!=null and obj.status!=''">and status=#{obj.status}</if>
+		<if test="obj.submitTime!=null and obj.submitTime!=''">and submit_time=#{obj.submitTime}</if>
+		<if test="obj.cperson !=null and obj.cperson!=''">and cperson=#{obj.cperson}</if>
+	</select>
+	
+	
+	<!-- 查找白名单所有 -->
+	<select id="findWhiteMgById" parameterType="java.lang.String" resultMap="whiteMap">
+		select * from sys_white where id=#{id}
+	</select>
+	
+	
+	<!-- 查找白名单所有 -->
+	<select id="findWhiteMgById1" parameterType="java.lang.String" resultMap="whiteSubmitMap">
+		select * from sys_white_submit where id=#{id}
+	</select>
+	
+	<!-- 根据市id查找三重一大会议 -->
+	<select id="findSzydByCityName" parameterType="java.lang.String" resultMap="whiteSubmitMap">
+		select * from sys_white_submit where city_id=#{cityId} and <![CDATA[rownum<=1]]>
+	</select>
+	
+	<!-- 根据三重一大编号查找附件 -->
+	<select id="findFJBySzydNo" parameterType="java.lang.String" resultType="com.audit.modules.system.entity.SysFile" >
+		select  DISTINCT SF.FILENAME,SF.FILEPATH,SF.NOTE,SF.CREATORID,SF.CREATOR,SF.EXT,SF.id from sys_file sf
+		left join sys_white_mid_file swmf on swmf.fj_id=sf.id
+		left join sys_white_submit_mg swsm on swsm.szyd_no=swmf.szyd_no
+		where swsm.szyd_no=#{szydNo}
+	</select>
+	
+	
+	
+	
+	<!-- 分页查找-->
+    <select id="findWhiteMgSubmitByPage" resultMap="whiteSubmitMap" parameterType="java.util.Map">
+		select * from sys_white_submit
+		WHERE 1=1
+        <if test="obj.cityId!=null and obj.cityId!=''">AND city_id=#{obj.cityId}</if>
+        <if test="obj.siteName!=null and obj.siteName!=''">AND site_name LIKE '%'||#{obj.siteName}||'%'</if>
+        <if test="obj.szydNo!=null and obj.szydNo!=''">AND szyd_no=#{szydNo}</if>
+    </select>
+    
+    <!-- 根据id删除白名单站点 -->
+    <delete id="delWhiteMgById" parameterType="java.lang.String">
+    	delete from sys_white where id=#{id}
+    </delete>
+    
+     <!-- 修改页根据id删除白名单站点 -->
+    <delete id="delWhiteMgById1" parameterType="java.lang.String">
+    	delete from sys_white_submit where id=#{id}
+    </delete>
+    
+    <!-- 删除white表 -->
+    <delete id="deleteWhite">
+    	delete from sys_white
+    </delete>
+    <!-- 插入whitSubmit表 -->
+    <insert id="addWhiteSubmit" parameterType="com.audit.modules.system.entity.WhiteMg">
+    	insert into sys_white_submit 
+    	(ID,
+		 CITY_NAME,
+		 ZH_LABEL,
+		 ZIGUAN_NAME,
+		 CJ,
+		 SITE_NAME,
+		 CONTRACT_NAME,
+		<if test="contractDate!=null and contractDate!=''">CONTRACT_DATE,</if>
+		<if test="contractEndTime!=null and contractEndTime!=''">CONTRACT_END_TIME,</if>
+		PAYTYPE,
+		PRICE,
+		FTAN,
+		<if test="contractStatus!=null and contractStatus!=''">CONTRACT_STATUS,</if>
+		SUPPLIER_NAME,
+		SUPPLIER_SITE_ID,
+		SUPPLIER_ORGANIZATION_ID,
+		BANK_NAME,
+		<if test="bankacName!=null and bankacName!=''">BANKAC_NAME,</if>
+		BANK_NUM,
+		SZYD_NO,
+		CPERSON,
+		SZYD_BEGIN_TIME,
+		SUBMIT_STATUS,
+		CITY_ID,
+		COUNTY_ID,
+		CONTRACT_ID)
+    	values
+    	(#{id},
+			#{cityName},
+			#{zhLabel},
+			#{ziguanName},
+			#{cj},
+			#{siteName},
+			#{contractName},
+			<if test="contractDate!=null and contractDate!=''">#{contractDate},</if>
+			<if test="contractEndTime!=null and contractEndTime!=''">#{contractEndTime},</if>
+			#{payType},
+			#{price},
+			#{fTan},
+			<if test="contractStatus!=null and contractStatus!=''">#{contractStatus},</if>
+			#{supplyName},
+			#{supplySiteId},
+			#{supplyerOrganizationId},
+			#{bankName},
+			<if test="bankacName!=null and bankacName!=''">#{bankacName},</if>
+			#{bankNum},
+			#{szydNo},
+			#{cperson},
+			#{szydBeginTime},
+			#{submitStatus},
+			#{cityId},
+			#{countyId},
+			#{contractId})
+    </insert>
+    
+    <!-- 插入syssubmitMg表中 -->
+    <insert id="addSubmitMg" parameterType="com.audit.modules.basedata.entity.whiteSubmitMg">
+    	insert into sys_white_submit_mg values (#{cityName},#{zhLabel},#{status},#{szydNo},#{endTime},#{cperson},#{cj},#{id},#{submitTime},#{updateTime},#{ziguanName},#{szydBeginTime},#{isdo},#{bz},#{createTime})
+    </insert>
+    
+    <!-- 插入submit_mid_mg -->
+    <insert id="addSubmitMidMg" parameterType="java.util.Map">
+    	insert into sys_submit_mid_mg values (#{id},#{mgId},#{submitId})
+    </insert>
+    
+    <select id="getRoleList" parameterType="java.lang.String" resultType="java.lang.String">
+    	select ROLE_NAME from SYS_ROLE sr
+left join SYS_USER_ROLE sur on sur.ROLE_ID=sr.id
+left join SYS_USER su on su.id=sur.USER_ID
+where su.id=#{id}
+    </select>
+    
+    <!-- <select id="getWhiteSubmitById" parameterType="java.lang.String" resultMap="whiteSubmitMap">
+    	select * from sys_white_submit where id=#{id}
+    </select> -->
+    
+    
+    <select id="getWhiteSubmitById" parameterType="java.lang.String" resultMap="whiteSubmitMgMap">
+    	select * from sys_white_submit_mg where id=#{id}
+    </select>
+    
+    <!-- 根据mgID查找whiteSubmit表 -->
+    <select id="getWhiteSubmitByLeftJoinId" parameterType="java.lang.String" resultMap="whiteSubmitMap">
+    	select sws.* from SYS_WHITE_SUBMIT sws
+		left join SYS_SUBMIT_MID_MG ssmm on sws.id=ssmm.submit_id
+		where ssmm.mg_id=#{mgId}
+    </select>
+    <!-- 删除submit_mg -->
+    <delete id="delWhiteSubmitMg" parameterType="java.lang.String">
+    	delete from sys_white_submit_mg where id=#{id}
+    </delete>
+    
+    <!-- 根据mgId查whiteSubmit -->
+    <select id="getSubmitIdByMgId" parameterType="java.lang.String" resultType="java.lang.String">
+    	select submit_id from sys_submit_mid_mg where mg_id=#{mgId}
+    </select>
+    <!-- 删除whiteSubmit -->
+    <delete id="delWhiteSubmitBySubmitId" parameterType="java.util.List">
+    	delete from sys_white_submit where id in
+    	<foreach collection="list" item="id" open="(" separator="," close=")">#{id}</foreach>
+    </delete>
+    
+    <!-- 删除中间表submit-mid_mg -->
+    <delete id="delSubmitMidMgByMgId" parameterType="java.lang.String">
+    	delete from sys_submit_mid_mg where mg_id=#{mgId}
+    </delete>
+    
+    <update id="upWhiteSubmitStatusById" parameterType="java.util.Map">
+    	update sys_white_submit_mg
+    	<set>
+    		STATUS=#{submitStatus},
+    		<if test="updateTime!=null and updateTime!=''">UPDATE_TIME=#{updateTime},</if>
+    		<if test="szydBeginTime!=null and szydBeginTime!=''">szyd_begin_time=#{szydBeginTime},</if>
+    		<if test="bz!=null and bz!=''">bz=#{bz}</if>
+    	</set>
+    	  where id=#{id}
+    </update>
+    
+    <insert id="addCpersonFile" parameterType="java.util.Map">
+    	insert into SYS_WHITE_CPERSON_MID_FILE values(#{id},#{fileid},#{cperson})
+    </insert>
+    
+    <insert id="addWhiteMidFile" parameterType="java.util.Map">
+    	insert into sys_white_mid_file values(#{szydNo},#{fjId},#{id})
+    </insert>
+    
+    <select id="getWhiteMidFile" parameterType="java.lang.String" resultType="com.audit.modules.basedata.entity.WhiteMidFile">
+		select SZYD_NO as szydNo ,FJ_ID AS fjId,ID as id from sys_white_mid_file where szyd_no=#{szydNo}    
+    </select>
+    
+    <select id="getFileId" parameterType="java.lang.String" resultMap="whiteCpersonFileMap">
+    	select * from SYS_WHITE_CPERSON_MID_FILE where cperson=#{cperson}
+    </select>
+    
+    <!-- 插入流程表 -->
+<insert id="addWhiteFlow" parameterType="java.util.Map">
+	insert into sys_white_flow values (#{id},#{status},#{person},#{time},#{remark},#{mgId})
+</insert>
+
+<!-- 根据mgId查submit -->
+<select id="getSubmitByMgId" parameterType="java.lang.String" resultMap="whiteSubmitMap">
+	select sws.* from SYS_WHITE_SUBMIT  sws
+LEFT JOIN SYS_SUBMIT_MID_MG ssmm on SSMM.SUBMIT_ID=SWS.ID
+left join SYS_WHITE_SUBMIT_MG swsm on SWSM.id=ssmm.mg_id
+where swsm.id=#{mgId}
+</select>
+
+<select id="getszydbegintimebymgid" parameterType="java.lang.String" resultType="java.lang.String">
+	select szyd_begin_time from sys_white_submit_mg where id=#{id}
+</select>
+
+<update id="updateSubmitStatus" parameterType="com.audit.modules.basedata.entity.WhiteSubmit">
+	update sys_white_submit set submit_status=#{submitStatus} where id=#{id}
+</update>
+
+<select id="getDataSubmitByPage" parameterType="java.util.Map" resultMap="whiteSubmitMap">
+	select swsm.id as mgid,swsm.end_time as endTime,sws.* from SYS_WHITE_SUBMIT sws
+LEFT JOIN SYS_SUBMIT_MID_MG ssmm on ssmm.submit_id=sws.id
+left join SYS_WHITE_SUBMIT_MG swsm on ssmm.mg_id=swsm.id
+where 1=1
+	<if test="cityId!=null and cityId!=''">and sws.city_id=#{cityId}</if>
+	<if test="siteName!=null and siteName!=''">AND sws.ziguan_name LIKE '%'||#{siteName}||'%'</if>
+	<if test="szydNo!=null and szydNo!=''"> and sws.szyd_no=#{szydNo}</if>
+</select>
+
+
+<select id="getDataSubmitCount" parameterType="java.util.Map" resultMap="whiteSubmitMap">
+	select count(*) from sys_white_submit where 1=1
+	and city_id=#{obj.cityId}
+	<if test="obj.siteName!=null and obj.siteName!=''">and site_name like '%'||#{#siteName}||'%'</if>
+	<if test="obj.szydNo!=null and obj.szydNo!=''">and szyd_no=#{obj.szydNo}</if>
+</select>
+
+<select id="getWhiteFlow" parameterType="java.lang.String" resultType="com.audit.modules.basedata.entity.WhiteFlow">
+	select swf.* from SYS_WHITE_FLOW swf
+LEFT JOIN SYS_SUBMIT_MID_MG ssmm on SSMM.MG_ID=SWF.MGID
+left join SYS_WHITE_SUBMIT sws on ssmm.submit_id=sws.id
+where sws.id=#{id} ORDER BY swf.time desc
+</select>
+
+<select id="getSzydFj" parameterType="java.lang.String" resultType="com.audit.modules.system.entity.SysFile">
+	select * from SYS_FILE sf
+	left join SYS_WHITE_MID_FILE swmf on SWMF.FJ_ID=SF.id
+	where SWMF.SZYD_NO=#{szydNo}
+</select>
+
+<select id="getSiteIdBySiteName" parameterType="java.lang.String" resultType="java.lang.String" >
+	select id from sys_account_site where site_name=#{siteName} and <![CDATA[rownum<=1]]>
+</select>
+
+<select id="getWhiteByAsiteId" parameterType="java.lang.String" resultMap="whiteSubmitMap">
+	select * from SYS_WHITE_SUBMIT where ZIGUAN_NAME=
+	(select SITE_NAME from SYS_ACCOUNT_SITE where id=#{asiteId}) and submit_status=4
+</select>
+
+<!--开始导入验证  -->
+<select id="checkCityName" parameterType="java.lang.String" resultType="java.lang.Integer">
+	select count(*) from zg_space_city where city_name=#{cityName}
+</select>
+
+<select id="checkZhlabel" parameterType="java.lang.String" resultType="java.lang.Integer">
+	select count(*) from zg_space_county where ZH_LABEL=#{zhLabel}
+</select>
+
+<select id="checkZiguan" parameterType="java.lang.String" resultType="java.lang.Integer">
+	select count(*) from zg_space_site where ZH_LABEL=#{ziguanName}
+</select>
+<select id="checkSupplyName" parameterType="java.lang.String" resultType="java.lang.Integer">
+	select count(*) from SYS_SUPPLIER where name=#{name}
+</select>
+<select id="checkSupplySiteId" parameterType="java.lang.String" resultType="java.lang.Integer">
+	select count(*) from SYS_SUPPLIER where REGION_CODE=#{siteId}
+</select>
+<select id="checkSupplyOrgId" parameterType="java.lang.String" resultType="java.lang.Integer">
+	select count(*) from SYS_SUPPLIER where ORGANIZATION_CODE=#{orgId}
+</select>
+
+<select id="getCityWhiteNum" resultMap="whiteCityNumMap">
+	select * from SYS_WHITE_CITY_SITE_NUM
+</select>
+
+<!-- <select id="getCountyWhiteNumByCityId" parameterType="java.lang.String" resultType="com.audit.modules.basedata.entity.WhiteCountyNum">
+	select tz.*
+	from
+	(
+	select t33.*,t44.siteNum as whiteSiteNum
+	from
+	(select t22.*
+	from (select t11.*,zscc.CITY_ID as cityId,ZSCC.INT_ID as countyId
+	from(select ZSC.ZH_LABEL as zhLabel,count(zss.COUNTRY_ID) as siteNum
+	from ZG_SPACE_COUNTY zsc
+	left join ZG_SPACE_SITE zss on zsc.int_id=zss.COUNTRY_ID
+	GROUP BY ZSC.ZH_LABEL ORDER BY ZSC.ZH_LABEL) t11
+	left join ZG_SPACE_COUNTY zscc on zscc.ZH_LABEL=t11.ZHLABEL) t22) t33
+	LEFT JOIN (select t11.*,zscc.CITY_ID as cityId,ZSCC.INT_ID as countyId
+	from(select ZSC.ZH_LABEL as zhLabel,count(zss.COUNTRY_ID) as siteNum
+	from ZG_SPACE_COUNTY zsc
+	left join ZG_SPACE_SITE zss on zsc.int_id=zss.COUNTRY_ID
+	where zss.iswhite=1
+	GROUP BY ZSC.ZH_LABEL ORDER BY ZSC.ZH_LABEL) t11
+	left join ZG_SPACE_COUNTY zscc on zscc.ZH_LABEL=t11.ZHLABEL
+	) t44 on t33.countyId=t44.countyId
+	) tz where TZ.cityid=#{cityId}
+</select>
+ -->
+ 
+ 
+ 
+ <select id="getCountyWhiteNumByCityId" parameterType="java.lang.String" resultType="com.audit.modules.basedata.entity.WhiteCountyNum">
+	SELECT
+	tz.*
+FROM
+	(
+		SELECT
+			t33.*, t44.siteNum AS whiteSiteNum
+		FROM
+			(
+				SELECT
+					t22.*
+				FROM
+					(
+						SELECT
+							t11.*, zscc.PARENT AS cityId,
+							ZSCC.id AS countyId
+						FROM
+							(
+								SELECT
+									ZSC.name AS zhLabel,
+									COUNT (zss.COUNTRY_ID) AS siteNum
+								FROM
+									YDJH_AREA zsc
+								LEFT JOIN (select * from ZG_SPACE_SITE where zh_label in(select SITE_NAME from SYS_ACCOUNT_SITE) ) zss ON zsc.id = zss.COUNTRY_ID
+								GROUP BY
+									ZSC.NAME
+								ORDER BY
+									ZSC.NAME
+							) t11
+						LEFT JOIN YDJH_AREA zscc ON zscc.name = t11.ZHLABEL
+					) t22
+			) t33
+		LEFT JOIN (
+			SELECT
+				t11.*, zscc.PARENT AS cityId,
+				ZSCC.ID AS countyId
+			FROM
+				(
+					SELECT
+						ZSC.NAME AS zhLabel,
+						COUNT (zss.COUNTRY_ID) AS siteNum
+					FROM
+						YDJH_AREA zsc
+					LEFT JOIN (select * from ZG_SPACE_SITE where zh_label in(select SITE_NAME from SYS_ACCOUNT_SITE) ) zss ON zsc.ID = zss.COUNTRY_ID
+					WHERE
+						zss.iswhite = 1
+					GROUP BY
+						ZSC.NAME
+					ORDER BY
+						ZSC.NAME
+				) t11
+			LEFT JOIN YDJH_AREA zscc ON zscc.NAME = t11.ZHLABEL
+		) t44 ON t33.countyId = t44.countyId
+	) tz
+WHERE
+	TZ.cityid = #{cityId}
+</select>
+ 
+ 
+ 
+<!-- 查找各地市站点数量 -->
+<!-- <select id="getCountCitySiteNum" resultType="com.audit.modules.basedata.entity.WhiteCityNum">
+	select t33.*,t44.siteNum as whiteSiteNum
+	from
+	(select t22.*
+	from (select t11.*,zscc.int_id as cityId
+	from(select ZSC.CITY_NAME as cityName,count(zss.city_id) as siteNum
+	from ZG_SPACE_CITY zsc
+	left join ZG_SPACE_SITE zss on zsc.int_id=zss.city_id
+	GROUP BY ZSC.CITY_NAME ORDER BY ZSC.CITY_NAME) t11
+	left join ZG_SPACE_CITY zscc on zscc.city_name=t11.cityName) t22) t33
+	LEFT JOIN (select t11.*,zscc.int_id as cityId
+	from(select ZSC.CITY_NAME as cityName,count(zss.city_id) as siteNum
+	from ZG_SPACE_CITY zsc
+	left join ZG_SPACE_SITE zss on zsc.int_id=zss.city_id
+	where zss.iswhite=1
+	GROUP BY ZSC.CITY_NAME ORDER BY ZSC.CITY_NAME) t11
+	left join ZG_SPACE_CITY zscc on zscc.city_name=t11.cityName
+	) t44 on t33.cityId=t44.cityId
+</select> -->
+
+<select id="getCountCitySiteNum" resultType="com.audit.modules.basedata.entity.WhiteCityNum">
+			SELECT
+			t33.*, t44.siteNum AS whiteSiteNum
+		FROM
+			(
+				SELECT
+					t22.*
+				FROM
+					(
+						SELECT
+							t11.*, zscc.ID AS cityId
+						FROM
+							(
+								SELECT
+									ZSC.NAME AS cityName,
+									COUNT (zss.city_id) AS siteNum
+								FROM
+									YDJH_AREA zsc
+								LEFT JOIN (select * from ZG_SPACE_SITE where zh_label in(select DISTINCT SITE_NAME from SYS_ACCOUNT_SITE) ) zss ON zsc. ID = zss.city_id
+								GROUP BY
+									ZSC. NAME HAVING ZSC.name in (select DISTINCT Y1.name 
+	from YDJH_AREA y1
+  INNER JOIN YDJH_AREA y2 on Y1.id=Y2.PARENT
+where <![CDATA[Y1.name<>'四川省']]>)
+								ORDER BY
+									ZSC. NAME
+							) t11
+						LEFT JOIN YDJH_AREA zscc ON zscc.NAME = t11.cityName
+					) t22
+			) t33
+		LEFT JOIN (
+			SELECT
+				t11.*, zscc.id AS cityId
+			FROM
+				(
+					SELECT
+						ZSC.name AS cityName,
+						COUNT (zss.city_id) AS siteNum
+					FROM
+						YDJH_AREA zsc
+					LEFT JOIN (select * from ZG_SPACE_SITE where zh_label in(select DISTINCT SITE_NAME from SYS_ACCOUNT_SITE) )
+ zss ON zsc.ID = zss.city_id
+					WHERE
+						zss.iswhite = 1
+					GROUP BY
+						ZSC. NAME HAVING ZSC.name in (select DISTINCT Y1.name 
+	from YDJH_AREA y1
+  INNER JOIN YDJH_AREA y2 on Y1.id=Y2.PARENT
+where <![CDATA[Y1.name<>'四川省']]>)
+					ORDER BY
+						ZSC.name
+				) t11
+			LEFT JOIN YDJH_AREA zscc ON zscc.name = t11.cityName
+		) t44 ON t33.cityId = t44.cityId
+</select>
+
+
+
+
+
+<select id="getCityWhiteCountZNum" resultType="java.lang.Integer">
+	select count(*) from zg_space_site zss where ZSS.ZH_LABEL in (select SITE_NAME from SYS_ACCOUNT_SITE) and  zss.iswhite=1
+</select>
+
+<select id="getCityCountZNum" resultType="java.lang.Integer">
+	select count(*) from zg_space_site zss where ZSS.ZH_LABEL in (select SITE_NAME from SYS_ACCOUNT_SITE) and   zss.iswhite=0
+</select>
+
+<select id="getCountyWhiteCountZNum" resultType="java.lang.Integer">
+	select count(*) from zg_space_site zss where ZSS.ZH_LABEL in (select SITE_NAME from SYS_ACCOUNT_SITE) and   zss.iswhite=1 and city_id=#{cityId}
+</select>
+
+<select id="getCountyZNum" resultType="java.lang.Integer">
+	select count(*) from zg_space_site zss where  ZSS.ZH_LABEL in (select SITE_NAME from SYS_ACCOUNT_SITE) and   zss.iswhite=0 and city_id=#{cityId}
+</select>
+
+<select id="getZbiByCityId" parameterType="java.lang.String" resultType="java.lang.String">
+	select zbi from sys_white_city_site_num where city_id=#{cityId}
+</select>
+
+<select id="getCityNameByCityId" parameterType="java.lang.String" resultType="java.lang.String">
+	select city_name from zg_space_city where int_id=#{cityId}
+</select>
+
+<update id="upIsDo" parameterType="java.lang.String">
+	update sys_white_submit_mg set isdo=1 where city_name=#{cityName}
+</update>
+
+<update id="upIsNDo" parameterType="java.lang.String">
+	update sys_white_submit_mg set isdo=0 where city_name=#{cityName}
+</update>
+
+<update id="upWhiteBili" parameterType="java.util.Map">
+	update SYS_WHITE_CITY_SITE_NUM set zbi=#{zbi} where city_name=#{cityName}
+</update>
+
+<select id="getSubmitAll" resultMap="whiteSubmitMap">
+ select * from sys_white_submit 
+</select>
+
+<delete id="deCpersonMidFileByfjid" parameterType="java.lang.String">
+	delete from SYS_WHITE_CPERSON_MID_FILE where file_id=#{fileId}
+</delete>
+
+<delete id="delCpMid">
+	delete from SYS_WHITE_CPERSON_MID_FILE
+</delete>
+
+<select id="getSzydCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+	select count(*) from SYS_WHITE_SUBMIT_MG where SZYD_NO = (
+select SWSM.SZYD_NO from SYS_WHITE_SUBMIT_MG swsm where id=#{id}
+)
+</select>
+
+<delete id="delSMFByMgId" parameterType="java.lang.String">
+	delete from SYS_WHITE_MID_FILE where SZYD_NO=
+(select SWSM.SZYD_NO from SYS_WHITE_SUBMIT_MG swsm where id=#{id})
+</delete>
+
+<delete id="delwhite">
+	delete from sys_white
+</delete>
+
+<!-- 根据三重一大编号查找相对应的三重一大数据 -->
+<select id="getSzydInofBySzydNo" parameterType="java.lang.String" resultMap="whiteSubmitMap">
+	select szyd_begin_time from sys_white_submit_mg where szyd_no=#{szydno}
+</select>
+
+<delete id="delfj" parameterType="java.util.Map">
+	delete from sys_white_mid_file where szyd_no=#{szydno} and fj_id=#{fjid}
+</delete>
+
+<insert id="addsyswhitemidfile" parameterType="java.util.Map">
+  insert into sys_white_mid_file values(#{szydno},#{fjid},#{id})
+</insert>
+
+<update id="updatesyswhitesubmitmgstatus" parameterType="java.lang.String">
+	update sys_white_submit_mg set status=4 where id=#{id}
+</update>
+
+<update id="upsys3" parameterType="java.lang.String">
+  update SYS_WHITE_SUBMIT set SUBMIT_STATUS=3 where id in(
+select SUBMIT_ID from SYS_SUBMIT_MID_MG where MG_ID=#{id})
+</update>
+
+<update id="upmg3" parameterType="java.lang.String">
+	update sys_white_submit_mg set status=3 where id=#{id}
+</update>
+
+<insert id="addwrong" parameterType="java.util.Map">
+	insert into sys_white_wrong  values(#{num},#{de},#{user})
+</insert>
+
+<select id="getwrong" resultType="java.lang.Integer">
+ select count(*) from sys_white_wrong
+</select>
+
+<select id="getwronginfo" parameterType="java.lang.String" resultType="com.audit.modules.basedata.entity.WrongInfo" >
+ select * from sys_white_wrong where userid=#{userid}
+</select>
+
+<delete id="delwrong" parameterType="java.lang.String">
+	delete from sys_white_wrong where userid=#{userid}
+</delete>
+
+<select id="checkziguanname" parameterType="java.lang.String" resultType="java.lang.Integer">
+	select count(*) from sys_white where ziguan_name=#{ziguanName}
+</select>
+<select id="checkziguanname2" parameterType="java.lang.String" resultType="java.lang.Integer">
+	select count(*) from sys_white_submit where ziguan_name=#{ziguanName} and <![CDATA[submit_status<>5]]>
+</select>
+
+<select id="getrnum" resultType="java.lang.Integer">
+	select count(*) from sys_white
+</select>
+
+<!--入库  -->
+<update id="ruku" parameterType="java.lang.String">
+	update ZG_SPACE_SITE set ISWHITE=1 where ZH_LABEL=
+(select ziguan_name from SYS_WHITE_SUBMIT_MG where id=#{id})
+</update>
+
+<!--入库  -->
+<update id="cuku" parameterType="java.lang.String">
+	update ZG_SPACE_SITE set ISWHITE=0 where ZH_LABEL=
+(select ziguan_name from SYS_WHITE_SUBMIT_MG where id=#{id})
+</update>
+
+<!-- 查找供应商id -->
+<select id="getsupplyid" parameterType="com.audit.modules.system.entity.WhiteMg" resultType="java.lang.String">
+	select code from sys_supplier where ORGANIZATION_CODE=#{supplyerOrganizationId} and REGION_CODE=#{supplySiteId} and name=#{supplyName} and <![CDATA[rownum<=1]]>
+</select>
+
+<!-- 保存入合同信息 -->
+<insert id="addContract" parameterType="java.util.Map">
+	insert into SYS_CONTRACT (CONTRACTID,CONTRACT_TITLE,EXECUTION_BEGIN_DATE,EXECUTION_END_DATE,PAYMENT_PERIOD,PRICE_OR_LUMP_SUM_PRICE,ALLOCATION_PROPORTION,
+	VENDOR_NAME,VENDOR_SITE_ID,ORGANIZATION_ID,BANK_BRANCH_NAME,BANK_NAME,BANK_NUM,ID,CITY,COUNTY,ISWHITE)
+	values
+	(#{contractId},
+	#{contractName},
+	#{contractDate},
+	#{contractEndTime},
+	#{payType},
+	#{price},
+	#{fTan},
+	#{supplyName},
+	#{supplySiteId},
+	#{supplyerOrganizationId},
+	#{bankName},
+	#{bankacName},
+	#{bankNum},
+	#{id},
+	#{city},
+	#{county},
+	#{iswhite})
+</insert>
+
+<select id="getele" resultType="com.audit.modules.basedata.entity.Peat">
+	 select sas.site_name as siteName ,sas.ACCOUNT_NAME as accountName,swe.TOTAL_ELECIRIC as totalE from SYS_ELECTRICITY se
+LEFT JOIN SYS_ELE_MID_WATTHOUR semw on semw.SYS_ELECIRICITY_ID=se.id
+LEFT JOIN SYS_WATTHOUR_EXTEND swe on swe.id=semw.SYS_WATTHOUR_EXTEND_ID
+LEFT JOIN SYS_ACCOUNT_SITE sas on sas.id=se.sys_account_site_id 
+where sas.site_name is not null
+GROUP BY sas.site_name ,sas.ACCOUNT_NAME,swe.TOTAL_ELECIRIC  ORDER BY swe.TOTAL_ELECIRIC desc
+</select>
+
+
+<select id="geteleMoney" resultType="com.audit.modules.basedata.entity.Peat">
+	 select sas.site_name as siteName ,sas.ACCOUNT_NAME as accountName,swe.TOTALAMOUNT as totalamount from SYS_ELECTRICITY se
+LEFT JOIN SYS_ELE_MID_WATTHOUR semw on semw.SYS_ELECIRICITY_ID=se.id
+LEFT JOIN SYS_WATTHOUR_EXTEND swe on swe.id=semw.SYS_WATTHOUR_EXTEND_ID
+LEFT JOIN SYS_ACCOUNT_SITE sas on sas.id=se.sys_account_site_id 
+where sas.site_name is not null
+GROUP BY sas.site_name ,sas.ACCOUNT_NAME,swe.TOTALAMOUNT  ORDER BY swe.TOTALAMOUNT desc
+</select>
+
+<!-- 根据contractId 删除虚拟合同 -->
+<delete id="delContractByContractId" parameterType="java.lang.String">
+	delete from sys_contract where CONTRACTID=#{contractId}
+</delete>
+
+<select id="getcity" parameterType="java.lang.String" resultType="java.lang.String">
+	select  id from ydjh_area where name=#{cn} and <![CDATA[ROWNUM<=1]]> order by parent asc 
+</select>
+
+<select id="checkziguanname1" parameterType="java.lang.String" resultType="java.lang.Integer">
+	select count(*) from sys_white_submit_mg where status=5 and ziguan_name=#{siteName}
+</select>
+
+
+</mapper>

@@ -1,0 +1,753 @@
+<!-- 自维电费稽核页面详情 dialog -->
+<div class="ledge-detail ledge-edit elec-dialog">
+    <h4 ng-if="flagSave" style="border-bottom: 1px solid #e1e4e6;">电费稽核查看页面详情</h4>
+    <h4 ng-if="flag" style="border-bottom: 1px solid #e1e4e6;">电费稽核修改页面详情</h4>
+    <div class="ledge-content">
+        <div class="pannel-title">
+            <ul>
+                <li ng-show="!isZWauditSave" class="pannel-curr">基本信息</li>
+
+                <li ng-show="isZWauditSave" ng-click="tab=1" ng-class="{'pannel-curr':tab==1}">基本信息</li>
+                <li ng-show="isZWauditSave" ng-click="tab=2" ng-class="{'pannel-curr':tab==2}">流转信息</li>
+                <li ng-show="isZWauditSave" ng-click="tab=3" ng-class="{'pannel-curr':tab==3}">流转图</li>
+            </ul>
+        </div>
+        <div class="pannel-basic">
+            <div ng-if="tab==1" class="basic-container">
+                <div class="basic-audit">
+                    <div class="ledge-title">台账明细</div>
+                    <div class="ledge-table">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <span class="table-left">稽核单流水号:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="singleDetail.serialNumber">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">地市:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="singleDetail.areas">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">区县:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="singleDetail.counties">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="sign table-left">报账点名称:</span>
+                                        <input
+                                            ng-click="getAccountSite()"
+                                            type="text"  ng-disabled = "flagSave"
+                                            name="" class="table-right" ng-model="singleDetail.accountName" title="{{singleDetail.accountName}}">
+                                        <i ng-if="flag" ng-click="getAccountSite()" class="search-icon"></i>
+                                    </td>
+                                    <td>
+                                        <span class="table-left">报账点别名:</span>
+                                        <input
+                                            disabled="disabled"
+                                            type="text"
+                                            name="" class="table-right" ng-model="singleDetail.accountAlias">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">是否包干:</span>
+                                        <input
+                                            disabled="disabled"
+                                            type="text"
+                                            name="" class="table-right" ng-model="singleDetail.isClud">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="table-left">产权性质:</span>
+                                        <input
+                                            disabled="disabled"
+                                            type="text"
+                                            name="" class="table-right"
+                                            ng-model="singleDetail.productNature">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">供应商名称:</span>
+                                        <input
+                                            readOnly="true"
+                                            ng-model="singleDetail.supplierName"
+                                            type="text"   ng-disabled = "flagSave"
+                                            ng-click="choiceSupplierDialog()"
+                                            name="" class="table-right " title="{{singleDetail.supplierName}}">
+                                        <i ng-if="flag" ng-click="choiceSupplierDialog()" class="search-icon" ></i>
+                                    </td>
+                                    <td>
+                                        <span class="table-left">成本中心:</span>
+                                        <input
+                                            ng-if="flagSave && resultData.costCenterID"
+                                            name="" class="table-right"
+                                            disabled="disabled"
+                                            ng-model="singleDetail.costCenter"
+                                            type="text">
+                                        <select
+                                            ng-if="flag && resultData.costCenterID"
+                                            name="costCenterID" class="table-right"
+                                            ng-model="$parent.singleDetail.costCenterID"
+                                            ng-options="i.id as i.costCenterName for i in costCeterVOs"
+                                            ng-selected="costCeterVOs.id == $parent.singleDetail.costCenterID">
+                                        </select>
+                                        <input ng-if="!resultData.costCenterID" ng-model="singleDetail.costCenter" type="text" class="table-right" ng-disabled="!resultData.costCenterID">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <!-- <td>
+                                        <span class="table-left">电表明细:</span>
+                                        <input type="text" name="" class="table-right" ng-readonly="true" ng-click="getDianBiaoDetail()">
+                                        <i ng-if="flag || flagSave " ng-click="getDianBiaoDetail()" class="search-icon"></i>
+                                    </td> -->
+                                    <td>
+                                        <span class="table-left">总金额（含税）:</span>
+                                        <input
+                                            type="text" name="" class="table-right"
+                                            disabled = "disabled" ng-model="singleDetail.totalAmount">
+                                    </td>
+                                    <!-- <td>
+                                        <span class="table-left">其他费用:</span>
+                                      <input
+                                            ng-blur="countTotal()"
+                                            ng-disabled = "flagSave"
+                                            type="text" name=""
+                                            class="table-right"
+                                            ng-model="singleDetail.otherCost"> 
+											 
+                                    </td> -->
+                                     <td>
+                                    <span class="table-left">财务站点名称:</span>
+                                    <input type="text" disabled = "disabled" name="" class="table-right" ng-model="singleDetail.oldFinanceName">
+                               		</td>
+                                    <td>
+                                        <span class="table-left">支付总金额:</span>
+                                        <input type="text" name="" class="table-right" disabled = "disabled" ng-model="singleDetail.paymentAmount">
+                                    </td> 
+                                </tr>
+                                <tr>
+                                <!-- </tr>
+                                <tr> -->
+                                    <td class="ledge-list">
+                                        <span class="table-left">报销组:</span>
+                                        <input ng-if="flagSave" type="text" name="" class="table-right" disabled = "disabled" ng-model="singleDetail.sysRgName">
+                                        <input
+                                            ng-if="flag" type="text" name=""
+                                            ng-click="showAccountGrop()"
+                                            readOnly="true"
+                                            class="table-right" ng-model="singleDetail.sysRgName" >
+                                        <a
+                                            ng-if="!isZWauditSave && flag"
+                                            ng-click="showAccountGrop()"
+                                            href="javascript:void(0)" class="mana-btn">管理</a>
+                                    </td>
+                                <td>
+                                        <span class="table-left">合同编号:</span>
+                                        <input
+                                            readOnly="true"
+                                            ng-model="singleDetail.contractID"
+                                            type="text"   ng-disabled = "flagSave"
+                                            ng-click="choiceContractDialog()"
+                                            name="" class="table-right " title="{{singleDetail.contractID}}">
+                                        <i ng-if="flag" ng-click="choiceContractDialog()" class="search-icon" ></i>
+                                    </td>
+		                            <td>
+		                             <span class="table-left">报销部门:</span>                              
+											<select ng-if="flag"
+											name="department" class="table-right" 
+											readOnly="true" 
+											ng-disabled = "flagSave" 
+											ng-model="departmentName" 
+											ng-options="i for i in departmentNameSum" 
+											ng-change="selectDepartmentName(departmentName)">	
+											<option value=""> -- 请选择部门 -- </option>									
+											</select>
+									<input
+		                                    ng-if="flagSave"
+		                                    name="" class="table-right"
+		                                    disabled="disabled"
+		                                    ng-model="departmentName"
+		                                    type="text">									
+		                            </td>
+                                </tr>
+								<tr>
+                                    <td>
+                                        <span class="table-left">核销总金额:</span>
+                                        <input type="text" name="" class="table-right" disabled = "disabled" ng-model="singleDetail.expenseTotalAmount">
+                                    </td>
+                                    <td>
+                                    <span class="table-left">  供应商ID:</span>
+                                    <input type="text" disabled = "disabled" name="" class="table-right" ng-model="singleDetail.supplierID">
+                                 </td>
+                            	<td>
+                                    <span class="table-left">缴费类型:</span>
+                                    <input type="text" disabled = "disabled" name="" class="table-right" value="基站">
+                                 </td>
+                            </tr>
+                            <tr>
+                                 <td>
+                                    <span class="table-left">所属专业:</span>
+                                    <input type="text" disabled = "disabled" name="" class="table-right" value="无线" >
+                                 </td>
+                                  <td>
+                                    <span class="table-left">移动站点名称:</span>
+                                    <input type="text" disabled = "disabled" name="" class="table-right" ng-model="singleDetail.siteName">
+                                 </td>
+                            </tr>
+                         <!--    <tr>
+                           		 <td>
+                                    <span class="table-left">财务站点名称:</span>
+                                    <input type="text" disabled = "disabled" name="" class="table-right" ng-model="singleDetail.oldFinanceName">
+                                 </td>
+                            </tr> -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <!--电表明细-->
+                     <div class="ledge-title ledge-sub">
+                      		 电表明细
+                     </div>
+					<!-- <div class="detial-inside detial-source"> -->
+					    <div class="ledge-table meter-details">
+					    <!-- <div class="reimbur-dialog-title">电表明细信息</div> -->
+					    <div class="reimbur-search" style="padding: 10px 0px;">
+					        <div class="electricty-info">
+					            <form action="" name="electrictyForm">
+					                <ul>
+					                    <!-- 查看 -->
+					                    <li ng-if="flagSave" ng-repeat="item in watthourMeterVOs track by $index">
+					                        <p>电表号{{item.code}}<img src="./assets/img/drop-down.png" alt=""></p>
+					                        <table>
+					                            <tbody>
+					                                <tr>
+					                                    <td>
+					                                        <span class="table-left">电表号:</span>
+					                                        <input readonly ng-model="item.code" type="text" name="" class="table-right" value="DB201732222224612">
+					
+					                                    </td>
+					                                    <td>
+					                                        <span class="table-left">电表户号:</span>
+					                                        <input readonly ng-model="item.paymentAccountCode" type="text" name="" class="table-right" value="">
+					                                    </td>
+					                                    <td>
+					                                        <span class="table-left">电表标识符:</span>
+					                                        <input ng-readonly="true" ng-model="item.code" type="text" name="" class="table-right" value="武侯">
+					                                    </td>
+					                                </tr>
+					                                <tr>
+					                                    <td>
+					                                        <span class="table-left">倍率(倍):</span>
+					                                        <input ng-readonly="true" ng-model="item.rate" type="text" name="" class="table-right" value="">
+					                                    </td>
+					                                    <td>
+					                                        <span class="table-left">是否翻表:</span>
+					                                        <input
+					                                            ng-readonly="true"
+					                                            ng-value="item.whetherMeter==0?'否':'是'"
+					                                            type="text" name="" class="table-right" value="">
+					                                    </td>
+					                                    <td>
+					                                        <span class="table-left">电表最大度数:</span>
+														<!-- ng-value="item.whetherMeter==0?'':item.maxReading" 改动前-->                                       
+														   <input
+					                                            ng-readonly="true"                                          
+																ng-value="item.maxReadings"
+					                                            type="text" name="" class="table-right" value="">
+					                                    </td>
+					                                </tr>
+					                                <tr>
+					                                    <td>
+					                                        <span class="table-left">电费归属起始日期:</span>
+					                                        <input
+					                                                readOnly="true"
+					                                                ng-model="item.belongStartTime"
+					                                                 type="text"  name="" class="table-right" value="2016-12-1">
+					                                    </td>
+					                                    <td>
+					                                        <span class="table-left">电费归属终止日期:</span>
+					                                        <input
+					                                            ng-readonly="true"
+					                                            ng-model="item.belongEndTime" name="" class="table-right " value="2017-12-31">
+					                                    </td>
+					                                    <td>
+					                                        <span class="table-left">用电天数</span>
+					                                        <input type="text" ng-readonly="true" ng-model="item.dayAmmeter" name="" class="table-right " value="30">
+					                                    </td>
+					                                </tr>
+					                                <tr>
+					                                    <td>
+					                                        <span class="table-left">用电起度(度):</span>
+					                                        <input ng-readonly="true" type="text" ng-model="item.startAmmeter" name="" class="table-right">
+					                                    </td>
+					                                    <td>
+					                                        <span class="table-left">用电止度(度):</span>
+					                                        <input ng-readonly="true" type="text" ng-model="item.endAmmeter" name="" class="table-right">
+					                                    </td>
+					                                    <td>
+					                                        <span class="table-left">总用电量(度):</span>
+					                                        <input ng-readonly="true" type="text" ng-model="item.totalEleciric" name="" class="table-right" value="84564.00">
+					                                    </td>
+					                                </tr>
+					                                <tr>
+					                                    <td>
+					                                        <span class="table-left">单价(元):</span>
+					                                        <input ng-readonly="true" type="text" ng-model="item.unitPrice" name="" class="table-right">
+					                                    </td>
+					
+					                                    <td>
+					                                        <span class="table-left">电费总金额(含税):</span>
+					                                        <input type="text" ng-readonly="true"  ng-model="item.totalAmount" name="" class="table-right">
+					                                    </td>
+					                                    <td>
+					                                        <span class="table-left">电损(度):</span>
+					                                        <input ng-readonly="true" type="text" ng-model="item.electricLoss" name="" class="table-right">
+					                                    </td>
+					                                </tr>
+					                                <tr>
+					                                    <td class="ledge-list">
+					                                        <span class="table-left">备注:</span>
+					                                        <input ng-readonly="true" type="text" ng-model="item.remarks" name="" class="table-right">
+					                                    </td>
+														<td>
+					                                        <span class="table-left ">上次拍照时间:</span>
+																<input
+					                                                ng-laydate type="text" id="'lastTakePhotosTime_'+{{$index}}"
+					                                                format="YYYY-MM-DD"
+					                                                ng-readonly="true"
+																	max-date="{{nowTime}}"
+					                                                ng-model="item.lastTakePhotosTime"
+					                                                type="text"  name="" class="table-right" value="" disabled="disabled">
+					                                    </td>
+					                                    <td>
+					                                        <span class="table-left ">本次拍照时间:</span>
+					                                        <input
+					                                            ng-laydate type="text" id="'takePhotosTime1_'+{{$index}}"
+					                                            ng-readonly="true"
+					                                            format="YYYY-MM-DD"
+					                                            min-date="{{item.lastTakePhotosTime}}"
+																max-date="{{nowTime}}"
+																ng-model="item.theTakePhotosTime"
+																ng-blur="bTheTakePhotosTime(item,$index)"
+					                                            type="text"
+					                                            name="" class="table-right " value="" disabled="disabled">
+					                                    </td>
+					                                </tr>
+													<tr>
+													 <td>
+					                                        <span class="table-left ">拍照电表读数:</span>
+					                                        <input type="text"  ng-readonly="true" ng-model="item.electricMeterDeg" ng-blur="bElectricMeterDeg(item,$index)" name="" class="table-right" id="electricMeterDeg">
+					                                 </td>
+													 <td>
+					                                        <span class="table-left ">拍照人员名称:</span>
+					                                        <input type="text"  ng-readonly="true" ng-model="item.takePhotosPeopleInfo" name="" class="table-right" id="takePhotosPeopleInfo">
+					                                 </td>
+													 <td>
+					                                        <span class="table-left ">拍照图片:</span>  
+					                                        <input id="upfile"  ng-readonly="true" ng-model="item.accessories" type="text" name="file" ng-click="showImg(item)" class="table-right" />                                     
+														<!--  	<input id="upfile" ng-model="item.accessories" type="file" name="file" class="table-right"/>  -->
+					                                 </td>
+													</tr>
+					                            </tbody>
+					                        </table>
+					                    </li>
+					                    <!-- 修改 新增-->
+					                    <li ng-if="!flagSave" ng-repeat="item in watthourMeterVOs track by $index">
+					                        <p>电表号{{item.code}}<img src="./assets/img/drop-down.png" alt=""></p>
+					                        <table>
+					                            <tbody>
+					                                <tr>
+					                                    <td>
+					                                        <span class="table-left sign">电表号:</span>
+					                                        <input readonly ng-model="item.code" type="text" name="" class="table-right" value="DB201732222224612">
+					
+					                                    </td>
+					                                    <td>
+					                                        <span class="table-left">电表户号:</span>
+					                                        <input readonly ng-model="item.paymentAccountCode" type="text" name="" class="table-right" value="">
+					                                    </td>
+					                                    <td>
+					                                        <span class="table-left">电表标识符:</span>
+					                                        <input readonly ng-model="item.code" type="text" name="" class="table-right" value="武侯">
+					                                    </td>
+					                                </tr>
+					                                <tr>
+					                                    <td>
+					                                        <span class="table-left sign">倍率(倍):</span>
+					                                        <input readonly ng-model="item.rate" type="text" name="" class="table-right" value="">
+					                                    </td>
+					                                    <td>
+					                                        <span class="table-left sign">是否翻表:</span>
+					                                        <select
+					                                            style="padding-right:0;"
+					                                            ng-if="isNew"
+					                                            ng-change="countPowerSize(item,$index)"
+					                                            ng-init ="item.whetherMeter=0"
+					                                            ng-disabled="!item.maxReading && item.maxReading != 0"
+					                                            ng-model="item.whetherMeter" class="table-right">
+					                                            <option ng-selected = "item.whetherMeter == 1" value="1">是</option>
+					                                            <option ng-selected = "item.whetherMeter == 0" value="0">否</option>
+					                                        </select>
+					                                        <select
+					                                            ng-if="!isNew"
+					                                            ng-change="countPowerSize(item,$index)"
+					                                            ng-disabled="!item.maxReading && item.maxReading != 0"
+					                                            ng-model="item.whetherMeter" class="table-right">
+					                                            <option ng-selected = "item.whetherMeter == 1" value="1">是</option>
+					                                            <option ng-selected = "item.whetherMeter == 0" value="0">否</option>
+					                                        </select>
+					                                    </td>
+					                                    <td>
+					                                        <span class="table-left">电表最大度数:</span>
+					                                        <!-- 新增 -->
+					                                      <!--   <input
+					                                            ng-if="isNew"
+					                                            ng-init = "!item.whetherMeter?item.viewMaxReading:(item.viewMaxReading=item.maxReading)"
+					                                            readonly ng-model="item.viewMaxReading"
+					                                            type="text" name="" class="table-right" value="">   ng-change="maxReadingsChange()"-->
+												<select ng-if="isNew&&(item.maxReadingStatus==false)" ng-model="item.maxReadings" ng-change="maxReadingsChange(item,$index)" name="" id="maxReadings" class="table-right">
+					                            <option value="">请选择最大读数</option>
+					                            <option value="999">999</option>
+					                            <option value="9999">9999</option>
+					                            <option value="99999">99999</option>
+					                            <option value="999999">999999</option>
+					                        </select>
+											<input readonly ng-if="isNew&&(item.maxReadingStatus==true)" ng-model="item.maxReadings" type="text" name="" class="table-right" value="" disabled>
+																
+					                                        <!-- 查看 -->
+					                                      <!--  <input
+					                                            ng-if="!isNew"
+					                                            ng-init = "item.whetherMeter==1?item.viewMaxReading=item.maxReading:''"
+					                                            readonly ng-model="item.viewMaxReading"
+					                                            type="text" name="" class="table-right" value=""> -->
+															<!--	<input
+					                                            ng-if="!isNew"                                            
+					                                            readonly ng-model="item.maxReadings"
+					                                            type="text" name="" class="table-right" value="">  -->
+												<select ng-if="!isNew" ng-model="item.maxReadings" ng-change="maxReadingsChange(item,$index)" name="" id="maxReadings" class="table-right" disabled>
+					                            <option value="">请选择最大读数</option>
+					                            <option value="999">999</option>
+					                            <option value="9999">9999</option>
+					                            <option value="99999">99999</option>
+					                            <option value="999999">999999</option>
+					                        </select>
+					                                    </td>
+					                                </tr>
+					                                <tr>
+					                                    <td>
+					                                        <span class="table-left sign">电费归属起始日期:</span>
+					                                        <input
+					                                                ng-laydate type="text" id="'belongStartTime_'+{{$index}}"
+					                                                format="YYYY-MM-DD"
+					                                                readonly
+					                                                ng-model="item.belongStartTime"
+					                                                ng-change="countDays(item,$index)" type="text"  name="" class="table-right" value="2016-12-1">
+					                                    </td>
+					                                    <td>
+					                                        <span class="table-left sign">电费归属终止日期:</span>
+					                                        <input
+					                                            ng-laydate type="text" id="'belongEndTime_'+{{$index}}"
+					                                            readonly
+					                                            format="YYYY-MM-DD"
+					                                            min-date="{{item.belongStartTime}}"
+					                                            ng-change="countDays(item,$index)" type="text"
+					                                            ng-model="item.belongEndTime" name="" class="table-right " value="2017-12-31">
+					                                    </td>
+					                                    <td>
+					                                        <span class="table-left">用电天数</span>
+					                                        <input type="text" readonly ng-model="item.dayAmmeter" name="" class="table-right " value="30">
+					                                    </td>
+					                                </tr>
+					                                <tr>
+					                                    <td>
+					                                        <span class="table-left sign">用电起度(度):</span>
+					                                        <input
+					                                            ng-blur="countPowerSize(item,$index)"
+					                                            type="text" ng-model="item.startAmmeter"
+					                                            name="startAmmeter" class="table-right" required>
+					
+					                                    </td>
+					                                    <td>
+					                                        <span class="table-left sign">用电止度(度):</span>
+					                                        <input ng-blur="countPowerSize(item,$index)" type="text" ng-model="item.endAmmeter" name="endAmmeter" class="table-right" required>
+					                                    </td>
+					                                    <td>
+					                                        <span class="table-left">总用电量(度):</span>
+					                                        <input readonly type="text" ng-model="item.totalEleciric" name="" class="table-right" value="84564.00">
+					                                    </td>
+					                                </tr>
+					                                <tr>
+					                                    <td>
+					                                        <span class="table-left sign">单价(元):</span>										
+															<input ng-if="isNew&&xIsClud=='bbg'" ng-readonly="true"  type="text" ng-model="item.unitPrice" name="unitPrice" class="table-right" required>
+															<input ng-if="isNew&&xIsClud=='bg'" ng-readonly="true"  type="text" ng-model="item.backcalculationPrice" name="unitPrice" class="table-right" required>			
+															<input ng-if="!isNew" ng-readonly="true"  type="text" ng-model="item.unitPrice" name="unitPrice" class="table-right" required>
+														<!--	<input ng-if="!isNew&&xIsClud=='bg'" ng-readonly="true"  type="text" ng-model="item.backcalculationPrice" name="unitPrice" class="table-right" required> -->
+														<!--  <input ng-blur="countElectrictyItemPrice(item,$index)"  type="text" ng-model="item.unitPrice" name="unitPrice" class="table-right" required>  -->
+					                                    </td>
+					
+					                                    <td>
+					                                        <span class="table-left sign">电费总金额(含税):</span>
+					                                        <input ng-if="isNew&&xIsClud=='bbg'" ng-readonly="true" type="text" ng-model="item.totalAmount"  name="" class="table-right" required>
+															<input ng-if="isNew&&xIsClud=='bg'" ng-blur="backcalculationPrice(item,$index)" type="text" ng-model="item.totalAmount"  name="" class="table-right" required>
+															<input ng-if="!isNew" ng-readonly="true" type="text" ng-model="item.totalAmount"  name="" class="table-right" required>
+														<!--	<input ng-if="!isNew&&xIsClud=='bg'" ng-blur="backcalculationPrice(item,$index)" type="text" ng-model="item.totalAmount"  name="" class="table-right" required> -->
+														</td>
+					                                    <td>
+					                                        <span class="table-left ">电损(度):</span>
+					                                        <input type="text" ng-model="item.electricLoss" ng-blur="bElectricLoss(item,$index)"   name="" class="table-right">
+					                                    </td>
+					                                </tr>
+					                                <tr>
+					                                    <td class="ledge-list">
+					                                        <span class="table-left ">备注:</span>
+					                                        <input type="text" ng-model="item.remarks" name="" class="table-right" ng-blur="checkNumber(item)">
+					                                    </td>
+														 <td>
+					                                        <span class="table-left ">上次拍照时间:</span>
+					                                        <input ng-if="isNew&&item.photosStatus==true"
+					                                                ng-laydate type="text" id="'lastTakePhotosTime_'+{{$index}}"
+					                                                format="YYYY-MM-DD"
+					                                                readonly
+																	max-date="{{nowTime}}"
+					                                                ng-model="item.lastTakePhotosTime"
+					                                                type="text"  name="" class="table-right" value="" disabled>
+																<input ng-if="isNew&&item.photosStatus==false"
+					                                                ng-laydate type="text" id="'lastTakePhotosTime_'+{{$index}}"
+					                                                format="YYYY-MM-DD"
+					                                                readonly
+																	max-date="{{nowTime}}"
+					                                                ng-model="item.lastTakePhotosTime"
+					                                                type="text"  name="" class="table-right" value="" disabled>	
+																<input ng-if="!isNew&&item.lastTakePhotosTime!=''"
+					                                                ng-laydate type="text" id="'lastTakePhotosTime_'+{{$index}}"
+					                                                format="YYYY-MM-DD"
+					                                                readonly
+																	max-date="{{nowTime}}"
+					                                                ng-model="item.lastTakePhotosTime"
+					                                                type="text"  name="" class="table-right" value="" disabled>
+																<input ng-if="!isNew&&item.lastTakePhotosTime==''"
+					                                                ng-laydate type="text" id="'lastTakePhotosTime_'+{{$index}}"
+					                                                format="YYYY-MM-DD"
+					                                                readonly
+																	max-date="{{nowTime}}"
+					                                                ng-model="item.lastTakePhotosTime"
+					                                                type="text"  name="" class="table-right" value="" disabled>
+					                                    </td>
+					                                    <td>
+					                                        <span class="table-left ">本次拍照时间:</span>
+					                                        <input
+					                                            ng-laydate type="text" id="'takePhotosTime1_'+{{$index}}"
+					                                            readonly
+					                                            format="YYYY-MM-DD"
+					                                            min-date="{{item.lastTakePhotosTime}}"
+																max-date="{{nowTime}}"
+																ng-model="item.theTakePhotosTime"
+																ng-change="bTheTakePhotosTime(item,$index)"
+					                                            type="text"
+					                                            name="" class="table-right abc" value="">
+					                                    </td>
+					                                </tr>								
+													<tr>
+													 <td>
+					                                        <span class="table-left ">拍照电表读数:</span>
+					                                        <input type="text" ng-model="item.electricMeterDeg" ng-change="bElectricMeterDeg(item,$index)" name="" class="table-right" id="electricMeterDeg">
+					                                 </td>
+													 <td>
+					                                        <span class="table-left ">拍照人员名称:</span>
+					                                        <input type="text" ng-model="item.takePhotosPeopleInfo" name="" class="table-right" id="takePhotosPeopleInfo">
+					                                 </td>
+													 <td>
+					                                        <span class="table-left ">拍照图片:</span>  
+					                                        <input id="upfile" ng-model="item.accessories" type="text" name="file" ng-click="uploadImg(item)" readonly class="table-right"/>                                     
+														<!--  	<input id="upfile" ng-model="item.accessories" type="file" name="file" class="table-right"/>  -->
+					                                 </td>
+													</tr>
+					                            </tbody>
+					                        </table>
+					                    </li>
+					                </ul>
+					            </form>
+					        </div>
+					    </div> 
+					    <!--totalAmount:{{resultData.totalAmount}}-->
+					   <!--  <div class="reimbur-foot ledge-foot audit-dialog">
+					        <button ng-if="!flagSave" ng-click="closeDialog('accountSiteDialog')" class="reimbur-cancel btn" style="width: 100px">取消</button>
+					        <button ng-if="isEditAudit || !flagSave" ng-click="submitDetail('accountSiteDialog')" class="reimbur-save btn" style="width: 100px">提交</button>
+					        <button ng-if="isAudit && flagSave" ng-click="closeDialog('accountSiteDialog')" class="reimbur-save btn" style="width: 100px">确定</button>
+					    </div>
+					    -->
+					</div> 
+					                     
+                   	<!-- 电表明细结束 -->
+                    <!-- 发票信息-->
+                    <div class="ledge-title ledge-sub">
+                       发票信息 <span class="add-btn" ng-click="editInvoiceVO()" ng-if="flag">新增发票</span>
+                    </div>
+                    <div class="invoinc-table">
+                        <table class="table-result">
+                            <colgroup ng-if="isAudit">
+                                <col style="width:25%" />
+                                <col style="width:25%" />
+                                <col style="width:25%" />
+                                <col style="width:25%" />
+                            </colgroup>
+                            <colgroup ng-if="isEditAudit">
+                                <col style="width:20%" />
+                                <col style="width:20%" />
+                                <col style="width:20%" />
+                                <col style="width:20%" />
+                                <col style="width:20%" />
+                            </colgroup>
+                            <thead>
+                                <tr ng-if="isAudit">
+                                    <th>发票</th>
+                                    <th>税率</th>
+                                    <th>电费金额(不含税)</th>
+                                    <th>税金金额</th>
+                                </tr>
+                                <tr ng-if="isEditAudit">
+                                    <th>操作</th>
+                                    <th>发票</th>
+                                    <th>税率</th>
+                                    <th>电费金额(不含税)</th>
+                                    <th>税金金额</th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <div class="table-details invoinc-list">
+                            <div style="max-height: 150px;">
+                                <table>
+                                    <colgroup ng-if="isAudit">
+                                        <col style="width:25%" />
+                                        <col style="width:25%" />
+                                        <col style="width:25%" />
+                                        <col style="width:25%" />
+                                    </colgroup>
+                                    <colgroup ng-if="isEditAudit">
+                                        <col style="width:20%" />
+                                        <col style="width:20%" />
+                                        <col style="width:20%" />
+                                        <col style="width:20%" />
+                                        <col style="width:20%" />
+                                    </colgroup>
+                                    <tbody class="query-date add-audit">
+                                        <tr ng-if="isAudit" ng-repeat="item in electrictyMidInvoices track by $index" >
+                                            <td>
+                                                <input type="text" ng-model="item.billType" disabled="disabled">
+                                            </td>
+                                            <td>{{item.billTax}}</td>
+                                            <td>
+                                                <input disabled="disabled" type="text" ng-model="item.electricityAmount">
+                                            </td>
+                                            <td>
+                                                <input disabled="disabled" type="text" ng-model="item.taxAmount">
+                                            </td>
+                                        </tr>
+                                        <tr ng-if="isEditAudit" ng-repeat="item in electrictyMidInvoices track by $index">
+                                            <td>
+                                                <a ng-click="removeEditInvoiceVO($index,item)" class="delete">删除</a>
+                                            </td>
+                                            <td>
+                                                <select name="" class="title-select"
+                                                        ng-model="item.invoiceId"
+                                                        ng-options="i.id as i.billType for i in invoiceVOs"
+                                                        ng-change="selectEditInvoiceVOs(item,item.invoiceId,$index)">
+                                                </select>
+                                            </td>
+                                            <td>{{item.billTax}}%</td>
+                                            <td><input ng-change="changeEditInvoice(item,item.invoiceId,$index)" ng-model="item.electricityAmount" type="text" name="" ng-disabled="disabled"></td>
+                                            <td>{{item.taxAmount}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    <!-- </div> placeholder="请输入不超过500个字的内容" -->
+                    <div class="ledge-title ledge-sub">备注信息</div>
+                    <div class="remark">
+                        <form action="" name="formText" >
+                            <!-- {{ng-minLenght}} -->
+                            <textarea
+                                ng-readonly = "flagSave"
+                                ng-model="singleDetail.remark"
+                                name="textear"
+                                ng-minLength="0"
+                                id="" class="textarea" required ></textarea>
+                        </form>
+                    </div>					
+					    <!-- <div class="ledge-title ledge-sub">超标原因</div>
+                    <div class="remark">
+                        <form action="" name="formText" >
+                            {{ng-minLenght}}
+                            <textarea
+                                ng-readonly = "flagSave"
+                                ng-model="singleDetail.overproofReasons"
+                                name="textear"
+                                ng-minLength="0"
+                                id="" class="textarea" required ></textarea>
+                        </form>
+                    </div> -->
+                    <div class="ledge-title ledge-sub">附件信息</div>
+                    <div class="upload-method">
+                        <div ng-repeat="item in singUploadFiles track by $index">
+                          	  附件信息：<span>{{item.filename}}</span>
+                            <a href="javascript:void(0)" ng-click="showDetailFiles(item)" >查看</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-if="tab==2" class="pannel-info">
+            <div class="basic-audit">
+                <ul class="info-list">
+                    <li ng-repeat="item in ApprovalZWDetails track by $index">
+                        <p>
+                            <span>{{$index+1}}.</span>
+                            <span>{{item.time}}</span>
+                            <span>{{item.user.userName}}</span> 操作类型：<span>{{item.opType}}</span>
+                        </p>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width:15%">操作人</th>
+                                    <th style="width:25%">操作姓名</th>
+                                    <th style="width:10%">部门职位</th>
+                                    <th style="width:15%">操作人联系方式</th>
+                                    <th style="width:10%">审批意见</th>
+                                    <th style="width:25%">处理时间</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{item.user.account}}</td>
+                                    <td>{{item.user.userName}}</td>
+                                    <td>{{item.roleNameList}}</td>
+                                    <td>{{item.user.mobile}}</td>
+                                    <td>{{item.suggestion}}</td>
+                                    <td>{{item.time}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div ng-if="tab==3" class="pannel-map">
+            <ul style="overflow: auto;">
+                <li ng-repeat="item in flowChartList track by $index" style="margin-bottom: 5px">
+                        <span style="float: left" ng-class="{true:'ledge-currbg ledge-text',false:'ledge-text'}[item.active]">
+                            {{item.stepName}}<br>{{item.user.userName}}
+                        </span>
+                    <span  style="float:left;text-align:center; width:53px; height:180px; background-image: url(assets/img/arrow_icon.png); background-position:center;  background-repeat:no-repeat;" ng-if ="!$last"></span>
+                </li>
+                <!-- <li class="ledge-arrow"></li> -->
+            </ul>
+        </div>
+        <div class="reimbur-foot ledge-foot audit-page-elec">
+            <button ng-if="flag" ng-click="closePage()" class="reimbur-cancel btn">取消</button>
+            <button ng-if="flagSave" ng-click="closePage()" class="reimbur-save btn">关闭</button>
+            <button ng-if="flag && !isZWsubmitSave && !isZWauditSave" ng-click="editZiweiElectricty(0)" class="reimbur-save btn">保存</button>
+            <button ng-if="isZWauditSave && !flagSave" ng-click="editZiweiAudit()" class="reimbur-save btn">保存</button>
+        </div>
+    </div>
+</div>

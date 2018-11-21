@@ -1,0 +1,28 @@
+﻿<!-- 白名单配置dialog -->
+<div class="ledge-detail ledge-edit elec-dialog">
+   <!--  <h4  style="border-bottom: 1px solid #e1e4e6;">驳回原因</h4> -->
+    <div class="ledge-content">
+    	<div style="margin-top: 20px;margin-bottom: 20px">
+    		站点数量：<span>{{countyWhiteNum[0].zSiteNum}}</span>&nbsp&nbsp白名单数量：<span>{{countyWhiteNum[0].zWhiteSiteNum}}</span>&nbsp&nbsp剩余数量：<span>{{countyWhiteNum[0].zSiteNum-countyWhiteNum[0].zWhiteSiteNum}}</span>
+    	</div>
+    	<div class="table-details">
+    		<table >
+    			<tbody class="query-date">
+    			<tr>
+    				<td style="width:10%">序号</td>
+    				<td style="width:15%">区县</td>
+    				<td style="width:15%">站点数量</td>
+    				<td style="width:15%">白名单数量</td>
+    				<td style="width:15%">剩余数量</td>
+    			</tr>
+    			<tr ng-repeat="item in countyWhiteNum track by $index">
+    				<td>{{$index+1}}</td>
+    				<td>{{item.zhLabel}}</td>
+    				<td>{{item.siteNum}}</td>
+    				<td>{{item.whiteSiteNum}}</td>
+    				<td>{{item.yu}}</td>
+    			</tr>
+    			</tbody>
+    		</table>
+    	</div>
+	</div>

@@ -1,0 +1,183 @@
+<!-- 转供电查看页面详情 dialog -->
+<div class="ledge-detail ledge-edit elec-dialog">
+    <h4 ng-if="flagSave" style="border-bottom: 1px solid #e1e4e6;">转供电查看页面详情</h4>
+    <h4 ng-if="flag" style="border-bottom: 1px solid #e1e4e6;">转供电修改页面详情</h4>
+    <div class="ledge-content">
+        <div class="pannel-title">
+            <ul>
+                <li ng-show="!isTransFlag" class="pannel-curr">基本信息</li>
+
+                <li ng-show="isTransFlag" ng-click="tab=1" ng-class="{'pannel-curr':tab==1}">基本信息</li>
+                <li ng-show="!flag" ng-click="tab=2" ng-class="{'pannel-curr':tab==2}">审批流程</li>
+               <!--  <li ng-show="isTransFlag" ng-click="tab=3" ng-class="{'pannel-curr':tab==3}">流转图</li> -->
+            </ul>
+        </div>
+        <div class="pannel-basic">
+            <div ng-if="tab==1" class="basic-container">
+                <div class="basic-audit">
+                    <div class="ledge-title">基本明细</div>
+                    <div class="ledge-table">
+                        <table>
+                            <tbody>
+                                <tr>
+                                 <!--    <td>
+                                        <span class="table-left">稽核单流水号:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="singleDetail.serialNumber">
+                                    </td> -->
+                                    <td>
+                                        <span class="table-left">地市:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="transData.cityName">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">区县:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="transData.countyName">
+                                    </td>
+                                </tr>
+								<tr>
+                                    <td>
+                                        <span class="table-left">前期上报站点名称:</span>
+                                        <input type="text" name="" class="table-right" disabled = "disabled" ng-model="transData.towerSiteName">
+                                    </td>
+                                    <td>
+                                    <span class="table-left">  资管站点名称:</span>
+                                    <input type="text" disabled = "disabled" name="" class="table-right" ng-model="transData.roomName">
+                                 </td>
+                            </tr>
+                             <tr>
+                                    <td>
+                                        <span class="table-left">铁塔站点名称:</span>
+                                        <!-- <span class="table-right" style="background: #ebebe4">{{transData.properType==0?"自维":(transData.properType==1?"塔维":"")}}</span> -->
+                                         <input type="text" disabled = "disabled" name="" class="table-right" ng-model="transData.towerSiteName"> 
+                                    </td>
+                                    <td>
+                                        <span class="table-left">铁塔站址编码:</span>
+                                        <!-- <span class="table-right" style="background: #ebebe4">{{transData.siteEleType==1?"直供电":(transData.siteEleType==2?"转供电":"")}}</span> -->
+                                         <input type="text" disabled = "disabled" name="" class="table-right" ng-model="transData.towerSiteCode"> 
+                                    </td>
+                            </tr>
+                            <tr>
+                                    <td>
+                                        <span class="table-left">供应商:</span>
+                                       <!--  <input type="text" disabled = "disabled" name="" class="table-right" > -->
+                                           <input ng-readonly = "flagSave"  ng-model="transData.supplierNames" type="text" placeholder="请添加供应商" ng-click="openChoiceSupply(flagSave)"  message="请输入供应商" class="table-right">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">改造时间:</span>
+                                         <input ng-if="flagSave" type="text" disabled = "disabled" name="" class="table-right" ng-model="transData.createDate">
+                                        <input ng-laydate id="id2" ng-if="!flagSave"  ng-model="transData.createDate" format="YYYY-MM-DD" type="text"  class="table-right" name=""/>
+                                    </td>
+                            </tr>
+                            <tr>
+                                    <td ng-show="!flag" >
+                                        <span class="table-left">提交人:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="transData.addapoUserName">
+                                    </td>
+                                    
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+                    <!-- 发票信息-->
+              
+                      
+                       
+                    <!-- </div> placeholder="请输入不超过500个字的内容" -->
+                    <div class="ledge-title ledge-sub">备注信息</div>
+                    <div class="remark">
+                        <form action="" name="formText" >
+                            <!-- {{ng-minLenght}} -->
+                            <textarea
+                                ng-readonly = "flagSave"
+                                ng-model="transData.remark"
+                                name="textear"
+                                ng-minLength="0"
+                                id="" class="textarea" required ></textarea>
+                        </form>
+                    </div>					
+					   
+                   
+                    <div class="ledge-title ledge-sub">附件信息</div>
+                    <div class="upload-method">
+                    <div ng-if="!flag">
+                                  
+                                  <div class="upload-method">
+                                        <div ng-repeat="item in transData.transEleFiles track by $index">
+                                            附件信息：<span>{{item.filename}}{{item.ext}}</span>
+                                            <a href="javascript:void(0)" ng-click="showDetailFiles2(item)" >查看</a>
+                                            <a ng-if="flag" href="javascript:void(0)" ng-click="deleteFiles($index)">移除</a>
+                                        </div>
+                                    </div>
+                    </div>    
+                    <div ng-if="flag">
+					              <a   href="javascript:void(0)" ng-click= "uploadFile()">上传附件</a>
+					              <div class="upload-method">
+					                    <div ng-repeat="item in uploadFiles track by $index">
+					                        附件信息：<span>{{item.upName}}{{item.ext}}</span>
+					                        <a href="javascript:void(0)" ng-click="showDetailFiles(item)" >查看</a>
+					                        <a ng-if="flag" href="javascript:void(0)" ng-click="deleteFiles($index)">移除</a>
+					                    </div>
+					                </div>
+                    </div>
+                
+                
+                
+                
+                
+                
+                
+                <div class="upload-method">
+                        <div ng-if="delflag" ng-repeat="item in singUploadFiles track by $index">
+                          	  附件信息：<span>{{item.filename}}</span>
+                            <a href="javascript:void(0)" ng-click="showDetailFiles(item)" >查看</a>
+                             <a ng-if="flag" href="javascript:void(0)" ng-click="delupfile(item)">移除</a>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+        <!-- 流转信息图 -->
+        <div ng-if="tab==2" class="pannel-info">
+            <div class="basic-audit">
+                <ul class="info-list">
+                    <li ng-repeat="item in ApprovalZWDetails track by $index">
+                        <p>
+                            <span>{{$index+1}}.</span>
+                            <span>{{item.time}}</span>
+                            <span>{{item.user.userName}}</span> 操作类型：<span>{{item.opType}}</span>
+                        </p>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th style="width:15%">操作人</th>
+                                    <th style="width:25%">操作姓名</th>
+                                    <th style="width:10%">部门职位</th>
+                                    <th style="width:15%">操作人联系方式</th>
+                                    <th style="width:10%">审批意见</th>
+                                    <th style="width:25%">处理时间</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{item.user.account}}</td>
+                                    <td>{{item.user.userName}}</td>
+                                    <td>{{item.roleNameList}}</td>
+                                    <td>{{item.user.mobile}}</td>
+                                    <td>{{item.suggestion}}</td>
+                                    <td>{{item.time}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="reimbur-foot ledge-foot audit-page-elec">
+            <button ng-if="flag" ng-click="closePage()" class="reimbur-cancel btn">取消</button>
+            <button ng-if="flagSave" ng-click="closePage()" class="reimbur-save btn">关闭</button>
+            <button ng-if="flag && !isZWsubmitSave && !isTransFlag" ng-click="editZiweiElectricty(0)" class="reimbur-save btn">保存</button>
+            <button ng-if="isTransFlag && !flagSave" ng-click="saveTransInfo()" class="reimbur-save btn">保存</button>
+        </div>
+    </div>
+</div>

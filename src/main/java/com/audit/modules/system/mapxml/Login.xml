@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.system.dao.LoginDao">
+
+	<!-- 用户登录信息 确认 -->
+	<!-- <select id="findUserByName" parameterType="String"
+		resultType="com.audit.modules.system.entity.UserVo">
+		SELECT
+		ID as userId,
+		TO_CHAR(LOGIN_DATE, 'yyyy-mm-dd HH24:mi:ss') as loginDateStr,
+		LOGIN_IP as loginIp,
+		USER_NAME as userName,
+		ACCOUNT as account,
+		PASSWORD as password,
+		USER_LEVEL as userLevel,
+		USER_TYPE as userType,
+		CITY,
+		(select city_name from zg_space_city where int_id = city) as cityStr,
+		COUNTY,
+		(select zh_label from zg_space_county where int_id = county) as countyStr,
+		PROVINCE,
+		(select province_name from zg_space_province where int_id = province) as
+		provinceStr
+		FROM
+		SYS_USER WHERE 1=1
+		<if test="_parameter != null and _parameter!=''">AND ACCOUNT =#{account}</if>
+	</select> -->
+
+<select id="findUserByName" parameterType="String"
+		resultType="com.audit.modules.system.entity.UserVo">
+		SELECT
+		ID as userId,
+		TO_CHAR(LOGIN_DATE, 'yyyy-mm-dd HH24:mi:ss') as loginDateStr,
+		LOGIN_IP as loginIp,
+		USER_NAME as userName,
+		ACCOUNT as account,
+		PASSWORD as password,
+		USER_LEVEL as userLevel,
+		USER_TYPE as userType,
+		CITY,
+		(select NAME from YDJH_AREA where ID = city) as cityStr,
+		COUNTY,
+		(select NAME from YDJH_AREA where ID = county) as countyStr,
+		PROVINCE,
+		(select NAME from YDJH_AREA where ID = province) as
+		provinceStr
+		FROM
+		SYS_USER WHERE 1=1
+		<if test="_parameter != null and _parameter!=''">AND ACCOUNT =#{account}</if>
+	</select>
+
+	<!-- 查询登录用户部分信息 -->
+	<select id="getUserByUserId" parameterType="String"
+		resultType="com.audit.modules.system.entity.UserVo">
+		SELECT
+		ID as userId,
+		USER_LEVEL as userLevel,
+		USER_TYPE as userType,
+		CITY as city
+		FROM
+		SYS_USER
+		WHERE
+		ID = #{userId}
+	</select>
+
+</mapper>

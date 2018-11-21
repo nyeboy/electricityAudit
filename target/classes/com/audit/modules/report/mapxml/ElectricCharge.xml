@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.report.dao.ElectricChargeDao">
+
+<!-- 	<select id="stasticCityYearMoneyAll" resultType="map">
+		SELECT
+			zsc.INT_ID regionId,
+			zsc.CITY_NAME regionName,
+			SUM(se.TOTAL_AMOUNT) totalAmount
+		FROM
+			SYS_ELECTRICITY se
+			LEFT JOIN SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas. ID
+			LEFT JOIN ZG_SPACE_CITY zsc ON sas.CITY_ID = zsc. CITY_ID
+		WHERE
+			TO_CHAR (se.CREATE_DATE, 'yyyy') = #{year, jdbcType=VARCHAR}
+		<if test="month != null and month != ''">
+			AND  <![CDATA[TO_CHAR (se.CREATE_DATE, 'mm') <= #{month, jdbcType=VARCHAR}]]>
+		</if>
+		<if test="auditType!=null and auditType!=''">
+			and se.AUDITTYPE=#{auditType}
+		</if>
+			AND zsc.INT_ID IS NOT NULL
+		GROUP BY
+			zsc.INT_ID ,
+			zsc.CITY_NAME 
+	</select>
+	<select id="stasticCityYearMoneyNoTax" resultType="map">
+		SELECT
+			zsc.INT_ID regionId,
+			zsc.CITY_NAME regionName,
+			SUM(semi.ELECTRICITY_AMOUNT) totalAmount
+		FROM
+			SYS_ELECTRICITY se
+			LEFT JOIN SYS_ELECTRICITY_MID_INVOICE semi ON semi.SYS_ELECTRICITY_ID = se.ID
+			LEFT JOIN SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas. ID
+			LEFT JOIN ZG_SPACE_CITY zsc ON sas.CITY_ID = zsc. CITY_ID
+		WHERE
+			TO_CHAR (se.CREATE_DATE, 'yyyy') = #{year, jdbcType=VARCHAR}
+			<if test="month != null and month != ''">
+				AND  <![CDATA[TO_CHAR (se.CREATE_DATE, 'mm') <= #{month, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="auditType!=null and auditType!=''">
+				and se.AUDITTYPE=#{auditType}
+			</if>
+			 AND zsc.INT_ID IS NOT NULL
+		GROUP BY
+		 	zsc.INT_ID ,
+		 	zsc.CITY_NAME 
+	</select> -->
+	
+		<select id="stasticCityYearMoneyAll" resultType="map">
+		SELECT
+			zsc.ID regionId,
+			zsc.NAME regionName,
+			SUM(se.TOTAL_AMOUNT) totalAmount
+		FROM
+			SYS_ELECTRICITY se
+			LEFT JOIN SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas. ID
+			LEFT JOIN YDJH_AREA zsc ON sas.CITY_ID = zsc.ID
+		WHERE
+			TO_CHAR (se.CREATE_DATE, 'yyyy') = #{year, jdbcType=VARCHAR}
+		<if test="month != null and month != ''">
+			AND  <![CDATA[TO_CHAR (se.CREATE_DATE, 'mm') <= #{month, jdbcType=VARCHAR}]]>
+		</if>
+		<if test="auditType!=null and auditType!=''">
+			and se.AUDITTYPE=#{auditType}
+		</if>
+			AND zsc.ID IS NOT NULL
+		GROUP BY
+			zsc.ID ,
+			zsc.NAME 
+	</select>
+	<select id="stasticCityYearMoneyNoTax" resultType="map">
+		SELECT
+			zsc.ID regionId,
+			zsc.NAME regionName,
+			SUM(semi.ELECTRICITY_AMOUNT) totalAmount
+		FROM
+			SYS_ELECTRICITY se
+			LEFT JOIN SYS_ELECTRICITY_MID_INVOICE semi ON semi.SYS_ELECTRICITY_ID = se.ID
+			LEFT JOIN SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas. ID
+			LEFT JOIN YDJH_AREA zsc ON sas.CITY_ID = zsc.ID
+		WHERE
+			TO_CHAR (se.CREATE_DATE, 'yyyy') = #{year, jdbcType=VARCHAR}
+			<if test="month != null and month != ''">
+				AND  <![CDATA[TO_CHAR (se.CREATE_DATE, 'mm') <= #{month, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="auditType!=null and auditType!=''">
+				and se.AUDITTYPE=#{auditType}
+			</if>
+			 AND zsc.ID IS NOT NULL
+		GROUP BY
+		 	zsc.ID ,
+		 	zsc.NAME 
+	</select>
+	
+	<select id="stasticCountyYearMoneyAll" resultType="map">
+		SELECT
+				zsc.INT_ID regionId,
+				zsc.ZH_LABEL regionName,
+				zsc.CITY_ID cityId,
+				SUM(se.TOTAL_AMOUNT) totalAmount
+			FROM
+				SYS_ELECTRICITY se 
+			LEFT JOIN SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas.ID 
+			LEFT JOIN ZG_SPACE_COUNTY zsc ON sas.COUNTY_ID = zsc.INT_ID
+			WHERE
+				sas.CITY_ID IS NOT NULL
+				AND TO_CHAR (se.CREATE_DATE, 'yyyy') = #{year, jdbcType=VARCHAR}
+				<if test="month != null and month != ''">
+					AND  <![CDATA[TO_CHAR (se.CREATE_DATE, 'mm') <= #{month, jdbcType=VARCHAR}]]>
+				</if>
+				<if test="auditType!=null and auditType!=''">
+					and se.AUDITTYPE=#{auditType}
+				</if>
+				AND	sas.CITY_ID = #{cityId, jdbcType=VARCHAR}
+				AND sas.COUNTY_ID IS NOT NULL 
+			GROUP BY
+				zsc.INT_ID ,
+				zsc.ZH_LABEL ,
+				zsc.CITY_ID 
+	</select>
+	<select id="stasticCountyYearMoneyNoTax" resultType="map">
+		SELECT
+			zsc.INT_ID regionId,
+			zsc.CITY_ID cityId,
+			SUM(semi.ELECTRICITY_AMOUNT) totalAmount
+		FROM
+			SYS_ELECTRICITY se 
+		LEFT JOIN SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas.ID 
+		LEFT JOIN SYS_ELECTRICITY_MID_INVOICE semi ON semi.SYS_ELECTRICITY_ID = se.ID
+		LEFT JOIN ZG_SPACE_COUNTY zsc ON sas.COUNTY_ID = zsc.INT_ID
+		WHERE 
+			sas.COUNTY_ID IS NOT NULL 
+			AND TO_CHAR (se.CREATE_DATE, 'yyyy') = #{year, jdbcType=VARCHAR}
+			<if test="month != null and month != ''">
+			AND  <![CDATA[TO_CHAR (se.CREATE_DATE, 'mm') <= #{month, jdbcType=VARCHAR}]]>
+			</if>
+			<if test="auditType!=null and auditType!=''">
+				and se.AUDITTYPE=#{auditType}
+			</if>
+			AND	sas.CITY_ID = #{cityId, jdbcType=VARCHAR}
+		GROUP BY
+			zsc.INT_ID ,
+			zsc.CITY_ID 
+	</select>
+</mapper>

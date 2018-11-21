@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.report.dao.StasticRankDao">
+  <select id="findByTypeAndYear" resultType="java.lang.String">
+	    SELECT 
+	  		 REGION_NAME
+	    FROM SYS_STASTIC_RANK
+	    WHERE
+		    1 = 1
+		    AND TYPECODE = #{typeCode}
+			AND YEAR = #{year}
+		ORDER BY TOTAL DESC
+  </select>
+</mapper>

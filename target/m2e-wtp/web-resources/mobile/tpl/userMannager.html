@@ -1,0 +1,163 @@
+<!--用户管理-->
+<!-- jQuery ztree -->
+<!-- <script src="bower_components/zTree_v3-master/css/zTreeStyle/zTreeStyle.css"></script>
+<script src="bower_components/zTree_v3-master/js/jquery.ztree.all.js"></script>
+ -->
+<div class="system-content" style="overflow: hidden;">
+    <div class="business-box" id="businessBox">
+        <div class="content-rout" id="contentRout"><span>系统管理</span>&gt;<span>用户 / 角色</span>&gt;<span class="now-rout">用户管理</span></div>
+        <div class="content-box  reimbur-manager" id="contentBox">
+            <!-- title -->
+            <div class="search-box">
+                <div>
+                    <select name="" id="" class="title-select"
+                            ng-if="userCity==null"
+                            ng-model="$parent.cityId"
+                            ng-options="city.key as city.value for city in citys"
+                            ng-change="queryCountyList(cityId)">
+                             <option  value="">全省</option>
+                    </select> 
+                    <input
+                           ng-if="userCity!=null"
+                           name="" class="title-select"
+                           disabled="disabled"
+                           ng-model="userCity"
+                           type="text"> 
+                    <select class="title-select"
+                            ng-if="userCounty==null"
+                            ng-model="$parent.countyId"
+                            ng-options="county.key as county.value for county in countys">
+                    <option value="" >全市</option>
+                    </select>
+                    <input
+                           ng-if="userCounty!=null"
+                           name="" class="title-select"
+                           disabled="disabled"
+                           ng-model="userCounty"
+                           type="text"> 
+                <select name="" id="" class="title-select supplier-parts"
+                        ng-model="$parent.roleInfo"
+                        ng-options="choseRole.roleName for choseRole in listAllRole">                      
+                <option value=""> -- 请选择角色 -- </option>
+                </select>
+               <!--  <select class="title-select supplier-parts"
+                        ng-model="zstatus"
+                        ng-options="zstatus for zstatus in listStatus">
+                <option value=""> -- 请选择资管机房状态 -- </option>
+                </select> -->
+              <!--   <input ng-model="zhLabel" type="text" placeholder="资管机房名称" class="process-input search-t" name=""> -->
+                    <input ng-model="userAccount" size="16" type="text" class="process-input search-t" placeholder="登录名">
+                    <input ng-model="email" size="16" type="text" class=" process-input search-t" placeholder="邮箱">
+                </div>
+                <button ng-click="params.pageNo=1;getData()" class="btn btn-primary" type="button">搜索</button>
+            </div>
+            <!-- table-content -->
+            <div class="table-content">
+                <!-- table-title -->
+                <div class="table-title">
+                    <button ng-click="goAddUserPage()" class="btn btn-blue">添加用户</button>
+                    <button ng-click="deleteSelected()" class="btn btn-blue">批量删除</button>
+                    <button ng-click="getData('refresh')" class="btn btn-blue">刷新</button>
+                </div>
+                <!-- table -->
+                <div class="left-tree" >
+                 <abn-tree tree-data="my_data"></abn-tree>
+                 </br>
+                 </br>
+                 </br>
+                 </br>
+                 </br>
+                 </br>
+                </div>
+                <div class="right-table">
+                    <div class="data-table">
+                       <!--  <table class="table-result" id="tableResult">
+                            <colgroup>
+                                <col style="width:2%">
+
+                                <col style="width:15%">
+                                <col style="width:16%">
+                                <col style="width:4%">
+                                <col style="width:7%">
+                                <col style="width:9%">
+                                <col style="width:10%">
+                                <col style="width:10%">
+                                <col style="width:5%">
+                                <col style="width:12%;">
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th  style="width:50px; "><input ng-click="checkAll('#checkAll','#userList')" id="checkAll" type="checkbox"></th>
+                                <th>登录名</th>
+                                <th>邮箱</th>
+                                <th>部门</th>
+                                <th>用户名</th>
+                                <th>登录IP</th>
+                                <th>登录时间</th>
+                                <th>创建时间</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                        </table> -->
+                        <div class="table-details">
+                            <div>
+                                <table>
+                                  <!--   <colgroup>
+                                        <col style="width:2%">
+
+                                        <col style="width:15%">
+                                        <col style="width:16%">
+                                        <col style="width:4%">
+                                        <col style="width:7%">
+                                        <col style="width:9%">
+                                        <col style="width:10%">
+                                        <col style="width:10%">
+                                        <col style="width:5%">
+                                        <col style="width:12%;">
+                                    </colgroup> -->
+                                    <tbody class="query-date" id="userList">
+                                    <tr>
+                                <th  style="width:50px; "><input ng-click="checkAll('#checkAll','#userList')" id="checkAll" type="checkbox"></th>
+                                <th>登录名</th>
+                                <th>邮箱</th>
+                                <th>部门</th>
+                                <th>用户名</th>
+                                <th>登录IP</th>
+                                <th>登录时间</th>
+                                <th>创建时间</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                                    <tr ng-repeat="item in list track by $index">
+                                        <td><input type="checkbox" value="{{item.userId}}" style="border: red solid 1px;;"></td>
+                                        <td>{{item.account}}</td>
+                                        <td>{{item.email}}</td>
+                                        <td>{{item.departmentName}}</td>
+                                        <td>{{item.userName}}</td>
+                                        <td>{{item.loginIp}}</td>
+                                        <td>{{item.loginDateStr}}</td>
+                                        <td>{{item.createDate|date:"yyyy-MM-dd HH:mm:ss"}}</td>
+                                        <td>{{item.userStatus==0?"正常":item.userStatus==1?"锁定":""}}</td>
+                                        <td>
+                                            <a ng-click="goViewUserPage(item)" class="check-detail">查看</a>
+                                            <a ng-click="goUpdateUserPage(item)" href="javascript:void(0)" class="edit-process">修改</a>
+                                        </td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                       
+                    </div>
+					
+                </div>
+                 <div class="page-foot" >
+                            <im-pagination conf="pageInfo" params="params" get-data="getData()"></im-pagination>
+                        </div>
+            </div>
+        </div>
+    </div>
+</div>

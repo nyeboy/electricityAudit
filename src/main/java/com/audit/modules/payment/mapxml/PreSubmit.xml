@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.payment.dao.PreSubmitDao">
+
+<resultMap type="com.audit.modules.payment.entity.ElectricitySubmitVO" id="psMap">
+	<id property="id" column="id"></id>
+	<result property="trustees" column="TRUSTEES_ID"/>
+	<result property="city" column="CITY"></result>
+	<result property="county" column="COUNTY"></result>
+	<result property="status" column="STATUS"></result>
+	<result property="reimbursementType" column="REIMBURSEMENT_TYPE"></result>
+	<result property="moneyAmount" column="MONEYAMOUNT"></result>
+	<result property="createDate" column="CREATE_DATE"></result>
+	<result property="submitNo" column="SUBMIT_NO"></result>
+	<result property="cityName" column="cityName"/>
+	<result property="countyName" column="countyName"/>
+</resultMap>
+
+<resultMap type="com.audit.modules.payment.entity.PreMidSubmit" id="smMap">
+	<id property="id" column="id"></id>
+	<result property="sysPreSubmitId" column="SYS_PRESUBMIT_ID"></result>
+	<result property="sysPreId" column="SYS_PRE_ID"></result>
+</resultMap>	
+
+<resultMap type="com.audit.modules.payment.entity.PreSubmit" id="spsMap">
+	<result property="id" column="ID"/>
+	<result property="city" column="CITY"/>
+	<result property="county" column="COUNTY"/>
+	<result property="status" column="STATUS"/>
+	<result property="reimbursementType" column="REIMBURSEMENT_TYPE"/>
+	<result property="moneyAmout" column="MONEYAMOUNT"/>
+	<result property="trustessId" column="TRUSTEES_ID"/>
+	<result property="createDate" column="CREATE_DATE"/>
+	<result property="submitNo" column="SUBMIT_NO"/>
+</resultMap>
+	
+	
+
+
+
+    <!-- 插入预付抵销推账务提交单 -->
+	<insert id="createEleSubmit" parameterType="com.audit.modules.payment.entity.ElectricitySubmitVO">
+		INSERT INTO SYS_PREPAY_SUBMIT
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">ID,</if>
+			<if test="trustees != null">TRUSTEES_ID,</if>
+			<if test="city != null">CITY,</if>
+			<if test="county != null">COUNTY,</if>
+			<if test="status != null">STATUS,</if>
+			<if test="reimbursementType != null">REIMBURSEMENT_TYPE,</if>
+			<if test="moneyAmount != null">MONEYAMOUNT,</if>
+			<if test="createDate != null">CREATE_DATE,</if>
+			<if test="submitNo != null">SUBMIT_NO,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">#{id},</if>
+			<if test="trustees != null">#{trustees},</if>
+			<if test="city != null">#{city},</if>
+			<if test="county != null">#{county},</if>
+			<if test="status != null">#{status},</if>
+			<if test="reimbursementType != null">#{reimbursementType},</if>
+			<if test="moneyAmount != null">#{moneyAmount},</if>
+			<if test="createDate != null">#{createDate},</if>
+			<if test="submitNo != null">#{submitNo},</if>
+		</trim>
+	</insert>
+	
+	<!-- 插入推账务表和预付单表中间表 -->
+	<insert id="savePreMidlleSubmit" parameterType="com.audit.modules.payment.entity.PreMidSubmit">
+		insert into SYS_PRE_MID_SUBMIT
+			<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">ID,</if>
+			<if test="sysPreSubmitId">SYS_PRESUBMIT_ID,</if>
+			<if test="sysPreId">SYS_PRE_ID,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">#{id},</if>
+			<if test="sysPreSubmitId">#{sysPreSubmitId},</if>
+			<if test="sysPreId">#{sysPreId},</if>
+		</trim>
+	</insert>
+	
+	
+	<!-- 查询预付单推账务列表 -->
+<!-- 	<select id="queryList" parameterType="java.util.Map" resultMap="psMap">
+		SELECT
+			seb.ID AS ID,
+			seb.CITY AS city,
+			seb.COUNTY AS county,
+			seb.STATUS AS status,
+			seb.REIMBURSEMENT_TYPE AS reimbursementType,
+			seb.MONEYAMOUNT AS moneyAmount,
+			seb.CREATE_DATE AS createDate,
+			seb.TRUSTEES_ID AS trustees,
+			seb.SUBMIT_NO AS submitNo,
+			zsc.CITY_NAME AS cityName,
+			zsct.ZH_LABEL AS countyName
+		FROM
+			SYS_PREPAY_SUBMIT seb
+		LEFT JOIN ZG_SPACE_CITY zsc ON seb.CITY = zsc.INT_ID
+		LEFT JOIN ZG_SPACE_COUNTY zsct ON seb.COUNTY = zsct.INT_ID
+		WHERE 1= 1
+			<if test="obj.submitNo!=null and obj.submitNo!=''">
+				AND  seb.SUBMIT_NO LIKE '%'||#{obj.submitNo,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="obj.status!=null and obj.status!=''">
+				AND  seb.STATUS = #{obj.status,jdbcType=INTEGER}
+			</if>
+			<if test="obj.startTime!=null ">
+				AND  <![CDATA[seb.CREATE_DATE >= #{obj.startTime,jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="obj.endTime!=null ">
+				AND  <![CDATA[seb.CREATE_DATE <= #{obj.endTime,jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="obj.trustees!=null and obj.trustees!=''">
+				AND  seb.TRUSTEES_ID = #{obj.trustees} 
+			</if>
+		ORDER BY seb.CREATE_DATE DESC
+	</select>
+	
+	
+	<select id="queryDetail" parameterType="java.lang.String" resultMap="psMap">
+		 SELECT ses.*,(select su.USER_NAME FROM SYS_USER su WHERE su.ID = ses.TRUSTEES_ID AND ROWNUM &lt;=1 ) as trusteesName,zsc.city_name as cityName,zscc.zh_label as countyName
+		 FROM SYS_PREPAY_SUBMIT ses LEFT JOIN ZG_SPACE_CITY zsc ON ses.CITY=zsc.INT_ID
+				LEFT JOIN ZG_SPACE_COUNTY zscc ON ses.COUNTY=zscc.INT_ID
+		 WHERE ID = #{subID}
+	</select> -->
+	
+		<select id="queryList" parameterType="java.util.Map" resultMap="psMap">
+		SELECT
+			seb.ID AS ID,
+			seb.CITY AS city,
+			seb.COUNTY AS county,
+			seb.STATUS AS status,
+			seb.REIMBURSEMENT_TYPE AS reimbursementType,
+			seb.MONEYAMOUNT AS moneyAmount,
+			seb.CREATE_DATE AS createDate,
+			seb.TRUSTEES_ID AS trustees,
+			seb.SUBMIT_NO AS submitNo,
+			zsc.NAME AS cityName,
+			zsct.NAME AS countyName
+		FROM
+			SYS_PREPAY_SUBMIT seb
+		LEFT JOIN YDJH_AREA zsc ON seb.CITY = zsc.ID
+		LEFT JOIN YDJH_AREA zsct ON seb.COUNTY = zsct.ID
+		WHERE 1= 1
+			<if test="obj.submitNo!=null and obj.submitNo!=''">
+				AND  seb.SUBMIT_NO LIKE '%'||#{obj.submitNo,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="obj.status!=null and obj.status!=''">
+				AND  seb.STATUS = #{obj.status,jdbcType=INTEGER}
+			</if>
+			<if test="obj.startTime!=null ">
+				AND  <![CDATA[seb.CREATE_DATE >= #{obj.startTime,jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="obj.endTime!=null ">
+				AND  <![CDATA[seb.CREATE_DATE <= #{obj.endTime,jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="obj.trustees!=null and obj.trustees!=''">
+				AND  seb.TRUSTEES_ID = #{obj.trustees} 
+			</if>
+		ORDER BY seb.CREATE_DATE DESC
+	</select>
+	
+	
+	<select id="queryDetail" parameterType="java.lang.String" resultMap="psMap">
+		 SELECT ses.*,(select su.USER_NAME FROM SYS_USER su WHERE su.ID = ses.TRUSTEES_ID AND ROWNUM &lt;=1 ) as trusteesName,zsc.NAME as cityName,zscc.NAME as countyName
+		 FROM SYS_PREPAY_SUBMIT ses LEFT JOIN YDJH_AREA zsc ON ses.CITY=zsc.ID
+				LEFT JOIN YDJH_AREA zscc ON ses.COUNTY=zscc.ID
+		 WHERE ses.ID = #{subID}
+	</select>
+	
+	<select id="queryMiddleBySubID" parameterType="java.lang.String" resultMap="smMap">
+		SELECT
+			ID as id,
+			SYS_PRESUBMIT_ID as sysPresubmitId,
+			SYS_PRE_ID as sysPreId
+		FROM
+		 	SYS_PRE_MID_SUBMIT
+		WHERE
+		  	SYS_PRESUBMIT_ID = #{subID}
+	</select>
+	
+	<!-- 修改预付提交单状态 -->
+	<update id="updateStatus" parameterType="java.util.Map">
+		UPDATE SYS_PREPAY_SUBMIT SET STATUS = #{status} WHERE ID in
+		       <foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+                #{item}       
+        </foreach> 
+	</update>
+
+	<select id="getPreSubBySubNO" parameterType="java.lang.String" resultMap="spsMap">
+		select * from SYS_PREPAY_SUBMIT where SUBMIT_NO=#{submitNo}
+	</select>
+	
+	<!-- 根据预付提交表id查找预付单 -->
+	<select id="getSpIds" parameterType="java.lang.String" resultType="java.lang.String">
+		select SYS_PRE_ID from SYS_PRE_MID_SUBMIT where SYS_PRESUBMIT_ID={spsid}
+	</select>
+	
+</mapper>

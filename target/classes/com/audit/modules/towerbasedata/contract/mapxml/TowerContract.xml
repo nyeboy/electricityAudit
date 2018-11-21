@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.towerbasedata.contract.dao.TowerContractDao">
+
+   <sql id="columns">
+		stc.ID as id,stc.CONTRACT_NO as contractNo,stc.NAME as name,stc.START_TIME as startDate,stc.END_TIME as endDate,stc.IS_CLUD as isClud,
+		stc.CLUD_PRICE as cludPrice,stc.PAYMENT_CYCLE as paymentCycle,stc.PRICE as unitPrice
+	</sql>
+
+   
+    <!-- 依据ID查询单个合同 -->
+	<!-- <select id="selectById"  resultType="com.audit.modules.towerbasedata.contract.entity.TowerContractVO">		
+		SELECT
+		 stas.CITY_ID AS cityId, stas.COUNTY_ID AS countyId, stas.ZY_CODE AS code, ZSS.ZH_LABEL AS label,
+		 (SELECT zsc.CITY_NAME FROM ZG_SPACE_CITY zsc WHERE  zsc.INT_ID = stas.CITY_ID) AS cityStr,
+		 (SELECT zsct.ZH_LABEL FROM ZG_SPACE_COUNTY zsct WHERE zsct.INT_ID = stas.COUNTY_ID) AS countyStr,
+		 <include refid="columns" />
+        FROM SYS_TOWER_CONTRACT stc
+			LEFT JOIN SYS_TOWER_SITE_MID_CONTRACT ssmc ON SSMC.SYS_TOWER_CONTRACT_ID = STC.ID
+			LEFT JOIN SYS_TOWER_ACCOUNT_SITE stas ON STAS.ID = SSMC.SYS_TOWER_SITE_ID 
+			LEFT JOIN ZG_TOWER_SITE zts ON stas.ZY_CODE = ZTS.ZY_CODE
+			LEFT JOIN ZG_SPACE_SITE zss ON ZTS.YW_CODE = ZSS.TOWER_SITE_CODE
+        WHERE 1=1
+        AND STC.ID = #{Id} 
+	</select>
+
+    分页搜索查询
+	<select id="getPageList" resultType="com.audit.modules.towerbasedata.contract.entity.TowerContractVO">
+		SELECT
+		 stas.CITY_ID AS cityId, stas.COUNTY_ID AS countyId, stas.ZY_CODE AS code,stas.ZY_NAME AS zyName, ZSS.ZH_LABEL AS label,
+		(SELECT zsc.CITY_NAME FROM ZG_SPACE_CITY zsc WHERE  zsc.INT_ID = stas.CITY_ID) AS cityStr,
+		 (SELECT zsct.ZH_LABEL FROM ZG_SPACE_COUNTY zsct WHERE zsct.INT_ID = stas.COUNTY_ID) AS countyStr,
+		 <include refid="columns" />
+        FROM SYS_TOWER_CONTRACT stc
+			LEFT JOIN SYS_TOWER_SITE_MID_CONTRACT ssmc ON SSMC.SYS_TOWER_CONTRACT_ID = STC.ID
+			LEFT JOIN SYS_TOWER_ACCOUNT_SITE stas ON STAS.ID = SSMC.SYS_TOWER_SITE_ID
+			LEFT JOIN ZG_TOWER_SITE zts ON stas.ZY_CODE = zts.ZY_CODE
+			LEFT JOIN ZG_SPACE_SITE zss ON zss.TOWER_SITE_CODE = zts.YW_CODE
+        WHERE 1=1
+			<if test="obj.CityId != null and obj.CityId!=''">
+				AND  stas.CITY_ID = #{obj.CityId,jdbcType=VARCHAR}
+			</if>
+			<if test="obj.CountyId != null and obj.CountyId!=''">
+				AND  stas.COUNTY_ID = #{obj.CountyId,jdbcType=VARCHAR}
+			</if>
+			<if test="obj.Code != null and obj.Code!=''">
+				AND  stas.ZY_CODE = #{obj.Code,jdbcType=VARCHAR}
+			</if>
+			<if test="obj.Label != null and obj.Label!=''">
+				AND  ZSS.ZH_LABEL  LIKE '%'||#{obj.Label,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="obj.zyName!=null and obj.zyName!=''">
+				and stas.ZY_NAME like '%'||#{obj.zyName}||'%'
+			</if>
+			order by stc.END_TIME desc
+	</select>
+	 -->
+	 
+	 <select id="selectById"  resultType="com.audit.modules.towerbasedata.contract.entity.TowerContractVO">		
+		SELECT
+		 stas.CITY_ID AS cityId, stas.COUNTY_ID AS countyId, stas.ZY_CODE AS code, ZSS.ZH_LABEL AS label,
+		 (SELECT zsc.NAME FROM YDJH_AREA zsc WHERE  zsc.ID = stas.CITY_ID) AS cityStr,
+		 (SELECT zsct.NAME FROM YDJH_AREA zsct WHERE zsct.ID = stas.COUNTY_ID) AS countyStr,
+		 <include refid="columns" />
+        FROM SYS_TOWER_CONTRACT stc
+			LEFT JOIN SYS_TOWER_SITE_MID_CONTRACT ssmc ON SSMC.SYS_TOWER_CONTRACT_ID = STC.ID
+			LEFT JOIN SYS_TOWER_ACCOUNT_SITE stas ON STAS.ID = SSMC.SYS_TOWER_SITE_ID 
+			LEFT JOIN ZG_TOWER_SITE zts ON stas.ZY_CODE = ZTS.ZY_CODE
+			LEFT JOIN ZG_SPACE_SITE zss ON ZTS.YW_CODE = ZSS.TOWER_SITE_CODE
+        WHERE 1=1
+        AND STC.ID = #{Id} 
+	</select>
+
+    <!-- 分页搜索查询 -->
+	<select id="getPageList" resultType="com.audit.modules.towerbasedata.contract.entity.TowerContractVO">
+		SELECT
+		 stas.CITY_ID AS cityId, stas.COUNTY_ID AS countyId, stas.ZY_CODE AS code,stas.ZY_NAME AS zyName, ZSS.ZH_LABEL AS label,
+		(SELECT zsc.NAME FROM YDJH_AREA zsc WHERE  zsc.ID = stas.CITY_ID) AS cityStr,
+		 (SELECT zsct.NAME FROM YDJH_AREA zsct WHERE zsct.ID = stas.COUNTY_ID) AS countyStr,
+		 <include refid="columns" />
+        FROM SYS_TOWER_CONTRACT stc
+			LEFT JOIN SYS_TOWER_SITE_MID_CONTRACT ssmc ON SSMC.SYS_TOWER_CONTRACT_ID = STC.ID
+			LEFT JOIN SYS_TOWER_ACCOUNT_SITE stas ON STAS.ID = SSMC.SYS_TOWER_SITE_ID
+			LEFT JOIN ZG_TOWER_SITE zts ON stas.ZY_CODE = zts.ZY_CODE
+			LEFT JOIN ZG_SPACE_SITE zss ON zss.TOWER_SITE_CODE = zts.YW_CODE
+        WHERE 1=1
+			<if test="obj.CityId != null and obj.CityId!=''">
+				AND  stas.CITY_ID = #{obj.CityId,jdbcType=VARCHAR}
+			</if>
+			<if test="obj.CountyId != null and obj.CountyId!=''">
+				AND  stas.COUNTY_ID = #{obj.CountyId,jdbcType=VARCHAR}
+			</if>
+			<if test="obj.Code != null and obj.Code!=''">
+				AND  stas.ZY_CODE = #{obj.Code,jdbcType=VARCHAR}
+			</if>
+			<if test="obj.Label != null and obj.Label!=''">
+				AND  ZSS.ZH_LABEL  LIKE '%'||#{obj.Label,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="obj.zyName!=null and obj.zyName!=''">
+				and stas.ZY_NAME like '%'||#{obj.zyName}||'%'
+			</if>
+			order by stc.END_TIME desc
+	</select>
+	
+	 
+	<!-- 根据合同ID删除合同 -->
+	<delete id="delete">        
+       BEGIN
+		DELETE from SYS_TOWER_CONTRACT WHERE ID IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        ;
+        DELETE from SYS_TOWER_SITE_MID_CONTRACT WHERE SYS_TOWER_CONTRACT_ID IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        ;
+       END;
+	</delete>
+
+	<!--修改合同信息 -->
+	<update id="update" parameterType="com.audit.modules.towerbasedata.contract.entity.TowerContractVO">
+	    UPDATE SYS_TOWER_CONTRACT 
+		<set>
+		<if test="name != null">
+			NAME = #{name,jdbcType=VARCHAR},
+		</if>
+		<if test="startDate != null">
+			 START_TIME = #{startDate,jdbcType=TIMESTAMP},
+		</if>
+		<if test="endDate != null">
+			 END_TIME = #{endDate,jdbcType=TIMESTAMP},
+		</if>
+		<if test="isClud != null">
+			 IS_CLUD = #{isClud,jdbcType=VARCHAR},
+		</if>
+		<if test="cludPrice != null">
+			CLUD_PRICE = #{cludPrice,jdbcType=VARCHAR},
+		</if>
+		<if test="paymentCycle != null">
+			 PAYMENT_CYCLE = #{paymentCycle,jdbcType=VARCHAR},
+		</if>
+		<if test="unitPrice != null">
+			 PRICE = #{unitPrice,jdbcType=VARCHAR},
+		</if>
+		<if test="contractNo != null">
+			 CONTRACT_NO = #{contractNo,jdbcType=VARCHAR},
+		</if>
+		</set>
+		WHERE ID = #{id}
+    </update>
+        <!-- 依据 铁塔id 查询合同 -->
+	<select id="selectByTowerId"  resultType="com.audit.modules.towerbasedata.contract.entity.TowerContractVO">		
+		SELECT 
+			stc.ID as id,
+			stc.CONTRACT_NO AS contractNo,												
+			stc.NAME  AS name,																
+			stc.START_TIME AS startDate,												
+			stc.END_TIME AS endDate,												
+			stc.IS_CLUD AS isClud,													
+			stc.CLUD_PRICE AS cludPrice,       								
+			stc.PAYMENT_CYCLE AS paymentCycle,									
+			stc.PRICE AS unitPrice														
+		FROM SYS_TOWER_CONTRACT stc 
+		LEFT JOIN SYS_TOWER_SITE_MID_CONTRACT stsmc ON stc.id = stsmc.sys_tower_contract_id
+		LEFT JOIN SYS_TOWER_ACCOUNT_SITE stas ON stas.ID = stsmc.sys_tower_site_id
+		WHERE 1=1 AND ROWNUM &lt;= 1
+		<if test="null != towerId and '' != towerId">AND stas.ID = #{towerId} </if>
+	</select>
+	
+	<select id="queryCount" resultType="java.lang.Integer">
+		select count(*) from SYS_TOWER_CONTRACT
+	</select>
+
+</mapper>

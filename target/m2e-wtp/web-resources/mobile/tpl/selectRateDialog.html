@@ -1,0 +1,25 @@
+﻿<!-- 额定功率信息dialog -->
+<div class="add-elecontent">
+    <h4 style="text-align:center; padding-top:10px;">机房设备信息</h4>
+    <table>
+            <tbody class="query-date">          
+						<tr>
+                       	   <th>序号</th>
+                           <th>设备类型</th>
+                           <th>型号</th>
+                           <th>生产厂家</th>
+                           <th>额定功率</th>
+                        </tr>
+						<tr ng-repeat="item in facility track by $index">
+                                	<td>{{((params.pageNo-1)*params.pageSize)+1*(1+$index)}}</td>
+                                    <td>{{item.deviceType}}</td>
+                                    <td>{{item.deviceModel}}</td>
+                                    <td>{{item.deviceVendor}}</td>
+                                    <td>{{item.powerRating}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+	<div class="reimbur-foot ledge-foot">
+        <button ng-click="closeDialog()" class="reimbur-save btn">确定</button>
+    </div>
+</div>

@@ -1,0 +1,24 @@
+﻿<!-- 额定功率信息dialog -->
+<div class="add-elecontent">
+    <h4 style="text-align:center; padding-top:10px;">额定功率信息</h4>
+    <form action="">
+        <ul class="user-list">
+            <li>
+                <span>设备类型:</span><input ng-model="object.deviceType" type="text" name="" value="">
+            </li>
+            <li>
+                <span>型号:</span><input ng-model="object.deviceModel" type="text" name="" value="">
+            </li>
+            <li>
+                <span>生产厂家:</span><input ng-model="object.deviceVendor" type="text" name="" value="">
+            </li>
+            <li>
+                <span>额定功率:</span><input ng-model="object.powerRating" type="text" name="" value="">
+            </li>
+        </ul>
+    </form>
+    <div class="reimbur-foot ledge-foot">
+        <button ng-click="closeDialog()" class="reimbur-cancel btn">取消</button>
+        <button ng-click="saveEditedRMSInfo(object)" class="reimbur-save btn">保存</button>
+    </div>
+</div>

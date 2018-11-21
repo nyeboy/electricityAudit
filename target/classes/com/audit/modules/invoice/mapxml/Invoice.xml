@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.audit.modules.invoice.dao.InvoiceDao">
+
+	<sql id="columns">
+		ID as id,BILL_TAX as billTax,BILL_TYPE as billType,BILL_COEFFICIENT as billCoefficient,
+		CREATE_DATE as createDate,MODIFY_DATE as modifyDate
+
+	</sql>
+
+	<select id="queryAllInvoice" resultType="com.audit.modules.invoice.entity.InvoiceVO">
+		SELECT <include refid="columns"/> FROM SYS_INVOICE order by MODIFY_DATE desc
+	</select>
+
+    <!-- 依据ID查询单行数据 -->
+	<select id="selectByInvoiceId" resultType="com.audit.modules.invoice.entity.InvoiceVO">
+		SELECT
+		<include refid="columns" />
+		FROM SYS_INVOICE WHERE ID = #{invoiceId}
+	</select>
+	
+    <!-- 依据发票类型-->
+	<select id="queryBillType" resultType="java.lang.String">
+		SELECT
+			DISTINCT BILL_TYPE as billType
+		FROM SYS_INVOICE 
+	</select>
+
+    <!-- 查询分页搜索 -->
+	<select id="getPageInvoiceList" parameterType="java.lang.String" resultType="com.audit.modules.invoice.entity.InvoiceVO">
+		SELECT
+		 <include refid="columns" />
+		FROM SYS_INVOICE
+		WHERE 1=1 
+			<if test="obj.ID != null and obj.ID!=''">
+				AND  ID = #{obj.ID,jdbcType=VARCHAR}
+			</if>
+			<if test="obj.billType != null and obj.billType!=''">
+				AND  BILL_TYPE like '%'||#{obj.billType,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="obj.createDateStr != null and obj.createDateStr !=''">
+				AND  to_char(CREATE_DATE,'yyyy-mm-dd') = #{obj.createDateStr}
+			</if>
+			order by MODIFY_DATE desc
+	</select>
+
+    <!-- 根据ID删除 -->
+	<delete id="deleteInvoice">
+		DELETE from SYS_INVOICE WHERE ID IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+	</delete>
+
+    
+    <!-- 保存或修改 -->
+	<insert id="saveOrUpdateInvoice" parameterType="com.audit.modules.contract.entity.ContractVO">
+	<selectKey keyProperty="count" resultType="int" order="BEFORE">
+		select count(*) from SYS_INVOICE where ID = #{id}
+	</selectKey>
+	<!-- 修改合同信息 -->
+	<if test="count > 0">
+	    UPDATE SYS_INVOICE 
+		<set>
+		<if test="billTax != null">
+			BILL_TAX = #{billTax,jdbcType=VARCHAR},
+		</if>
+		<if test="billType != null">
+			 BILL_TYPE = #{billType,jdbcType=VARCHAR},
+		</if>
+		<if test="billCoefficient != null">
+			 BILL_COEFFICIENT = #{billCoefficient,jdbcType=VARCHAR},
+		</if>
+		<if test="modifyDate != null">
+			 MODIFY_DATE = #{modifyDate,jdbcType=TIMESTAMP},
+		</if>
+		</set>
+		WHERE ID = #{id}
+	</if>
+	<!-- 保存 -->
+	<if test="count == 0">
+	   INSERT INTO SYS_INVOICE
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID,
+			</if>
+			<if test="billTax != null">
+				BILL_TAX,
+			</if>
+			<if test="billType != null">
+				BILL_TYPE,
+			</if>
+			<if test="billCoefficient != null">
+				BILL_COEFFICIENT,
+			</if>
+			<if test="createDate != null">
+				CREATE_DATE,
+			</if>
+			<if test="modifyDate != null">
+				MODIFY_DATE,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+		    <if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="billTax != null">
+				#{billTax,jdbcType=VARCHAR},
+			</if>
+			<if test="billType != null">
+				#{billType,jdbcType=VARCHAR},
+			</if>
+			<if test="billCoefficient != null">
+				#{billCoefficient,jdbcType=VARCHAR},
+			</if>
+			<if test="createDate != null">
+				#{createDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifyDate != null">
+			 	#{modifyDate,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</if>
+    </insert>
+
+</mapper>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.testdemo.dao.TestDemoDao">
+	
+	<!-- 分页查询DEMO-->
+	<!-- <select id="queryDataByPage" parameterType="com.audit.modules.common.mybatis.PageUtil" resultType="com.audit.modules.system.entity.SysDataVo">
+		SELECT 
+			INT_ID as key,CITY_NAME as value
+		FROM 
+			ZG_SPACE_CITY
+		WHERE 1=1
+
+	</select> -->	
+	
+	<select id="queryDataByPage" parameterType="com.audit.modules.common.mybatis.PageUtil" resultType="com.audit.modules.system.entity.SysDataVo">
+		SELECT 
+			ID as key,NAME as value
+		FROM 
+			YDJH_AREA
+		WHERE 1=1
+			AND PARENT='1'
+	</select>
+	
+</mapper>
+

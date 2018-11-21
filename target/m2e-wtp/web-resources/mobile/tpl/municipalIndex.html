@@ -1,0 +1,95 @@
+<!-- 市领导首页 -->
+<div class="system-content">
+    <!-- 首页内容 -->
+    <div id="home-page">
+        <!-- 市级首页 -->
+        <div class="province-chart">
+            <div class="chart-title" data-ng-init="normDetail()">
+                <div class="flex" ng-click="normDetail()">评优指标体系(月)</div>
+                <div class="flex" ng-click="powerConsumption()">全省电费情况</div>
+                <div class="flex" ng-click="powerRate()">全省电费占收比</div>
+                <div class="flex" ng-click="carrierTariff()">全省单载波电费情况</div>
+                <div class="flex" ng-click="powerSupply()">全省直供电/转供电用电量情况</div>
+                <div class="flex" ng-click="electricityPriceRatio()">全省电费单价占比情况</div>
+            </div>
+            <div class="chart-content">
+                <!-- 首页数据图 -->
+                <div class="chart-date ">
+                    <div  id="chart-province" ng-show="!noData" ></div>
+                    <image ng-show="noData" ng-src="./assets/img/no_data.png" style="vertical-align: middle;
+                                left: 50%;
+                                position: absolute;
+                                top: 50%;
+                                margin-left: -23px;
+                                margin-top: -89px;"/> 
+                </div>
+                <script src="./assets/js/extends/jquery-3.1.1.min.js"></script>
+                <script src="./assets/js/extends/echarts.min.js"></script>
+                <!-- 评优排名 -->
+                 <div ng-if="ranking == 1" class="ranking">
+                    <div class="sidebar-title">{{rankDataName}}</div>
+                    <div class="sidebar-tree">
+                        <ul>
+                            <li ng-repeat="item in cityRankData" ng-if="$index < 10"><span>{{item.name}}</span><span>{{item.value}}</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="foot-message">
+            <div class="flex-foot">
+                <div class="detail-foot">
+                    <div>
+                            <div>直供电比例</div>
+                            <div class="detail-t">{{proSum.directScale}}</div>
+                        </div>
+                        <div>
+                            <div>转供电比例</div>
+                            <div class="detail-t">{{proSum.rotaryScale}}</div>
+                        </div>
+                    </div>
+                    <div class="foot-title">电费基础信息</div>
+                </div>
+                <div class="flex-foot">
+                    <div class="detail-foot">
+                         <div>
+                            <div>直供电电量</div>
+                            <div class="detail-t">{{proSum.directPower}}</div>
+                        </div>
+                        <div>
+                            <div>转供电电量</div>
+                            <div class="detail-t">{{proSum.rotaryPower}}</div>
+                        </div>
+                    </div>
+                    <div class="foot-title">全省财务数据</div>
+                </div>
+                <div class="flex-foot">
+                    <div class="detail-foot">
+                         <div>
+                            <div>基站总数</div>
+                            <div class="detail-t">{{proSum.siteNum}}</div>
+                        </div>
+                        <div>
+                            <div>自维报账点</div>
+                            <div class="detail-t">{{proSum.selfNum}}</div>
+                        </div>
+                    </div>
+                    <div class="foot-title">全省基站报账站点数据</div>
+                </div>
+                <div class="flex-foot">
+                    <div class="detail-foot">
+                         <div>
+                            <div>移交铁塔站点</div>
+                            <div class="detail-t">45651</div>
+                        </div>
+                        <div>
+                            <div>过户站点</div>
+                            <div class="detail-t">13251</div>
+                        </div>
+                    </div>
+                 <div class="foot-title">铁塔信息</div>   
+            </div>
+        </div>
+    </div>
+</div>

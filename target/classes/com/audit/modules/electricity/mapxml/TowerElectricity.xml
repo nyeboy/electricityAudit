@@ -1,0 +1,1259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.electricity.dao.TowerElectricityDao">
+
+  <!--   <select id="queryList" parameterType="java.util.Map" resultType="com.audit.modules.electricity.entity.TowerElectrictyVO">
+        SELECT * FROM (
+        SELECT rownum rsn, a1.* FROM (
+        SELECT
+        ste.ID AS ID,
+        ste.SERIAL_NUMBER AS serialNumber,
+        zsy.CITY_NAME AS AREAS,
+        zsc.ZH_LABEL AS COUNTIES,
+        ste.SYS_TOWER_SIT_NO AS sysTowerSitNo,
+        ste.ZG_SPACE_SITE_NAME AS zgSpaceSiteName,
+        ste.ZG_TOWER_SITE_NAME AS zgTowerSiteName,
+        ste.STATUS,
+        ste.CREATE_DATE AS createDate,
+        su.USER_NAME AS createPerson,
+        ss.NAME AS supplierName,
+        ss.ID AS supplierID,
+        scc.COST_CENTER_NAME AS costCenterName,
+        stc.CONTRACT_NO AS contractNo,
+        ste.SHARE_AMOUNT as totalAmount
+        FROM
+        SYS_TOWER_ELECTRICITY ste
+        LEFT JOIN ZG_SPACE_COUNTY zsc ON ste.COUNTY_ID = zsc.INT_ID
+        LEFT JOIN ZG_SPACE_CITY zsy ON ste.CITY_ID = zsy.INT_ID
+        LEFT JOIN SYS_TOWER_ELE_MID_SUPPLIER stems ON stems.SYS_TOWER_ELE_ID = ste.ID
+        LEFT JOIN SYS_SUPPLIER ss ON stems.SYS_SUPPLIER=ss.ID
+        LEFT JOIN SYS_TOWER_ELE_MID_COSTCENTER stelmc ON stelmc.SYS_TOWER_ELE_ID=ste.ID
+        LEFT JOIN SYS_COST_CENTER scc ON scc.ID = stelmc.SYS_COST_CENTER_ID
+        LEFT JOIN SYS_TOWER_SITE_MID_CONTRACT stsmc ON stsmc.SYS_TOWER_SITE_ID=ste.SYS_TOWER_SIT_ID
+        LEFT JOIN SYS_TOWER_CONTRACT stc ON stc.ID = stsmc.SYS_TOWER_CONTRACT_ID
+        LEFT JOIN SYS_USER su ON su.ID = ste.CREATE_PERSON
+        WHERE
+        1=1
+        <if test="map.serialNumber != null and map.serialNumber!=''">
+            AND ste.SERIAL_NUMBER LIKE '%'||#{map.serialNumber}||'%'
+        </if>
+         <if test="map.zgSpaceSiteName != null and map.zgSpaceSiteName!=''">
+            AND ste.ZG_SPACE_SITE_NAME LIKE '%'||#{map.zgSpaceSiteName}||'%'
+        </if>
+            <if test="map.zgTowerSiteName!=null and map.zgTowerSiteName!=''">
+                AND ste.ZG_TOWER_SITE_NAME LIKE '%'||#{map.zgTowerSiteName}||'%'
+            </if>
+            
+            <if test="map.flowState!=null and map.flowState!=''">
+                AND ste.STATUS = #{map.flowState}
+            </if>
+            <if test="map.cityId!=null and map.cityId!=''">
+                AND ste.CITY_ID = #{map.cityId}
+            </if>
+            <if test="map.countyId!=null and map.countyId!=''">
+                AND ste.COUNTY_ID = #{map.countyId}
+            </if>
+            
+            <if test="map.status!=null and map.status.length>0">AND ste.STATUS IN
+                <foreach
+                        collection="map.status" index="index" item="st" open="("
+                         separator="," close=")">
+                    #{st}
+                </foreach>
+            </if>
+            <if test="map.submitPerson!=null and map.submitPerson!=''">
+                AND ste.SUBMIT_PERSON = #{map.submitPerson}
+            </if>
+            <if test="map.userID!=null and map.userID!=''">
+                AND ste.CREATE_PERSON = #{map.userID}
+            </if>
+            <if test="map.supplierName!=null and map.supplierName!=''">
+                AND ss.NAME LIKE '%'||#{map.supplierName}||'%'
+            </if>
+            <if test="map.startTime!=null and map.startTime!=''">
+                AND
+                <![CDATA[ ste.CREATE_DATE >=  ]]> TO_DATE(#{map.startTime}, 'yyyy-MM-dd')
+            </if>
+            <if test="map.endTime!=null and map.endTime!=''">
+                AND
+                <![CDATA[ ste.CREATE_DATE <= ]]> TO_DATE(#{map.endTime}, 'yyyy-MM-dd')
+            </if>
+
+        )a1  WHERE
+        <![CDATA[ROWNUM <= #{map.pageSize}]]> ) a2
+        WHERE <![CDATA[a2.rsn > #{map.pageNo}]]>
+    </select>
+
+    <select id="queryListCount" parameterType="java.util.Map" resultType="java.lang.Long">
+        SELECT
+        count(1)
+        FROM
+        SYS_TOWER_ELECTRICITY ste
+        LEFT JOIN ZG_SPACE_COUNTY zsc ON ste.COUNTY_ID = zsc.INT_ID
+        LEFT JOIN ZG_SPACE_CITY zsy ON ste.CITY_ID = zsy.INT_ID
+        LEFT JOIN SYS_TOWER_ELE_MID_SUPPLIER stems ON stems.SYS_TOWER_ELE_ID = ste.ID
+        LEFT JOIN SYS_SUPPLIER ss ON stems.SYS_SUPPLIER=ss.ID
+        LEFT JOIN SYS_TOWER_ELE_MID_COSTCENTER stelmc ON stelmc.SYS_TOWER_ELE_ID=ste.ID
+        LEFT JOIN SYS_COST_CENTER scc ON scc.ID = stelmc.SYS_COST_CENTER_ID
+        LEFT JOIN SYS_TOWER_SITE_MID_CONTRACT stsmc ON stsmc.SYS_TOWER_SITE_ID=ste.SYS_TOWER_SIT_ID
+        LEFT JOIN SYS_TOWER_CONTRACT stc ON stc.ID = stsmc.SYS_TOWER_CONTRACT_ID
+        WHERE
+        1=1
+        <if test="map.serialNumber != null and map.serialNumber!=''">
+            AND ste.SERIAL_NUMBER = #{map.serialNumber}
+        </if>
+        <if test="
+        map.zgTowerSiteName!=null and map.zgTowerSiteName!=''">
+            AND (ste.ZG_TOWER_SITE_NAME LIKE '%'||#{map.zgTowerSiteName}||'%' OR ste.ZG_SPACE_SITE_NAME LIKE '%'||#{map.zgTowerSiteName}||'%')
+        </if>
+        <if test="map.status!=null and map.status.length>0">
+            AND ste.STATUS IN
+            <foreach
+                    collection="map.status" index="index" item="st" open="("
+                    separator="," close=")">
+                #{st}
+            </foreach>
+        </if>
+        <if test="map.submitPerson!=null and map.submitPerson!=''">
+            AND ste.SUBMIT_PERSON = #{map.submitPerson}
+        </if>
+        <if test="map.userID!=null and map.userID!=''">
+            AND ste.CREATE_PERSON = #{map.userID}
+        </if>
+        <if test="map.supplierName!=null and map.supplierName!=''">
+            AND ss.NAME LIKE '%'||#{map.supplierName}||'%'
+        </if>
+        <if test="map.startTime!=null and map.startTime!=''">
+            AND
+            <![CDATA[ ste.CREATE_DATE >=  ]]> TO_DATE(#{map.startTime}, 'yyyy-MM-dd')
+        </if>
+        <if test="map.endTime!=null and map.endTime!=''">
+            AND
+            <![CDATA[ ste.CREATE_DATE <= ]]> TO_DATE(#{map.endTime}, 'yyyy-MM-dd')
+        </if>
+    </select> -->
+
+  <select id="queryList" parameterType="java.util.Map" resultType="com.audit.modules.electricity.entity.TowerElectrictyVO">
+        SELECT * FROM (
+        SELECT rownum rsn, a1.* FROM (
+        SELECT
+        ste.ID AS ID,
+        ste.SERIAL_NUMBER AS serialNumber,
+        zsy.NAME AS AREAS,
+        zsc.NAME AS COUNTIES,
+        ste.SYS_TOWER_SIT_NO AS sysTowerSitNo,
+        ste.ZG_SPACE_SITE_NAME AS zgSpaceSiteName,
+        ste.ZG_TOWER_SITE_NAME AS zgTowerSiteName,
+        ste.STATUS,
+        ste.CREATE_DATE AS createDate,
+        su.USER_NAME AS createPerson,
+        ss.NAME AS supplierName,
+        ss.ID AS supplierID,
+        scc.COST_CENTER_NAME AS costCenterName,
+        stc.CONTRACT_NO AS contractNo,
+        ste.SHARE_AMOUNT as totalAmount
+        FROM
+        SYS_TOWER_ELECTRICITY ste
+        LEFT JOIN YDJH_AREA zsc ON ste.COUNTY_ID = zsc.ID
+        LEFT JOIN YDJH_AREA zsy ON ste.CITY_ID = zsy.ID
+        LEFT JOIN SYS_TOWER_ELE_MID_SUPPLIER stems ON stems.SYS_TOWER_ELE_ID = ste.ID
+        LEFT JOIN SYS_SUPPLIER ss ON stems.SYS_SUPPLIER=ss.ID
+        LEFT JOIN SYS_TOWER_ELE_MID_COSTCENTER stelmc ON stelmc.SYS_TOWER_ELE_ID=ste.ID
+        LEFT JOIN SYS_COST_CENTER scc ON scc.ID = stelmc.SYS_COST_CENTER_ID
+        LEFT JOIN SYS_TOWER_SITE_MID_CONTRACT stsmc ON stsmc.SYS_TOWER_SITE_ID=ste.SYS_TOWER_SIT_ID
+        LEFT JOIN SYS_TOWER_CONTRACT stc ON stc.ID = stsmc.SYS_TOWER_CONTRACT_ID
+        LEFT JOIN SYS_USER su ON su.ID = ste.CREATE_PERSON
+        WHERE
+        1=1
+        <if test="map.serialNumber != null and map.serialNumber!=''">
+            AND ste.SERIAL_NUMBER LIKE '%'||#{map.serialNumber}||'%'
+        </if>
+         <if test="map.zgSpaceSiteName != null and map.zgSpaceSiteName!=''">
+            AND ste.ZG_SPACE_SITE_NAME LIKE '%'||#{map.zgSpaceSiteName}||'%'
+        </if>
+            <if test="map.zgTowerSiteName!=null and map.zgTowerSiteName!=''">
+                AND ste.ZG_TOWER_SITE_NAME LIKE '%'||#{map.zgTowerSiteName}||'%'
+            </if>
+            
+            <if test="map.flowState!=null and map.flowState!=''">
+                AND ste.STATUS = #{map.flowState}
+            </if>
+            <if test="map.cityId!=null and map.cityId!=''">
+                AND ste.CITY_ID = #{map.cityId}
+            </if>
+            <if test="map.countyId!=null and map.countyId!=''">
+                AND ste.COUNTY_ID = #{map.countyId}
+            </if>
+            
+            <if test="map.status!=null and map.status.length>0">AND ste.STATUS IN
+                <foreach
+                        collection="map.status" index="index" item="st" open="("
+                         separator="," close=")">
+                    #{st}
+                </foreach>
+            </if>
+            <if test="map.submitPerson!=null and map.submitPerson!=''">
+                AND ste.SUBMIT_PERSON = #{map.submitPerson}
+            </if>
+            <if test="map.userID!=null and map.userID!=''">
+                AND ste.CREATE_PERSON = #{map.userID}
+            </if>
+            <if test="map.supplierName!=null and map.supplierName!=''">
+                AND ss.NAME LIKE '%'||#{map.supplierName}||'%'
+            </if>
+            <if test="map.startTime!=null and map.startTime!=''">
+                AND
+                <![CDATA[ ste.CREATE_DATE >=  ]]> TO_DATE(#{map.startTime}, 'yyyy-MM-dd')
+            </if>
+            <if test="map.endTime!=null and map.endTime!=''">
+                AND
+                <![CDATA[ ste.CREATE_DATE <= ]]> TO_DATE(#{map.endTime}, 'yyyy-MM-dd')
+            </if>
+
+        )a1  WHERE
+        <![CDATA[ROWNUM <= #{map.pageSize}]]> ) a2
+        WHERE <![CDATA[a2.rsn > #{map.pageNo}]]>
+    </select>
+    
+    <update id="addDEC" parameterType="java.util.Map">
+    	update SYS_TOWER_ELECTRICITY set OVERPROOFREASONS=#{dec} where id=#{id}
+    </update>
+
+	<!-- 删除超标信息表数据 -->
+	<delete id="deleteBenchmarkByTWID" parameterType="java.lang.String">
+		delete from SYS_TOWER_ELE_BENCHMARK where TOWER_ELECTRICITY_ID = #{twElectricityId}
+	</delete>
+	<!-- 向超标信息表中添加数据 -->
+	<insert id="saveBenchmark" parameterType="com.audit.modules.electricity.entity.TowerEleBenchmark">
+		insert into SYS_TOWER_ELE_BENCHMARK(
+			ID,
+			TOWER_ELECTRICITY_ID,
+			TOWER_ELECTRICITY_SN,
+			TYPE,
+			BENCHMARK,
+			OVER_PROPORTION
+		)
+		values(
+			#{id},
+			#{tower_electricityId},
+			#{tower_electricitySN},
+			#{type},
+			#{benchmark},
+			#{overProportion}
+		)
+	
+	</insert>
+	
+	<!-- 根据铁塔站址编码获取对应机房id -->
+	<select id="getRoomsByTowerId" parameterType="java.util.Map" resultType="java.lang.String">
+		SELECT 
+			zser.INT_ID
+		FROM 
+			ZG_TOWER_SITE ZTS
+			LEFT JOIN ZG_SPACE_SITE ZSS ON ZTS.YW_CODE = ZSS.TOWER_SITE_CODE
+			LEFT JOIN ZG_SPACE_EQUIP_ROOM ZSER ON ZSS.INT_ID = ZSER.RELATED_SITE
+			LEFT JOIN SYS_ROOM_LOCKING SRL ON zser.INT_ID = SRL.ROOM_ID
+			
+		WHERE 
+			ZTS.ZY_CODE=#{siteNo}
+			<if test="status=='在网'">
+	           <![CDATA[ AND INSTR(ZSER.STATUS,'在网')>0 ]]>
+	        </if>
+	        <if test="status=='退网'">
+	            and INSTR(ZSER.STATUS,'在网')=0
+	        </if>
+	        <if test="isLocking != null and isLocking == 'isLocking'">
+	        	and SRL.ROOM_ID IS NOT NULL
+	        </if>
+			
+	</select>
+	
+	<!-- 根据铁塔编号查询ZTO类电器的额定功率之和 -->
+	<select id="queryPowerRatingToZTO" parameterType="java.lang.String" resultType="java.lang.Double">
+		SELECT 
+			SUM(SPR.POWER_RATING)
+		FROM 
+			ZG_TOWER_SITE ZTS
+			LEFT JOIN ZG_SPACE_SITE ZSS ON ZTS.YW_CODE = ZSS.TOWER_SITE_CODE
+			LEFT JOIN ZG_SPACE_EQUIP_ROOM ZSER ON ZSS.INT_ID = ZSER.RELATED_SITE
+			LEFT JOIN ZG_TRAN_OLT ZTO ON ZTO.RELATED_EQUIPROOM = ZSER.INT_ID
+			LEFT JOIN SYS_POWER_RATING SPR ON(SPR."MODEL"=ZTO.NE_TYPE AND SPR.VENDOR = ZTO.VENDER)
+		WHERE 
+			INSTR(ZTO.NE_STATE,'退网')=0
+			AND ZTS.ZY_CODE=#{sysTowerSitId}
+	</select>
+	
+	<!-- 根据铁塔编号查询ZTTN类电器的额定功率之和 -->
+	<select id="queryPowerRatingToZTTN" parameterType="java.lang.String" resultType="java.lang.Double">
+		SELECT 
+			SUM(SPR.POWER_RATING)
+		FROM 
+			ZG_TOWER_SITE ZTS
+			LEFT JOIN ZG_SPACE_SITE ZSS ON ZTS.YW_CODE = ZSS.TOWER_SITE_CODE
+			LEFT JOIN ZG_SPACE_EQUIP_ROOM ZSER ON ZSS.INT_ID = ZSER.RELATED_SITE
+			LEFT JOIN ZG_TRAN_TRANS_NE ZTTN ON ZTTN.RELATED_EQUROOM = ZSER.INT_ID
+			LEFT JOIN SYS_POWER_RATING SPR ON(SPR."MODEL"=ZTTN.NE_TYPE AND SPR.VENDOR = ZTTN.VENDOR)
+		WHERE 
+			INSTR(ZTTN.STATUS,'退网')=0
+			AND ZTS.ZY_CODE=#{sysTowerSitId}
+	</select>
+
+	<!-- 根据铁塔编号查询ZWB类电器的额定功率之和 -->
+	<select id="queryPowerRatingToZWB" parameterType="java.lang.String" resultType="java.lang.Double">
+		SELECT 
+			SUM(SPR.POWER_RATING)
+		FROM 
+			ZG_TOWER_SITE ZTS
+			LEFT JOIN ZG_SPACE_SITE ZSS ON ZTS.YW_CODE = ZSS.TOWER_SITE_CODE
+			LEFT JOIN ZG_SPACE_EQUIP_ROOM ZSER ON ZSS.INT_ID = ZSER.RELATED_SITE
+			LEFT JOIN ZG_WIRE_BTS ZWB ON ZWB.RELATED_EQUIPROOM = ZSER.INT_ID
+			LEFT JOIN SYS_POWER_RATING SPR ON(SPR."MODEL"=ZWB."MODEL" AND SPR.VENDOR = ZWB.VENDOR)
+		WHERE 
+			INSTR(ZWB.STATUS,'退网')=0
+			AND ZTS.ZY_CODE=#{sysTowerSitId}
+	</select>
+	
+	<!-- 根据铁塔编号查询ZWEN类电器的额定功率之和 -->
+	<select id="queryPowerRatingToZWEN" parameterType="java.lang.String" resultType="java.lang.Double">
+		SELECT 
+			SUM(SPR.POWER_RATING)
+		FROM 
+			ZG_TOWER_SITE ZTS
+			LEFT JOIN ZG_SPACE_SITE ZSS ON ZTS.YW_CODE = ZSS.TOWER_SITE_CODE
+			LEFT JOIN ZG_SPACE_EQUIP_ROOM ZSER ON ZSS.INT_ID = ZSER.RELATED_SITE
+			LEFT JOIN ZG_WIRE_E_NODEB ZWEN ON ZWEN.RELATED_EQUIPROOM = ZSER.INT_ID
+			LEFT JOIN SYS_POWER_RATING SPR ON(SPR."MODEL"=ZWEN."MODEL" AND SPR.VENDOR = ZWEN.VENDOR)
+		WHERE 
+			INSTR(ZWEN.STATUS,'退网')=0
+			AND ZTS.ZY_CODE=#{sysTowerSitId}
+	</select>
+	
+	<!-- 根据铁塔编号查询ZWLR类电器的额定功率之和 -->
+	<select id="queryPowerRatingToZWLR" parameterType="java.lang.String" resultType="java.lang.Double">
+		SELECT 
+			SUM(SPR.POWER_RATING)
+		FROM 
+			ZG_TOWER_SITE ZTS
+			LEFT JOIN ZG_SPACE_SITE ZSS ON ZTS.YW_CODE = ZSS.TOWER_SITE_CODE
+			LEFT JOIN ZG_SPACE_EQUIP_ROOM ZSER ON ZSS.INT_ID = ZSER.RELATED_SITE
+			LEFT JOIN ZG_WIRE_LTE_RRU ZWLR ON ZWLR.RELATED_EQUIPROOM = ZSER.INT_ID
+			LEFT JOIN SYS_POWER_RATING SPR ON(SPR."MODEL"=ZWLR."MODEL" AND SPR.VENDOR = ZWLR.VENDOR)
+		WHERE 
+			INSTR(ZWLR.STATUS,'退网')=0
+			AND ZTS.ZY_CODE=#{sysTowerSitId}
+	</select>
+	
+	<!-- 根据铁塔编号查询ZWN类电器的额定功率之和 -->
+	<select id="queryPowerRatingToZWN" parameterType="java.lang.String" resultType="java.lang.Double">
+		SELECT 
+			SUM(SPR.POWER_RATING)
+		FROM 
+			ZG_TOWER_SITE ZTS
+			LEFT JOIN ZG_SPACE_SITE ZSS ON ZTS.YW_CODE = ZSS.TOWER_SITE_CODE
+			LEFT JOIN ZG_SPACE_EQUIP_ROOM ZSER ON ZSS.INT_ID = ZSER.RELATED_SITE
+			LEFT JOIN ZG_WIRE_NODEB ZWN ON ZWN.RELATED_EQUIPROOM = ZSER.INT_ID
+			LEFT JOIN SYS_POWER_RATING SPR ON(SPR."MODEL"=ZWN."MODEL" AND SPR.VENDOR = ZWN.VENDOR)
+		WHERE 
+			INSTR(ZWN.STATUS,'退网')=0
+			AND ZTS.ZY_CODE=#{sysTowerSitId}
+	</select>
+
+
+
+    <select id="queryListCount" parameterType="java.util.Map" resultType="java.lang.Long">
+        SELECT
+        count(1)
+        FROM
+        SYS_TOWER_ELECTRICITY ste
+        LEFT JOIN YDJH_AREA zsc ON ste.COUNTY_ID = zsc.ID
+        LEFT JOIN YDJH_AREA zsy ON ste.CITY_ID = zsy.ID
+        LEFT JOIN SYS_TOWER_ELE_MID_SUPPLIER stems ON stems.SYS_TOWER_ELE_ID = ste.ID
+        LEFT JOIN SYS_SUPPLIER ss ON stems.SYS_SUPPLIER=ss.ID
+        LEFT JOIN SYS_TOWER_ELE_MID_COSTCENTER stelmc ON stelmc.SYS_TOWER_ELE_ID=ste.ID
+        LEFT JOIN SYS_COST_CENTER scc ON scc.ID = stelmc.SYS_COST_CENTER_ID
+        LEFT JOIN SYS_TOWER_SITE_MID_CONTRACT stsmc ON stsmc.SYS_TOWER_SITE_ID=ste.SYS_TOWER_SIT_ID
+        LEFT JOIN SYS_TOWER_CONTRACT stc ON stc.ID = stsmc.SYS_TOWER_CONTRACT_ID
+        WHERE
+        1=1
+        <if test="map.serialNumber != null and map.serialNumber!=''">
+            AND ste.SERIAL_NUMBER = #{map.serialNumber}
+        </if>
+        <if test="
+        map.zgTowerSiteName!=null and map.zgTowerSiteName!=''">
+            AND (ste.ZG_TOWER_SITE_NAME LIKE '%'||#{map.zgTowerSiteName}||'%' OR ste.ZG_SPACE_SITE_NAME LIKE '%'||#{map.zgTowerSiteName}||'%')
+        </if>
+        <if test="map.status!=null and map.status.length>0">
+            AND ste.STATUS IN
+            <foreach
+                    collection="map.status" index="index" item="st" open="("
+                    separator="," close=")">
+                #{st}
+            </foreach>
+        </if>
+        <if test="map.submitPerson!=null and map.submitPerson!=''">
+            AND ste.SUBMIT_PERSON = #{map.submitPerson}
+        </if>
+        <if test="map.userID!=null and map.userID!=''">
+            AND ste.CREATE_PERSON = #{map.userID}
+        </if>
+        <if test="map.supplierName!=null and map.supplierName!=''">
+            AND ss.NAME LIKE '%'||#{map.supplierName}||'%'
+        </if>
+        <if test="map.startTime!=null and map.startTime!=''">
+            AND
+            <![CDATA[ ste.CREATE_DATE >=  ]]> TO_DATE(#{map.startTime}, 'yyyy-MM-dd')
+        </if>
+        <if test="map.endTime!=null and map.endTime!=''">
+            AND
+            <![CDATA[ ste.CREATE_DATE <= ]]> TO_DATE(#{map.endTime}, 'yyyy-MM-dd')
+        </if>
+    </select>
+
+    <select id="queryELECIRICAndTotalAmount" parameterType="java.util.List" resultType="java.util.LinkedHashMap">
+        SELECT
+            STEMW.SYS_TOWER_ELE_ID AS EID,
+            SUM (stwm.TOTAL_ELECIRIC) AS TOTALELECIRIC,
+            SUM (stwm.PAY_AMOUNT) AS PAYAMOUNT
+        FROM
+          SYS_TOWER_ELE_MID_WATTHOUR stemw
+        LEFT JOIN SYS_TOWER_WATTHOUR_METER stwm ON stemw.SYS_TOWER_WATTHOUR_ID = stwm.ID
+        WHERE STEMW.SYS_TOWER_ELE_ID IN
+        <foreach collection="list" index="index" item="id" open="("
+                 separator="," close=")">
+            #{id}
+        </foreach>
+        GROUP BY
+          STEMW.SYS_TOWER_ELE_ID
+    </select>
+
+    <insert id="saveElectricty" parameterType="com.audit.modules.electricity.entity.TowerSaveEntities">
+        INSERT INTO
+        SYS_TOWER_ELECTRICITY(
+            ID,
+            SERIAL_NUMBER,
+            SYS_TOWER_SIT_ID,
+            SYS_TOWER_SIT_NO,
+            ZG_SPACE_SITE_NAME,
+            ZG_TOWER_SITE_NAME,
+            SHARE_AMOUNT,
+            CREATE_DATE,
+            CREATE_PERSON,
+            STATUS,
+            CITY_ID,
+            COUNTY_ID,
+            SUBMIT_DATE,
+            SUBMIT_PERSON,
+            ISONLINE
+        )
+        VALUES (
+            #{id,jdbcType=VARCHAR},
+            #{serialNumber,jdbcType=VARCHAR},
+            #{sysTowerSitId,jdbcType=VARCHAR},
+            #{sysTowerSitNo,jdbcType=VARCHAR},
+            #{zgSpaceSiteName,jdbcType=VARCHAR},
+            #{zgTowerSiteName,jdbcType=VARCHAR},
+            #{shareAmount,jdbcType=VARCHAR},
+            #{createDate,jdbcType=TIMESTAMP},
+            #{createPerson,jdbcType=VARCHAR},
+            #{status,jdbcType=INTEGER},
+            #{areas,jdbcType=VARCHAR},
+            #{counties,jdbcType=VARCHAR},
+            #{submitDate,jdbcType=TIMESTAMP},
+            #{submitPerson,jdbcType=VARCHAR},
+            #{isOnline,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <insert id="saveTowerWatthour" parameterType="com.audit.modules.electricity.entity.TowerWatthourMeterVO">
+        INSERT INTO
+              SYS_TOWER_WATTHOUR_METER(
+                  ID,
+                  CODE,
+                  PAYMENT_ACCOUNT_CODE,
+                  PTYPE,
+                  STATUS,
+                  RATE,
+                  MAX_READING,
+                  ELECTRIC_LOSS,
+                  WHETHER_METER,
+                  BELONG_START_TIME,
+                  BELONG_END_TIME,
+                  START_AMMETER,
+                  END_MMETER,
+                  TOTAL_ELECIRIC,
+                  PAY_AMOUNT,
+                  UNIT_PRICE,
+                  OTHER_AMOUNT,
+                  ACTUAL_AMOUNT,
+                  SHARE_PROPORTION,
+                  SHARE_AMOUNT,
+                  PAY_INVOICE_TYPE,
+                  PAY_BILL_COEFFICIENT,
+                  OTHER_INVOICE_TYPE,
+                  OTHER_BILL_COEFFICIENT,
+                  WATTHOUR_TYPE
+              )
+              VALUES (
+                #{id,jdbcType=VARCHAR},
+                #{code,jdbcType=VARCHAR},
+                #{paymentAccountCode,jdbcType=VARCHAR},
+                #{ptype,jdbcType=INTEGER},
+                #{status,jdbcType=INTEGER},
+                #{rate,jdbcType=DOUBLE},
+                #{maxReading,jdbcType=DOUBLE},
+                #{electricLoss,jdbcType=VARCHAR},
+                #{whetherMeter,jdbcType=INTEGER},
+                #{belongStartTime,jdbcType=TIMESTAMP},
+                #{belongEndTime,jdbcType=TIMESTAMP},
+                #{startAmmeter,jdbcType=VARCHAR},
+                #{endAmmeter,jdbcType=VARCHAR},
+                #{totalEleciric,jdbcType=VARCHAR},
+                #{payAmount,jdbcType=VARCHAR},
+                #{unitPrice,jdbcType=VARCHAR},
+                #{otherAmount,jdbcType=VARCHAR},
+                #{actualAmount,jdbcType=VARCHAR},
+                #{shareProportion,jdbcType=VARCHAR},
+                #{shareAmount,jdbcType=VARCHAR},
+                #{payInvoiceType,jdbcType=VARCHAR},
+                #{payBillCoefficient,jdbcType=VARCHAR},
+                #{otherInvoiceType,jdbcType=VARCHAR},
+                #{otherBillCoefficient,jdbcType=VARCHAR},
+                 #{watthourType,jdbcType=VARCHAR}
+              )
+    </insert>
+
+    <insert id="saveTowerMidWatthour" parameterType="com.audit.modules.electricity.entity.SysTowerMidWatthour">
+        INSERT INTO
+                SYS_TOWER_ELE_MID_WATTHOUR(
+                    ID,
+                    SYS_TOWER_ELE_ID,
+                    SYS_TOWER_WATTHOUR_ID
+                )
+        <foreach collection="list" index="index" item="tower" separator="union all">
+            select
+            #{tower.id,jdbcType=VARCHAR},#{tower.sysTowerEleId,jdbcType=VARCHAR},#{tower.sysTowerWatthourId,jdbcType=VARCHAR}
+            from dual
+        </foreach>
+    </insert>
+
+    <!-- 根据iDs 删除  mybatis 传入的都为map  list:ids-->
+    <delete id="deleteByIDs">
+        DELETE FROM SYS_TOWER_ELECTRICITY WHERE ID IN
+        <foreach collection="list" index="index" item="id" open="("
+                 separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteTowerWatthourByTowerID">
+        DELETE  FROM
+            SYS_TOWER_WATTHOUR_METER
+        WHERE
+            ID IN (
+                SELECT
+                      stwm.ID
+                FROM
+                      SYS_TOWER_WATTHOUR_METER stwm
+                LEFT JOIN SYS_TOWER_ELE_MID_WATTHOUR stema ON stwm.ID = stema.SYS_TOWER_WATTHOUR_ID
+                WHERE stema.SYS_TOWER_ELE_ID IN
+                <foreach collection="list" index="index" item="id" open="("
+                         separator="," close=")">
+                    #{id}
+                </foreach>
+                  )
+    </delete>
+
+    <delete id="deleteMidWatthourByTowerID">
+        DELETE  FROM
+            SYS_TOWER_ELE_MID_WATTHOUR
+        WHERE
+            SYS_TOWER_ELE_ID IN
+            <foreach collection="list" index="index" item="id" open="("
+                     separator="," close=")">
+                #{id}
+            </foreach>
+    </delete>
+
+
+    <select id="stasticStatus"  resultType="map">
+       SELECT SE.STATUS ,count(1) AMOUNT FROM SYS_ELECTRICITY se GROUP BY SE.STATUS
+    </select>
+
+
+
+   <!--  <select id="findOneByID" resultType="com.audit.modules.electricity.entity.TowerSaveVO">
+		SELECT
+            ste.ID AS ID,
+            ste.SERIAL_NUMBER AS serialNumber,
+            zsy.CITY_NAME AS AREAS,
+            zsc.ZH_LABEL AS COUNTIES,
+            ste.SYS_TOWER_SIT_NO AS sysTowerSitNo,
+            ste.ZG_SPACE_SITE_NAME AS zgSpaceSiteName,
+            ste.ZG_TOWER_SITE_NAME AS zgTowerSiteName,
+            ste.STATUS,
+            su.USER_NAME AS createPerson,
+            ste.CREATE_DATE AS createDate,
+            ss.NAME AS supplierName,
+            ss.ID AS supplierID,
+            ss.CODE AS supplierCode,
+            ss.ORGANIZATION_CODE AS organizationCode,
+            ss.REGION_CODE as regionCode,
+            ste.SHARE_AMOUNT AS shareAmount,
+            scc.COST_CENTER_NAME AS costCenterName,
+            scc.ID AS costCenterID,
+            stc.CONTRACT_NO AS contractNo,
+            stc.IS_CLUD AS isClud,
+            ste.SYS_TOWER_SIT_ID AS sysTowerSitId
+        FROM
+            SYS_TOWER_ELECTRICITY ste
+        LEFT JOIN ZG_SPACE_COUNTY zsc ON ste.COUNTY_ID = zsc.INT_ID
+        LEFT JOIN ZG_SPACE_CITY zsy ON ste.CITY_ID = zsy.INT_ID
+        LEFT JOIN SYS_USER su ON su.ID=ste.CREATE_PERSON
+        LEFT JOIN SYS_TOWER_ELE_MID_SUPPLIER stems ON stems.SYS_TOWER_ELE_ID = ste.ID
+        LEFT JOIN SYS_SUPPLIER ss ON stems.SYS_SUPPLIER=ss.ID
+        LEFT JOIN SYS_TOWER_ELE_MID_COSTCENTER stelmc ON stelmc.SYS_TOWER_ELE_ID=ste.ID
+        LEFT JOIN SYS_COST_CENTER scc ON scc.ID = stelmc.SYS_COST_CENTER_ID
+        LEFT JOIN SYS_TOWER_SITE_MID_CONTRACT stsmc ON stsmc.SYS_TOWER_SITE_ID=ste.SYS_TOWER_SIT_ID
+        LEFT JOIN SYS_TOWER_CONTRACT stc ON stc.ID = stsmc.SYS_TOWER_CONTRACT_ID
+        WHERE ste.ID = #{id}
+	</select> -->
+
+ <select id="findOneByID" resultType="com.audit.modules.electricity.entity.TowerSaveVO">
+		SELECT
+            ste.ID AS ID,
+            ste.SERIAL_NUMBER AS serialNumber,
+            zsy.NAME AS AREAS,
+            zsc.NAME AS COUNTIES,
+            ste.SYS_TOWER_SIT_NO AS sysTowerSitNo,
+            ste.ZG_SPACE_SITE_NAME AS zgSpaceSiteName,
+            ste.ZG_TOWER_SITE_NAME AS zgTowerSiteName,
+            ste.STATUS,
+            su.USER_NAME AS createPerson,
+            ste.CREATE_DATE AS createDate,
+            ss.NAME AS supplierName,
+            ss.ID AS supplierID,
+            ss.CODE AS supplierCode,
+            ss.ORGANIZATION_CODE AS organizationCode,
+            ss.REGION_CODE as regionCode,
+            ste.SHARE_AMOUNT AS shareAmount,
+            scc.COST_CENTER_NAME AS costCenterName,
+            scc.ID AS costCenterID,
+            stc.CONTRACT_NO AS contractNo,
+            stc.IS_CLUD AS isClud,
+            ste.SYS_TOWER_SIT_ID AS sysTowerSitId,
+            ste.OVERPROOFREASONS AS overProofReasons,
+            ste.ISONLINE AS isOnline
+        FROM
+            SYS_TOWER_ELECTRICITY ste
+        LEFT JOIN YDJH_AREA zsc ON ste.COUNTY_ID = zsc.ID
+        LEFT JOIN YDJH_AREA zsy ON ste.CITY_ID = zsy.ID
+        LEFT JOIN SYS_USER su ON su.ID=ste.CREATE_PERSON
+        LEFT JOIN SYS_TOWER_ELE_MID_SUPPLIER stems ON stems.SYS_TOWER_ELE_ID = ste.ID
+        LEFT JOIN SYS_SUPPLIER ss ON stems.SYS_SUPPLIER=ss.ID
+        LEFT JOIN SYS_TOWER_ELE_MID_COSTCENTER stelmc ON stelmc.SYS_TOWER_ELE_ID=ste.ID
+        LEFT JOIN SYS_COST_CENTER scc ON scc.ID = stelmc.SYS_COST_CENTER_ID
+        LEFT JOIN SYS_TOWER_SITE_MID_CONTRACT stsmc ON stsmc.SYS_TOWER_SITE_ID=ste.SYS_TOWER_SIT_ID
+        LEFT JOIN SYS_TOWER_CONTRACT stc ON stc.ID = stsmc.SYS_TOWER_CONTRACT_ID
+        WHERE ste.ID = #{id}
+	</select>
+
+    <select id="findTowerWatthourByTowerID" resultType="com.audit.modules.electricity.entity.TowerWatthourMeterVO">
+        SELECT
+                  stwm.ID AS id,
+                  stwm.CODE AS code,
+                  stwm.PAYMENT_ACCOUNT_CODE AS paymentAccountCode,
+                  stwm.PTYPE AS ptype,
+                  stwm.STATUS AS status,
+                  stwm.RATE AS rate,
+                  stwm.MAX_READING AS maxReading,
+                  stwm.ELECTRIC_LOSS AS electricLoss,
+                  stwm.WHETHER_METER AS whetherMeter,
+                  stwm.BELONG_START_TIME AS belongStartTime,
+                  stwm.BELONG_END_TIME AS belongEndTime,
+                  stwm.START_AMMETER AS startAmmeter,
+                  stwm.END_MMETER AS endAmmeter,
+                  stwm.TOTAL_ELECIRIC AS totalEleciric,
+                  stwm.PAY_AMOUNT AS payAmount,
+                  stwm.UNIT_PRICE AS unitPrice,
+                  stwm.OTHER_AMOUNT AS otherAmount,
+                  stwm.ACTUAL_AMOUNT AS actualAmount,
+                  stwm.SHARE_PROPORTION AS shareProportion,
+                  stwm.SHARE_AMOUNT AS shareAmount,
+                  stwm.PAY_INVOICE_TYPE AS payInvoiceType,
+                  stwm.PAY_BILL_COEFFICIENT AS payBillCoefficient,
+                  stwm.OTHER_INVOICE_TYPE AS otherInvoiceType,
+                  stwm.OTHER_BILL_COEFFICIENT AS otherBillCoefficient,
+                  stwm.WATTHOUR_TYPE as watthourType
+        FROM SYS_TOWER_WATTHOUR_METER stwm LEFT JOIN SYS_TOWER_ELE_MID_WATTHOUR stemw ON stwm.ID = stemw.SYS_TOWER_WATTHOUR_ID
+        WHERE stemw.SYS_TOWER_ELE_ID=#{id}
+    </select>
+
+    <select id="findBySiteID" resultType="com.audit.modules.electricity.entity.ElectricyBaseVO">
+        SELECT
+              sc.IS_CLUD as isClud,
+              sc.CLUD_PRICE as cludPrice,
+              sc.PRICE as unitPrice
+        FROM
+               SYS_ACCOUNT_SITE sas
+        LEFT JOIN SYS_SITE_MID_CONTRACT ssmc ON sas.ID = ssmc.ACCOUNT_SITE_ID
+        LEFT JOIN SYS_CONTRACT sc ON ssmc.CONTRACT_ID = sc.ID
+        where 1=1
+        <if test="siteID!=null and siteID!=''">
+            AND sas.ID = #{siteID}
+        </if>
+    </select>
+
+
+
+    <select id="findFileByElID" resultType="com.audit.modules.system.entity.SysFileVO">
+        SELECT
+            sf.ID as id,
+            sf.FILENAME as filename,
+            sf.EXT as ext
+        FROM SYS_ELECTRICITY se
+        LEFT JOIN SYS_MIDDLE_FILE smf ON se.ID=smf.BUSINESS_ID
+        LEFT JOIN SYS_FILE sf ON smf.SYS_FILE_ID = sf.ID
+        WHERE 1=1
+        <if test="id!=null and id!=''">
+            AND se.ID = #{id}
+        </if>
+    </select>
+
+    <insert id="saveElectricityBenchmark" parameterType="com.audit.modules.electricity.entity.ElectricityBenchmark">
+		INSERT INTO
+		        SYS_ELECTRICITY_BENCHMARK(
+		            ID,
+		            ELECTRICITY_ID,
+		            TYPE,
+		            BENCHMARK,
+		            OVER_PROPORTION,
+		            REASON
+		            )
+		VALUES (
+		      #{id,jdbcType=VARCHAR},
+		      #{electricityId,jdbcType=VARCHAR},
+		      #{type,jdbcType=VARCHAR},
+		      #{benchmark,jdbcType=DOUBLE},
+		      #{overProportion,jdbcType=DOUBLE},
+		      #{reason,jdbcType=VARCHAR}
+		      )
+	</insert>
+
+    <select id="queryElectricityBenchmarkByElectricityId" resultType="com.audit.modules.electricity.entity.ElectricityBenchmark" parameterType="java.lang.String">
+		SELECT
+		    ID,
+		    ELECTRICITY_ID,
+		    TYPE,
+		    BENCHMARK,
+		    OVER_PROPORTION, REASON
+		FROM SYS_ELECTRICITY_BENCHMARK
+		WHERE
+			ELECTRICITY_ID = #{electricityId}
+	</select>
+
+    <update id="updateElectricty" parameterType="com.audit.modules.electricity.entity.TowerSaveEntities">
+		UPDATE SYS_TOWER_ELECTRICITY
+		SET
+            SYS_TOWER_SIT_ID=#{sysTowerSitId,jdbcType=VARCHAR},
+            SYS_TOWER_SIT_NO=#{sysTowerSitNo,jdbcType=VARCHAR},
+            ZG_SPACE_SITE_NAME=#{zgSpaceSiteName,jdbcType=VARCHAR},
+            ZG_TOWER_SITE_NAME=#{zgTowerSiteName,jdbcType=VARCHAR},
+            SHARE_AMOUNT=#{shareAmount,jdbcType=VARCHAR},
+            OVERPROOFREASONS=#{overProoFreAsons,jdbcType=VARCHAR},
+            STATUS=#{status,jdbcType=INTEGER},
+            CITY_ID=#{areas,jdbcType=VARCHAR},
+            COUNTY_ID=#{counties,jdbcType=VARCHAR},
+            UPDATE_DATE=#{updateDate,jdbcType=TIMESTAMP}
+		WHERE ID=#{id}
+	</update>
+
+    <update id="updateStatus" parameterType="java.util.Map">
+        UPDATE SYS_TOWER_ELECTRICITY SET STATUS = #{map.status} WHERE ID IN
+        <foreach collection="map.ids" index="index" item="id" open="("
+                 separator="," close=")">
+            #{id}
+        </foreach>
+	</update>
+
+    <update id="updateSubmitPerson" parameterType="java.util.Map">
+		UPDATE SYS_TOWER_ELECTRICITY
+		SET
+		      SUBMIT_PERSON=#{submitPerson,jdbcType=VARCHAR},SUBMIT_DATE=#{submitDate,jdbcType=TIMESTAMP}
+		WHERE ID=#{id,jdbcType=VARCHAR}
+	</update>
+
+    <select id="findSiteIdByEid" resultType="com.audit.modules.electricity.entity.ElectrictyVO"
+            parameterType="java.util.List">
+        SELECT
+            se.ID AS ID,
+            SYS_ACCOUNT_SITE_ID AS sysAccountSiteId,
+            semi.ELECTRICITY_AMOUNT AS electricityAmount,
+            semi.TAX_AMOUNT AS taxAmount,
+            TOTAL_AMOUNT AS totalAmount
+        FROM
+            SYS_ELECTRICITY se
+        LEFT JOIN SYS_ELECTRICITY_MID_INVOICE semi ON se.ID = semi.SYS_ELECTRICITY_ID
+        WHERE se.ID IN
+        <foreach collection="list" index="index" item="id" open="("
+                 separator="," close=")">
+            #{id,jdbcType=VARCHAR}
+        </foreach>
+    </select>
+
+   <!--  <select id="queryByIDs" parameterType="java.util.List"
+            resultType="com.audit.modules.electricity.entity.TowerElectrictyVO">
+        SELECT
+            ste.ID AS ID,
+            ste.SERIAL_NUMBER AS serialNumber,
+            zsy.CITY_NAME AS AREAS,
+            zsc.ZH_LABEL AS COUNTIES,
+            ste.SYS_TOWER_SIT_NO AS sysTowerSitNo,
+            ste.ZG_SPACE_SITE_NAME AS zgSpaceSiteName,
+            ste.ZG_TOWER_SITE_NAME AS zgTowerSiteName,
+            ste.STATUS
+        FROM
+            SYS_TOWER_ELECTRICITY ste
+        LEFT JOIN ZG_SPACE_COUNTY zsc ON ste.COUNTY_ID = zsc.INT_ID
+        LEFT JOIN ZG_SPACE_CITY zsy ON ste.CITY_ID = zsy.INT_ID
+        WHERE ste.ID IN
+        <foreach collection="list" index="index" item="id" open="("
+                 separator="," close=")">
+            #{id,jdbcType=VARCHAR}
+        </foreach>
+    </select> -->
+    
+     <select id="queryByIDs" parameterType="java.util.List"
+            resultType="com.audit.modules.electricity.entity.TowerElectrictyVO">
+        SELECT
+            ste.ID AS ID,
+            ste.SERIAL_NUMBER AS serialNumber,
+            zsy.NAME AS AREAS,
+            zsc.NAME AS COUNTIES,
+            ste.SYS_TOWER_SIT_NO AS sysTowerSitNo,
+            ste.ZG_SPACE_SITE_NAME AS zgSpaceSiteName,
+            ste.ZG_TOWER_SITE_NAME AS zgTowerSiteName,
+            ste.STATUS
+        FROM
+            SYS_TOWER_ELECTRICITY ste
+        LEFT JOIN YDJH_AREA zsc ON ste.COUNTY_ID = zsc.ID
+        LEFT JOIN YDJH_AREA zsy ON ste.CITY_ID = zsy.ID
+        WHERE ste.ID IN
+        <foreach collection="list" index="index" item="id" open="("
+                 separator="," close=")">
+            #{id,jdbcType=VARCHAR}
+        </foreach>
+    </select>
+    
+    <select id="stasticStatusByCreatePerson"  resultType="map">
+       SELECT ste .STATUS ,count(1) AMOUNT FROM SYS_TOWER_ELECTRICITY ste 
+       WHERE 1=1 
+      <if test="userId!=null and userId!=''">
+           AND ste .CREATE_PERSON = #{userId, jdbcType=VARCHAR}
+      </if>
+        GROUP BY ste.STATUS
+    </select>
+    
+    <select id="stasticStatusBySubmitPerson"  resultType="map">
+       SELECT ste.STATUS ,count(1) AMOUNT FROM SYS_TOWER_ELECTRICITY ste  
+       WHERE 1=1 
+      <if test="userId!=null and userId!=''">
+           AND ste.SUBMIT_PERSON  = #{userId, jdbcType=VARCHAR}
+      </if>
+        GROUP BY ste.STATUS
+    </select>
+    
+    <select id="queryTotalAmount" resultType="com.audit.modules.electricity.entity.ElectrictySaveVO">
+        SELECT
+            SUM (TO_NUMBER(semi.TAX_AMOUNT)) AS taxAmount,
+            SUM (
+                TO_NUMBER (semi.ELECTRICITY_AMOUNT)
+            ) AS electricityAmount,
+            SUM (TO_NUMBER(OTHER_COST)) AS otherCost,queryElectricityBySiteID
+            SUM (TO_NUMBER(TOTAL_AMOUNT)) AS totalAmount
+        FROM
+            SYS_ELECTRICITY se LEFT JOIN SYS_ELECTRICITY_MID_INVOICE semi ON se.ID=semi.SYS_ELECTRICITY_ID
+    </select>
+
+    <select id="queryElectricityBySiteID" parameterType="java.lang.String" resultType="com.audit.modules.watthourmeter.entity.WatthourExtendVO">
+        SELECT
+	      swe.BELONG_START_TIME AS belongStartTime,
+	      swm.REIMBURSEMENT_DATE AS reimbursementDate,
+	      se.STATUS
+        FROM
+            SYS_ELECTRICITY se
+            INNER JOIN SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas.ID
+            INNER JOIN SYS_SITE_MID_METER ssme ON ssme.ACCOUNT_SITE_ID=sas.ID
+            INNER JOIN SYS_WATTHOUR_METER swm ON swm.ID = ssme.WATTHOUR_METER_ID
+            INNER JOIN SYS_WATTHOUR_EXTEND swe ON swm.ID = swe.SYS_WATTHOUR_ID
+        WHERE se.SYS_ACCOUNT_SITE_ID = #{siteID}
+    </select>
+
+    <insert id="saveEleMidInvoice" parameterType="com.audit.modules.electricity.entity.ElectrictyMidInvoice">
+        INSERT INTO
+                SYS_ELECTRICITY_MID_INVOICE(
+                  ID,
+                  SYS_INVOICE_ID,
+                  SYS_ELECTRICITY_ID,
+                  TAX_AMOUNT,
+                  ELECTRICITY_AMOUNT
+                  )
+        VALUES (
+                #{id,jdbcType=VARCHAR},
+                #{invoiceId,jdbcType=VARCHAR},
+                #{sysElectricityId,jdbcType=VARCHAR},
+                #{taxAmount,jdbcType=VARCHAR},
+                #{electricityAmount,jdbcType=VARCHAR}
+                )
+    </insert>
+
+    <select id="findByEleID" resultType="com.audit.modules.electricity.entity.ElectrictyMidInvoice" parameterType="java.lang.String">
+        SELECT
+            semi.ID,
+            semi.TAX_AMOUNT AS taxAmount,
+            semi.ELECTRICITY_AMOUNT as electricityAmount,
+            si.BILL_TYPE AS billType,
+            si.BILL_TAX AS billTax
+        FROM
+            SYS_ELECTRICITY se
+        LEFT JOIN SYS_ELECTRICITY_MID_INVOICE semi ON se. ID = semi.SYS_ELECTRICITY_ID
+        LEFT JOIN SYS_INVOICE si ON si. ID = semi.SYS_INVOICE_ID
+        WHERE se.ID = #{eleID}
+    </select>
+
+    <delete id="deleteEleMidInvoiceByEleID" parameterType="java.lang.String">
+        DELETE FROM SYS_ELECTRICITY_MID_INVOICE WHERE SYS_ELECTRICITY_ID = #{eleID}
+    </delete>
+
+    <select id="queryTotalAmountByTowerIDs" resultType="java.lang.Double">
+        SELECT
+            SUM(SHARE_AMOUNT)
+        FROM
+            SYS_TOWER_ELECTRICITY
+        WHERE
+          ID IN
+        <foreach collection="list" index="index" item="id" open="("
+                 separator="," close=")">
+            #{id,jdbcType=VARCHAR}
+        </foreach>
+    </select>
+
+   <!--  <select id="queryTowerElBySubmitId" parameterType="java.lang.Integer" resultType="com.audit.modules.electricity.entity.TowerElectrictyVO">
+        SELECT
+            ste.ID AS ID,
+            ste.SERIAL_NUMBER AS serialNumber,
+            zsy.CITY_NAME AS AREAS,
+            zsc.ZH_LABEL AS COUNTIES,
+            ste.SYS_TOWER_SIT_NO AS sysTowerSitNo,
+            ste.ZG_SPACE_SITE_NAME AS zgSpaceSiteName,
+            ste.ZG_TOWER_SITE_NAME AS zgTowerSiteName,
+            ste.STATUS,
+            stc.NAME as contractName,
+            ste.SHARE_AMOUNT as totalAmount,
+            ste.CREATE_DATE as createDate
+        FROM
+            SYS_TOWER_ELECTRICITY ste
+        INNER JOIN SYS_TOWER_REI_ELE stre ON ste. ID = stre.TOWER_ID
+        LEFT JOIN ZG_SPACE_COUNTY zsc ON ste.COUNTY_ID = zsc.INT_ID
+        LEFT JOIN ZG_SPACE_CITY zsy ON ste.CITY_ID = zsy.INT_ID
+        LEFT JOIN SYS_TOWER_SITE_MID_CONTRACT stsmc ON stsmc.SYS_TOWER_SITE_ID=ste.SYS_TOWER_SIT_ID
+        LEFT JOIN SYS_TOWER_CONTRACT stc ON stsmc.SYS_TOWER_CONTRACT_ID=stc.ID
+        WHERE stre.REIMBURSE_ID = #{subID}
+    </select> -->
+
+ <select id="queryTowerElBySubmitId" parameterType="java.lang.Integer" resultType="com.audit.modules.electricity.entity.TowerElectrictyVO">
+        SELECT
+            ste.ID AS ID,
+            ste.SERIAL_NUMBER AS serialNumber,
+            zsy.NAME AS AREAS,
+            zsc.NAME AS COUNTIES,
+            ste.SYS_TOWER_SIT_NO AS sysTowerSitNo,
+            ste.ZG_SPACE_SITE_NAME AS zgSpaceSiteName,
+            ste.ZG_TOWER_SITE_NAME AS zgTowerSiteName,
+            ste.STATUS,
+            stc.NAME as contractName,
+            ste.SHARE_AMOUNT as totalAmount,
+            ste.CREATE_DATE as createDate
+        FROM
+            SYS_TOWER_ELECTRICITY ste
+        INNER JOIN SYS_TOWER_REI_ELE stre ON ste. ID = stre.TOWER_ID
+        LEFT JOIN YDJH_AREA zsc ON ste.COUNTY_ID = zsc.ID
+        LEFT JOIN YDJH_AREA zsy ON ste.CITY_ID = zsy.ID
+        LEFT JOIN SYS_TOWER_SITE_MID_CONTRACT stsmc ON stsmc.SYS_TOWER_SITE_ID=ste.SYS_TOWER_SIT_ID
+        LEFT JOIN SYS_TOWER_CONTRACT stc ON stsmc.SYS_TOWER_CONTRACT_ID=stc.ID
+        WHERE stre.REIMBURSE_ID = #{subID}
+    </select>
+    
+    <select id="getCityById" parameterType="java.lang.String" resultType="com.audit.modules.electricity.entity.CityNameVO">
+    	SELECT 
+				ZSC."NAME" as cityName,
+				ZSY."NAME" as countyName
+		
+			FROM SYS_TOWER_ACCOUNT_SITE tas
+			LEFT JOIN YDJH_AREA zsc ON TAS.CITY_ID = ZSC."ID"
+			LEFT JOIN YDJH_AREA zsy ON TAS.COUNTY_ID = ZSY."ID"
+		WHERE TAS."ID" = #{id}
+    </select>
+
+    <insert id="saveTowerMidCostcenter" parameterType="com.audit.modules.electricity.entity.SysTowerMidCostcenter">
+        INSERT INTO
+        SYS_TOWER_ELE_MID_COSTCENTER(
+            ID,
+            SYS_TOWER_ELE_ID,
+            SYS_COST_CENTER_ID
+        )
+        VALUES (
+          #{id,jdbcType=VARCHAR},
+          #{sysTowerEleId,jdbcType=VARCHAR},
+          #{sysCostCenterId,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <insert id="saveTowerMidSupplier" parameterType="com.audit.modules.electricity.entity.SysTowerMidSupplier">
+        INSERT INTO
+        SYS_TOWER_ELE_MID_SUPPLIER(
+            ID,
+            SYS_TOWER_ELE_ID,
+            SYS_SUPPLIER
+        )
+        VALUES (
+            #{id,jdbcType=VARCHAR},
+            #{sysTowerEleId,jdbcType=VARCHAR},
+            #{sysSupplier,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <update id="updateTowerMidCostcenter" parameterType="com.audit.modules.electricity.entity.SysTowerMidCostcenter">
+        UPDATE SYS_TOWER_ELE_MID_COSTCENTER SET SYS_COST_CENTER_ID=#{sysCostCenterId} WHERE SYS_TOWER_ELE_ID =#{sysTowerEleId}
+    </update>
+
+    <update id="updateTowerMidSupplier" parameterType="com.audit.modules.electricity.entity.SysTowerMidSupplier">
+        UPDATE SYS_TOWER_ELE_MID_SUPPLIER SET SYS_SUPPLIER=#{sysSupplier} WHERE SYS_TOWER_ELE_ID =#{sysTowerEleId}
+    </update>
+
+
+    <select id="findElectricityWatthourByEleIds" resultType="com.audit.modules.electricity.entity.ElectricityWatthourEntity"
+            parameterType="java.util.List">
+        select
+        se.id as electricityId, se.sys_tower_sit_id as siteId, se.SERIAL_NUMBER as electricitySN,
+        swm.id as watthourId, swm.total_eleciric as totalElecitity, (trunc(swm.BELONG_END_TIME) - trunc(swm.BELONG_START_TIME)) as dateRange
+        from sys_tower_electricity se
+        left join SYS_TOWER_ELE_MID_WATTHOUR semw on se.id = semw.SYS_TOWER_ELE_ID
+        left join SYS_TOWER_WATTHOUR_METER swm on semw.SYS_TOWER_WATTHOUR_ID = swm.id
+        where se.id in
+        <foreach collection="list" index="index" item="id" open="("
+                 separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="checkSerialNumber" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT count(1) FROM sys_tower_electricity WHERE SERIAL_NUMBER =#{serialNumber}
+    </select>
+    
+   <!--  <select id="exportExcel" parameterType="java.util.Map" resultType="com.audit.modules.electricity.entity.TowerElectrictyExcelVO">
+     SELECT
+        ste.ID AS id,
+        ste.SERIAL_NUMBER AS serialNumber,
+        zsy.CITY_NAME AS areas,
+        zsc.ZH_LABEL AS counties,
+        ste.SYS_TOWER_SIT_NO AS sysTowerSitNo,
+        ste.ZG_SPACE_SITE_NAME AS zgSpaceSiteName,
+        ste.ZG_TOWER_SITE_NAME AS zgTowerSiteName,
+        ste.SHARE_AMOUNT AS shareAmountSum,
+        ste.STATUS as status,
+        ste.CREATE_DATE AS createDate,
+        su.USER_NAME AS createPerson,
+        ss.NAME AS supplierName,
+        ss.ID AS supplierID,
+        ss.REGION_CODE as regionCode,
+        stc.IS_CLUD AS isClud,
+        scc.COST_CENTER_NAME AS costCenterName,
+        ste.SHARE_AMOUNT as totalAmount,
+        stwm.CODE as code,
+        stwm.PAYMENT_ACCOUNT_CODE as paymentAccountCode,
+        stwm.BELONG_START_TIME as belongStartTime,
+        stwm.BELONG_END_TIME as belongEndTime,
+        stwm.TOTAL_ELECIRIC as totalEleciric,
+        stwm.ACTUAL_AMOUNT as actualAmount,
+        stwm.SHARE_PROPORTION as shareProportion,
+        stwm.SHARE_AMOUNT as shareAmount,
+        stwm.WHETHER_METER as whetherMeter,
+        stwm.MAX_READING as maxReading,
+        stwm.RATE as rate,
+        stwm.START_AMMETER as startAmmeter,
+        stwm.END_MMETER as endAmmeter,
+        stwm.ELECTRIC_LOSS as electricLoss,
+        stwm.PAY_AMOUNT as payAmount,
+        stwm.PAY_INVOICE_TYPE as payInvoiceType,
+        stwm.PAY_BILL_COEFFICIENT as payBillCoefficient,
+        stwm.UNIT_PRICE as unitPrice,
+        stwm.OTHER_AMOUNT as otherAmount,
+        stwm.OTHER_INVOICE_TYPE as otherInvoiceType,
+        stwm.OTHER_BILL_COEFFICIENT as otherBillCoefficient
+        FROM
+        SYS_TOWER_ELECTRICITY ste
+        LEFT JOIN ZG_SPACE_COUNTY zsc ON ste.COUNTY_ID = zsc.INT_ID
+        LEFT JOIN ZG_SPACE_CITY zsy ON ste.CITY_ID = zsy.INT_ID
+        LEFT JOIN SYS_TOWER_ELE_MID_SUPPLIER stems ON stems.SYS_TOWER_ELE_ID = ste.ID
+        LEFT JOIN SYS_SUPPLIER ss ON stems.SYS_SUPPLIER=ss.ID
+        LEFT JOIN SYS_TOWER_ELE_MID_COSTCENTER stelmc ON stelmc.SYS_TOWER_ELE_ID=ste.ID
+        LEFT JOIN SYS_COST_CENTER scc ON scc.ID = stelmc.SYS_COST_CENTER_ID
+        LEFT JOIN SYS_TOWER_SITE_MID_CONTRACT stsmc ON stsmc.SYS_TOWER_SITE_ID=ste.SYS_TOWER_SIT_ID
+        LEFT JOIN SYS_TOWER_CONTRACT stc ON stc.ID = stsmc.SYS_TOWER_CONTRACT_ID
+        LEFT JOIN SYS_TOWER_ELE_MID_WATTHOUR stemw ON stemw.SYS_TOWER_ELE_ID=ste.ID
+        LEFT JOIN SYS_TOWER_WATTHOUR_METER stwm ON stemw.SYS_TOWER_WATTHOUR_ID = stwm.ID
+        LEFT JOIN SYS_USER su ON su.ID = ste.CREATE_PERSON
+        WHERE
+        1=1                    
+            <if test="status!=null and status.length>0">AND ste.STATUS IN
+                <foreach
+                        collection="status" index="index" item="st" open="("
+                         separator="," close=")">
+                    #{st}
+                </foreach>
+            </if>
+             <if test="userID!=null and userID!=''">
+                AND ste.CREATE_PERSON = #{userID}
+            </if>
+            </select> -->
+    
+     <select id="exportExcel" parameterType="java.util.Map" resultType="com.audit.modules.electricity.entity.TowerElectrictyExcelVO">
+     SELECT
+        ste.ID AS id,
+        ste.SERIAL_NUMBER AS serialNumber,
+        zsy.NAME AS areas,
+        zsc.NAME AS counties,
+        ste.SYS_TOWER_SIT_NO AS sysTowerSitNo,
+        ste.ZG_SPACE_SITE_NAME AS zgSpaceSiteName,
+        ste.ZG_TOWER_SITE_NAME AS zgTowerSiteName,
+        ste.SHARE_AMOUNT AS shareAmountSum,
+        ste.STATUS as status,
+        ste.CREATE_DATE AS createDate,
+        su.USER_NAME AS createPerson,
+        ss.NAME AS supplierName,
+        ss.ID AS supplierID,
+        ss.REGION_CODE as regionCode,
+        stc.IS_CLUD AS isClud,
+        scc.COST_CENTER_NAME AS costCenterName,
+        ste.SHARE_AMOUNT as totalAmount,
+        stwm.CODE as code,
+        stwm.PAYMENT_ACCOUNT_CODE as paymentAccountCode,
+        stwm.BELONG_START_TIME as belongStartTime,
+        stwm.BELONG_END_TIME as belongEndTime,
+        stwm.TOTAL_ELECIRIC as totalEleciric,
+        stwm.ACTUAL_AMOUNT as actualAmount,
+        stwm.SHARE_PROPORTION as shareProportion,
+        stwm.SHARE_AMOUNT as shareAmount,
+        stwm.WHETHER_METER as whetherMeter,
+        stwm.MAX_READING as maxReading,
+        stwm.RATE as rate,
+        stwm.START_AMMETER as startAmmeter,
+        stwm.END_MMETER as endAmmeter,
+        stwm.ELECTRIC_LOSS as electricLoss,
+        stwm.PAY_AMOUNT as payAmount,
+        stwm.PAY_INVOICE_TYPE as payInvoiceType,
+        stwm.PAY_BILL_COEFFICIENT as payBillCoefficient,
+        stwm.UNIT_PRICE as unitPrice,
+        stwm.OTHER_AMOUNT as otherAmount,
+        stwm.OTHER_INVOICE_TYPE as otherInvoiceType,
+        stwm.OTHER_BILL_COEFFICIENT as otherBillCoefficient
+        FROM
+        SYS_TOWER_ELECTRICITY ste
+        LEFT JOIN YDJH_AREA zsc ON ste.COUNTY_ID = zsc.ID
+        LEFT JOIN YDJH_AREA zsy ON ste.CITY_ID = zsy.ID
+        LEFT JOIN SYS_TOWER_ELE_MID_SUPPLIER stems ON stems.SYS_TOWER_ELE_ID = ste.ID
+        LEFT JOIN SYS_SUPPLIER ss ON stems.SYS_SUPPLIER=ss.ID
+        LEFT JOIN SYS_TOWER_ELE_MID_COSTCENTER stelmc ON stelmc.SYS_TOWER_ELE_ID=ste.ID
+        LEFT JOIN SYS_COST_CENTER scc ON scc.ID = stelmc.SYS_COST_CENTER_ID
+        LEFT JOIN SYS_TOWER_SITE_MID_CONTRACT stsmc ON stsmc.SYS_TOWER_SITE_ID=ste.SYS_TOWER_SIT_ID
+        LEFT JOIN SYS_TOWER_CONTRACT stc ON stc.ID = stsmc.SYS_TOWER_CONTRACT_ID
+        LEFT JOIN SYS_TOWER_ELE_MID_WATTHOUR stemw ON stemw.SYS_TOWER_ELE_ID=ste.ID
+        LEFT JOIN SYS_TOWER_WATTHOUR_METER stwm ON stemw.SYS_TOWER_WATTHOUR_ID = stwm.ID
+        LEFT JOIN SYS_USER su ON su.ID = ste.CREATE_PERSON
+        WHERE
+        1=1                    
+            <if test="status!=null and status.length>0">AND ste.STATUS IN
+                <foreach
+                        collection="status" index="index" item="st" open="("
+                         separator="," close=")">
+                    #{st}
+                </foreach>
+            </if>
+             <if test="userID!=null and userID!=''">
+                AND ste.CREATE_PERSON = #{userID}
+            </if>
+            </select>
+    
+    <select id="getMt" parameterType="java.lang.String" resultType="com.audit.modules.electricity.entity.TowerWatthourMeterVO">
+    	SELECT
+	stwm.BELONG_END_TIME as belongEndTime,
+	stwm.END_MMETER as endAmmeter
+FROM
+	SYS_TOWER_ELE_MID_WATTHOUR stemw
+LEFT JOIN SYS_TOWER_ELECTRICITY ste on STE.id=STEMW.SYS_TOWER_ELE_ID
+left join SYS_TOWER_WATTHOUR_METER stwm on stwm.id=stemw.SYS_TOWER_WATTHOUR_ID
+where STE.SYS_TOWER_SIT_ID=#{sid}
+    </select>
+    
+    
+      <!-- 查询原有数据库的稽核单数据 -->
+     <select id="getOldEle" parameterType="com.audit.modules.workflow.entity.TowerElectricityFlowVo" resultType="java.lang.String">
+         SELECT se.ID 
+						
+			FROM SYS_TOWER_ELECTRICITY se
+			  LEFT JOIN YDJH_AREA zsc ON se.COUNTY_ID = zsc.ID
+        		LEFT JOIN YDJH_AREA zsy ON se.CITY_ID = zsy.ID
+
+		WHERE
+            1=1
+			AND se.ISOLD = 1
+			<if test="curOpUserID != null and curOpUserID!=''">
+                AND se.CREATE_PERSON = #{curOpUserID}
+            </if>
+            
+			<if test="flowState != null and flowState!=''">
+                AND se.STATUS = #{flowState}
+            </if>
+            
+			<if test="qSerialNumber != null and qSerialNumber!=''">
+                AND se.SERIAL_NUMBER LIKE '%'||#{qSerialNumber}||'%'
+			</if>
+
+			<if test="qCity != null and qCity !=''">
+                AND zsy.NAME = #{qCity}
+            </if>
+            
+			<if test="qCounty != null and qCounty !=''">
+                AND zsc.NAME = #{qCounty}
+            </if>
+
+			<if test="qCounterNumber != null and qCounterNumber !=''">
+                AND se.SYS_TOWER_SIT_NO = #{qCounterNumber}
+            </if>
+            
+			<if test="qCounterName != null and qCounterName !=''">
+                AND se.ZG_SPACE_SITE_NAME = #{qCounterName}
+            </if>
+            
+           	<!-- <if test="qOverState != null and qOverState = 1">
+               AND se.OVERPROOFREASONS IS NOT NULL
+           	</if>
+		 	
+		 	<if test="qOverState != null and qOverState = 0">
+               AND (se.OVERPROOFREASONS IS NULL or se.OVERPROOFREASONS = '')
+           	</if> -->
+            	
+		 <if test="qStartTime!=null">
+				AND  <![CDATA[se.CREATE_DATE >= #{qStartTime,jdbcType=TIMESTAMP}]]>
+			</if>
+			<if test="qEndTime!=null">
+				AND  <![CDATA[se.CREATE_DATE <= #{qEndTime,jdbcType=TIMESTAMP}]]>
+			</if>
+
+			
+            
+			ORDER BY se.CREATE_DATE DESC
+        
+    </select>
+    
+</mapper>

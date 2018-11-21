@@ -1,0 +1,130 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>layer-更懂你的web弹窗解决方案</title>
+  <script src="http://lib.sinaapp.com/js/jquery/1.9.1/jquery-1.9.1.min.js"></script>
+  <script src="../../bower_components/layer/layer.js"></script>
+</head>
+<body>
+<div class="box">
+ 
+</div>
+<script>
+    
+    function myAlert(text,fn){
+            var index=  layer.alert(text,function(){
+                if(typeof fn == 'function'){
+                    fn();
+                }
+                layer.close(index);
+            });
+    };
+
+//
+//    myAlert('asdad',function () {
+//        alert('asdsaas');
+//    })
+
+
+
+    function error(text){
+      layer.alert(text, {
+        icon:2,
+        time:2000,
+        btn:[]
+      });
+    }
+
+    function success(text,fn){
+      layer.alert(text, {
+        icon:1,
+        time:2000,
+        btn:[],
+      });
+
+      if(typeof fn == 'function'){
+        setTimeout(function(){
+          fn();
+        },2000); 
+      }
+    }
+
+
+//error();
+//  success('text',function(){
+//    msg('撒大苏打撒');
+//  });
+
+
+
+    function bigMsg(){
+
+    }
+
+
+
+    // layer.alert('内容', {
+    //   icon: 1
+    // })
+
+
+
+    function myConfirm(text,yesFn,cancelFn){
+
+     var index= layer.confirm(text, {
+        btn: ['确定','取消'] //按钮
+      }, function(){
+          
+       if(typeof yesFn == 'function'){
+          yesFn();
+          layer.close(index);
+       }
+      }, function(){
+        if(typeof cancelFn == 'function'){
+          cancelFn();
+          layer.close(index);
+        }
+      });
+    }
+
+
+    // myAlert('testalert',function(){
+    //     alert('call back ');
+    // })
+
+    // myConfirm('myConfirm',function(){
+    //   console.log('你点击了确定');
+    // },function(){
+
+    //   console.log('点击了取消')
+    // })
+
+
+    // myConfirm('myConfirm',function(){
+    //   console.log('你点击了确定2');
+    // })
+
+
+
+    function msg(text,fn) {
+      
+      layer.msg(text,fn);
+    }
+
+
+
+    // msg('text');
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>

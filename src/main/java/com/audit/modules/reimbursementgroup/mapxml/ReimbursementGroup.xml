@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.reimbursementgroup.dao.ReimbursementGroupDao">
+
+	<select id="queryList" parameterType="com.audit.modules.common.mybatis.PageUtil" resultType="com.audit.modules.reimbursementgroup.entity.ReimbursementVO">
+		SELECT ID,
+				NAME,
+				TO_CHAR(CREATE_TIME ,'yyyy-MM-dd') AS createTimeStr,
+				TO_CHAR(UPDATE_TIME ,'yyyy-MM-dd') AS updateTimeStr
+		FROM SYS_REIMBURSEMENT_GROUP
+		WHERE 1=1
+		<if test="obj.name != null and obj.name!=''">
+			AND NAME LIKE '%'||#{obj.name}||'%'
+		</if>
+	</select>
+
+	<insert id="createReimbursement" parameterType="com.audit.modules.reimbursementgroup.entity.ReimbursementVO">
+		INSERT INTO
+				SYS_REIMBURSEMENT_GROUP(ID,NAME,CREATE_TIME)
+		VALUES (#{id,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP})
+	</insert>
+
+	<update id="updateReimbursement" parameterType="com.audit.modules.reimbursementgroup.entity.ReimbursementVO">
+		UPDATE SYS_REIMBURSEMENT_GROUP
+		SET NAME=#{name,jdbcType=VARCHAR},UPDATE_TIME=#{updateTime,jdbcType=TIMESTAMP}
+		WHERE ID=#{id}
+	</update>
+
+	<select id="findElectricityByID" parameterType="java.lang.String" resultType="java.lang.Integer">
+		  SELECT COUNT(1) FROM SYS_ELECTRICITY WHERE SYS_RG_ID =#{id}
+	</select>
+
+	<delete id="deleteById" parameterType="java.lang.String">
+		DELETE FROM SYS_REIMBURSEMENT_GROUP WHERE ID=#{id}
+	</delete>
+
+	<select id="findOneById" parameterType="java.lang.String" resultType="com.audit.modules.reimbursementgroup.entity.ReimbursementVO">
+		SELECT
+			ID,
+			NAME,
+			TO_CHAR(CREATE_TIME ,'yyyy-MM-dd') AS createTimeStr,
+			TO_CHAR(UPDATE_TIME ,'yyyy-MM-dd') AS updateTimeStr
+		FROM SYS_REIMBURSEMENT_GROUP
+		WHERE ID = #{id}
+	</select>
+
+</mapper>

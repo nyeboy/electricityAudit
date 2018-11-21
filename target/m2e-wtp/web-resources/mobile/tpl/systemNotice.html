@@ -1,0 +1,121 @@
+ <!--系统公告 -->
+<div class="system-content" id="systemContent" style="overflow: hidden;">
+    <div class="business-box" id="businessBox">
+        <div class="content-rout" id="contentRout"><span>系统管理</span>&gt;<span class="now-rout">系统公告</span></div>
+        <div class="content-box" id="contentBox">
+            <!-- title -->
+            <div class="search-box">
+                <div>
+                    <input ng-model="startTime" ng-laydate id="id1"  format="YYYY-MM-DD" ng-model="startDate" type="text" placeholder="开始时间" class="process-input ng-pristine ng-valid ">
+
+                    <!--  <input ng-laydate
+                       id="id1"
+                       ng-model="createDateStr"
+                       format="YYYY-MM-DD"
+                       type="text" placeholder="时间" class="process-input con-parts" name=""/> -->
+
+                    <input ng-model="endTime" ng-laydate id="id2" format="YYYY-MM-DD" ng-model="endDate" type="text" placeholder="结束时间" class="process-input ng-pristine ng-valid ">
+                </div>
+                <button ng-click="getData()" class="btn btn-primary" type="button">搜索</button>
+            </div>
+            <!-- table-content -->
+            <div class="table-content">
+                <!-- table-title -->
+                <div class="table-title">
+                    <button ng-click="deleteSelected()" class="btn btn-blue">批量删除</button>
+                    <button ng-click="goAddPage()" class="btn btn-blue">添加公告</button>
+                </div>
+                <!-- table -->
+                <div class="data-table">
+                   <!--  <table class="table-result" id="tableResult">
+                        <colgroup>
+                            <col style="width:5%" />
+                            <col style="width:25%" />
+                            <col style="width:30%" />
+                            <col style="width:10%" />
+                            <col style="width:10%" />
+                            <col style="width:20%" />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th><input  ng-click="checkAll('#checkAll','#List')" id="checkAll"  type="checkbox" ></th>
+                                <th>用户名</th>
+                                <th>标题</th>
+                                <th>开始时间</th>
+                                <th>结束时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                    </table> -->
+                    <div class="table-details">
+                        <div>
+                            <table>
+                               <!--  <colgroup>
+                                    <col style="width:5%" />
+                                    <col style="width:25%" />
+                                    <col style="width:30%" />
+                                    <col style="width:10%" />
+                                    <col style="width:10%" />
+                                    <col style="width:20%" />
+                                </colgroup> -->
+                                <tbody class="query-date" id="noticeList">
+                                <tr>
+                                <th><input  ng-click="checkAll('#checkAll','#noticeList')" id="checkAll"  type="checkbox" ></th>
+                                <th>用户名</th>
+                                <th>标题</th>
+                                <th>开始时间</th>
+                                <th>结束时间</th>
+                                <th>操作</th>
+                            </tr>
+                                    <tr ng-repeat="item in list track by $index">
+                                        <td><input type="checkbox" value="{{item.noticId}}"></td>
+                                        <td>{{item.userName}}</td>
+                                        <td>{{item.title}}</td>
+                                        <td>{{item.startDateStr}}</td>
+                                        <td>{{item.endDateStr}}</td>
+                                        <td>
+                                            <a ng-click="showDetail(item)" class="check-detail">查看</a>
+                                            <a ng-click="goUpdatePage(item)" class="edit-process">修改</a>
+                                            <a ng-click="deleteSelected(item.noticId)" class="delete">删除</a>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                       
+                    </div>
+					
+                </div>
+                 <div class="page-foot">
+                            <im-pagination  conf="pageInfo" params="params" get-data="getData()"></im-pagination>
+                        </div>  
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!--<script type="text/ng-template" id="showDetailDialog">-->
+
+    <!--<h4 style="text-align: center">公告详情</h4>-->
+
+    <!--<div class="content-box">-->
+        <!--<div class="content-box">-->
+            <!--<div class="add-user">-->
+                <!--<form name="form">-->
+                    <!--<ul class="user-list">-->
+                        <!--<li><span>公告标题:</span><input ng-model="notice.title" name="title" type="text" readonly></li>-->
+                        <!--<li><span>开始时间:</span><input  ng-model="notice.startDateStr" name="startDate" type="text"readonly></li>-->
+                        <!--<li><span class="end-time">结束时间:</span><input  ng-model="notice.endDateStr" name="endDate" type="text" readonly></li>-->
+                        <!--<li><span>公告内容:</span><textarea ng-model="notice.message" name="message" id="" cols="80" rows="8" readonly style="width: 380px;"></textarea></li>-->
+                    <!--</ul>-->
+                    <!--<div class="submit-btn" style="text-align: center">-->
+                        <!--<input ng-click="closeDialog()" type="button" value="確定" class="save">-->
+                    <!--</div>-->
+                <!--</form>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</script>

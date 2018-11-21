@@ -1,0 +1,77 @@
+<!-- 智能电表标杆 -->
+<div class="system-content" id="systemContent">
+    <div class="business-box" id="businessBox">
+        <div class="content-rout" id="contentRout">
+            <span>基础数据</span>&gt;<span>标杆管理</span>&gt;<span class="now-rout">智能电表标杆</span>
+            <div class="right-router">报账点 | <span>共<i class="number">{{pageInfo.totalCount}}</i>个</span></div>
+        </div>
+        <div class="content-box" id="contentBox">
+            <div class="search-box">
+                <div>
+                    <select name="" id="" class="title-select"
+                            ng-model="cityId"
+                            ng-options="city.key as city.value for city in citys"
+                            ng-change="queryCountyList(cityId)">
+                    <option value="">全省</option>
+                    </select>
+
+                    <select class="title-select"
+                            ng-model="countyId"
+                            ng-options="county.key as county.value for county in countys">
+                    <option value="">全市</option>
+                    </select>
+                    <input ng-model="siteName" type="text" placeholder="报账点名称" class="process-input" style="width: 48.5%;">
+                </div>
+                <button ng-click="getData(true)" class="btn btn-primary" type="button">搜索</button>
+            </div>
+            <!-- table-content -->
+            <div class="table-content">
+                <!-- table -->
+                <div class="data-table">
+
+                    <div class="table-details">
+                        <div>
+                            <table>
+
+                                <tbody class="query-date">
+                                <tr>
+                               <th>序号</th>
+                               <th>地市</th>
+                               <th>区县</th>
+                               <th>报账点名称</th>
+                               <th>机房或资源点名称</th>
+                               <th>智能电表读数</th>
+                               <th>动环智能电表测点监控状态</th>
+                               <th>电量标杆值（度）</th>
+                               <th>更新状态</th>
+                               <th>更新时间</th>
+                               <!-- <th>操作</th> -->
+                            </tr>
+                                     <tr ng-repeat="item in list track by $index">
+                                        <td>{{ ((params.pageNo-1)*params.pageSize) +1*($index+1)}}</td>
+                                        <td>{{item.cityName}}</td>
+                                        <td>{{item.countyName}}</td>
+                                        <td>{{item.accountName}}</td>
+                                        <td>{{item.resourceName}}</td>
+                                        <td>{{item.meterLatestNum}}</td>
+                                        <td>{{item.monitorStatus==0?'正常':item.monitorStatus==1?'异常':''}}</td>
+                                        <td>{{item.standardNum==null?'':item.standardNum}}</td>
+                                        <td>{{item.updateStatus}}</td>
+                                        <td class="updata-time">{{item.updateTime | date:"yyyy-MM-dd HH:mm:ss"}}</td>
+                                        <!-- <td class="through">
+                                            <img src="./assets/img/search_icon.png"><a ng-click="showDetail(item)" href="javascript:void(0)" class="browse">查看</a>
+                                        </td> -->
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="page-foot">
+                                <im-pagination conf="pageInfo" params="params" get-data="getData()"></im-pagination>
+                            </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

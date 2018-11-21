@@ -1,0 +1,16 @@
+<!-- 电费提交单查看详情弹框 -->
+<div class="ledge-detail add-details">
+    <div class="ledge-title">意见框</div>
+    <div class="ledge-table">
+    <textarea id="talks" cols="138" rows="30" ng-model="talks" ></textarea>
+    </div>
+    <div class="reimbur-foot ledge-foot">
+       <!--  <button ng-if="!isZWfrinc" ng-click="revocationProcess(details.id)" class="reimbur-cancel btn">取消</button> -->
+        <input type="hidden" ng-model="id">
+        <button   ng-click="talk(talks,id)" class="reimbur-save btn">确定</button>
+        <button  ng-click="closeDialog('SubmitDialog')" class="reimbur-save btn">关闭</button>
+    </div>
+</div>
+<style type="text/css">
+.invoinc-list .query-date td{ width: auto; }
+</style>

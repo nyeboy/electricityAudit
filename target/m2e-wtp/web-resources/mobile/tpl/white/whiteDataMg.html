@@ -1,0 +1,127 @@
+﻿<!-- 白名单管理页面 -->
+<!-- 
+ <script language="javascript" type="text/javascript">
+
+        $(document).ready(function () {
+           
+            $("#table1").freezeHeader({ 'height': '600px' });
+        
+        })
+    </script> -->
+	<style>
+	.search-box .title-select {
+			width: 19%;
+
+		}
+
+	.search-box .process-input {
+			width: 19%;
+		}
+	</style>
+<div class="system-content" id="systemContent">
+    <div class="business-box" id="businessBox">
+        <div class="content-rout" id="contentRout">
+            <span>基础数据</span>&gt;<span>基础数据维护</span>&gt;<span class="now-rout">白名单管理</span>
+        </div>
+        <div class="content-box trariffc-table" id="contentBox">
+            <div class="search-box">
+                <div>
+                    <select name="" id="" class="title-select"
+							ng-if="userCity==null"
+                            ng-model="$parent.cityId"
+                            ng-options="city.key as city.value for city in citys"
+                            ng-change="queryCountyList(cityId)">
+                    <option  value="">全省</option>
+                    </select>
+                    <input
+                           ng-if="userCity!=null"
+                           name="" class="title-select"
+                           disabled="disabled"
+                           ng-model="userCity"
+                           type="text">	
+                    <select class="title-select"
+							ng-if="userCounty==null"
+                            ng-model="$parent.countyId"
+                            ng-options="county.key as county.value for county in countys">
+                    <option value="" >全市</option>
+                    </select>
+					<input
+                           ng-if="userCounty!=null"
+                           name="" class="title-select"
+                           disabled="disabled"
+                           ng-model="userCounty"
+                           type="text">	
+                    <input ng-model="siteName" type="text" placeholder="站点名" class="process-input con-parts" name="siteName">
+                    <input ng-model="szydNo" type="text" placeholder="三重一大会议编号" class="process-input con-parts" name="szydNo">
+                    <button  ng-click="getData(true)" class="btn btn-primary" type="button">查询</button>
+                    <button ng-click="daochu()" class="btn btn-primary" type="button">导出</button>
+                    <button ng-if="list!=null && list[0].userRoleLevel==3" ng-click="whiteSet()" class="btn btn-primary" type="button">配置</button>
+                </div>
+                
+            </div>
+            <!-- table-content -->
+            <div class="table-content">
+                <!-- table -->
+                <div class="data-table">
+
+                    <div class="table-details">
+                        <div>
+                            <table >
+                          <!--   <thead>
+                                 <tr>
+                               <th>序号</th>
+                               <th>合同编号</th>
+                               <th>合同名称</th>
+                               <th>合同生效日期</th>
+                               <th>合同终止日期</th>
+                               <th>是否包干</th>
+                               <th>包干价</th>
+                               <th>缴费周期</th>
+                               <th>电表户号</th>
+                               <th>单价</th>
+                               <th>操作</th> -->
+                            </tr></thead>
+                                <tbody class="query-date">
+                                 <tr>
+                               <th>序号</th>
+                               <th>地市</th>
+                               <th>区县</th>
+                               <th>资管站点名称</th>
+                               <th>状态</th>
+                               <th>三重一大会议编号</th>
+                               <th>有效截至时间</th>
+                               <th>录入员</th>
+                               <th>白名单场景</th>
+                               <th>操作</th> 
+                            </tr>
+                            <tr ng-repeat="item in list track by $index">
+                                        <td>{{$index+1}}</td>
+                                        <td>{{item.cityName}}</td>
+                                        <td>{{item.zhLabel}}</td>
+                                        <td>{{item.ziguanName}}</td>
+                                        <td>{{item.submitStatus|submitStatusType}}</td>
+                                        <td>{{item.szydNo}}</td>
+                                        <td>{{item.endTime}}</td>
+                                        <td>{{item.cperson}}</td>
+                                        <td>{{item.cj|whiteType}}</td>
+                                        <td >
+                                        	<a ng-click="showWhiteSubmitDetai(item)" class="check-detail" >详情</a>
+                                        	<a ng-if="(item.submitStatus==4 && item.userRoleLevel==0)||(item.submitStatus==6 && item.userRoleLevel==0)" ng-click="delWhiteSubmitWhiteMg(item)" class="edit-process">删除</a>
+                                        </td> 
+                              </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            
+                        </div>
+						
+                    </div>
+                    <div class="page-foot">
+                                <im-pagination  conf="pageInfo" params="params" get-data="getData()"></im-pagination>
+                            </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

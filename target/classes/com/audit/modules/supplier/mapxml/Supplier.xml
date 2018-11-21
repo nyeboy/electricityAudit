@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.supplier.dao.SupplierDao">
+
+    <select id="findBySiteID" resultType="com.audit.modules.supplier.entity.SupplierVO" parameterType="java.util.Map">
+        SELECT
+            su.ID as id,
+            su.CODE as code,
+            su.NAME as name,
+            su.CODE as CODE,
+            su.REGION_CODE as regionCode,
+            su.ORGANIZATION_CODE as organizationCode
+        FROM SYS_SITE_MID_SUPPLIER ssms
+        LEFT JOIN SYS_SUPPLIER su on ssms.SUPPLIER_ID=su.ID
+        where 1=1
+        <if test="siteId!=null and siteId!=''">
+            AND ssms.ACCOUNT_SITE_ID = #{siteId}
+        </if> 
+    </select>
+    
+    
+    <!-- 根据供应商表id查找code -->
+    <select id="getCodeById" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select CODE from SYS_SUPPLIER where id=#{supplyId} and <![CDATA[rownum<=1]]>
+    </select>
+
+    <!-- 根据报账点ID获取稽核单数据 -->
+    <!-- <select id="findContractBySiteID" resultType="com.audit.modules.electricity.entity.ElectrictyVO">
+        SELECT
+            se.ID AS ID,
+            se.SERIAL_NUMBER AS serialNumber,
+            zsy.CITY_NAME AS AREAS,
+            zsc.ZH_LABEL AS COUNTIES,
+            sas.ACCOUNT_NAME AS accountName,
+            sas.ACCOUNT_ALIAS AS accountAlias,
+            sc.IS_CLUD AS isClud,
+            sas.PRODUCT_NATURE AS productNature,
+            ss.NAME AS supplierName,
+            ss.ID AS supplierID,
+            ss.CODE AS supplierCode,
+            ss.ORGANIZATION_CODE AS organizationCode,
+            ss.REGION_CODE as regionCode,
+            se.COST_CENTER_ID as costCenterID,
+            scc.COST_CENTER_NAME AS costCenter,
+            se.TOWER_SITE_NUMBER AS towerSiteNumber,
+            se.SHARE_ELECTRICITY AS shareElectricity,          
+            semi.TAX_AMOUNT AS taxAmount,           
+            semi.ELECTRICITY_AMOUNT as electricityAmount,           
+            se.OTHER_COST AS otherCost,        
+            se.TOTAL_AMOUNT AS totalAmount,
+            se.EXPENSE_TOTAL_AMOUNT AS expenseTotalAmount,
+            se.PAYMENT_AMOUNT AS paymentAmount,
+            se.CREATE_DATE AS createDate,
+            se.STATUS,
+            sc.PRICE AS unitPrice,
+            sc.CLUD_PRICE AS cludPrice,
+            sas.ID AS sysAccountSiteId,
+            se.REMARK AS remark,
+            se.OVERPROOFREASONS AS overproofReasons,
+            srg.NAME AS sysRgName,
+            srg.ID AS sysRgID,
+            se.DEPARTMENT_NAME as departmentName,
+            sc.ID as contractID            
+        FROM
+                SYS_ELECTRICITY se
+            LEFT JOIN SYS_ELECTRICITY_MID_INVOICE semi ON se. ID = semi.SYS_ELECTRICITY_ID
+            LEFT JOIN SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas.ID
+            LEFT JOIN ZG_SPACE_COUNTY zsc ON sas.COUNTY_ID = zsc.INT_ID
+            LEFT JOIN ZG_SPACE_CITY zsy ON sas.CITY_ID = zsy.INT_ID
+            LEFT JOIN SYS_CONTRACT sc ON se.CONTRACT_ID = sc.ID
+            LEFT JOIN SYS_SUPPLIER ss ON se.SYS_SUPPLIER_ID = ss.ID
+            LEFT JOIN SYS_COST_CENTER scc ON se.COST_CENTER_ID = scc.ID
+            LEFT JOIN SYS_REIMBURSEMENT_GROUP srg ON se.SYS_RG_ID= srg.ID
+        WHERE se.SYS_ACCOUNT_SITE_ID=#{siteId} and ROWNUM=1
+        ORDER BY scc.SORT_NO asc
+    </select> -->
+
+<select id="findContractBySiteID" resultType="com.audit.modules.electricity.entity.ElectrictyVO">
+        select * from(
+        SELECT
+            se.ID AS ID,
+            se.SERIAL_NUMBER AS serialNumber,
+            zsy.NAME AS AREAS,
+            zsc.NAME AS COUNTIES,
+            sas.ACCOUNT_NAME AS accountName,
+            sas.ACCOUNT_ALIAS AS accountAlias,
+            sc.IS_CLUD AS isClud,
+            sas.PRODUCT_NATURE AS productNature,
+            ss.NAME AS supplierName,
+            ss.ID AS supplierID,
+            ss.CODE AS supplierCode,
+            ss.ORGANIZATION_CODE AS organizationCode,
+            ss.REGION_CODE as regionCode,
+            se.COST_CENTER_ID as costCenterID,
+            scc.COST_CENTER_NAME AS costCenter,
+            se.TOWER_SITE_NUMBER AS towerSiteNumber,
+            se.SHARE_ELECTRICITY AS shareElectricity,                    
+            se.OTHER_COST AS otherCost,        
+            se.TOTAL_AMOUNT AS totalAmount,
+            se.EXPENSE_TOTAL_AMOUNT AS expenseTotalAmount,
+            se.PAYMENT_AMOUNT AS paymentAmount,
+            se.CREATE_DATE AS createDate,
+            se.STATUS,
+            sc.PRICE AS unitPrice,
+            sc.CLUD_PRICE AS cludPrice,
+            sas.ID AS sysAccountSiteId,
+            se.REMARK AS remark,
+            se.OVERPROOFREASONS AS overproofReasons,
+            srg.NAME AS sysRgName,
+            srg.ID AS sysRgID,
+            se.DEPARTMENT_NAME as departmentName,
+            sc.id as contractID            
+        FROM
+                SYS_ELECTRICITY se
+            LEFT JOIN SYS_ACCOUNT_SITE sas ON se.SYS_ACCOUNT_SITE_ID = sas.ID
+            LEFT JOIN YDJH_AREA zsc ON sas.COUNTY_ID = zsc.ID
+            LEFT JOIN YDJH_AREA zsy ON sas.CITY_ID = zsy.ID
+            LEFT JOIN SYS_CONTRACT sc ON se.CONTRACT_ID = sc.CONTRACTID
+            LEFT JOIN SYS_SUPPLIER ss ON se.SYS_SUPPLIER_ID = ss.ID
+            LEFT JOIN SYS_COST_CENTER scc ON se.COST_CENTER_ID = scc.ID
+            LEFT JOIN SYS_REIMBURSEMENT_GROUP srg ON se.SYS_RG_ID= srg.ID
+        WHERE se.SYS_ACCOUNT_SITE_ID=#{siteId} and (sc.ISWHITE=1 or sc.ISWHITE IS NULL)
+        ORDER BY se.CREATE_DATE DESC)where ROWNUM=1
+    </select>
+
+    <!-- <select id="queryContract" resultType="java.lang.String">
+        SELECT
+             sc.CONTRACTID          
+        FROM
+                SYS_ACCOUNT_SITE sas
+                 LEFT JOIN SYS_CONTRACT sc ON sc.SITE_NAME = sas.SITE_NAME
+        WHERE sas.ID=#{siteId}
+    </select> -->
+    
+    
+    <select id="queryContract" resultType="java.lang.String">
+        SELECT
+             sc.ID         
+        FROM
+                SYS_ACCOUNT_SITE sas
+                 LEFT JOIN SYS_CONTRACT sc ON sc.SITE_NAME = sas.SITE_NAME
+        WHERE sas.ID=#{siteId}
+    </select>
+    
+
+    <select id="findAll" resultType="com.audit.modules.supplier.entity.SupplierVO">
+        SELECT
+            su.ID as id,
+            CODE,
+            ORGANIZATION_CODE as organizationCode,
+            REGION_CODE as regionCode
+        FROM SYS_SUPPLIER
+    </select>
+    
+    
+    <!-- 根据供应商编码获取供应名称 -->
+    <select id="queryNameByCode" resultType="map" parameterType="String">
+        SELECT
+            CODE,
+            NAME
+        FROM
+            SYS_SUPPLIER 
+        WHERE 1=1
+        <if test="code != null and code != ''">AND CODE = #{code}</if>
+    </select>
+
+
+    <select id="findLikeByName" resultType="com.audit.modules.supplier.entity.SupplierVO" parameterType="com.audit.modules.common.mybatis.PageUtil">
+        SELECT
+            ss.ID AS ID,
+            ss.CODE,
+            ss.NAME,
+            ss.OU_NAME as ouName,
+            ss.BANK_NAME as bankName,
+            ss.BANK_NUM as bankNum,
+            SS.ORGANIZATION_CODE as organizationCode,
+            SS.VENDOR_CODE as vendorCode,
+            SS.ADDRESS as address,
+            SS.BANK_BRANCH_NAME as bankBranchName
+        FROM
+        SYS_SUPPLIER ss
+        <!-- INNER JOIN SYS_COMPANY_MID_SUPPLIER scms ON SCMS.MIS_ORGANIZATION_ID = ss.ORGANIZATION_CODE
+        INNER JOIN OA_DEPARTMENT_DATA odd ON odd.COMPANY_CODE = scms.OA_COMPANY_CODE -->
+        where 1=1
+        <if test="obj.name != null and obj.name != ''">
+            AND ss.NAME LIKE '%'||#{obj.name}||'%'
+        </if>
+        <choose>
+            <when test="obj.areaCode != null and obj.areaCode!=''">
+                        and odd.ID = #{obj.areaCode}        
+            </when>
+            <!-- <otherwise>
+                and odd.ID = '-1'
+            </otherwise>  -->
+        </choose> 
+    </select>
+
+</mapper>

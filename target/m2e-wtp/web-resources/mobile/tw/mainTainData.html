@@ -1,0 +1,75 @@
+<!-- 塔维维护数据修改管理 -->
+<div class="system-content" style="overflow: hidden">
+    <div class="business-box" id="businessBox">
+        <div class="content-rout" id="contentRout">
+            <span>基础数据</span>&gt;<span>基础数据维护</span>&gt;<span class="now-rout">维护数据修改管理</span>
+        </div>
+        <div class="content-box maintain" id="contentBox">
+            <div class="search-box">
+                <div>
+                    <select name="" id="" class="title-select"
+                            ng-model="cityId"
+                            ng-options="city.key as city.value for city in citys"
+                            ng-change="queryCountyList(cityId)">
+                    <option value="">全省</option>
+                    </select>
+
+                    <select class="title-select"
+                            ng-model="countyId"
+                            ng-options="county.key as county.value for county in countys">
+                    <option value="">全市</option>
+                    </select>
+                    <input ng-model="deviceModel" type="text" placeholder="申请人/变更类型" class="process-input con-parts" name="">
+                </div>
+                <button ng-click = "getData()" class="btn btn-primary" type="button">搜索</button>
+            </div>
+            <div class="table-content">
+                <!-- table -->
+                <div class="data-table">
+
+                    <div class="table-details">
+                        <div>
+                            <table>
+
+                                <tbody class="query-date">
+                                 <tr>
+                               <th>序号</th>
+                               <th>地市</th>
+                               <th>区县</th>
+                               <th>申请人</th>
+                               <th>变更类型</th>
+                               <th>变更时间</th>
+                               <th>变更状态</th>
+                               <th>备注</th>
+                               <th>操作</th>
+                            </tr>
+                                    <tr ng-repeat="item in list track by $index">
+                                        <td>{{$index+1}}</td>
+                                        <td>{{item.aataModifyApply.cityName}}</td>
+                                        <td>{{item.aataModifyApply.countyName}}</td>
+                                        <td>{{item.aataModifyApply.applyUserName}}</td>
+                                        <td>{{item.aataModifyApply.changeType}}</td>
+                                        <td>{{item.aataModifyApply.changeTime | date:"yyyy-MM-dd HH:mm:ss"}}</td>
+                                        <td>{{item.aataModifyApply.changeStatus | changeStatusFilter}}</td>
+                                        <td>{{item.aataModifyApply.remarks}}</td>
+                                        <td>
+                                            <a ng-click="showDetail(item)" class="check-detail">查看</a>
+                                            <a ng-click="bachSubmit(item.instanceId, 1)" class="approve-icon">同意</a>
+                                            <a ng-click="bachSubmit(item.instanceId, -1)" class="reject-icon">驳回</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
+                    <div class="page-foot">
+                        <im-pagination conf="pageInfo" params="params" get-data="getData()"></im-pagination>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

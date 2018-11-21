@@ -1,0 +1,27 @@
+ <div><button ng-click="downExcelGo()" class="btn btn-primary" type="button">导出</button></div>
+<div id="exportable11">
+	<table border="1px solid black">
+		<tr>
+			<td>城市名</td>
+			<td>区县</td>
+			<td>站点名</td>
+			<td>三重一大编号</td>
+			<td>白名单场景</td>
+			<td>创建人</td>
+			<td>合同名</td>
+			<td>供应商</td>
+			<td>有效期</td>
+		</tr>
+		<tr ng-repeat="item in excel" >
+			<td>{{item.cityName}}</td>
+			<td>{{item.zhLabel}}</td>
+			<td>{{item.ziguanName}}</td>
+			<td>{{item.szydNo}}</td>
+			<td>{{item.cj}}</td>
+			<td>{{item.cperson}}</td>
+			<td>{{item.contractName}}</td>
+			<td>{{item.supplyName}}</td>
+			<td>{{item.contractEndTime}}</td>
+		</tr>
+	</table>
+</div>

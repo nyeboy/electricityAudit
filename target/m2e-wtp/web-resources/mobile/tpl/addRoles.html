@@ -1,0 +1,88 @@
+<!--用户管理《添加角色》  -->
+<style type="text/css">
+.role-check li {
+	width: 140px;
+	margin-right: 0px;
+}
+</style>
+<style type="text/css">
+.role span:before {
+	content: " " !important;
+}
+</style>
+<div class="system-content">
+	<div class="submit-btn" style="text-align: left; padding-left: 15px;">
+		<button ng-click="addOrUpdate()" class="save">确认</button>
+		<button ng-click="backRole()" class="cancel">取消</button>
+	</div>
+	<div class="business-box" id="businessBox">
+		<div id="contentRout" class="content-rout">
+			<span>系统管理</span>&gt;<span>用户/角色</span>&gt;<span>用户管理</span>&gt;<span
+				class="now-route">添加角色</span>
+		</div>
+		<div class="content-box" id="contentBox">
+			<div class="add-user">
+				<form action="" name="myform">
+					<ul class="user-list">
+						<li><span>角色名称:</span><input ng-readonly="status== 2"
+							ng-model="role.roleName" name="roleName" type="text"></li>
+						<li><span>角色描述:</span><input ng-readonly="status== 2"
+							ng-model="role.description" name="" type="text"></li>
+						<li><span>是否內置:</span><label><input
+								ng-disabled="status== 2" ng-model="role.isSystem"
+								name="isSystem" type="radio" value="1"> 是</label> <label><input
+								ng-disabled="status== 2" ng-model="role.isSystem"
+								name="isSystem" type="radio" value="0"> 否</label></li>
+						<li><span>角色等级:</span><select ng-disabled="status== 2"
+							ng-model="role.roleLevel">
+								<option value="0">省级</option>
+								<option value="5">市领导</option>
+								<option value="1">市级</option>
+								<option value="3">区县级</option>
+								<option value="4">报销发起人</option>
+								<option value="2">经办人</option>
+						</select></li>
+						<div
+							style="line-height: 30px; border-bottom: 1px solid #cccccc; font-size: 16px; font-weight: bolder; padding-bottom: 8px; text-indent: 13px; margin-bottom: 15px;">自维电费管理</div>
+						<div id="roleTapContent1">
+							<li class="role "
+								ng-repeat="item in resources.self track by $index"><span
+								class="role-span" style="content:"">{{item.resourceName}}:</span>
+								<ul class="role-check" id="userRoles">
+									<li style="margin-bottom: 10px;"
+										ng-repeat="item2 in item.child"
+										style="margin-right: 0px; width: 140px;"><label><input
+											ng-disabled="status== 2" class="role-checkbox"
+											ng-checked="checkMe(item2.id);" value="{{item2.id}}"
+											type="checkbox">{{item2.resourceName}}</label></li>
+								</ul></li>
+						</div>
+
+						<div
+							style="line-height: 30px; border-bottom: 1px solid #cccccc; font-size: 16px; font-weight: bolder; padding-bottom: 8px; text-indent: 13px; margin-bottom: 15px;">塔维电费管理</div>
+						<div id="roleTapContent2">
+							<li class="role "
+								ng-repeat="item in resources.tower track by $index"><span
+								class="role-span">{{item.resourceName}}:</span>
+								<ul class="role-check" id="userRoles">
+									<li style="margin-bottom: 10px;"
+										ng-repeat="item2 in item.child"
+										style="margin-right: 0px; width: 140px;"><label><input
+											ng-disabled="status== 2" class="role-checkbox"
+											ng-checked="checkMe(item2.id)" value="{{item2.id}}"
+											type="checkbox">{{item2.resourceName}}</label></li>
+
+
+								</ul></li>
+
+
+						</div>
+			</div>
+			</ul>
+			</form>
+
+		</div>
+
+
+	</div>
+</div>

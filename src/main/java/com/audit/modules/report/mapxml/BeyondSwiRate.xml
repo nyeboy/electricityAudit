@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.report.dao.BeyondSwiRateDao">
+  <resultMap id="BaseResultMap" type="com.audit.modules.report.entity.BeyondSwiRate">
+    <id column="ID" jdbcType="DECIMAL" property="id" />
+    <result column="CITY_ID" jdbcType="VARCHAR" property="cityId" />
+    <result column="COUNTY_ID" jdbcType="VARCHAR" property="countyId" />
+    <result column="REGION_NAME" jdbcType="VARCHAR" property="regionName" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="SUPPER_COUNT" jdbcType="VARCHAR" property="supperCount" />
+    <result column="TYPE_CODE" jdbcType="VARCHAR" property="typeCode" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, CITY_ID, COUNTY_ID, REGION_NAME, CREATE_TIME, SUPPER_COUNT, TYPE_CODE
+  </sql>
+   <select id="findByTypeAndYear"  resultMap="BaseResultMap">
+    SELECT 
+    <include refid="Base_Column_List" />
+    FROM SYS_STASTIC_SUPPER_POWER_RATE
+    WHERE TYPE_CODE = #{typeCode,jdbcType=VARCHAR}
+    AND YEAR = #{year,jdbcType=VARCHAR}
+  </select>
+   <select id="findSiteNum"  resultType="java.lang.Double">
+    SELECT 
+    	SUM(SITE_NUM)
+    FROM SYS_STASTIC_SUPPER_POWER_RATE
+    WHERE TYPE_CODE = '0'
+  </select>
+</mapper>

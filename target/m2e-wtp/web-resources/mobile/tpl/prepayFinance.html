@@ -1,0 +1,128 @@
+
+<!-- 提交财务 -->
+
+<div class="system-content" id="systemContent">
+    <div class="business-box" id="businessBox">
+        <div class="content-rout" id="contentRout">
+            <span>基础电费</span>&gt;<span>预付提交</span>&gt;<span class="now-rout">提交财务</span>
+        </div>
+        <div class="content-box" id="contentBox">
+            <div class="power-table">
+                <div class="search-box">
+                    <div>
+                        <select name="" id="" class="title-select" ng-model="status" >
+                            <option value="">请选择报销单状态</option>
+                            <option value="0">等待推送报销发起人</option>
+                            <option value="1">等待推送财务</option>
+                            <option value="2">等待财务报销</option>
+                            <option value="3">报销成功</option>
+                            <option value="4">报销失败</option>
+                        </select>
+                        <input type="text" placeholder="预付提交单单号" class="process-input con-parts" ng-model="submitNo">
+                        <input ng-laydate
+                               id="id1"
+                               format="YYYY-MM-DD"
+                               type="text" placeholder="起始时间" class="process-input con-parts" name="" ng-model="startCreateDate">
+                        <input ng-laydate
+                               id="id2"
+                               format="YYYY-MM-DD"
+                               type="text" placeholder="截止时间" class="process-input con-parts" name="" ng-model="endCreateDate">
+
+
+                    </div>
+                    <button ng-click="getData()" class="btn btn-primary" type="button" >搜索</button>
+                </div>
+                <!-- table-content -->
+                <div class="table-content">
+                    <div class="table-title">
+                        <button  ng-click="pushManagerMultiy()" ng-show="userLevel!=undefined && userLevel == 4" class="btn btn-blue">批量推送财务</button>
+                        <button ng-click="pushManagerMultiy()" ng-show="userLevel!=undefined && userLevel == 2" class="btn btn-blue" style="width: 160px;">批量推送报销发起人</button>
+                    </div>
+                    <!-- table -->
+                   <!--  <table class="table-result" id="tableResult">   
+                        <colgroup>
+                            <col style="width:3%" />
+                            <col style="width:15%" />
+                            <col style="width:12%" />
+                            <col style="width:5%" />
+                            <col style="width:5%" />
+                            <col style="width:8%" />
+                            <col style="width:8%" />
+                            <col style="width:8%" />
+                            <col style="width:5%" />
+                            <col style="width:28%" />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th><input ng-click="checkAll('#checkAll','#list')" id="checkAll" type="checkbox"></th>
+                                <th>电费提交单号</th>
+                                <th>制单时间</th>
+                                <th>地市</th>
+                                <th>区县</th>
+                                <th>推送类型</th>
+                                <th>报销状态</th>
+                                <th>价款金额</th>
+                                <th>税金金额</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                    </table> -->
+                    <div class="table-details">
+                        <div>
+                            <table>
+                               <!--  <colgroup>
+                                    <col style="width:3%" />
+                                    <col style="width:15%" />
+                                    <col style="width:12%" />
+                                    <col style="width:5%" />
+                                    <col style="width:5%" />
+                                    <col style="width:8%" />
+                                    <col style="width:8%" />
+                                    <col style="width:8%" />
+                                    <col style="width:5%" />
+                                    <col style="width:28%" />
+                                </colgroup> -->
+                                <tbody class="query-date" id="list">
+                                    <tr>
+                                        <th><input ng-click="checkAll('#checkAll','#list')" id="checkAll" type="checkbox"></th>
+                                        <th>预付提交单号</th>
+                                        <th>制单时间</th>
+                                        <th>地市</th>
+                                        <th>区县</th>
+                                        <th>推送类型</th>
+                                        <th>报销状态</th>
+                                        <th>供应商</th>
+                                        <th>预付金额</th>
+                                        <th style="width:224px;" >操作</th>
+                                    </tr>
+                                    <tr ng-repeat="item in list track by $index">
+                                        <td><input type="checkbox" value="{{item.id}}"></td>
+                                        <td>{{item.submitNo}}</td>
+                                        <td>{{item.createDate | date:"yyyy-MM-dd HH:mm:ss"}}</td>
+                                        <td>{{item.cityName}}</td>
+                                        <td>{{item.countyName}}</td>
+                                        <td>{{item.reimbursementType==0?"报销":""}}</td>
+                                        <td>{{item.status | pushType}}</td>
+                                        <td>{{item.supplierName}}</td>
+                                        <td>{{item.moneyAmount}}</td>
+                                        <td style="width:224px;" >
+                                            <a ng-click="showDetail(item)" class="check-detail">查看</a>
+                                            <a ng-if="item.status == 1 && userLevel!=undefined && userLevel == 4 && item.operation" ng-click="pushManager(item)"
+                                              class="finance">推送财务</a>
+                                            <a ng-if="item.status == 0 && userLevel!=undefined && userLevel == 2 && item.operation" ng-click="pushManager(item)"
+                                              class="reimbur">推送报销发起人</a>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="page-foot">
+                        <im-pagination conf="pageInfo" params="params" get-data="getData()"></im-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

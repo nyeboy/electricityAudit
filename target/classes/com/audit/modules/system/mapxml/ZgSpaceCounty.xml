@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.audit.modules.system.dao.ZgSpaceDao">
+
+	<!-- <select id="findAllCity" resultType="java.util.HashMap">
+		SELECT
+			zs.CITY_NAME,ZSC.ZH_LABEL,ZS.CITY_ID,ZSC.INT_ID
+		FROM ZG_SPACE_CITY zs INNER JOIN ZG_SPACE_COUNTY zsc
+			  ON ZS.CITY_ID=ZSC.CITY_ID
+	</select> -->
+	
+	<select id="findAllCity" resultType="java.util.HashMap">
+		SELECT
+			zs.NAME as CITY_NAME,ZSC.NAME as ZH_LABEL,ZS.ID as CITY_ID,ZSC.ID as INT_ID
+		FROM YDJH_AREA zs INNER JOIN YDJH_AREA zsc
+			  ON ZS.ID=ZSC.PARENT
+			  where ZS.ID!=1
+	</select>
+
+</mapper>

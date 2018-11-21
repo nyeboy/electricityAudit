@@ -1,0 +1,39 @@
+<!-- 塔维供电信息弹窗dialog -->
+<div class="business-box" id="businessBox">
+    <div class="add-elecontent">
+        <h4 style="text-align:center; padding-top:10px;">供电信息修改</h4>
+        <form action="">
+            <ul class="user-list">
+                <li><span>铁塔站址编号:</span><input ng-model="object.code" type="text" name="" value="" disabled="disabled"></li>
+                <li><span>资管站点名称:</span><input ng-model="object.label" type="text" name="" value="" disabled="disabled"></li>
+                <li>
+                    <span>用电类型:</span>
+                    <select name="" id="" ng-model="object.electricityType" >
+                        <option value="1">直供电</option>
+                        <option value="2">转供电</option>
+                    </select>
+                </li>
+                <li>
+                    <span>共享方式:</span>
+                    <select name="" id="" ng-model="object.shareType">
+                        <option value="1">共享</option>
+                        <option value="2">独享</option>
+                    </select>
+                </li>
+                <li>
+                    <span>站址类型:</span>
+                    <select name="" id="" ng-model="object.zzType">
+                        <option value="1">铁塔新建</option>
+                        <option value="2">电信存量</option>
+                        <option value="3">联通存量</option>
+                        <option value="4">移动存量</option>
+                    </select>
+                </li>
+            </ul>
+        </form>
+        <div class="reimbur-foot ledge-foot">
+            <button ng-click="closeDialog()" class="reimbur-cancel btn">取消</button>
+            <button ng-click="saveEditedPowerInfo(object)" class="reimbur-save btn">保存</button>
+        </div>
+    </div>
+</div>

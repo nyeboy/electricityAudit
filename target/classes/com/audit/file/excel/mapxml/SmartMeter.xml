@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.audit.modules.excelUpload.dao.SmartMeterDao">
+
+	<delete id="deleteAll">
+		truncate table SYS_SMART_METER
+	</delete>
+	
+	<insert id="batchSave" parameterType="com.audit.file.excel.entity.SmartMeterMeta">
+		INSERT INTO SYS_SMART_METER(ID,SYSTEM_TITLE,NE_CLASS,SITE_NAME,SITE_NO,SITE_ATTIBUTION,TIME_START,TIME_END,METER_DIAL
+			,METER_STATE,MAIN_EQUIPMENT_METER_DIAL,MAIN_EQUIPMENT_METER_STATE,AIR_COND_METER_DIAL
+			,AIR_COND_METER_STATE,STATION_OUTDOOR_AVER_TEMP,STATION_INDOOR_AVER_TEMP,STATION_DAILY_PUE
+			,SWITCH_POWER_LOSS)">
+		<foreach collection="list" index="index" item="smartMeterMeta" separator="union all" >
+			select
+				#{smartMeterMeta.ID,jdbcType=NUMBER},#{smartMeterMeta.SYSTEM_TITLE,jdbcType=NUMBER}
+				#{smartMeterMeta.NE_CLASS,jdbcType=NUMBER},#{smartMeterMeta.SITE_NAME,jdbcType=VERCHAR},
+				#{smartMeterMeta.SITE_NO,jdbcType=NUMBER},#{smartMeterMeta.SITE_ATTIBUTION,jdbcType=VERCHAR},
+				#{smartMeterMeta.TIME_START,jdbcType=DATE},#{smartMeterMeta.TIME_END,jdbcType=DATE},
+				#{smartMeterMeta.METER_DIAL,jdbcType=NUMBER},#{smartMeterMeta.METER_STATE,jdbcType=NUMBER},
+				#{smartMeterMeta.MAIN_EQUIPMENT_METER_DIAL,jdbcType=VERCHAR},#{smartMeterMeta.MAIN_EQUIPMENT_METER_STATE,jdbcType=NUMBER},
+				#{smartMeterMeta.AIR_COND_METER_DIAL,jdbcType=NUMBER},#{smartMeterMeta.AIR_COND_METER_STATE,jdbcType=NUMBER},
+				#{smartMeterMeta.STATION_OUTDOOR_AVER_TEMP,jdbcType=NUMBER},#{smartMeterMeta.STATION_INDOOR_AVER_TEMP,jdbcType=NUMBER},
+				#{smartMeterMeta.STATION_DAILY_PUE,jdbcType=NUMBER},#{smartMeterMeta.SWITCH_POWER_LOSS,jdbcType=NUMBER}
+			from dual
+		</foreach>
+	</insert>
+</mapper>

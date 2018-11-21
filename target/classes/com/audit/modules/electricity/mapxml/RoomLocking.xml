@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.electricity.dao.RoomLockingDao">
+
+	
+	
+	<!-- 锁定机房 -->
+	<insert id="lockingRoom" parameterType="java.util.Map">
+		INSERT INTO SYS_ROOM_LOCKING(ROOM_ID,ELECTRICTY_ID,LOCKING_DATE)
+			VALUES(#{roomID,jdbcType=VARCHAR},#{electrictyId,jdbcType=VARCHAR},#{lockingDate,jdbcType=TIMESTAMP})
+	</insert>
+	
+	
+	<!-- 解锁机房 -->
+	<delete id="unLockingRoom" parameterType="java.lang.String">
+		 DELETE FROM SYS_ROOM_LOCKING WHERE ROOM_ID = #{roomId}
+	</delete>
+	
+	<select id="unLockingRoomByElectrictyId" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT ROOM_ID 
+			FROM SYS_ROOM_LOCKING
+			WHERE ELECTRICTY_ID = #{electrictyId}
+	</select>
+	
+</mapper>

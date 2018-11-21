@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.system.dao.DepartmentDao">
+
+    <sql id="columns">
+        ID,
+        DEPARTMENT_NO AS departmentNo,
+        DEPARTMENT_PARENT_NO AS departmentParentNo,
+        DEPARTMENT_NAME AS departmentName,
+        COMPANY_CODE AS companyCode,
+        DEPARTMENT_LEVEL AS departmentLevel,
+        STATUS,
+        VISIBLE,
+        AREA_CODE AS areaCode,
+        DEPARTMENT_ORDER AS departmentOrder
+    </sql>
+
+    <select id="findById" resultType="com.audit.modules.system.entity.DepartmentEntity">
+        SELECT <include refid="columns"/> FROM OA_DEPARTMENT_DATA where id=#{id}
+    </select>
+
+    <select id="findByLevel" resultType="com.audit.modules.system.entity.DepartmentEntity">
+        SELECT <include refid="columns"/>
+        FROM OA_DEPARTMENT_DATA
+        WHERE DEPARTMENT_LEVEL = #{level,jdbcType=VARCHAR}
+    </select>
+    
+     <select id="findChildren" resultType="com.audit.modules.system.entity.DepartmentEntity">
+       SELECT odd.ID, odd.DEPARTMENT_NAME AS departmentName, odd.DEPARTMENT_LEVEL AS departmentLevel, odd.DEPARTMENT_NO AS departmentNo,
+        	(SELECT COUNT(1) FROM OA_DEPARTMENT_DATA od WHERE od.DEPARTMENT_PARENT_NO = odd.DEPARTMENT_NO) as childNum
+        FROM OA_DEPARTMENT_DATA odd
+        WHERE 1=1 
+        	<choose>
+                <when test="deptId != null and deptId != ''">
+                       AND  odd.DEPARTMENT_PARENT_NO IN (SELECT DEPARTMENT_NO FROM OA_DEPARTMENT_DATA WHERE ID = #{deptId,jdbcType=VARCHAR} AND rownum &lt; 2) 
+                </when>
+                <otherwise>
+                       AND odd.DEPARTMENT_LEVEL = '0'
+                </otherwise>
+         	</choose>
+          ORDER BY length(odd.DEPARTMENT_NAME) ASC
+    </select>
+
+    <select id="findByCompanyCodeAndLevel" resultType="com.audit.modules.system.entity.DepartmentEntity">
+        SELECT <include refid="columns"/>
+        FROM OA_DEPARTMENT_DATA
+        where COMPANY_CODE = #{companyCode} AND DEPARTMENT_LEVEL = #{level}
+    </select>
+
+</mapper>

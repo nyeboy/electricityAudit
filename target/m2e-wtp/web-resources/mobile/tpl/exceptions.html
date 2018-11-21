@@ -1,0 +1,33 @@
+﻿ <!-- 异常 (报销周期未在合同期限内)-->
+ <style>
+ 
+.heading {
+padding-left: 0px;
+color:#4b8de6;
+}
+
+.content {
+padding-left: 10%;
+padding-top:10%;
+color:red;
+padding-bottom:10%;
+}
+
+</style>
+ <div class="ledge-table meter-details">
+ 	<div class="heading">
+ 	<h3>报销提示</h3>	
+ 	</div>
+ 	<div class="content">
+ 	<h3>发现数据异常: </h3><br><br><br>
+ 	<h3>报账点名称: {{AccountSiteName}}</h3><br>
+ 	<h3>资管站点名称:  {{assetManagementSiteName}}</h3><br>
+	<h3>合同编号: {{contractNumber}}</h3><br>
+ 	<h3>合同起始日期:  {{startDate}}</h3><br>
+ 	<h3>合同终止日期: {{endDate}} </h3><br><br><br>
+ 	<h3>异常原因: 报销周期未在合同期限内不予报销</h3><br><br><br>
+ 	</div>
+<div class="reimbur-foot ledge-foot audit-dialog">
+<button ng-click="closeDialog('exceptions')" class="reimbur-save btn">确认</button>
+</div>
+ </div>

@@ -1,0 +1,56 @@
+﻿<!-- 供电信息  --> 
+<div class="ledge-detail ledge-edit elec-dialog">
+   <div class="ledge-content">
+   <div class="reimbur-foot ledge-foot">
+        <button ng-click="supplierExcel()" class="reimbur-save btn" style="margin-left:80%;">导出</button>
+    </div>	
+       <div class="pannel-basic">
+            <div class="basic-container">
+                <div class="basic-audit">           
+		<div class="ledge-detail add-details">
+			
+		<div class="table-details invoinc-list" id="supplierDetails">											
+					
+						<table border="1px solid black" >
+		<tbody class="query-date">																			
+                               <tr>
+                             			 <th colspan="9"><h4>供电信息</h4></th>
+                               </tr>							 
+                                <tr>  
+                                	<th>序号</th>                                 
+                                    <th>地市</th>
+                                    <th>区县</th>
+                                    <th>铁塔站址编码</th>
+                                    <th>资管站点名称</th>
+                                    <th>用电类型</th>
+                                    <th>共享方式</th>
+                                    <th>站址类型</th>                                                                                               
+                               		<th>时间</th>                          		
+                                </tr>
+								<tr ng-repeat="item in lists track by $index">
+								<td>{{((params.pageNo-1)*params.pageSize) +1*($index+1)}}</td>
+								<td>{{item.cityStr}}</td>
+								<td>{{item.countyStr}}</td>
+								<td>{{item.code}}</td>								
+								<td>{{item.label}}</td>								
+								<td>{{item.electricityType}}</td>								
+								<td>{{item.shareType}}</td>
+								<td>{{item.zzType}}</td>
+								<td>{{item.updateTime}}</td>							
+
+								</tr>                                        							
+						</tbody>
+						</table>										
+                        </div>
+				
+   </div>
+
+     </div>
+   </div>
+     </div>
+        		<div class="reimbur-foot ledge-foot">
+        <button ng-click="closeDialog('supplierExportDialog')" class="reimbur-save btn">关闭</button>
+    </div>
+	 </div>
+     </div>
+	 

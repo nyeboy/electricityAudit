@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.system.dao.SystemDataDao">
+	<!--  地市区县改变前的sql -->
+	<!-- 查询City列表信息-->
+	<!--  <select id="queryCityList" parameterType="String" resultType="com.audit.modules.system.entity.SysDataVo">
+		SELECT 
+			INT_ID as key,CITY_NAME as value
+		FROM 
+			ZG_SPACE_CITY
+		ORDER BY 
+			NLSSORT(CITY_NAME, 'NLS_SORT=SCHINESE_PINYIN_M')
+	</select>	
+	
+	<select id="queryCityInfo" parameterType="java.util.Map" resultType="com.audit.modules.system.entity.SysDataVo">
+		SELECT 
+			INT_ID as key,CITY_NAME as value
+		FROM 
+			ZG_SPACE_CITY
+		WHERE 
+		    INT_ID = ${id}
+	</select>
+	
+	<select id="queryCountyInfo" parameterType="java.util.Map" resultType="com.audit.modules.system.entity.SysDataVo">
+		SELECT 
+			INT_ID as key,ZH_LABEL as value
+		FROM 
+			ZG_SPACE_COUNTY 
+		WHERE 
+			INT_ID = #{id}
+	</select> -->
+ 
+	<!-- 查询County列表信息-->
+	<!-- <select id="queryCountyList" parameterType="String" resultType="com.audit.modules.system.entity.SysDataVo">
+		SELECT 
+			INT_ID as key,ZH_LABEL as value
+		FROM 
+			ZG_SPACE_COUNTY 
+		WHERE 
+			1=1 AND CITY_ID = #{cityId}
+		ORDER BY 
+			NLSSORT(ZH_LABEL, 'NLS_SORT=SCHINESE_PINYIN_M')
+	</select>
+	
+	<select id="queryCityCounty" parameterType="java.util.Map" resultType="com.audit.modules.system.entity.SysDataVo">
+		SELECT
+            city.INT_ID as key,
+            county.INT_ID as value
+        FROM
+            ZG_SPACE_CITY city,
+            ZG_SPACE_COUNTY county
+        WHERE 
+            city.INT_ID = county.CITY_ID AND 
+            city.CITY_NAME = '${cityName}' AND 
+            county.ZH_LABEL = '${countyName }'
+	</select>   -->
+	
+	<select id="queryCityList" parameterType="String" resultType="com.audit.modules.system.entity.SysDataVo">
+		SELECT 
+			ID as key,NAME as value
+		FROM 
+			YDJH_AREA
+			where PARENT='1'
+		ORDER BY 
+			NLSSORT(NAME, 'NLS_SORT=SCHINESE_PINYIN_M')
+	</select>	
+	
+	<select id="queryCityInfo" parameterType="java.util.Map" resultType="com.audit.modules.system.entity.SysDataVo">
+		SELECT 
+			ID as key,NAME as value
+		FROM 
+			YDJH_AREA
+		WHERE 
+		    ID = ${id}
+	</select>
+	
+	<select id="queryCountyInfo" parameterType="java.util.Map" resultType="com.audit.modules.system.entity.SysDataVo">
+		SELECT 
+			ID as key,NAME as value
+		FROM 
+			YDJH_AREA 
+		WHERE 
+			ID = #{id}
+	</select>
+ 
+	<!-- 查询County列表信息-->
+	<select id="queryCountyList" parameterType="String" resultType="com.audit.modules.system.entity.SysDataVo">
+		SELECT 
+			ID as key,NAME as value
+		FROM 
+			YDJH_AREA 
+		WHERE 
+			1=1 AND PARENT = #{cityId}
+		ORDER BY 
+			NLSSORT(NAME, 'NLS_SORT=SCHINESE_PINYIN_M')
+	</select>
+	
+	<select id="queryCityCounty" parameterType="java.util.Map" resultType="com.audit.modules.system.entity.SysDataVo">
+		SELECT
+            city.ID as key,
+            county.ID as value
+        FROM
+            YDJH_AREA city,
+            YDJH_AREA county
+        WHERE 
+            city.ID = county.PARENT AND 
+            city.NAME = '${cityName}' AND 
+            county.NAME = '${countyName }'
+	</select>
+	
+</mapper>
+

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.towerbasedata.datashow.dao.TowerPowerRatedDao">
+
+	<!-- 塔维: 标杆管理-->
+    <select id="powerRateManage" resultType="com.audit.modules.towerbasedata.datashow.entity.TowerPowerRate" parameterType="java.util.Map">
+		SELECT 
+		 DISTINCT
+			stas.id as towerId,       		
+			zsy.CITY_NAME AS cityName,		
+			zsc.ZH_LABEL AS countyName,		
+			stas.ZY_CODE AS towerNum,			
+			zss.ZH_LABEL AS resName		
+		FROM SYS_TOWER_ACCOUNT_SITE stas
+		LEFT JOIN ZG_TOWER_SITE zts ON stas.ZY_CODE = ZTS.ZY_CODE  
+		LEFT JOIN ZG_SPACE_SITE zss ON ZTS.YW_CODE = ZSS.TOWER_SITE_CODE
+		LEFT JOIN ZG_SPACE_CITY zsy ON stas.CITY_ID = zsy.INT_ID
+		LEFT JOIN ZG_SPACE_COUNTY zsc ON stas.COUNTY_ID = zsc.INT_ID
+		LEFT JOIN ZG_SPACE_EQUIP_ROOM zser ON zser.RELATED_SITE = zss.INT_ID
+		LEFT JOIN SYS_EQUROOM_POWER_RATING sepr ON sepr.EQUROOM_ID = zser.INT_ID
+		WHERE 1=1
+			<if test="obj.towerNum!=null and obj.towerNum!=''">AND stas.ZY_CODE LIKE '%'||#{obj.towerNum}||'%'</if>
+			<if test="obj.resName!=null and obj.resName!=''">AND zss.ZH_LABEL LIKE '%'||#{obj.resName}||'%'</if>
+	        <if test="obj.cityId!=null and obj.cityId!=''">AND stas.CITY_ID = #{obj.cityId}</if>
+	        <if test="obj.countyId!=null and obj.countyId!=''">AND stas.COUNTY_ID = #{obj.countyId}</if>
+	       	AND ZSS.TOWER_SITE_CODE IS NOT NULL
+	       	
+    </select>
+	
+	
+   <!-- 塔维：额定功率标杆管理-详情-->
+    <select id="powerRateManageDetail" resultType="com.audit.modules.site.entity.EquRoomDevice">
+		SELECT
+			stas.id as towerId,
+			sepr.EQUROOM_NAME as equipmentRoomName,
+			sepr.DEVICE_BELONG as deviceBelong,
+			sepr.DEVICE_TYPE as deviceType,
+			sepr.DEVICE_MODEL as deviceModel,
+			sepr.DEVICE_VENDOR as deviceVendor,
+			sepr.POWER_RATING as powerRating,
+			(SELECT 
+				SUM(SEPRR.POWER_RATING)
+			FROM SYS_TOWER_ACCOUNT_SITE stass
+			LEFT JOIN ZG_TOWER_SITE ztss ON stass.ZY_CODE = ZTSS.ZY_CODE  
+			LEFT JOIN ZG_SPACE_SITE zsss ON ZTSS.YW_CODE = ZSSS.TOWER_SITE_CODE
+			LEFT JOIN ZG_SPACE_EQUIP_ROOM zserr ON zserr.RELATED_SITE = zsss.INT_ID
+			LEFT JOIN SYS_EQUROOM_POWER_RATING seprr ON seprr.EQUROOM_ID = zserr.INT_ID
+			WHERE stass.id = stas.id
+			) AS siteTotalPower
+		FROM SYS_TOWER_ACCOUNT_SITE stas
+		LEFT JOIN ZG_TOWER_SITE zts ON stas.ZY_CODE = ZTS.ZY_CODE  
+		LEFT JOIN ZG_SPACE_SITE zss ON ZTS.YW_CODE = ZSS.TOWER_SITE_CODE
+		LEFT JOIN ZG_SPACE_EQUIP_ROOM zser ON zser.RELATED_SITE = zss.INT_ID
+		LEFT JOIN SYS_EQUROOM_POWER_RATING sepr ON sepr.EQUROOM_ID = zser.INT_ID
+		WHERE 1=1
+			<if test="towerId != null and towerId != ''">AND stas.ID = #{towerId}</if>
+	</select> 
+	
+	<!-- 塔维：额定功率标杆管理-获取站点总功率-->
+    <select id="queryTotalPower" resultType="Double">
+		SELECT
+			SUM (SEPR.POWER_RATING) AS siteTotalPower
+		FROM
+			SYS_TOWER_ACCOUNT_SITE stas
+		LEFT JOIN ZG_TOWER_SITE zts ON stas.ZY_CODE = ZTS.ZY_CODE
+		LEFT JOIN ZG_SPACE_SITE zss ON ZTS.YW_CODE = ZSS.TOWER_SITE_CODE
+		LEFT JOIN ZG_SPACE_EQUIP_ROOM zser ON zser.RELATED_SITE = zss.INT_ID
+		LEFT JOIN SYS_EQUROOM_POWER_RATING sepr ON sepr.EQUROOM_ID = zser.INT_ID
+		WHERE 1=1
+			<if test="towerId != null and towerId != ''">AND stas.ID = #{towerId}</if>
+	</select>
+
+</mapper>

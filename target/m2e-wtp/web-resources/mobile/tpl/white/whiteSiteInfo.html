@@ -1,0 +1,158 @@
+﻿<!-- 自维电费稽核页面详情 dialog -->
+<div class="ledge-detail ledge-edit elec-dialog">
+    <h4  style="border-bottom: 1px solid #e1e4e6;">站点详情页</h4>
+    <div class="ledge-content">
+        <div class="pannel-basic">
+            <div  class="basic-container">
+                <div class="basic-audit">
+                    <div class="ledge-title">站点信息</div>
+                    <div class="ledge-table">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <span class="table-left">资管名称:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="siteInfo1.ziguanName">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">站点名称:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="siteInfo1.siteName">
+                                    </td>
+                                </tr>
+                                <tr>
+                                	<td>
+                                        <span class="table-left">移动编号:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="siteInfo1.siteNo">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">铁塔站址编号:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="siteInfo1.tsiteNo">
+                                    </td>
+                                    </tr>
+                                    <tr>
+                                    	<td>
+                                        <span class="table-left">白名单场景:</span>
+                                        <input
+                                            disabled="disabled"
+                                            type="text"
+                                            name="" class="table-right" ng-model="siteInfo1.cj">
+                                    </td>
+                                    </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- 发票信息-->
+                    <div class="ledge-title ledge-sub">
+                       		合同信息
+                    </div>
+                     <div class="ledge-table">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <span class="table-left">合同号:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="siteInfo1.contractId">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">合同名称:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="siteInfo1.contractName">
+                                    </td>
+                                </tr>
+                                <tr>
+                                	<td>
+                                        <span class="table-left">公司名称:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right">
+                                    </td>
+                                    <td>
+                                        <span class=" table-left">合同类型:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" value="虚拟合同">
+                                    </td>
+                                    </tr>
+                                    <tr>
+                                    	<td>
+                                        <span class="table-left">合同状态:</span>
+                                        <input
+                                            disabled="disabled"
+                                            type="text"
+                                            name="" class="table-right" value="有效">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">缴费周期:</span>
+                                        <input
+                                            disabled="disabled"
+                                            type="text"
+                                            name="" class="table-right" ng-model="siteInfo1.payType">
+                                    </td>
+                                    </tr>
+                                    <tr>
+                                    	<td>
+                                        <span class="table-left">单价或包干价:</span>
+                                        <input
+                                            disabled="disabled"
+                                            type="text"
+                                            name="" class="table-right" ng-model="siteInfo1.price">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">分摊比例:</span>
+                                        <input
+                                            disabled="disabled"
+                                            type="text"
+                                            name="" class="table-right" ng-model="siteInfo1.fTan">
+                                    </td>
+                                    </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    
+                    
+                    
+                    <!-- 供应商信息-->
+                    <div class="ledge-title ledge-sub">
+                       		供应商信息
+                    </div>
+                     <div class="ledge-table">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <span class="table-left">供应商名称:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="siteInfo1.supplyName">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">供应商地点ID:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="siteInfo1.supplySiteId">
+                                    </td>
+                                </tr>
+                                <tr>
+                                	<td>
+                                        <span class="table-left">供应商组织ID:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="siteInfo1.supplyerOrganizationId">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">开户行:</span>
+                                        <input type="text" disabled = "disabled" name="" class="table-right" ng-model="siteInfo1.bankName">
+                                    </td>
+                                    </tr>
+                                    <tr>
+                                    	<td>
+                                        <span class="table-left">账户号:</span>
+                                        <input
+                                            disabled="disabled"
+                                            type="text"
+                                            name="" class="table-right" ng-model="siteInfo1.bankacName">
+                                    </td>
+                                    <td>
+                                        <span class="table-left">银行账号:</span>
+                                        <input
+                                            disabled="disabled"
+                                            type="text"
+                                            name="" class="table-right" ng-model="siteInfo1.bankNum">
+                                    </td>
+                            </tbody>
+                        </table>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>

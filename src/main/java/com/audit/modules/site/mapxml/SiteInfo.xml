@@ -1,0 +1,786 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.site.dao.SiteInfoDao">
+
+  <!--   <select id="queryById" resultType="com.audit.modules.site.entity.SiteInfoVO" parameterType="java.lang.String">
+			SELECT
+                si.ID AS ID,
+                si.ACCOUNT_ALIAS AS accountAlias,
+                si.PAYTYPE AS payTypee,
+                si.PROFESSIONAL AS professional,
+                si.ACCOUNT_NAME AS accountName,
+                si.PRODUCT_NATURE AS productNature,
+                CASE ssmr.TYPE WHEN 1 THEN zser.ZH_LABEL WHEN 2 THEN zsrp.ZH_LABEL END AS resourceName,
+                zs.CITY_NAME AS area,
+                zsc.ZH_LABEL AS county,
+                si.OLD_FINANCE_NAME AS oldFinanceName,
+                si.CYCLE AS cycle,
+                ss.NAME AS supplierName,
+                si.SITE_NAME AS siteName,
+                si.ELECTRICITY_TYPE as electricityType, 
+                si.SUPPLY_COMPANY as supplyCompany,
+                si.SHARE_TYPE as shareType,
+                si.PAY_TYPE as payType
+            FROM
+                SYS_ACCOUNT_SITE si
+            LEFT JOIN ZG_SPACE_CITY zs ON si.CITY_ID = zs.INT_ID
+            LEFT JOIN ZG_SPACE_COUNTY zsc ON si.COUNTY_ID = zsc.INT_ID
+            LEFT JOIN SYS_SITE_MID_SUPPLIER ssms ON ssms.ACCOUNT_SITE_ID = si. ID
+            LEFT JOIN SYS_SUPPLIER ss ON ssms.SUPPLIER_ID = TO_CHAR(ss.ID)
+            LEFT JOIN SYS_SITE_MID_RESOURCE ssmr ON ssmr.ACCOUNT_SITE_ID=si.ID
+            LEFT JOIN ZG_SPACE_RES_POINT zsrp ON ssmr.RESOURCE_ID = zsrp.INT_ID
+            LEFT JOIN ZG_SPACE_EQUIP_ROOM zser ON ssmr.RESOURCE_ID = zser.INT_ID
+			WHERE si.id = #{id,jdbcType=VARCHAR}
+	</select>
+	
+	
+	
+	 <select id="queryAll" resultType="com.audit.modules.site.entity.SiteInfoVO">
+			SELECT
+                si.ID AS ID,
+                si.ACCOUNT_ALIAS AS accountAlias,
+                si.ACCOUNT_NAME AS accountName,
+                si.PRODUCT_NATURE AS productNature,
+                CASE ssmr.TYPE WHEN 1 THEN zser.ZH_LABEL WHEN 2 THEN zsrp.ZH_LABEL END AS resourceName,
+                zs.CITY_NAME AS area,
+                zsc.ZH_LABEL AS county,
+                si.OLD_FINANCE_NAME AS oldFinanceName,
+                si.CYCLE AS cycle,
+                ss.NAME AS supplierName,
+                si.SITE_NAME AS siteName,
+                si.ELECTRICITY_TYPE as electricityType, 
+                si.SUPPLY_COMPANY as supplyCompany,
+                si.SHARE_TYPE as shareType,
+                si.PAY_TYPE as payType
+            FROM
+                SYS_ACCOUNT_SITE si
+            LEFT JOIN ZG_SPACE_CITY zs ON si.CITY_ID = zs.INT_ID
+            LEFT JOIN ZG_SPACE_COUNTY zsc ON si.COUNTY_ID = zsc.INT_ID
+            LEFT JOIN SYS_SITE_MID_SUPPLIER ssms ON ssms.ACCOUNT_SITE_ID = si. ID
+            LEFT JOIN SYS_SUPPLIER ss ON ssms.SUPPLIER_ID = TO_CHAR(ss.ID)
+            LEFT JOIN SYS_SITE_MID_RESOURCE ssmr ON ssmr.ACCOUNT_SITE_ID=si.ID
+            LEFT JOIN ZG_SPACE_RES_POINT zsrp ON ssmr.RESOURCE_ID = zsrp.INT_ID
+            LEFT JOIN ZG_SPACE_EQUIP_ROOM zser ON ssmr.RESOURCE_ID = zser.INT_ID
+	</select>
+	
+	
+	
+	
+
+    <select id="queryList" resultType="com.audit.modules.site.entity.SiteInfoVO">
+        SELECT
+            si.ID AS ID,
+            si.ACCOUNT_ALIAS AS accountAlias,
+            si.ACCOUNT_NAME AS accountName,
+            si.PRODUCT_NATURE AS productNature,
+            si.PAYTYPE AS payTypee,
+            si.PROFESSIONAL AS professional,
+            ssmr.TYPE,
+            CASE ssmr.TYPE WHEN 1 THEN zser.ZH_LABEL WHEN 2 THEN zsrp.ZH_LABEL END AS resourceName,
+            zs.CITY_NAME AS area,
+            zsc.ZH_LABEL AS county,
+            si.OLD_FINANCE_NAME AS oldFinanceName,
+            si.CYCLE AS CYCLE,
+            ss.NAME AS supplierName,
+            si.SITE_NAME AS siteName,
+            si.CITY_ID AS cityId,
+            si.COUNTY_ID AS countyId
+        FROM SYS_ACCOUNT_SITE si
+        LEFT JOIN ZG_SPACE_CITY zs ON si.CITY_ID = zs.INT_ID
+        LEFT JOIN ZG_SPACE_COUNTY zsc ON si.COUNTY_ID = zsc.INT_ID
+        LEFT JOIN SYS_SITE_MID_SUPPLIER ssms ON ssms.ACCOUNT_SITE_ID = si.ID
+        LEFT JOIN SYS_SUPPLIER ss ON ssms.SUPPLIER_ID = TO_CHAR(ss.ID)
+        LEFT JOIN SYS_SITE_MID_RESOURCE ssmr ON ssmr.ACCOUNT_SITE_ID=si.ID
+        LEFT JOIN ZG_SPACE_RES_POINT zsrp ON ssmr.RESOURCE_ID = zsrp.INT_ID
+        LEFT JOIN ZG_SPACE_EQUIP_ROOM zser ON ssmr.RESOURCE_ID = zser.INT_ID
+        WHERE 1=1
+        and (islock=0 or islock is null)
+        <if test="obj.queryData!=null and obj.queryData!=''">
+            AND (si.ACCOUNT_NAME LIKE '%'||#{obj.queryData,jdbcType=VARCHAR}||'%'
+            OR si.ACCOUNT_ALIAS LIKE '%'||#{obj.queryData,jdbcType=VARCHAR}||'%'
+            OR ss.NAME LIKE '%'||#{obj.queryData,jdbcType=VARCHAR}||'%')
+        </if>
+        <if test="obj.countyId!=null and obj.countyId!=''">
+            AND zsc.INT_ID = #{obj.countyId,jdbcType=VARCHAR}
+        </if>
+        <if test="obj.id!=null and obj.id!=''">
+            AND si.id = #{obj.id,jdbcType=VARCHAR}
+        </if>
+        <if test="obj.cityId!=null and obj.cityId!=''">
+            AND zs.INT_ID = #{obj.cityId,jdbcType=VARCHAR}
+        </if>
+    </select>
+    
+ 	额定功率的标杆列表查询 
+    <select id="queryPowerRatingList" resultType="com.audit.modules.electricity.entity.PowerRatingVO">
+       SELECT
+			sas.ID AS siteId,
+			sas.ACCOUNT_NAME AS siteName,
+			zsy.CITY_NAME AS cityName,
+			sum(sepr.POWER_RATING) AS totalPowerRating,
+			zsc.ZH_LABEL AS countyName
+		FROM
+			SYS_ACCOUNT_SITE sas
+		LEFT JOIN SYS_SITE_MID_RESOURCE ssmr ON ssmr.ACCOUNT_SITE_ID = sas. ID
+		LEFT JOIN ZG_SPACE_EQUIP_ROOM zser ON ssmr.RESOURCE_ID = zser.INT_ID
+		LEFT JOIN SYS_EQUROOM_POWER_RATING sepr ON sepr.EQUROOM_ID = zser.INT_ID
+		LEFT JOIN ZG_SPACE_CITY zsy ON sas.CITY_ID=zsy.INT_ID
+		LEFT JOIN ZG_SPACE_COUNTY zsc ON sas.COUNTY_ID = zsc.INT_ID
+        WHERE 1=1
+        <if test="obj.siteName!=null and obj.siteName!=''">
+			AND ( INSTR(sas.SITE_NAME,#{obj.siteName,jdbcType=VARCHAR}) > 0 OR 
+			 INSTR(sas.ACCOUNT_NAME,#{obj.siteName,jdbcType=VARCHAR}) > 0 )
+        </if>
+        <if test="obj.cityId!=null and obj.cityId!=''">
+            AND sas.CITY_ID = #{obj.cityId,jdbcType=VARCHAR}
+        </if>
+        <if test="obj.countyId!=null and obj.countyId!=''">
+            AND sas.COUNTY_ID = #{obj.countyId,jdbcType=VARCHAR}
+        </if>
+       	 	AND sas.id IS NOT NULL
+        GROUP BY sas.ID,sas.ACCOUNT_NAME,zsy.CITY_NAME ,zsc.ZH_LABEL
+    </select> -->
+
+  <select id="queryById" resultType="com.audit.modules.site.entity.SiteInfoVO" parameterType="java.lang.String">
+			SELECT
+                si.ID AS ID,
+                si.ACCOUNT_ALIAS AS accountAlias,
+                si.PAYTYPE AS payTypee,
+                si.PROFESSIONAL AS professional,
+                si.ACCOUNT_NAME AS accountName,
+                si.PRODUCT_NATURE AS productNature,
+              <!--   CASE ssmr.TYPE WHEN 1 THEN zser.ZH_LABEL WHEN 2 THEN zsrp.ZH_LABEL END AS resourceName, -->
+                zs.NAME AS area,
+                zsc.NAME AS county,
+                si.OLD_FINANCE_NAME AS oldFinanceName,
+                si.CYCLE AS cycle,
+                ss.NAME AS supplierName,
+                si.SITE_NAME AS siteName,
+                si.ELECTRICITY_TYPE as electricityType, 
+                si.SUPPLY_COMPANY as supplyCompany,
+                si.SHARE_TYPE as shareType,
+                si.PAY_TYPE as payType
+            FROM
+                SYS_ACCOUNT_SITE si
+            LEFT JOIN YDJH_AREA zs ON si.CITY_ID = zs.ID
+            LEFT JOIN YDJH_AREA zsc ON si.COUNTY_ID = zsc.ID
+            LEFT JOIN SYS_SITE_MID_SUPPLIER ssms ON ssms.ACCOUNT_SITE_ID = si. ID
+            LEFT JOIN SYS_SUPPLIER ss ON ssms.SUPPLIER_ID = TO_CHAR(ss.ID)
+            <!-- LEFT JOIN SYS_SITE_MID_RESOURCE ssmr ON ssmr.ACCOUNT_SITE_ID=si.ID -->
+            <!-- LEFT JOIN ZG_SPACE_RES_POINT zsrp ON ssmr.RESOURCE_ID = zsrp.INT_ID -->
+           <!--  LEFT JOIN ZG_SPACE_EQUIP_ROOM zser ON ssmr.RESOURCE_ID = zser.INT_ID -->
+			WHERE si.id = #{id,jdbcType=VARCHAR}
+	</select>
+	
+	
+	<select id="queryByIdTOEqRoom" resultType="com.audit.modules.site.entity.BasedataLableVO" parameterType="java.lang.String">
+			SELECT
+              zser.ZH_LABEL as zhLable,
+              zser.STATUS as status,
+              zser.PROPERTY as property,
+              zser.POWER_SUPPLY_TYPE as PSType
+            FROM
+                SYS_SITE_MID_RESOURCE ssmr
+           LEFT JOIN ZG_SPACE_EQUIP_ROOM zser ON ssmr.RESOURCE_ID = zser.INT_ID 
+			WHERE ssmr.TYPE = 1
+			AND ssmr.ACCOUNT_SITE_ID = #{id,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="queryByIdTORePoint" resultType="com.audit.modules.site.entity.BasedataLableVO" parameterType="java.lang.String">
+			SELECT
+              zsrp.ZH_LABEL as zhLable,
+              zsrp.STATUS as status,
+              zsrp.PROPERTY as property
+           FROM
+                SYS_SITE_MID_RESOURCE ssmr
+           LEFT JOIN ZG_SPACE_RES_POINT zsrp ON ssmr.RESOURCE_ID = zsrp.INT_ID
+			WHERE ssmr.TYPE = 2
+			AND ssmr.ACCOUNT_SITE_ID = #{id,jdbcType=VARCHAR}
+	</select>
+	
+	
+	
+	 <select id="queryAll" resultType="com.audit.modules.site.entity.SiteInfoVO">
+			SELECT
+                si.ID AS ID,
+                si.ACCOUNT_ALIAS AS accountAlias,
+                si.ACCOUNT_NAME AS accountName,
+                si.PRODUCT_NATURE AS productNature,
+                CASE ssmr.TYPE WHEN 1 THEN zser.ZH_LABEL WHEN 2 THEN zsrp.ZH_LABEL END AS resourceName,
+                zs.NAME AS area,
+                zsc.NAME AS county,
+                si.OLD_FINANCE_NAME AS oldFinanceName,
+                si.CYCLE AS cycle,
+                ss.NAME AS supplierName,
+                si.SITE_NAME AS siteName,
+                si.ELECTRICITY_TYPE as electricityType, 
+                si.SUPPLY_COMPANY as supplyCompany,
+                si.SHARE_TYPE as shareType,
+                si.PAY_TYPE as payType
+            FROM
+                SYS_ACCOUNT_SITE si
+            LEFT JOIN YDJH_AREA zs ON si.CITY_ID = zs.ID
+            LEFT JOIN YDJH_AREA zsc ON si.COUNTY_ID = zsc.ID
+            LEFT JOIN SYS_SITE_MID_SUPPLIER ssms ON ssms.ACCOUNT_SITE_ID = si. ID
+            LEFT JOIN SYS_SUPPLIER ss ON ssms.SUPPLIER_ID = TO_CHAR(ss.ID)
+            LEFT JOIN SYS_SITE_MID_RESOURCE ssmr ON ssmr.ACCOUNT_SITE_ID=si.ID
+            LEFT JOIN ZG_SPACE_RES_POINT zsrp ON ssmr.RESOURCE_ID = zsrp.INT_ID
+            LEFT JOIN ZG_SPACE_EQUIP_ROOM zser ON ssmr.RESOURCE_ID = zser.INT_ID
+	</select>
+	
+	
+	
+	
+
+    <select id="queryList" resultType="com.audit.modules.site.entity.SiteInfoVO">
+        SELECT
+        	DISTINCT
+            si.ID AS ID,
+            si.ACCOUNT_ALIAS AS accountAlias,
+            si.ACCOUNT_NAME AS accountName,
+            si.PRODUCT_NATURE AS productNature,
+            si.PAYTYPE AS payTypee,
+            si.PROFESSIONAL AS professional,
+            ssmr.TYPE,
+            CASE ssmr.TYPE WHEN 1 THEN zser.ZH_LABEL WHEN 2 THEN zsrp.ZH_LABEL END AS resourceName,
+            zs.NAME AS area,
+            zsc.NAME AS county,
+            si.OLD_FINANCE_NAME AS oldFinanceName,
+            si.CYCLE AS CYCLE,
+            ss.NAME AS supplierName,
+            si.SITE_NAME AS siteName,
+            si.CITY_ID AS cityId,
+            si.COUNTY_ID AS countyId,
+            zsrp.STATUS AS pointStatus<!-- ,
+			zser.STATUS AS roomStatus,
+			si.EXIT_STATUS AS exitStatus -->
+        FROM SYS_ACCOUNT_SITE si
+        LEFT JOIN YDJH_AREA zs ON si.CITY_ID = zs.ID
+        LEFT JOIN YDJH_AREA zsc ON si.COUNTY_ID = zsc.ID
+        LEFT JOIN SYS_SITE_MID_SUPPLIER ssms ON ssms.ACCOUNT_SITE_ID = si.ID
+        LEFT JOIN SYS_SUPPLIER ss ON ssms.SUPPLIER_ID = TO_CHAR(ss.ID)
+        LEFT JOIN SYS_SITE_MID_RESOURCE ssmr ON ssmr.ACCOUNT_SITE_ID=si.ID
+        LEFT JOIN ZG_SPACE_RES_POINT zsrp ON ssmr.RESOURCE_ID = zsrp.INT_ID
+        LEFT JOIN ZG_SPACE_EQUIP_ROOM zser ON ssmr.RESOURCE_ID = zser.INT_ID
+        LEFT JOIN SYS_SITE_MID_METER ssmm ON ssmm.ACCOUNT_SITE_ID = si.ID 
+		LEFT JOIN SYS_WATTHOUR_METER swm ON swm.id = ssmm.WATTHOUR_METER_ID
+        WHERE 1=1
+        <if test="obj.queryData!=null and obj.queryData!=''">
+            AND (si.ACCOUNT_NAME LIKE '%'||#{obj.queryData,jdbcType=VARCHAR}||'%'
+            OR si.ACCOUNT_ALIAS LIKE '%'||#{obj.queryData,jdbcType=VARCHAR}||'%'
+            OR ss.NAME LIKE '%'||#{obj.queryData,jdbcType=VARCHAR}||'%')
+        </if>
+        <if test="obj.countyId!=null and obj.countyId!=''">
+            AND zsc.ID = #{obj.countyId,jdbcType=VARCHAR}
+        </if>
+        <if test="obj.id!=null and obj.id!=''">
+            AND si.id = #{obj.id,jdbcType=VARCHAR}
+        </if>
+        <if test="obj.cityId!=null and obj.cityId!=''">
+            AND zs.ID = #{obj.cityId,jdbcType=VARCHAR}
+        </if>
+        <if test="obj.meterCode!=null and obj.meterCode!=''">
+        	AND swm.PAYMENT_ACCOUNT_CODE LIKE  '%'||#{obj.meterCode,jdbcType=VARCHAR}||'%'
+        </if>
+    </select>
+    
+   <select id="queryListByPage" resultType="com.audit.modules.site.entity.SiteInfoVO">
+   		SELECT 
+   			si.ID 	as id,
+   			si.SITE_NAME as accountName,
+   			zs.NAME as area,
+            zsc.NAME as county
+   			
+   		FROM SYS_ACCOUNT_SITE si
+   			LEFT JOIN YDJH_AREA zs ON si.CITY_ID = zs.ID
+        	LEFT JOIN YDJH_AREA zsc ON si.COUNTY_ID = zsc.ID
+   		WHERE 1=1
+   
+   
+   </select>
+    
+    <select id="queryListExcel" resultType="java.util.Map">
+    SELECT 
+		zsc.NAME as qx,								
+		zsy.NAME as ds,								
+		sas.ACCOUNT_NAME as bzdmc,					
+		sas.ACCOUNT_ALIAS as bzdbm,					
+		sas.OLD_FINANCE_NAME as ycwzdmc,			
+		sas.CYCLE as bxzq,							
+		sas.ELECTRICITY_TYPE as ydlx,				
+		sas.SUPPLY_COMPANY as gdgs,					
+		sas.SHARE_TYPE as gxfs,						
+		sas.PAY_TYPE as dfjlfs,						
+		sas.PRODUCT_NATURE as cqxz,					
+		sas.SITE_NAME as zdmc,						
+		sc.CONTRACTID as htbh,						
+		sc.IS_CLUD as sfbg,							
+		sc.CLUD_PRICE as bgj,						
+		sc.PAYMENT_PERIOD as jfzq,					
+		sc.CONTRACT_TITLE as htmc,					
+		sc.EXECUTION_BEGIN_DATE as htsxrq,			
+		sc.EXECUTION_BEGIN_DATE as htzzrq,			
+		sc.PRICE as htdj,							
+		swm.PAYMENT_ACCOUNT_CODE as dbhh,			
+		swm.CODE as dbbsf,							
+		swm.TYPE as dblx,							
+		swm.STATUS as dbzt,							
+		swm.MAX_READING as zdds,					
+		swm.CURRENT_READING as dqds,				
+		to_char(swm.REIMBURSEMENT_DATE,'yyyy-mm-dd HH24:mi:ss') as dqdsksrq,		
+		swm.BELONG_ACCOUNT as ssht,					
+		swm.RATE as bl,		 							
+		zser.ZH_LABEL as jfzydmc					
+FROM 
+	SYS_ACCOUNT_SITE sas 
+	LEFT JOIN YDJH_AREA zsy ON sas.CITY_ID = zsy.ID
+    LEFT JOIN YDJH_AREA zsc ON sas.COUNTY_ID = zsc.ID
+    LEFT JOIN SYS_SITE_MID_CONTRACT ssmc ON sas.ID = ssmc.ACCOUNT_SITE_ID
+    LEFT JOIN SYS_CONTRACT sc ON sc.ID = ssmc.CONTRACT_ID
+    LEFT JOIN SYS_SITE_MID_METER ssmm ON sas.ID = ssmm.ACCOUNT_SITE_ID
+    LEFT JOIN SYS_WATTHOUR_METER swm ON swm.ID = ssmm.WATTHOUR_METER_ID 
+    LEFT JOIN SYS_SITE_MID_RESOURCE ssmr ON sas.ID=ssmr.ACCOUNT_SITE_ID        
+	LEFT JOIN ZG_SPACE_EQUIP_ROOM zser ON ssmr.RESOURCE_ID = zser.INT_ID			
+	WHERE 
+		 1=1
+		 <if test="obj.queryData!=null and obj.queryData!=''">
+            AND (si.ACCOUNT_NAME LIKE '%'||#{obj.queryData,jdbcType=VARCHAR}||'%'
+            OR si.ACCOUNT_ALIAS LIKE '%'||#{obj.queryData,jdbcType=VARCHAR}||'%'
+        </if>
+        <if test="obj.countyId!=null and obj.countyId!=''">
+            AND zsc.ID = #{obj.countyId,jdbcType=VARCHAR}
+        </if>
+        <if test="obj.id!=null and obj.id!=''">
+            AND si.id = #{obj.id,jdbcType=VARCHAR}
+        </if>
+        <if test="obj.cityId!=null and obj.cityId!=''">
+            AND zs.ID = #{obj.cityId,jdbcType=VARCHAR}
+        </if>
+        <if test="obj.meterCode!=null and obj.meterCode!=''">
+        	AND swm.CODE LIKE  '%'||#{obj.meterCode,jdbcType=VARCHAR}||'%'
+        </if>
+		
+    </select>
+    
+ 	<!-- 额定功率的标杆列表查询  -->
+    <select id="queryPowerRatingList" resultType="com.audit.modules.electricity.entity.PowerRatingVO">
+       SELECT
+			sas.ID AS siteId,
+			sas.ACCOUNT_NAME AS siteName,
+			zsy.NAME AS cityName,
+			sum(sepr.POWER_RATING) AS totalPowerRating,
+			zsc.NAME AS countyName
+		FROM
+			SYS_ACCOUNT_SITE sas
+		LEFT JOIN SYS_SITE_MID_RESOURCE ssmr ON ssmr.ACCOUNT_SITE_ID = sas. ID
+		LEFT JOIN ZG_SPACE_EQUIP_ROOM zser ON ssmr.RESOURCE_ID = zser.INT_ID
+		
+		LEFT JOIN SYS_EQUROOM_POWER_RATING sepr ON sepr.EQUROOM_ID = zser.INT_ID
+		LEFT JOIN YDJH_AREA zsy ON sas.CITY_ID=zsy.ID
+		LEFT JOIN YDJH_AREA zsc ON sas.COUNTY_ID = zsc.ID
+        WHERE 1=1
+        <if test="obj.siteName!=null and obj.siteName!=''">
+			AND ( <!-- INSTR(sas.SITE_NAME,#{obj.siteName,jdbcType=VARCHAR}) > 0 OR  -->
+			 INSTR(sas.ACCOUNT_NAME,#{obj.siteName,jdbcType=VARCHAR}) > 0 )
+        </if>
+        <if test="obj.cityId!=null and obj.cityId!=''">
+            AND sas.CITY_ID = #{obj.cityId,jdbcType=VARCHAR}
+        </if>
+        <if test="obj.countyId!=null and obj.countyId!=''">
+            AND sas.COUNTY_ID = #{obj.countyId,jdbcType=VARCHAR}
+        </if>
+       	 	AND sas.id IS NOT NULL
+        GROUP BY sas.ID,sas.ACCOUNT_NAME,zsy.NAME ,zsc.NAME
+    </select>
+    
+    <select id="queryExitStatusById" parameterType="java.lang.String" resultType="com.audit.modules.site.entity.SiteInfoVO">
+    	SELECT 
+			zser.STATUS AS roomStatus 
+		FROM SYS_ACCOUNT_SITE sas 
+		LEFT JOIN SYS_SITE_MID_RESOURCE ssmr ON sas.id = ssmr.ACCOUNT_SITE_ID 
+		LEFT JOIN ZG_SPACE_EQUIP_ROOM  zser  ON ssmr.RESOURCE_ID =zser.INT_ID
+		WHERE sas.ID=#{id}
+    </select>
+    
+    
+
+	<!-- 根据报账点id查询机房 -->
+	<select id="getRoomByAccountSiteId" parameterType="java.lang.String" resultType="com.audit.modules.site.entity.EquRoomDevice">
+		SELECT 
+			ZSER.INT_ID AS equipmentRoomId,
+			ZSER.ZH_LABEL AS equipmentRoomName,
+			ZSER.PROPERTY AS equipmentRoomType
+		FROM 
+			SYS_ACCOUNT_SITE SAS
+			LEFT JOIN SYS_SITE_MID_RESOURCE SMR ON SMR.ACCOUNT_SITE_ID = SAS.ID
+			LEFT JOIN ZG_SPACE_EQUIP_ROOM ZSER ON ZSER.INT_ID = SMR.RESOURCE_ID
+		WHERE SAS.ID = #{accountId}
+			 
+	
+	</select>
+	<!-- 根据报账点id查询机房zto类设备 -->
+	<select id="getZTOByAccountId" parameterType="java.lang.String" resultType="com.audit.modules.site.entity.PowerRatingDetailVO">
+		SELECT 
+			ZTO.INT_ID AS equipmentRoomId,
+			ASER.ZH_LABEL AS equipmentRoomName,
+			'有线设备' AS deviceBelong,
+			ZTO.NE_STATE AS deviceStatus,
+			ZTO.NE_TYPE AS deviceModel,
+			ZTO.VENDER AS deviceVendor,
+			'OLT' AS deviceType
+		FROM SYS_SITE_MID_RESOURCE SSMR
+		LEFT JOIN ZG_SPACE_EQUIP_ROOM ASER ON SSMR.RESOURCE_ID = ASER.INT_ID
+		LEFT JOIN ZG_TRAN_OLT ZTO ON ZTO.RELATED_EQUIPROOM = ASER.INT_ID
+		WHERE SSMR.ACCOUNT_SITE_ID = #{accountId}
+			AND (ZTO.INT_ID IS NOT NULL  )
+	</select>
+	
+	<select id="getZTTNByAccountId" parameterType="java.lang.String" resultType="com.audit.modules.site.entity.PowerRatingDetailVO">
+		SELECT 
+			ZTTN.INT_ID AS equipmentRoomId,
+			ASER.ZH_LABEL AS equipmentRoomName,
+			'有线设备' AS deviceBelong,
+			ZTTN.STATUS AS deviceStatus,
+			ZTTN.MODEL AS deviceModel,
+			ZTTN.VENDOR AS deviceVendor,
+			'TRANSNE' AS deviceType
+		FROM SYS_SITE_MID_RESOURCE SSMR
+		LEFT JOIN ZG_SPACE_EQUIP_ROOM ASER ON SSMR.RESOURCE_ID = ASER.INT_ID
+		LEFT JOIN ZG_TRAN_TRANS_NE ZTTN ON ZTTN.RELATED_EQUROOM = ASER.INT_ID
+		WHERE SSMR.ACCOUNT_SITE_ID = #{accountId}
+			AND (ZTTN.INT_ID IS NOT NULL  )
+	</select>
+	
+	<select id="getZWBByAccountId"  parameterType="java.lang.String" resultType="com.audit.modules.site.entity.PowerRatingDetailVO">
+		SELECT 
+			ZWB.INT_ID AS equipmentRoomId,
+			ASER.ZH_LABEL AS equipmentRoomName,
+			'无线设备' AS deviceBelong,
+			ZWB.STATUS AS deviceStatus,
+			ZWB.MODEL AS deviceModel,
+			ZWB.VENDOR AS deviceVendor,
+			'BTS' AS deviceType
+		FROM SYS_SITE_MID_RESOURCE SSMR
+		LEFT JOIN ZG_SPACE_EQUIP_ROOM ASER ON SSMR.RESOURCE_ID = ASER.INT_ID
+		LEFT JOIN ZG_WIRE_BTS ZWB ON ZWB.RELATED_EQUIPROOM =  ASER.INT_ID
+		WHERE SSMR.ACCOUNT_SITE_ID = #{accountId}
+			AND (ZWB.INT_ID IS NOT NULL  )
+	</select>
+	
+	<select id="getZWENByAccountId"  parameterType="java.lang.String" resultType="com.audit.modules.site.entity.PowerRatingDetailVO">
+		SELECT 
+			ZWEN.INT_ID AS equipmentRoomId,
+			ASER.ZH_LABEL AS equipmentRoomName,
+			'无线设备' AS deviceBelong,
+			ZWEN.STATUS AS deviceStatus,
+			ZWEN.MODEL AS deviceModel,
+			ZWEN.VENDOR AS deviceVendor,
+			'ENODEB' AS deviceType
+		FROM SYS_SITE_MID_RESOURCE SSMR
+		LEFT JOIN ZG_SPACE_EQUIP_ROOM ASER ON SSMR.RESOURCE_ID = ASER.INT_ID
+		LEFT JOIN ZG_WIRE_E_NODEB ZWEN ON ZWEN.RELATED_EQUIPROOM = ASER.INT_ID
+		WHERE SSMR.ACCOUNT_SITE_ID = #{accountId}
+			AND (ZWEN.INT_ID IS NOT NULL  )
+	</select>
+	
+	<select id="getZWLRByAccountId"  parameterType="java.lang.String" resultType="com.audit.modules.site.entity.PowerRatingDetailVO">
+		SELECT 
+			ZWLR.INT_ID AS equipmentRoomId,
+			ASER.ZH_LABEL AS equipmentRoomName,
+			'无线设备' AS deviceBelong,
+			ZWLR.STATUS AS deviceStatus,
+			ZWLR.MODEL AS deviceModel,
+			ZWLR.VENDOR AS deviceVendor,
+			'RRU' AS deviceType
+		FROM SYS_SITE_MID_RESOURCE SSMR
+		LEFT JOIN ZG_SPACE_EQUIP_ROOM ASER ON SSMR.RESOURCE_ID = ASER.INT_ID
+		LEFT JOIN ZG_WIRE_LTE_RRU ZWLR ON ZWLR.RELATED_EQUIPROOM = ASER.INT_ID
+		WHERE SSMR.ACCOUNT_SITE_ID = #{accountId}
+			AND (ZWLR.INT_ID IS NOT NULL  )
+	</select>
+	
+	<select id="getZWNRByAccountId"  parameterType="java.lang.String" resultType="com.audit.modules.site.entity.PowerRatingDetailVO">
+		SELECT 
+			ZWN.INT_ID AS equipmentRoomId,
+			ASER.ZH_LABEL AS equipmentRoomName,
+			'无线设备' AS deviceBelong,
+			ZWN.STATUS AS deviceStatus,
+			ZWN.MODEL AS deviceModel,
+			ZWN.VENDOR AS deviceVendor,
+			'NODEB' AS deviceType
+		FROM SYS_SITE_MID_RESOURCE SSMR
+		LEFT JOIN ZG_SPACE_EQUIP_ROOM ASER ON SSMR.RESOURCE_ID = ASER.INT_ID
+		LEFT JOIN ZG_WIRE_NODEB ZWN ON ZWN.RELATED_EQUIPROOM = ASER.INT_ID
+		WHERE SSMR.ACCOUNT_SITE_ID = #{accountId}
+			AND (ZWN.INT_ID IS NOT NULL  )
+	</select>
+	
+	<!-- 根据机房id查询ZTO类电器的额定功率之和 -->
+	<select id="queryPowerRatingToZTO" parameterType="java.lang.String" resultType="java.lang.Double">
+		SELECT 
+			SUM(SPR.POWER_RATING)
+		FROM 
+			ZG_TRAN_OLT ZTO
+			LEFT JOIN SYS_POWER_RATING SPR ON(SPR."MODEL"=ZTO.NE_TYPE AND SPR.VENDOR = ZTO.VENDER)
+		WHERE 
+			INSTR(ZTO.NE_STATE,'退网')=0
+			AND ZTO.RELATED_EQUIPROOM=#{accountSiteId}
+			AND SPR.TYPE = 'OLT'
+	</select>
+	
+	<!-- 根据机房id查询ZTTN类电器的额定功率之和 -->
+	<select id="queryPowerRatingToZTTN" parameterType="java.lang.String" resultType="java.lang.Double">
+		SELECT 
+			SUM(SPR.POWER_RATING)
+		FROM 
+			ZG_TRAN_TRANS_NE ZTTN 
+			LEFT JOIN SYS_POWER_RATING SPR ON(SPR."MODEL"=ZTTN.NE_TYPE AND SPR.VENDOR = ZTTN.VENDOR)
+		WHERE 
+			INSTR(ZTTN.STATUS,'退网')=0
+			AND ZTTN.RELATED_EQUROOM=#{accountSiteId}
+			AND SPR.TYPE = 'TRINSNE'
+	</select>
+
+	<!-- 根据机房id查询ZWB类电器的额定功率之和 -->
+	<select id="queryPowerRatingToZWB" parameterType="java.lang.String" resultType="java.lang.Double">
+		SELECT 
+			SUM(SPR.POWER_RATING)
+		FROM 
+			ZG_WIRE_BTS ZWB 
+			LEFT JOIN SYS_POWER_RATING SPR ON(SPR."MODEL"=ZWB."MODEL" AND SPR.VENDOR = ZWB.VENDOR)
+		WHERE 
+			INSTR(ZWB.STATUS,'退网')=0
+			AND ZWB.RELATED_EQUIPROOM=#{accountSiteId}
+			AND SPR.TYPE = 'BTS'
+	</select>
+	
+	<!-- 根据机房id查询ZWEN类电器的额定功率之和 -->
+	<select id="queryPowerRatingToZWEN" parameterType="java.lang.String" resultType="java.lang.Double">
+		SELECT 
+			SUM(SPR.POWER_RATING)
+		FROM 
+			ZG_WIRE_E_NODEB ZWEN 
+			LEFT JOIN SYS_POWER_RATING SPR ON(SPR."MODEL"=ZWEN."MODEL" AND SPR.VENDOR = ZWEN.VENDOR)
+		WHERE 
+			INSTR(ZWEN.STATUS,'退网')=0
+			AND ZWEN.RELATED_EQUIPROOM=#{accountSiteId}
+			AND SPR.TYPE = 'ENODEB'
+	</select>
+	
+	<!-- 根据机房id查询ZWLR类电器的额定功率之和 -->
+	<select id="queryPowerRatingToZWLR" parameterType="java.lang.String" resultType="java.lang.Double">
+		SELECT 
+			SUM(SPR.POWER_RATING)
+		FROM 
+			ZG_WIRE_LTE_RRU ZWLR 
+			LEFT JOIN SYS_POWER_RATING SPR ON(SPR."MODEL"=ZWLR."MODEL" AND SPR.VENDOR = ZWLR.VENDOR)
+		WHERE 
+			INSTR(ZWLR.STATUS,'退网')=0
+			AND ZWLR.RELATED_EQUIPROOM=#{accountSiteId}
+			AND (SPR.TYPE='LTE' OR SPR.TYPE='RRU')
+	</select>
+	
+	<!-- 根据机房id查询ZWN类电器的额定功率之和 -->
+	<select id="queryPowerRatingToZWN" parameterType="java.lang.String" resultType="java.lang.Double">
+		SELECT 
+			SUM(SPR.POWER_RATING)
+		FROM 
+			ZG_WIRE_NODEB ZWN 
+			LEFT JOIN SYS_POWER_RATING SPR ON(SPR."MODEL"=ZWN."MODEL" AND SPR.VENDOR = ZWN.VENDOR)
+		WHERE 
+			INSTR(ZWN.STATUS,'退网')=0
+			AND ZWN.RELATED_EQUIPROOM=#{accountSiteId}
+			AND SPR.TYPE = 'NODEB'
+	</select>
+	
+
+    <select id="queryByCountyID" parameterType="java.lang.String" resultType="com.audit.modules.site.entity.SiteInfoVO">
+        SELECT
+            ID,SITE_NAME AS siteName,
+            ACCOUNT_NAME AS accountName,
+            ACCOUNT_ALIAS as accountAlias,
+            OLD_FINANCE_NAME AS oldFinanceName,
+            PRODUCT_NATURE AS productNature,
+            CITY_ID AS area,
+            COUNTY_ID AS county,
+            CYCLE AS cycle,
+            ELECTRICITY_TYPE AS electricityType,
+            SUPPLY_COMPANY AS supplyCompany,
+            SHARE_TYPE AS shareType,
+            PAY_TYPE AS payType
+        FROM SYS_ACCOUNT_SITE
+        WHERE 1=1
+        <if test="countyID!=null and countyID!=''">
+            AND COUNTY_ID = #{countyID}
+        </if>
+    </select>
+
+    <insert id="batchSave" parameterType="com.audit.modules.site.entity.SiteInfoVO">
+        INSERT INTO SYS_ACCOUNT_SITE(ID,SITE_NAME,ACCOUNT_NAME,ACCOUNT_ALIAS,OLD_FINANCE_NAME,
+        PRODUCT_NATURE,CITY_ID,COUNTY_ID,ELECTRICITY_TYPE,SUPPLY_COMPANY,SHARE_TYPE,PAY_TYPE)
+        <foreach collection="list" index="index" item="site" separator="union all">
+            select
+            #{site.id,jdbcType=VARCHAR},#{site.siteName,jdbcType=VARCHAR},#{site.accountName,jdbcType=VARCHAR},#{site.accountAlias,jdbcType=VARCHAR},
+            #{site.oldFinanceName,jdbcType=VARCHAR},#{site.productNature,jdbcType=VARCHAR},#{site.area,jdbcType=VARCHAR},#{site.county,jdbcType=VARCHAR},
+            #{site.electricityType,jdbcType=VARCHAR},
+            #{site.supplyCompany,jdbcType=VARCHAR},#{site.shareType,jdbcType=VARCHAR},#{site.payType,jdbcType=VARCHAR}
+            from dual
+        </foreach>
+    </insert>
+    
+    <update id="batchUpdateRoomStatus" parameterType="java.lang.String">
+    	UPDATE SYS_ACCOUNT_SITE set EXIT_STATUS = '锁定' where ID = #{siteId}
+    </update>
+    <update id="batchUpdateRoomStatusNull" parameterType="java.lang.String">
+    	UPDATE SYS_ACCOUNT_SITE set EXIT_STATUS = '' where ID = #{siteId}
+    </update>
+
+    <update id="batchUpdate" parameterType="com.audit.modules.site.entity.SiteInfoVO">
+        begin
+        <foreach collection="list" item="item" index="index" separator=";">
+            update SYS_ACCOUNT_SITE
+            <set>
+                <if test="item.id!=null and item.id!=''">
+                    ID = #{item.id},
+                </if>
+                <if test="item.siteName!=null and item.siteName!=''">
+                    SITE_NAME = #{item.siteName},
+                </if>
+                <if test="item.accountName!=null and item.accountName!=''">
+                    ACCOUNT_NAME = #{item.accountName},
+                </if>
+                <if test="item.accountAlias!=null and item.accountAlias!=''">
+                    ACCOUNT_ALIAS = #{item.accountAlias},
+                </if>
+                <if test="item.oldFinanceName!=null and item.oldFinanceName!=''">
+                    OLD_FINANCE_NAME = #{item.oldFinanceName},
+                </if>
+                <if test="item.productNature!=null and item.productNature!=''">
+                    PRODUCT_NATURE = #{item.productNature},
+                </if>
+                <if test="item.area!=null and item.area!=''">
+                    CITY_ID = #{item.area},
+                </if>
+                <if test="item.county!=null and item.county!=''">
+                    COUNTY_ID = #{item.county},
+                </if>
+                <if test="item.cycle!=null and item.cycle!=''">
+                    CYCLE = #{item.cycle},
+                </if>
+                <if test="item.electricityType!=null and item.electricityType!=''">
+                    ELECTRICITY_TYPE = #{item.electricityType},
+                </if>
+                <if test="item.supplyCompany!=null and item.supplyCompany!=''">
+                    SUPPLY_COMPANY = #{item.supplyCompany},
+                </if>
+                <if test="item.shareType!=null and item.shareType!=''">
+                    SHARE_TYPE = #{item.shareType},
+                </if>
+                <if test="item.payType!=null and item.payType!=''">
+                    PAY_TYPE = #{item.payType},
+                </if>
+            </set>
+            where id = #{item.id}
+        </foreach>
+        ;end;
+    </update>
+
+    <delete id="batchDeleteMidForWatth" parameterType="com.audit.modules.site.entity.SiteMidWattInfo">
+        DELETE FROM SYS_SITE_MID_METER WHERE ACCOUNT_SITE_ID IN
+        <foreach collection="list" index="index" item="item" open="("
+                 separator="," close=")">
+            #{item.accountSiteId}
+        </foreach>
+    </delete>
+
+    <insert id="batchSaveMidForWatth" parameterType="com.audit.modules.site.entity.SiteMidWattInfo">
+        INSERT INTO SYS_SITE_MID_METER(ID,ACCOUNT_SITE_ID,WATTHOUR_METER_ID)
+        <foreach collection="list" index="index" item="site" separator="union all">
+            select
+            #{site.id,jdbcType=VARCHAR},#{site.accountSiteId,jdbcType=VARCHAR},#{site.watthourMeterId,jdbcType=VARCHAR}
+            from dual
+        </foreach>
+    </insert>
+
+    <insert id="batchSaveMidForSupplier" parameterType="com.audit.modules.site.entity.SiteMidSupplierInfo">
+        INSERT INTO SYS_SITE_MID_SUPPLIER(ID,ACCOUNT_SITE_ID,SUPPLIER_ID)
+        <foreach collection="list" index="index" item="site" separator="union all">
+            select
+            #{site.id,jdbcType=VARCHAR},#{site.accountSiteId,jdbcType=VARCHAR},#{site.supplierId,jdbcType=VARCHAR}
+            from dual
+        </foreach>
+    </insert>
+
+    <delete id="batchDeleteMidSupplier" parameterType="com.audit.modules.site.entity.SiteMidSupplierInfo">
+        DELETE FROM SYS_SITE_MID_SUPPLIER WHERE ACCOUNT_SITE_ID IN
+        <foreach collection="list" index="index" item="item" open="("
+                 separator="," close=")">
+            #{item.accountSiteId}
+        </foreach>
+    </delete>
+
+    <insert id="batchSaveMidForContract" parameterType="com.audit.modules.site.entity.SiteMidContractInfo">
+        INSERT INTO SYS_SITE_MID_CONTRACT(ID,ACCOUNT_SITE_ID,CONTRACT_ID)
+        <foreach collection="list" index="index" item="site" separator="union all">
+            select
+            #{site.id,jdbcType=VARCHAR},#{site.accountSiteId,jdbcType=VARCHAR},#{site.contractId,jdbcType=VARCHAR}
+            from dual
+        </foreach>
+    </insert>
+
+    <delete id="batchDeleteMidContract" parameterType="com.audit.modules.site.entity.SiteMidContractInfo">
+        DELETE FROM SYS_SITE_MID_CONTRACT WHERE ACCOUNT_SITE_ID IN
+        <foreach collection="list" index="index" item="item" open="("
+                 separator="," close=")">
+            #{item.accountSiteId}
+        </foreach>
+    </delete>
+
+    <insert id="batchSaveMidForResource" parameterType="com.audit.modules.site.entity.SiteMidResourceInfo">
+        INSERT INTO SYS_SITE_MID_RESOURCE(ID,ACCOUNT_SITE_ID,TYPE,RESOURCE_ID)
+        <foreach collection="list" index="index" item="site" separator="union all">
+            select
+            #{site.id,jdbcType=VARCHAR},#{site.accountSiteId,jdbcType=VARCHAR},#{site.type,jdbcType=INTEGER},#{site.resourceId,jdbcType=VARCHAR}
+            from dual
+        </foreach>
+    </insert>
+
+    <insert id="saveMidForResource" parameterType="com.audit.modules.site.entity.SiteMidResourceInfo">
+		INSERT INTO
+			SYS_SITE_MID_RESOURCE(ID,ACCOUNT_SITE_ID,TYPE,RESOURCE_ID) VALUES (
+			#{id,jdbcType=VARCHAR},#{accountSiteId,jdbcType=VARCHAR},#{type,jdbcType=INTEGER},#{resourceId,jdbcType=VARCHAR}
+			)
+
+	</insert>
+
+    <delete id="batchDeleteMidResource" parameterType="com.audit.modules.site.entity.SiteMidResourceInfo">
+        DELETE FROM SYS_SITE_MID_RESOURCE WHERE ACCOUNT_SITE_ID IN
+        <foreach collection="list" index="index" item="item" open="("
+                 separator="," close=")">
+            #{item.accountSiteId}
+        </foreach>
+    </delete>
+
+    <select id="queryMidForSiteAndWatthour" parameterType="java.lang.String"
+            resultType="com.audit.modules.site.entity.SiteMidWattInfo">
+        SELECT ssme.ID as id,ssme.ACCOUNT_SITE_ID AS accountSiteId,ssme.WATTHOUR_METER_ID AS watthourMeterId
+        FROM SYS_ACCOUNT_SITE sas INNER JOIN SYS_SITE_MID_METER ssme ON sas.ID=ssme.ACCOUNT_SITE_ID
+        <if test="countyID!=null and countyID!=''">
+            AND sas.COUNTY_ID = #{countyID}
+        </if>
+    </select>
+
+    <select id="queryMidForSiteAndResoure" parameterType="java.lang.String"
+            resultType="com.audit.modules.site.entity.SiteMidResourceInfo">
+        SELECT ssmr.RESOURCE_ID AS resourceId
+        FROM SYS_ACCOUNT_SITE sas INNER JOIN SYS_SITE_MID_RESOURCE ssmr ON sas.ID=ssmr.ACCOUNT_SITE_ID
+        <if test="countyID!=null and countyID!=''">
+            AND sas.COUNTY_ID = #{countyID}
+        </if>
+    </select>
+    
+    <select id="getPayTypeById" parameterType="java.lang.String" resultType="com.audit.modules.site.entity.SiteInfoVO">
+    	select PAYTYPE AS payTypee,PROFESSIONAL as professional from 
+    	SYS_ACCOUNT_SITE where id=#{id}
+    </select>
+</mapper>

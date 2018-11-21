@@ -1,0 +1,146 @@
+<!--报表统计-->
+
+
+<div class="system-content"  onResize="resize()" >
+
+    <div style="    line-height: 52px;color: #434343;background-color: #f6f6f8;    font-weight: bold;">
+        <span>数据报表</span>
+    </div>
+
+    <div class="index-box" id="indexBox">
+        <div class="search-box">
+            <div>
+                <select ng-readonly="userLevel==1" name="" id="" class="title-select"
+                        ng-model="cityId"
+                        ng-change="queryCountyList(cityId)"
+                        style="width: 25%"
+						ng-if="citys"
+                ><option value ="0">全省汇总</option>
+                <option ng-repeat="city in citys" value="{{city.key}}">{{city.value}}</option>
+                </select>
+                <select ng-change="changeMenu(type)" ng-model="type" class="title-select" style="width: 25%">
+                    <option ng-repeat="item in menus track by $index" ng-if="item.key" ng-selected="item.key=='电量统计管理'"  value="{{item.key}}">{{item.key}}</option>
+                </select>
+                <select ng-model="year" class="title-select" style="width: 24%">
+                    <option ng-repeat="year in years" ng-selected="year==2017" value="{{year}}">{{year}}</option>
+                </select>
+                <select ng-model="auditType" ng-change="cauditType(auditType)" class="title-select" style="width: 24%">
+                    <option  ng-selected="-1" value="-1">选择稽核类型</option>
+                    <option   value="0">基站电费</option>
+                    <option  value="1">综合电费</option>
+                </select>
+            </div>
+            <button ng-click="getData('全省站点用电量情况')" class="btn btn-primary" type="button">搜索</button>
+        </div>
+         <div>
+         	<button ng-click="downExcel()" class="btn btn-primary" type="button">导出转供电清单</button>
+         </div>
+        
+        <div id="home-page"  style="height: auto; padding-top: 0px;">
+            <!-- 市级首页 -->
+            <div class="province-chart">
+                <div class="chart-title" >
+                    <div ng-show="stasticType=='电量统计管理'" ng-click="switchChart('全省站点用电量情况')" class="flex" >全省站点用电量情况</div>
+                    <div ng-show="stasticType=='电量统计管理'" ng-click="switchChart('全省站点直供电，转供电用电量情况')" class="flex" >全省站点直供电，转供电用电量情况</div>
+                    <div ng-show="stasticType=='电量统计管理'" ng-click="switchChart('全省报账点月用电量TOP100排名')" class="flex" >全省报账点月用电量TOP100排名</div>
+                    <div ng-show="stasticType=='电费统计管理'" ng-click="switchChart('全省站点电费情况')" class="flex" >全省站点电费情况</div>
+                    <div ng-show="stasticType=='电费统计管理'" ng-click="switchChart('全省站点电费占收比,占支比，全省站点单载波电费情况')"  class="flex" >全省站点电费占收比,占支比，全省站点单载波电费情况</div>
+                    <div ng-show="stasticType=='电费统计管理'" ng-click="switchChart('全省报账点月用电费用TOP100排名')"  class="flex" >全省报账点月用电费用TOP100排名</div>
+                    <div ng-show="stasticType=='稽核统计管理'"  ng-click="switchChart('全省站点超额定功率标杆情况')" class="flex" >全省站点超额定功率标杆情况</div>
+                    <div ng-show="stasticType=='稽核统计管理'" ng-click="switchChart('全省站点超智能电表标杆值、超开关电源标杆值情况')" class="flex" >全省站点超智能电表标杆值、超开关电源标杆值情况</div>
+                    <div ng-show="stasticType=='单价统计管理'" ng-click="switchChart('全省电费单价占比情况')" class="flex">全省电费单价占比情况</div>
+                    <div ng-show="stasticType=='指标统计管理'"  ng-click="switchChart('资产、财务系统基站名称一致性情况')" class="flex" >资产、财务系统基站名称一致性情况</div>
+                    <div ng-show="stasticType=='指标统计管理'" ng-click="switchChart('全省站点智能电表接入率、可用率情况')" class="flex" >全省站点智能电表接入率、可用率情况</div>
+                    <div ng-show="stasticType=='指标统计管理'" ng-click="switchChart('全省站点开关电源监控完好率、可用率情况')" class="flex" >全省站点开关电源监控完好率、可用率情况</div>
+                </div>
+                <div  class="chart-content" >
+                    <!-- 首页数据图 -->
+                   <!--  <div class="chart-date"> -->
+                        <div class="chart-date" style="width: 100%">
+                            <div  id="container" ng-show="!noData" >
+                            </div>
+                            <image ng-show="noData"  ng-src="./assets/img/no_data.png" style="vertical-align: middle;
+                                left: 50%;
+                                position: absolute;
+                                top: 50%;
+                                margin-left: -62px;
+                                margin-top: -89px;" /> 
+                        </div>
+                    <!-- </div> -->
+                </div>
+            </div>
+        </div>
+        <div class="foot-message">
+                <div class="flex-foot">
+                    <div class="detail-foot">
+                        <div>
+                            <div>直供电比例</div>
+                            <div class="detail-t">{{proSum.directScale}}</div>
+                        </div>
+                        <div>
+                            <div>转供电比例</div>
+                            <div class="detail-t">{{proSum.rotaryScale}}</div>
+                        </div>
+                    </div>
+                    <div class="foot-title">电费基础信息</div>
+                </div>
+                <div class="flex-foot">
+                    <div class="detail-foot">
+                         <div>
+                            <div>直供电电量</div>
+                            <div class="detail-t">{{proSum.directPower}}</div>
+                        </div>
+                        <div>
+                            <div>转供电电量</div>
+                            <div class="detail-t">{{proSum.rotaryPower}}</div>
+                        </div>
+                    </div>
+                    <div class="foot-title">全省财务数据</div>
+                </div>
+                <div class="flex-foot">
+                    <div class="detail-foot">
+                         <div>
+                            <div>基站总数</div>
+                            <div class="detail-t">{{proSum.siteNum}}</div>
+                        </div>
+                        <div>
+                            <div>自维报账点</div>
+                            <div class="detail-t">{{proSum.selfNum}}</div>
+                        </div>
+                    </div>
+                    <div class="foot-title">全省基站报账站点数据</div>
+                </div>
+                <div class="flex-foot">
+                    <div class="detail-foot">
+                         <div>
+                            <div>移交铁塔站点</div>
+                            <div class="detail-t">45651</div>
+                        </div>
+                        <div>
+                            <div>过户站点</div>
+                            <div class="detail-t">13251</div>
+                        </div>
+                    </div>
+                    <div class="foot-title">铁塔信息</div>   
+                </div>
+            </div>
+    </div>
+</div>
+     <script language="javascript" type="text/javascript">
+        $(document).ready(function (){
+            $(".flex").each(function(index){
+                if(index==0){
+                    $(".flex").eq(index).addClass("tab-hover");
+                }
+                $(this).click(function(){
+                    $(".flex").removeClass("tab-hover");
+                    $(".flex").eq(index).addClass("tab-hover");
+                });
+            });
+        });
+    </script>
+
+
+
+
+

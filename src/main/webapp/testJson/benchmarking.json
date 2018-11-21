@@ -1,0 +1,47 @@
+{
+    "siteInfoVO": {
+        "id": "1",
+        "accountName": "泸州叙永滨江商城基站001",
+        "accountAlias": "滨江商城",
+        "productNature": "0",
+        "allocationProportion": null,
+        "area": "泸州",
+        "county": "叙永县",
+        "resourceName": "泸州叙永滨江商城基站综合机房",
+        "oldFinanceName": "滨江商城",
+        "cycle": 1
+    },
+    "contractVO": {
+        "name": "合同名字一",
+        "startDate": 1483237860000,
+        "endDate": 1514773874000,
+        "isClud": "0",
+        "cludPrice": null,
+        "paymentCycle": "1",
+        "paymentAccountCode": "0513217849",
+        "unitPrice": ".9119"
+    },
+    "supplierVO": {
+        "id": "1",
+        "name": "电力公司",
+        "code": 98839,
+        "regionCode": 120495,
+        "organizationCode": 85
+    },
+    "watthourMeterVO": {
+        "id": "1",
+        "code": "滨江商城_001",
+        "paymentAccountCode": "0513217849",
+        "ptype": 2,
+        "status": 1,
+        "rate": 1,
+        "maxReading": 99999,
+        "currentReading": 21996,
+        "reimbursementDate": 1481299200000,
+        "belongCompany": 1,
+        "powerType": 1,
+        "powerSupply": 1,
+        "shareEnable": 0,
+        "paymentType": 3
+    }
+}

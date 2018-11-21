@@ -1,0 +1,30 @@
+﻿ <!-- 抄表异常 (距离上次上传电表图片附件已6个月)-->
+ <style>
+ 
+.heading {
+padding-left: 0px;
+color:#4b8de6;
+}
+
+.content {
+padding-left: 10%;
+padding-top:10%;
+color:red;
+padding-bottom:10%;
+}
+
+</style>
+ <div class="ledge-table meter-details">
+ 	<div class="heading">
+ 	<h3>报销提示</h3>	
+ 	</div>
+ 	<div class="content">
+ 	<h3>未满足报销要求: </h3><br><br><br>
+ 	<h3>距上次上传电表图片信息已超过6个月,必须提供新电表</h3><br><br><br>
+ 	<h3>图片附件才可以继续报销。</h3><br><br><br>
+ 	<h3>上次上传电表图片时间: {{lastTimes}} </h3><br>
+ 	</div>
+<div class="reimbur-foot ledge-foot audit-dialog">
+<button ng-click="closeDialog('wattTimeDialog')" class="reimbur-save btn">确认</button>
+</div>
+ </div>

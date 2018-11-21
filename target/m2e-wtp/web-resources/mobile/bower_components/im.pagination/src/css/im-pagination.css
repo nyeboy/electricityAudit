@@ -1,0 +1,10 @@
+
+
+.page-list2 .pagination {float:right;}
+.page-list2 .pagination span {cursor: pointer;}
+.page-list2 .pagination .separate span{cursor: default; border-top:none;border-bottom:none;}
+.page-list2 .pagination .separate span:hover {background: none;}
+.page-list2 .page-total {float:left; margin: 25px 20px;}
+.page-list2 .page-total input, .page-list2 .page-total select{height: 26px; border: 1px solid #ddd;}
+.page-list2 .page-total input {width: 40px; padding-left:3px;}
+.page-list2 .page-total select {width: 50px;}

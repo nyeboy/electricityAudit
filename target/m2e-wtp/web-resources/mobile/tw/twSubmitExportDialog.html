@@ -1,0 +1,111 @@
+﻿<!-- 塔维稽核单信息  --> 
+<div class="ledge-detail ledge-edit elec-dialog">
+   <div class="ledge-content">
+   <div class="reimbur-foot ledge-foot">
+        <button ng-click="twSubmitExcel()" class="reimbur-save btn" style="margin-left:80%;">导出</button>
+    </div>	
+       <div class="pannel-basic">
+            <div class="basic-container">
+                <div class="basic-audit">           
+		<div class="ledge-detail add-details">
+			
+		<div class="table-details invoinc-list" id="twSubmitDetails">											
+					
+						<table border="1px solid black" >
+		<tbody class="query-date">																			
+                               <tr>
+                             			 <th colspan="37"><h4>塔维稽核单</h4></th>
+                               </tr>							 
+                                <tr>  
+                                	<th>序号</th>
+                                	<th>稽核单流水号</th>                                 
+                                    <th>地市</th>
+                                    <th>区县</th>
+                                    <th>铁塔站址编码</th>
+                                    <th>资管站点名称</th>
+                                    <th>铁塔站址名称</th>
+                                    <th>建单时间</th>
+                                    <th>录入人员</th>                                                                                               
+                               		<th>供应商</th> 
+                               		<th>供应商地点ID</th>                                		
+                                	<th>总金额(含税)</th>                                 
+                                    <th>状态</th>                                   
+                                    <th>成本中心</th>
+                                    <th>分摊电费总金额</th>
+                                    <th>是否包干</th>
+                                    <th>电表编号</th>
+                                    <th>缴费户号</th>                                                                                               
+                               		<th>电费归属地起始日期</th> 
+                               		<th>电费归属终止日期</th>
+                                	<th>总电量(度)</th>                                 
+                                    <th>实际支付电费(元)</th>
+                                    <th>分摊比例</th>
+                                    <th>分摊电费金额</th>
+                                    <th>是否翻表</th>
+                                    <th>最大读数</th>
+                                    <th>倍率</th>
+                                    <th>用电起度(度)</th>                                                                                               
+                               		<th>用电止度(度)</th> 
+                               		<th>电损(度)</th> 
+                               		<th>缴费金额(元)</th>
+                                	<th>缴费发票类型</th>                                 
+                                    <th>缴费开票系数</th>                                   
+                                    <th>单价</th>
+                                    <th>其他费用</th>
+                                    <th>其他发票类型</th>
+                                    <th>其他开票系数</th>                                                                                                                                                        		
+                                </tr>
+								<tr ng-repeat="item in lists track by $index">
+								<td>{{((params.pageNo-1)*params.pageSize) +1*($index+1)}}</td>
+								<td>{{item.serialNumber}}</td>
+								<td>{{item.areas}}</td>
+								<td>{{item.counties}}</td>								
+								<td>{{item.sysTowerSitNo}}</td>								
+								<td>{{item.zgSpaceSiteName}}</td>								
+								<td>{{item.zgTowerSiteName}}</td>
+								<td>{{item.createDate}}</td>
+								<td>{{item.createPerson}}</td>							
+								<td>{{item.supplierName}}</td>
+								<td>{{item.regionCode}}</td>
+								<td>{{item.totalAmount}}</td>								
+								<td>{{item.status}}</td>								
+								<td>{{item.costCenterName}}</td>								
+								<td>{{item.shareAmountSum}}</td>
+								<td>{{item.isClud}}</td>
+								<td>{{item.code}}</td>
+								<td>{{item.paymentAccountCode}}</td>
+								<td>{{item.belongStartTime}}</td>
+								<td>{{item.belongEndTime}}</td>								
+								<td>{{item.totalEleciric}}</td>								
+								<td>{{item.actualAmount}}</td>								
+								<td>{{item.shareProportion}}</td>
+								<td>{{item.shareAmount}}</td>
+								<td>{{item.whetherMeter}}</td>							
+								<td>{{item.maxReading}}</td>
+								<td>{{item.rate}}</td>
+								<td>{{item.startAmmeter}}</td>								
+								<td>{{item.endAmmeter}}</td>								
+								<td>{{item.electricLoss}}</td>								
+								<td>{{item.payAmount}}</td>
+								<td>{{item.payInvoiceType}}</td>
+								<td>{{item.payBillCoefficient}}</td>								
+								<td>{{item.unitPrice}}</td>
+								<td>{{item.otherAmount}}</td>
+								<td>{{item.otherInvoiceType}}</td>								
+								<td>{{item.otherBillCoefficient}}</td>								
+								</tr>                                        							
+						</tbody>
+						</table>										
+                        </div>
+				
+   </div>
+
+     </div>
+   </div>
+     </div>
+        		<div class="reimbur-foot ledge-foot">
+        <button ng-click="closeDialog('twSubmitExportDialog')" class="reimbur-save btn">关闭</button>
+    </div>
+	 </div>
+     </div>
+	 

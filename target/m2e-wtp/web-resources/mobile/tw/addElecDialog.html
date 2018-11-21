@@ -1,0 +1,368 @@
+﻿<!-- 添加电表 -->
+<div class="content-box" id="contentBox">
+    <div class="ledge-detail">
+        <div class="ledge-title">添加电表</div>
+        <div class="ledge-table">
+            <table>
+                <!-- 查看 -->
+                <tbody ng-if="checkDetail">
+                    <tr>
+                            <td>
+                            <span class="sign table-left">电表类型:</span>
+                            <input readonly ng-if="electricInfo.ptype ==1 || electricInfo.ptype == 2"  type="text" name="" class="table-right" value="{{electricInfo.ptype==1?'普通电表':'智能电表'}}" disabled>
+                    
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="table-left" >电表编码:</span>
+                            <input
+                                ng-model="electricInfo.code"
+                                ng-readonly="true"
+                                type="text" name="" class="table-right" value="JH201732222224612">
+                        </td>
+                        <td>
+                            <span class="table-left">缴费户号:</span>
+                            <input
+                                ng-readonly="true"
+                                ng-model="electricInfo.paymentAccountCode"
+                                type="text"  name="" class="table-right"  >
+                        </td>
+                        <td>
+                            <span class="table-left">是否翻表:</span>
+                            <input
+                                type="text"
+                                ng-readonly="true"
+                                ng-model="electricInfo.whetherMeter"
+                                class="table-right">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="table-left">最大读数:</span>
+                            <input
+                                type="text"
+                                ng-readonly="true"
+                                ng-model="electricInfo.maxReading" name="" id="" class="table-right">
+                        </td>
+                        <td>
+                            <span class="table-left">倍率:</span>
+                            <input
+                                ng-readonly="true"
+                                ng-blur="countPowerSize(electricInfo,$index)"
+                                ng-model="electricInfo.rate"
+                                type="text"
+                                name="" class="table-right" >
+                        </td>
+                        <td>
+                            <span class="table-left">电费归属起始日期:</span>
+                            <input
+                                format="YYYY-MM-DD"
+                                ng-readonly="true"
+                                type="text" ng-model="electricInfo.belongStartTime" name="" class="table-right" >
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="table-left">电费归属终止日期:</span>
+                            <input
+                                ng-readonly="true"
+                                format="YYYY-MM-DD"
+                                type="text" ng-model="electricInfo.belongEndTime" name="" class="table-right " >
+                        </td>
+                        <td>
+                            <span class="table-left">用电起度(度):</span>
+                            <input
+                                ng-readonly="true"
+                                ng-model="electricInfo.startAmmeter"
+                                type="text" name="" class="table-right">
+                        </td>
+                        <td>
+                            <span class="table-left">用电止度(度):</span>
+                            <input
+                                ng-readonly="true"
+                                ng-model="electricInfo.endAmmeter"
+                                type="text" name="" class="table-right"   >
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="table-left">电损(度):</span>
+                            <input
+                                ng-readonly="true"
+                                ng-model="electricInfo.electricLoss"
+                                type="text" name="" class="table-right">
+                        </td>
+                        <td>
+                            <span class="table-left">总电量(度):</span>
+                            <input
+                                ng-readonly="true"
+                                ng-model="electricInfo.totalEleciric"
+                                type="text" name="" class="table-right">
+                        </td>
+                        <td>
+                            <span class="table-left">缴费金额(元):</span>
+                            <input
+                                ng-readonly="true"
+                                ng-model="electricInfo.payAmount"
+                                type="text" name="" class="table-right">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="table-left">缴费发票类型:</span>
+                            <input
+                                type="text"
+                                ng-readonly="true"
+                                ng-model="electricInfo.payInvoiceType" name="" id="" class="table-right">
+                        </td>
+                        <td>
+                            <span class="table-left">缴费开票系数:</span>
+                            <input
+                                ng-readonly="true"
+                                ng-model="electricInfo.payBillCoefficient"
+                                type="text" name="" class="table-right">
+                        </td>
+                        <td>
+                            <span class="table-left">单价:</span>
+                            <input
+                                ng-readonly="true"
+                                ng-model="electricInfo.unitPrice"
+                                type="text" name="" class="table-right">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="table-left">其他费用:</span>
+                            <input
+                                ng-readonly="true"
+                                ng-model="electricInfo.otherAmount"
+                                type="text" name="" class="table-right"   >
+                        </td>
+                        <td>
+                            <span class="table-left">其他发票类型:</span>
+                            <input
+                                type="text"
+                                ng-readonly="true"
+                                ng-model="electricInfo.otherInvoiceType" name="" id="" class="table-right">
+                        </td>
+                        <td>
+                            <span class="table-left">其他开票系数:</span>
+                            <input
+                                ng-readonly="true"
+                                ng-model="electricInfo.otherBillCoefficient"
+                                type="text" name="" class="table-right">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="table-left">实际支付电费(元):</span>
+                            <input
+                                ng-readonly="true"
+                                ng-model="electricInfo.actualAmount"
+                                type="text" name="" class="table-right" >
+                        </td>
+                        <td>
+                            <span class="table-left" >分摊比例:</span>
+                            <input
+                                ng-readonly="true"
+                                ng-model="electricInfo.shareProportion"
+                                type="text" name="" class="table-right">
+                        </td>
+                        <td>
+                            <span class="table-left">分摊电费金额:</span>
+                            <input
+                                ng-readonly="true"
+                                ng-model="electricInfo.shareAmount"
+                                type="text" name="" class="table-right">
+                        </td>
+                    </tr>
+                </tbody>
+                <!-- 修改 新增-->
+                <tbody ng-if="editDetail">
+                    <tr>
+                        <td>
+                            <span class="sign table-left">电表类型:</span>
+                            <input readonly ng-if="electricInfo.ptype ==1 || electricInfo.ptype == 2"  type="text" name="" class="table-right" value="{{electricInfo.ptype==1?'普通电表':'智能电表'}}" disabled>
+                            
+                            <select ng-if="electricInfo.ptype != 1 && electricInfo.ptype != 2" ng-model="eleTableType" 
+                                    ng-change="choiceType(eleTableType)"
+                            name="" id="" class="title-select con-parts">
+                                <option value="">请选择电表类型</option>
+                                <option value="1">普通电表</option>
+                                <option value="2">智能电表</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="table-left sign" >电表编码:</span>
+                            <input ng-readonly="electricInfo.watthourType=='1'" ng-model="electricInfo.code" type="text" name="" class="table-right" value="JH201732222224612">
+                        </td>
+                        <td>
+                            <span class="table-left">缴费户号:</span>
+                            <input ng-readonly="electricInfo.watthourType=='1'" ng-model="electricInfo.paymentAccountCode" type="text"  name="" class="table-right"  >
+                        </td>
+                        <td>
+                            <span class="table-left sign">是否翻表:</span>
+                            <select
+                                    ng-init="electricInfo.whetherMeter=0"
+                                    ng-model="electricInfo.whetherMeter"
+                                    class="table-right">
+                                <option value="1">是</option>
+                                <option value="0">否</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="table-left">最大读数:</span>
+                            <select								
+                                ng-if="electricInfo.whetherMeter == 1&&electricInfo.watthourType!='1'"
+                                ng-change="countPowerSize(electricInfo,$index)"
+                                ng-model="electricInfo.maxReading" name="" id="" class="table-right">
+                                <option value="99">99</option>
+                                <option value="999">999</option>
+                                <option value="9999">9999</option>
+                                <option value="99999">99999</option>
+                            </select>
+                            <input
+                                ng-readonly="true"
+                                ng-if="electricInfo.whetherMeter == 0&&electricInfo.watthourType!='1'"
+                                type="text"
+                                name="" class="table-right"  >
+							<input
+                                ng-readonly="true"
+                                ng-if="electricInfo.watthourType=='1'"
+								ng-model="electricInfo.maxReading"
+                                type="text"
+                                name="" class="table-right"  >
+                        </td>
+                        <td>
+                            <span class="table-left sign">倍率:</span>
+                            <input
+								ng-readonly="electricInfo.watthourType=='1'"
+                                ng-blur="countPowerSize(electricInfo,$index)"
+                                ng-model="electricInfo.rate"
+                                type="text"
+                                name="" class="table-right" >
+                        </td>
+                        <td>
+                            <span class="table-left sign">电费归属起始日期:</span>
+                            <input
+								ng-disabled="electricInfo.watthourType=='1'"
+                                ng-laydate id="belongStartTime"
+                                format="YYYY-MM-DD"
+                                readOnly="true"
+                                ng-change="countDays(item,$index)" type="text" ng-model="electricInfo.belongStartTime" name="" class="table-right" >
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="table-left sign">电费归属终止日期:</span>
+                            <input
+                                ng-laydate  id="belongEndTime"
+                                readOnly="true"
+                                format="YYYY-MM-DD"
+                                min-date="{{electricInfo.belongStartTime}}"
+                                ng-change="countDays(item,$index)" type="text" ng-model="electricInfo.belongEndTime" name="" class="table-right " >
+                        </td>
+                        <td>
+                            <span class="table-left sign">用电起度(度):</span>
+                            <input ng-readonly="electricInfo.watthourType=='1'" ng-blur="countPowerSize(electricInfo,$index)" ng-model="electricInfo.startAmmeter" type="text" name="" class="table-right"   >
+                        </td>
+                        <td>
+                            <span class="table-left sign">用电止度(度):</span>
+                            <input ng-change="countPowerSize(electricInfo,$index)" ng-model="electricInfo.endAmmeter" type="text" name="" class="table-right"   >
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="table-left sign">电损(度):</span>
+                            <input
+                                ng-blur="countPowerSize(electricInfo,$index)"
+                                ng-model="electricInfo.electricLoss"
+                                type="text" name="" class="table-right">
+                        </td>
+                        <td>
+                            <span class="table-left sign">总电量(度):</span>
+                            <input ng-model="electricInfo.totalEleciric" type="text" name="" class="table-right" ng-change="singlePrice(electricInfo)" disabled="disabled" >
+                        </td>
+                        <td>
+                            <span class="table-left sign"  >缴费金额(元):</span>
+                            <input  ng-blur="singlePrice(electricInfo)" ng-model="electricInfo.payAmount" type="text" name="" class="table-right">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="table-left sign" >缴费发票类型:</span>
+                            <select
+                                ng-init="electricInfo.payInvoiceType=1"
+                                ng-change="payInvoiceType()"
+                                ng-model="electricInfo.payInvoiceType" name="" id="" class="table-right">
+                                <option value="1">增值税专票(17%)</option>
+                                <option value="1.1554">增值税专票(3%)</option>
+                                <option value="1.1944">普通发票</option>
+                                <option value="1.1944">分割单+发票复印件+收据</option>
+                                <option value="1.1944">白条部分</option>
+                            </select>
+                        </td>
+                        <td>
+                            <span class="table-left">缴费开票系数:</span>
+                            <input ng-model="electricInfo.payBillCoefficient" type="text" name="" class="table-right" disabled="disabled"  >
+                        </td>
+                        <td>
+                            <span class="table-left">单价:</span>
+                            <input ng-model="electricInfo.unitPrice" type="text" name="" class="table-right" disabled="disabled"  >
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="table-left sign">其他费用:</span>
+                            <input ng-blur="payInvoiceType(electricInfo)" ng-model="electricInfo.otherAmount" type="text" name="" class="table-right"   >
+                        </td>
+                        <td>
+                            <span class="table-left">其他发票类型:</span>
+                            <select
+                                ng-init="electricInfo.otherInvoiceType=1"
+                                ng-change="payInvoiceType()"
+                                ng-model="electricInfo.otherInvoiceType" name="" id="" class="table-right">
+                                <option value="1">增值税专票(17%)</option>
+                                <option value="1.1554">增值税专票(3%)</option>
+                                <option value="1.1944">普通发票</option>
+                                <option value="1.1944">分割单+发票复印件+收据</option>
+                                <option value="1.1994">白条部分</option>
+                            </select>
+
+                        </td>
+                        <td>
+                            <span class="table-left">其他开票系数:</span>
+                            <input ng-model="electricInfo.otherBillCoefficient" type="text" name="" class="table-right" disabled="disabled"   >
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="table-left sign">实际支付电费(元):</span>
+                            <input ng-model="electricInfo.actualAmount" type="text" name="" class="table-right" disabled="disabled"  >
+                        </td>
+                        <td>
+                            <span class="table-left sign" >分摊比例:</span>
+                            <input ng-blur="countShareAmount(electricInfo)" ng-model="electricInfo.shareProportion" type="text" name="" class="table-right"   >
+
+                        </td>
+                        <td>
+                            <span class="table-left">分摊电费金额:</span>
+                            <input ng-model="electricInfo.shareAmount" type="text" name="" class="table-right" disabled="disabled"  >
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="reimbur-foot ledge-foot">
+            <button ng-if="!checkDetail" ng-click="closeDialog('addElectricInfoDialogs')" class="reimbur-cancel btn">取消</button>
+            <button ng-if="edit" ng-click="editTowerEdit(electricInfo)" class="reimbur-save btn">保存</button>
+            <button ng-if="save && !checkDetail" ng-click="saveElectrictInfo(electricInfo)" class="reimbur-save btn">确定</button>
+            <button ng-if="checkDetail" ng-click="closeDialog('addElectricInfoDialogs')" class="reimbur-save btn">关闭</button>
+        </div>
+    </div>
+	</div>

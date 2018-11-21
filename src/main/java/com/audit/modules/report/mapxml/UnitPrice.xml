@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.report.dao.UnitPriceDao">
+
+	<resultMap id="BaseResultMap" type="com.audit.modules.report.entity.UnitPrice">
+		<id column="ID" jdbcType="DECIMAL" property="id" />
+		<result column="CITY_ID" jdbcType="VARCHAR" property="cityId" />
+		<result column="COUNTY_ID" jdbcType="VARCHAR" property="countyId" />
+		<result column="REGION_NAME" jdbcType="VARCHAR" property="regionName" />
+		<result column="YEAR" jdbcType="VARCHAR" property="year" />
+		<result column="HIGH_CHARGE" jdbcType="VARCHAR" property="highCharge" />
+		<result column="MID_CHARGE" jdbcType="VARCHAR" property="midCharge" />
+		<result column="LOW_CHARGE" jdbcType="VARCHAR" property="lowCharge" />
+		<result column="TYPE_CODE" jdbcType="VARCHAR" property="typeCode" />
+		<result column="SUPPLY_TYPE" jdbcType="VARCHAR" property="supplyType" />
+	</resultMap>
+  
+	<sql id="Base_Column_List">
+		ID,CITY_ID,COUNTY_ID,REGION_NAME,YEAR,HIGH_CHARGE,MID_CHARGE,LOW_CHARGE,TYPE_CODE,SUPPLY_TYPE
+	</sql>
+	
+	<select id="findByTypeAndYear" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"/>
+		FROM SYS_STASTIC_UNITPRICE
+		WHERE TYPE_CODE = #{typeCode,jdbcType=VARCHAR}
+		AND YEAR = #{year,jdbcType=VARCHAR}
+		AND SUPPLY_TYPE = #{supplyType,jdbcType=VARCHAR}
+  </select>
+</mapper>

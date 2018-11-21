@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.audit.modules.dataimport.dao.ZgDataImportDao">
+
+   <select id="checkTable" parameterType="String" resultType="java.lang.Integer" >
+       SELECT count(*) FROM USER_OBJECTS WHERE OBJECT_NAME = #{tableName}
+   </select>
+	
+	<!-- 调用存储过程-清空表 -->
+	 <select id="deleteTable" parameterType="java.util.Map" statementType="CALLABLE"  resultType="String" >
+	   {call DELETE_ZG_TABLE(#{tbname,mode=IN,jdbcType=VARCHAR},#{code,mode=OUT,jdbcType=VARCHAR})}
+   </select>
+   
+   <!-- 调用存储过程-插入数据 -->
+    <select id="dataImport" parameterType="java.util.Map" statementType="CALLABLE"  resultType="String">
+		{call PRO_ZGDATAIMPORT(#{tbname,mode=IN,jdbcType=VARCHAR}, #{valueStr,mode=IN,jdbcType=VARCHAR},#{code,mode=OUT,jdbcType=VARCHAR})}
+	</select>
+	
+	<!-- 调用存储过程-导入后数据更新 -->
+    <select id="dataUpdateAfterImport" parameterType="java.util.Map" statementType="CALLABLE"  resultType="String">
+		{call PRO_ZGDATAUPDATE(#{code,mode=OUT,jdbcType=VARCHAR})}
+	</select>
+</mapper>

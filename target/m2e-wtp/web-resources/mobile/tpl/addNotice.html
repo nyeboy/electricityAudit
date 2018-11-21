@@ -1,0 +1,52 @@
+<!-- 添加公告 -->
+<div class="system-content" id="systemContent">
+    <div class="business-box" id="businessBox">
+              <style >
+        *{
+            margin: 0;
+            padding:0;
+        }
+        .system-content {
+           
+            background-color: #ffffff; 
+           
+        }
+
+        .userMamager h4{
+            height: 44px;
+            line-height: 44px;
+            text-align: center;
+            font-size: 18px;
+            color: #585c5e;
+        }
+        .user-list li span:before {
+            content: "";
+        }
+        </style>
+        <div id="contentRout" class="userMamager" >
+            <h4 class="now-rout" ng-if="status=='add'">添加公告 </h4>
+            <h4 class="now-rout" ng-if="status=='update'">更新公告</h4>
+        </div>
+
+        <div class="content-box" id="contentBox">
+            <div class="add-user">
+                <form name="form">
+                    <ul class="user-list">
+                        <li><span>公告标题:</span>
+                        <input ng-model="notice.title" name="title" type="text"><i class="error" ng-hide="true">输入有误</i></li>
+                        <li><span>开始时间:</span>
+                            <input ng-laydate type="text" id="id10" format="YYYY-MM-DD" ng-model="notice.startDate" type="text" ></li>
+                        <li><span class="end-time">结束时间:</span>
+                        <input ng-laydate type="text" id="id11" format="YYYY-MM-DD" ng-model="notice.endDate" name="endDate" type="text" ></li>
+                        <li><span>公告内容:</span><textarea ng-model="notice.message" name="message" id="" cols="60" rows="8"></textarea></li>
+                    </ul>
+                     <div class="reimbur-foot ledge-foot audit-dialog">
+                        <button ng-click="closeDialog('noticeDialog')" class="reimbur-cancel btn">取消<btton>
+                        <button  ng-click="saveOrUpdate(form,notice)" class="reimbur-save btn">确定<tton>
+                     
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

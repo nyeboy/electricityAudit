@@ -1,0 +1,86 @@
+<!--角色管理-->
+<div class="system-content">
+    <div class="business-box" id="businessBox">
+        <div class="content-rout" id="contentRout"><span>系统管理</span>&gt;<span>用户 / 角色</span>&gt;<span class="now-rout">角色管理</span></div>
+        <div class="content-box roles-page" id="contentBox">
+            <!-- title -->
+            <div class="search-box" style="">
+                <div>
+                    <input ng-model="roleName" size="16" type="text" class=" title-input form-control" placeholder="角色名称">
+                </div>
+                <button ng-click="params.pageNo=1;getData()" class="btn btn-primary" type="button">搜索</button>
+            </div>
+            <!-- table-content -->
+            <div class="table-content">
+                <!-- table-title -->
+                <div class="table-title">
+                    <button ng-click="goAddrolesPage()" class="btn btn-blue">添加角色</button>
+                    <button ng-click="deleteSelected()" class="btn btn-blue">批量删除</button>
+                </div>
+                <!-- table -->
+               <!--  <table class="table-result" id="tableResult">
+                    <colgroup>
+                        <col style="width:10%">
+                        <col style="width:19%">
+                        <col style="width:19%">
+                        <col style="width:19">
+                        <col style="width:19%">
+                        <col style="width:19%">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th  style="width:50px; "><input ng-click="checkAll('#checkAll','#userList')" id="checkAll" type="checkbox"></th>
+                        <th>角色名</th>
+                        <th>是否系统内置</th>
+                        <th>角色描述</th>
+                        <th>创建时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                </table> -->
+                <div class="table-details">
+                    <div>
+                        <table>
+                      <!--       <colgroup>
+                                <col style="width:10%">
+                                <col style="width:19%">
+                                <col style="width:19%">
+                                <col style="width:19">
+                                <col style="width:19%">
+                                <col style="width:19%">
+                            </colgroup> -->
+                            <tbody class="query-date" id="userList">
+                            <tr>
+                        <th  style="width:50px; "><input ng-click="checkAll('#checkAll','#userList')" id="checkAll" type="checkbox"></th>
+                        <th>角色名</th>
+                        <th>是否系统内置</th>
+                        <th>角色描述</th>
+                        <th>创建时间</th>
+                        <th>操作</th>
+                    </tr>
+                            <tr  ng-repeat="item in list track by $index" id="list">
+                                <td><input type="checkbox" value="{{item.roleId}}" style="border: red solid 1px;;"></td>
+
+                                <td>{{item.roleName}}</td>
+                                <td>{{item.isSystem==1?"是":"否"}}</td>
+                                <td>{{item.description}}</td>
+                                <td>{{item.createDate|date:"yyyy-MM-dd HH:mm:ss"}}</td>
+                                <td>
+                                    <a ng-click="addRoleDialog(item,2)" class="edit-process">查看</a>
+                                    <a ng-click="addRoleDialog(item,1)" class="edit-process">修改</a>
+                                    <a ng-click="deleteSelected(item.roleId)" class="delete">删除</a>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+                <div class="page-foot">
+                    <im-pagination conf="pageInfo" params="params" get-data="getData()"></im-pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

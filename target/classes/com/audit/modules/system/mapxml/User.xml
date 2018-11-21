@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.system.dao.UserDao">
+	
+	<!-- 查询所有用户列表 （可条件查询）-->
+	<!-- <select id="queryUserByPage" parameterType="com.audit.modules.common.mybatis.PageUtil" resultType="com.audit.modules.system.entity.UserVo">
+		SELECT
+			DISTINCT 
+			SU.ID as userId,
+			TO_CHAR(SU.LOGIN_DATE, 'yyyy-mm-dd HH24:mi:ss') as loginDateStr,
+			SU.LOGIN_IP as loginIp,
+			SU.USER_NAME as userName,
+			SU.NICK_NAME as nickName,
+			SU.ACCOUNT as account,
+			ODD.DEPARTMENT_NAME as departmentName,
+			ODD.ID as departmentId,
+			SU.USER_TYPE as userType,
+			SU.USER_LEVEL as userLevel,
+			SU.CITY,
+			(select city_name from zg_space_city where int_id = SU.city) as cityStr,
+			SU.COUNTY,
+			(select zh_label from zg_space_county where int_id = SU.county) as countyStr,
+			SU.PROVINCE,
+			(select province_name from zg_space_province where int_id = SU.province) as provinceStr,
+			SU.EMAIL as email,
+			SU.USER_STATUS as userStatus,
+			SU.CREATE_DATE as createDate
+		FROM
+			SYS_USER SU
+		LEFT JOIN OA_DEPARTMENT_DATA_EMPLOYEES ODDE ON SU.ID = ODDE.EMPLOYEES 
+		LEFT JOIN OA_DEPARTMENT_DATA ODD ON ODD.ID = ODDE.OA_DEPARTMENT_DATA
+		LEFT JOIN SYS_USER_ROLE	SUR ON SUR.USER_ID = SU.ID
+		LEFT JOIN SYS_ROLE SR ON SUR.ROLE_ID = SR.ID	
+		WHERE 1=1
+			<if test="obj.userLevels != null and obj.userLevels !=''">AND INSTR(#{obj.userLevels} , CONCAT(',',CONCAT(SR.ROLE_LEVEL ,','))) > 0 </if>
+			<if test="obj.city != null and obj.city !=''"> AND SU.CITY = #{obj.city,jdbcType=VARCHAR}</if>
+			<if test="obj.county != null and obj.county !=''"> AND SU.COUNTY = #{obj.county,jdbcType=VARCHAR}</if>
+		    <if test="null != obj.account"> AND (INSTR(USER_NAME,#{obj.account}) > 0 OR	INSTR(ACCOUNT,#{obj.account}) > 0) </if>
+		    <if test="null != obj.email"> AND INSTR(EMAIL,#{obj.email} ) > 0</if>
+		    <if test="null != obj.departmentId"> AND ODD.ID in (SELECT
+				ID
+			FROM
+				OA_DEPARTMENT_DATA 
+			START WITH ID = #{obj.departmentId}
+			CONNECT BY PRIOR DEPARTMENT_NO = DEPARTMENT_PARENT_NO)</if>
+		Order By SU.CREATE_DATE DESC 
+	</select> -->
+	
+	<select id="queryUserByPage" parameterType="com.audit.modules.common.mybatis.PageUtil" resultType="com.audit.modules.system.entity.UserVo">
+		SELECT
+			DISTINCT 
+			SU.ID as userId,
+			TO_CHAR(SU.LOGIN_DATE, 'yyyy-mm-dd HH24:mi:ss') as loginDateStr,
+			SU.LOGIN_IP as loginIp,
+			SU.USER_NAME as userName,
+			SU.NICK_NAME as nickName,
+			SU.ACCOUNT as account,
+			ODD.DEPARTMENT_NAME as departmentName,
+			ODD.ID as departmentId,
+			SU.USER_TYPE as userType,
+			SU.USER_LEVEL as userLevel,
+			SU.CITY,
+			(select NAME from YDJH_AREA where ID = SU.city) as cityStr,
+			SU.COUNTY,
+			(select NAME from YDJH_AREA where ID = SU.county) as countyStr,
+			SU.PROVINCE,
+			(select NAME from YDJH_AREA where ID = SU.province) as provinceStr,
+			SU.EMAIL as email,
+			SU.USER_STATUS as userStatus,
+			SU.CREATE_DATE as createDate
+		FROM
+			SYS_USER SU
+		LEFT JOIN OA_DEPARTMENT_DATA_EMPLOYEES ODDE ON SU.ID = ODDE.EMPLOYEES 
+		LEFT JOIN OA_DEPARTMENT_DATA ODD ON ODD.ID = ODDE.OA_DEPARTMENT_DATA
+		LEFT JOIN SYS_USER_ROLE	SUR ON SUR.USER_ID = SU.ID
+		LEFT JOIN SYS_ROLE SR ON SUR.ROLE_ID = SR.ID	
+		WHERE 1=1
+			<if test="obj.userLevels != null and obj.userLevels !=''">AND INSTR(#{obj.userLevels} , CONCAT(',',CONCAT(SR.ROLE_LEVEL ,','))) > 0 </if>
+			<if test="obj.city != null and obj.city !=''"> AND SU.CITY = #{obj.city,jdbcType=VARCHAR}</if>
+			<if test="obj.county != null and obj.county !=''"> AND SU.COUNTY = #{obj.county,jdbcType=VARCHAR}</if>
+		    <if test="null != obj.account"> AND (INSTR(USER_NAME,#{obj.account}) > 0 OR	INSTR(ACCOUNT,#{obj.account}) > 0) </if>
+		    <if test="null != obj.email"> AND INSTR(EMAIL,#{obj.email} ) > 0</if>
+		    <if test="null != obj.roleIds"> AND SR.ID = #{obj.roleIds,jdbcType=VARCHAR}</if>
+		    <if test="null != obj.departmentId"> AND ODD.ID in (SELECT
+				ID
+			FROM
+				OA_DEPARTMENT_DATA 
+			START WITH ID = #{obj.departmentId}
+			CONNECT BY PRIOR DEPARTMENT_NO = DEPARTMENT_PARENT_NO)</if>
+		Order By SU.CREATE_DATE DESC 
+	</select>
+	
+	<!-- 删除被选中id(批量String []) -->
+	<delete id="deleteById" parameterType="String" >
+		DELETE FROM 
+			SYS_USER 
+		WHERE ID IN
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")"> 
+			#{item} 
+		</foreach>
+	</delete>
+	<select id="checkAdminSupper" parameterType="String" resultType="java.lang.Integer">
+	 SELECT COUNT(1) 
+	 	FROM SYS_USER SU 
+	 LEFT JOIN SYS_USER_ROLE SUR ON SUR.USER_ID = SU.ID
+	 LEFT JOIN SYS_ROLE SR ON SUR.ROLE_ID = SR. ID
+	 WHERE 1=1
+		AND SR.ID = 180
+		AND SU.ID IN
+		<foreach item="item" index="index" collection="array" open="(" separator="," close=")"> 
+			#{item} 
+		</foreach>
+	</select>
+	
+	<update id="updateUser" parameterType="com.audit.modules.system.entity.UserVo">
+		UPDATE SYS_USER 
+		<set>
+     	 	<if test="loginDate != null">LOGIN_DATE = #{loginDate,jdbcType=TIMESTAMP},</if>
+			<if test="loginIp != null">LOGIN_IP = #{loginIp,jdbcType=VARCHAR},</if>
+			<if test="userName != null">USER_NAME = #{userName,jdbcType=VARCHAR},</if>
+			<if test="password != null">PASSWORD = #{password,jdbcType=VARCHAR},</if>
+			<if test="account != null">ACCOUNT = #{account,jdbcType=VARCHAR},</if>
+			<if test="userType != null">USER_TYPE = #{userType,jdbcType=NUMERIC},</if>
+			<if test="city != null">CITY = #{city,jdbcType=NUMERIC},</if>
+			<if test="county != null">COUNTY = #{county,jdbcType=NUMERIC},</if>
+			<if test="province != null">PROVINCE = #{province,jdbcType=NUMERIC},</if>
+			<if test="mobile != null">MOBILE = #{mobile,jdbcType=VARCHAR},</if>
+			<if test="userStatus != null">USER_STATUS =  #{userStatus,jdbcType=VARCHAR},</if>
+			<if test="email != null">EMAIL = #{email,jdbcType=VARCHAR},</if>
+			<if test="remark != null">REMARK = #{remark,jdbcType=VARCHAR},</if>
+		</set>
+		 WHERE 
+		 	ID = #{userId,jdbcType=VARCHAR} 
+	</update>
+	
+	<!-- 添加信息 -->
+	<insert id="addUser" parameterType="com.audit.modules.system.entity.UserVo" >
+		INSERT INTO SYS_USER
+			 <trim prefix="(" suffix=")" suffixOverrides=",">
+			 ID,
+		      <if test="userId != null">ID,</if>
+		      <if test="userName != null">USER_NAME,</if>
+		      <if test="nickName != null">NICK_NAME,</if>
+		      <if test="password != null">PASSWORD,</if>
+		      <if test="account != null">ACCOUNT,</if>
+		      <if test="userType != null">USER_TYPE,</if>
+		      <if test="city != null">CITY,</if>
+		      <if test="county != null">COUNTY,</if>
+		      <if test="province != null">PROVINCE,</if>
+		      <if test="email != null">EMAIL,</if>
+		      <if test="mobile != null">MOBILE,</if>
+		      <if test="userStatus != null">USER_STATUS,</if>
+		      <if test="createDate != null">CREATE_DATE,</if>
+		      <if test="remark != null">REMARK,</if>
+		    </trim>
+		    <trim prefix="values (" suffix=")" suffixOverrides=",">
+		    GET_SEQ('SEQ_SYS_USER'),
+		       <if test="userId != null">#{userId,jdbcType=VARCHAR},</if>
+		      <if test="userName != null">#{userName,jdbcType=VARCHAR},</if>
+		      <if test="nickName != null">#{nickName,jdbcType=VARCHAR},</if>
+		      <if test="password != null">#{password,jdbcType=VARCHAR},</if>
+		      <if test="account != null">#{account,jdbcType=VARCHAR},</if>
+		      <if test="userType != null">#{userType,jdbcType=NUMERIC},</if>
+		      <if test="city != null">#{city,jdbcType=NUMERIC},</if>
+		      <if test="county != null">#{county,jdbcType=NUMERIC},</if>
+		      <if test="province != null">#{province,jdbcType=NUMERIC},</if>
+		      <if test="email != null">#{email,jdbcType=VARCHAR},</if>
+		      <if test="mobile != null">#{mobile,jdbcType=VARCHAR},</if>
+	       	  <if test="userStatus != null">#{userStatus,jdbcType=VARCHAR},</if>
+	       	  <if test="createDate != null">#{createDate,jdbcType=TIMESTAMP},</if>
+	          <if test="remark != null">#{remark,jdbcType=VARCHAR},</if>
+		    </trim>
+	</insert>
+	
+	
+	 <!--查询OA系统中 用户是否存在 -->
+	<!--<select id="findUserInOA" parameterType="String" resultType="map">
+		SELECT ID FROM OA_EMPLOYEE_DATA 
+		WHERE LOGIN_NAME = #{loginName,jdbcType=VARCHAR}
+	</select> -->
+	
+	<!--查询用户根据账号 -->
+	<!-- <select id="queryUserByAccount" parameterType="String" resultType="com.audit.modules.system.entity.UserVo">
+		SELECT
+			SU.ID as userId,
+			SU.USER_NAME as userName,
+			SU.ACCOUNT as account,
+			SU.USER_TYPE as userType,
+			SU.EMAIL as email,
+			SU.MOBILE as mobile,
+			SU.REMARK as remark,
+			SU.USER_STATUS as userStatus,
+			SU.PASSWORD as password,
+			SU.USER_LEVEL as userLevel,
+			ODD.DEPARTMENT_NAME as departmentName,
+			ODD.ID as departmentId,
+			ODD.DEPARTMENT_NO as departmentNo,
+			SU.CITY as city,
+			(select city_name from zg_space_city where int_id = SU.city) as cityStr,
+			SU.COUNTY as county,
+			(select zh_label from zg_space_county where int_id = SU.county) as countyStr,
+			SU.PROVINCE,
+			(select province_name from zg_space_province where int_id = SU.province) as provinceStr
+		FROM
+			SYS_USER SU
+		LEFT JOIN OA_DEPARTMENT_DATA_EMPLOYEES ODDE ON SU.ID = ODDE.EMPLOYEES 
+		LEFT JOIN OA_DEPARTMENT_DATA ODD ON ODD.ID = ODDE.OA_DEPARTMENT_DATA
+		WHERE
+			SU.ACCOUNT = #{account,jdbcType = VARCHAR}
+	</select>
+	查询用户根据Id
+	<select id="queryUserByUserId" parameterType="String" resultType="com.audit.modules.system.entity.UserVo">
+		SELECT
+			ID as userId,
+			USER_NAME as userName,
+			ACCOUNT as account,
+			USER_TYPE as userType,
+			EMAIL as email,
+			MOBILE as mobile,
+			REMARK as remark,
+			USER_STATUS as userStatus,
+			USER_LEVEL as userLevel,
+			CITY,
+			(select city_name from zg_space_city where int_id = city) as cityStr,
+			COUNTY,
+			(select zh_label from zg_space_county where int_id = county) as countyStr,
+			PROVINCE,
+			(select province_name from zg_space_province where int_id = province) as provinceStr
+		FROM
+			SYS_USER
+		WHERE
+			ID = #{userId,jdbcType = VARCHAR}
+	</select> -->
+	
+	<select id="queryUserByAccountByOA" parameterType="String" resultType="com.audit.modules.system.entity.UserVo">
+		SELECT
+			ODD.DEPARTMENT_NAME as departmentName,
+			ODD.ID as departmentId,
+			ODD.DEPARTMENT_NO as departmentNo
+			
+		FROM
+			OA_EMPLOYEE_DATA E
+		LEFT JOIN OA_DEPARTMENT_DATA_EMPLOYEES ODDE ON E.ID = ODDE.EMPLOYEES 
+		LEFT JOIN OA_DEPARTMENT_DATA ODD ON ODD.ID = ODDE.OA_DEPARTMENT_DATA 
+		WHERE
+			E.LOGIN_NAME =  #{account,jdbcType = VARCHAR}
+	
+	</select>
+	
+	<select id="queryUserByAccount" parameterType="String" resultType="com.audit.modules.system.entity.UserVo">
+		SELECT
+			SU.ID as userId,
+			SU.USER_NAME as userName,
+			SU.ACCOUNT as account,
+			SU.USER_TYPE as userType,
+			SU.EMAIL as email,
+			SU.MOBILE as mobile,
+			SU.REMARK as remark,
+			SU.USER_STATUS as userStatus,
+			SU.PASSWORD as password,
+			SU.USER_LEVEL as userLevel,
+			<!-- ODD.DEPARTMENT_NAME as departmentName,
+			ODD.ID as departmentId,
+			ODD.DEPARTMENT_NO as departmentNo, -->
+			SU.CITY as city,
+			(select NAME from YDJH_AREA where ID = SU.city) as cityStr,
+			SU.COUNTY as county,
+			(select NAME from YDJH_AREA where ID = SU.county) as countyStr,
+			SU.PROVINCE,
+			(select NAME from YDJH_AREA where ID = SU.province) as provinceStr
+		FROM
+			SYS_USER SU
+		<!-- LEFT JOIN OA_DEPARTMENT_DATA_EMPLOYEES ODDE ON SU.ID = ODDE.EMPLOYEES 
+		LEFT JOIN OA_DEPARTMENT_DATA ODD ON ODD.ID = ODDE.OA_DEPARTMENT_DATA -->
+		WHERE
+			SU.ACCOUNT = #{account,jdbcType = VARCHAR}
+			
+	</select>
+	<!--查询用户根据Id -->
+	<select id="queryUserByUserId" parameterType="String" resultType="com.audit.modules.system.entity.UserVo">
+		SELECT
+			ID as userId,
+			USER_NAME as userName,
+			ACCOUNT as account,
+			USER_TYPE as userType,
+			EMAIL as email,
+			MOBILE as mobile,
+			REMARK as remark,
+			USER_STATUS as userStatus,
+			USER_LEVEL as userLevel,
+			CITY,
+			(select NAME from YDJH_AREA where ID = city) as cityStr,
+			COUNTY,
+			(select NAME from YDJH_AREA where ID = county) as countyStr,
+			PROVINCE,
+			(select NAME from YDJH_AREA where ID = province) as provinceStr
+		FROM
+			SYS_USER
+		WHERE
+			ID = #{userId,jdbcType = VARCHAR}
+	</select>
+	
+	<!--添加用户时 从OA获取部分数据渲染 -->
+	<select id="queryByAccountInOA" parameterType="String" resultType="com.audit.modules.system.entity.UserVo">
+		SELECT
+			OED.ID as userID,
+			OED.EMPLOYEE_NAME as userName,
+			OED.LOGIN_NAME as account,
+			OED.MAIL as email,
+			OED.MOBILE as mobile
+		FROM
+			OA_EMPLOYEE_DATA OED
+		WHERE 1=1
+			<if test="account != null">AND OED.LOGIN_NAME = #{account,jdbcType=VARCHAR}</if>
+	</select>
+	
+	<!--用户分配角色  -->
+	<insert id="addUserPermission" parameterType="java.util.List">
+        INSERT INTO 
+        	SYS_USER_ROLE (ID,USER_ID,ROLE_ID)     
+        VALUES
+           (GET_SEQ('SYS_USER_ROLE_SEQ'),#{userId,jdbcType=VARCHAR}, #{roleId,jdbcType=VARCHAR})
+    </insert>
+    
+    <!--删除用户角色 信息  -->
+    <delete id="deleteUserPermission" parameterType="String">
+    	DELETE FROM 
+			SYS_USER_ROLE
+		WHERE 
+			USER_ID = #{userId,jdbcType=VARCHAR}
+		AND ROLE_ID IN
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+  
+    <!-- 展示该用户-角色信息 -->
+    <select id="showPermissionlist" parameterType="String" resultType="com.audit.modules.system.entity.SysUserRole" >
+		SELECT
+			ROLE_ID as roleId,
+			(select ROLE_NAME from sys_role where ID = ROLE_ID) as roleName
+		FROM
+			SYS_USER_ROLE
+		WHERE 1=1
+			<if test="account != null"> 
+				AND USER_ID = (SELECT ID FROM SYS_USER WHERE ACCOUNT = #{account})
+			</if>
+	</select>
+	
+	<!-- 获取用户拥有的 角色id -->
+    <select id="queryRoleIds" parameterType="String" resultType="String" >
+		SELECT
+			ROLE_ID as roleId
+		FROM
+			SYS_USER_ROLE
+		WHERE 1=1
+			<if test="userId != null"> 
+				AND USER_ID = #{userId}
+			</if>
+	</select>
+	
+	<!-- 查询角色-->
+	<select id="roleSelect" resultType="com.audit.modules.system.entity.SysUserRole">
+	select ID as roleId,
+	ROLE_NAME as roleName 
+	from SYS_ROLE	
+	</select>
+	
+ 	<!-- <select id="userSelect" parameterType="java.util.Map" resultType="com.audit.modules.system.entity.AccountShiftVO">
+        SELECT *  FROM (
+          SELECT rownum rsn, a1.*  FROM (
+        SELECT
+           zsc.CITY_NAME as areas,
+           zscy.ZH_LABEL as counties,
+           sr.ROLE_NAME as roleName,
+           su.ACCOUNT as account
+        FROM
+            SYS_ROLE sr
+        LEFT JOIN SYS_USER_ROLE sur ON sur.ROLE_ID = sr.ID
+        LEFT JOIN SYS_USER su ON sur.USER_ID = su.ID        
+        LEFT JOIN ZG_SPACE_CITY zsc ON zsc.INT_ID = su.CITY
+        LEFT JOIN ZG_SPACE_COUNTY zscy ON zscy.INT_ID = su.COUNTY
+        WHERE
+            1=1
+            <if test="map.cityId != null and map.cityId!=''">
+                AND su.CITY = #{map.cityId}
+            </if>
+            <if test="map.countyId!=null and map.countyId!=''">
+                AND su.COUNTY = #{map.countyId}
+            </if>            
+            <if test="map.roleId!=null and map.roleId!=''">
+                AND sr.ID = #{map.roleId}
+            </if>
+            <if test="map.userName!=null and map.userName!=''">
+                AND su.USER_NAME LIKE '%'||#{map.userName}||'%'
+            </if> 
+            and su.USER_STATUS=0          
+        ) a1  WHERE
+        <![CDATA[ROWNUM <= #{map.pageSize}]]> ) a2
+        WHERE <![CDATA[a2.rsn > #{map.pageNo}]]>
+    </select>  
+	
+  <select id="userSelectCount" parameterType="java.util.Map" resultType="java.lang.Long">
+        SELECT
+          count(1)
+        FROM
+	 		SYS_ROLE sr
+        LEFT JOIN SYS_USER_ROLE sur ON sur.ROLE_ID = sr.ID
+        LEFT JOIN SYS_USER su ON sur.USER_ID = su.ID        
+        LEFT JOIN ZG_SPACE_CITY zsc ON zsc.INT_ID = su.CITY
+        LEFT JOIN ZG_SPACE_COUNTY zscy ON zscy.INT_ID = su.COUNTY
+        WHERE
+            1=1
+            <if test="map.cityId != null and map.cityId!=''">
+                AND su.CITY = #{map.cityId}
+            </if>
+            <if test="map.countyId!=null and map.countyId!=''">
+                AND su.COUNTY = #{map.countyId}
+            </if>            
+            <if test="map.roleId!=null and map.roleId!=''">
+                AND sr.ID = #{map.roleId}
+            </if>
+            <if test="map.userName!=null and map.userName!=''">
+                AND su.USER_NAME LIKE '%'||#{map.userName}||'%'
+            </if> 
+            and su.USER_STATUS=0
+            
+            </select> -->
+            
+            <select id="userSelect" parameterType="java.util.Map" resultType="com.audit.modules.system.entity.AccountShiftVO">
+        SELECT *  FROM (
+          SELECT rownum rsn, a1.*  FROM (
+        SELECT
+           zsc.NAME as areas,
+           zscy.NAME as counties,
+           sr.ROLE_NAME as roleName,
+           su.ACCOUNT as account
+        FROM
+            SYS_ROLE sr
+        LEFT JOIN SYS_USER_ROLE sur ON sur.ROLE_ID = sr.ID
+        LEFT JOIN SYS_USER su ON sur.USER_ID = su.ID        
+        LEFT JOIN YDJH_AREA zsc ON zsc.ID = su.CITY
+        LEFT JOIN YDJH_AREA zscy ON zscy.ID = su.COUNTY
+        WHERE
+            1=1
+            <if test="map.cityId != null and map.cityId!=''">
+                AND su.CITY = #{map.cityId}
+            </if>
+            <if test="map.countyId!=null and map.countyId!=''">
+                AND su.COUNTY = #{map.countyId}
+            </if>            
+            <if test="map.roleId!=null and map.roleId!=''">
+                AND sr.ID = #{map.roleId}
+            </if>
+            <if test="map.userName!=null and map.userName!=''">
+                AND su.USER_NAME LIKE '%'||#{map.userName}||'%'
+            </if> 
+            and su.USER_STATUS=0          
+        ) a1  WHERE
+        <![CDATA[ROWNUM <= #{map.pageSize}]]> ) a2
+        WHERE <![CDATA[a2.rsn > #{map.pageNo}]]>
+    </select>  
+	
+  <select id="userSelectCount" parameterType="java.util.Map" resultType="java.lang.Long">
+        SELECT
+          count(1)
+        FROM
+	 		SYS_ROLE sr
+        LEFT JOIN SYS_USER_ROLE sur ON sur.ROLE_ID = sr.ID
+        LEFT JOIN SYS_USER su ON sur.USER_ID = su.ID        
+        LEFT JOIN YDJH_AREA zsc ON zsc.ID = su.CITY
+        LEFT JOIN YDJH_AREA zscy ON zscy.ID = su.COUNTY
+        WHERE
+            1=1
+            <if test="map.cityId != null and map.cityId!=''">
+                AND su.CITY = #{map.cityId}
+            </if>
+            <if test="map.countyId!=null and map.countyId!=''">
+                AND su.COUNTY = #{map.countyId}
+            </if>            
+            <if test="map.roleId!=null and map.roleId!=''">
+                AND sr.ID = #{map.roleId}
+            </if>
+            <if test="map.userName!=null and map.userName!=''">
+                AND su.USER_NAME LIKE '%'||#{map.userName}||'%'
+            </if> 
+            and su.USER_STATUS=0
+            
+            </select>
+            
+            <select id="getUserByUserId" parameterType="java.lang.String" resultType="com.audit.modules.system.entity.UserVo">
+            	select su.id as userId,su.user_name as userName,
+su.account as account,odd.id as departmentId,odd.company_code as companyId,
+odd.department_name as departmentName,odd.department_no as departmentNo,scc.COST_CENTER_NO as costid
+ from SYS_USER su 
+LEFT JOIN OA_DEPARTMENT_DATA_EMPLOYEES odde on odde.employees=su.id
+left join OA_DEPARTMENT_DATA odd on odde.OA_DEPARTMENT_DATA=odd.id
+left join sys_cost_center scc on scc.DEPLOYMENT_NO=odd.department_no
+where su.id=#{id}
+            </select>
+            
+</mapper>

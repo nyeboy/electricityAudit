@@ -1,0 +1,55 @@
+html,body{
+    height: 100%;
+    overflow: hidden;
+    font-family: "微软雅黑",'Helvetica Neue', Helvetica, Arial, sans-serif;
+    scrollbar-arrow-color: #e3e3e3;  /*图6,三角箭头的颜色*/
+    scrollbar-face-color: #e3e3e3;  /*图5,立体滚动条的颜色*/
+    scrollbar-3dlight-color: #fff;  /*图1,立体滚动条亮边的颜色*/
+    scrollbar-highlight-color: #fff;  /*图2,滚动条空白部分的颜色*/
+    scrollbar-shadow-color: #e3e3e3;  /*图3,立体滚动条阴影的颜色*/
+    scrollbar-darkshadow-color: #fff;  /*图4,立体滚动条强阴影的颜色*/
+    scrollbar-track-color: #fff;  /*图7,立体滚动条背景颜色*/
+    scrollbar-base-color:#e3e3e3;  /*滚动条的基本颜色*/
+}
+ /*chrome滚动条垂直方向的宽度*/
+::-webkit-scrollbar {
+   width: 10px;
+}
+/* 垂直滚动条的滑动块 */
+::-webkit-scrollbar-thumb:vertical {
+    border-radius: 4px;
+    background-color:#e3e3e3;
+}
+html,
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+div,
+p,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+form,
+fieldset,
+legend,
+button,
+input,
+textarea,
+select,
+table,
+tr,
+th,
+td { 
+    margin:0;
+    padding:0;
+}
+ul{
+    list-style-type: none;
+}

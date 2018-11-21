@@ -1,0 +1,133 @@
+﻿<!-- 电费提交单查看详情弹框 -->
+<div class="ledge-detail add-details">
+	 <div class="ledge-title"><button ng-click="expenseAccountDetail()">查看报销单明细</button></div> 
+	 <div class="ledge-title"><button ng-click="submitProcess()">查看报销流程</button></div>
+    <div class="ledge-title">电费提交详情</div>
+    <div class="ledge-table">
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                        <span class="table-left">电费提交单号:</span>
+                        <input type="text" disabled="disabled" name="" class="table-right" value="{{details.submitNo}}">
+                    </td>
+                    <td>
+                        <span class="table-left">区县经办人:</span>
+                        <input type="text" disabled="disabled" name="" class="table-right" value="{{details.trusteesName}}">
+                    </td>
+                    <td>
+                        <span class="table-left">制单时间:</span>
+                        <input type="text" disabled="disabled" name="" class="table-right" value="{{details.createDate | date:'yyyy-MM-dd hh:mm:ss'}}">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="table-left">地市:</span>
+                        <input type="text" disabled="disabled" name="" class="table-right" value="{{details.city}}">
+                    </td>
+                    <td>
+                        <span class="table-left">区县:</span>
+                        <input type="text" disabled="disabled" name="" class="table-right" value="{{details.county}}">
+                    </td>
+                    <td>
+                        <span class="table-left">推送类型:</span>
+                        <input type="text" disabled="disabled" name="" class="table-right" value="{{details.reimbursementType}}">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="table-left">报销状态:</span>
+                        <input type="text" disabled="disabled" name="" class="table-right" value="{{details.status | pushType}}">
+                    </td>
+                    <td>
+                        <span class="table-left">报销总金额:</span>
+                        <input type="text" disabled="disabled" name="" class="table-right " value="{{details.totalAmount}}">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 稽核单列表-->
+    <div class="ledge-title ledge-sub">稽核单列表</div>
+    <div ng-if="isSaveOK" class="btn btn-blue" ng-click="createSubmitOrderDialog_1()" >添加稽核单</div>
+    <div class="invoinc-table">
+       <!--  <table class="table-result">
+            <colgroup>
+                <col style="width:20%" />
+                <col style="width:8%" />
+                <col style="width:8%" />
+                <col style="width:10%" />
+                <col style="width:15%" />
+                <col style="width:10%" />
+                <col style="width:20%" />
+                <col style="width:9%" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>稽核单号</th>
+                    <th>地市</th>
+                    <th>区县</th>
+                    <th>录入员</th>
+                    <th>稽核单状态</th>
+                    <th>金额(元)</th>
+                    <th>供应商</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+        </table> -->
+        <div class="table-details invoinc-list" id="listDetail">
+            <div>
+                <table>
+                   <!--  <colgroup>
+                        <col style="width:20%" />
+                        <col style="width:8%" />
+                        <col style="width:8%" />
+                        <col style="width:10%" />
+                        <col style="width:15%" />
+                        <col style="width:10%" />
+                        <col style="width:20%" />
+                        <col style="width:9%" />
+                    </colgroup> -->
+                    <tbody class="query-date">
+                    <tr>
+                    <th>稽核单号</th>
+                    <th>地市</th>
+                    <th>区县</th>
+                    <th>录入员</th>
+                    <th>稽核单状态</th>
+                    <th>金额(元)</th>
+                    <th>供应商</th>
+                    <th>操作</th>
+                </tr>
+                        <tr  ng-repeat="item in listDetail track by $index">
+                            <td>{{item.serialNumber}}</td>
+                            <td>{{item.areas}}</td>
+                            <td>{{item.counties}}</td>
+                            <td>{{item.createPersonName}}</td>
+                            <td>{{item.status | ElectrictyStatusFilter}}</td>
+                            <td>{{item.amount}}</td>
+                            <td>{{item.supplierName}}</td>
+                            <td>
+                                <a ng-click="showZWauditDetailDetail(item,false,true)" class="check-detail">查看</a>
+                                <a ng-if="isSaveOK"  class="delete" ng-click="removeElectricityToSubmit(item.id,details.id,$index)">移出</a>
+                               <!--   <a ng-if="isSaveOK"  class="edit-process">修改供应商</a> -->
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="reimbur-foot ledge-foot">
+       <!--  <button ng-if="!isZWfrinc" ng-click="revocationProcess(details.id)" class="reimbur-cancel btn">取消</button> -->
+        <!-- <button ng-if="!isZWfrinc" ng-click="saveDialog()" class="reimbur-save btn">确定</button>
+        <button ng-if="isZWfrinc" ng-click="closeDialog('SubmitDialog')" class="reimbur-save btn">关闭</button> -->
+        <button ng-if="isSaveOK" ng-click="closeAndSearch('SubmitDialog')" class="reimbur-save btn">确定</button>
+        <button ng-if="!isSaveOK" ng-click="closeDialog('SubmitDialog')" class="reimbur-save btn">关闭</button>
+    </div>
+</div>
+<style type="text/css">
+.invoinc-list .query-date td{ width: auto; }
+</style>

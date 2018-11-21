@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<!-- 设置但JDBC类型为空时,某些驱动程序 要指定值,default: OTHER 默认为OTHER，我们指定为NULL -->
+		<!-- oracle -->
+		<!-- <setting name="jdbcTypeForNull" value="VARCHAR"/>  -->
+		<!--表明重用预编译的SQL语句-->
+		<setting name="defaultExecutorType" value="REUSE"/>
+		<setting name="logImpl" value="LOG4J"/>
+	</settings>
+
+	<!-- 注册 ibaste 配置文件 -->
+	<mappers>
+		<mapper resource="com/audit/modules/system/mapxml/EquRoomDevice.xml" />
+		<mapper resource="com/audit/modules/system/mapxml/File.xml" />
+		<mapper resource="com/audit/modules/system/mapxml/Login.xml" />
+		<mapper resource="com/audit/modules/system/mapxml/OperationLog.xml" />
+		<mapper resource="com/audit/modules/system/mapxml/SysMiddleFile.xml" />
+		<mapper resource="com/audit/modules/system/mapxml/SysRole.xml" />
+		<mapper resource="com/audit/modules/system/mapxml/SystemData.xml" />
+		<mapper resource="com/audit/modules/system/mapxml/User.xml" />
+		<mapper resource="com/audit/modules/system/mapxml/SysResource.xml" />
+		<mapper resource="com/audit/modules/system/mapxml/SysRoleResource.xml" />
+		<mapper resource="com/audit/modules/system/mapxml/ZgSpaceCounty.xml" />
+		<mapper resource="com/audit/modules/contract/mapxml/Contract.xml" />
+		<mapper resource="com/audit/modules/costcenter/mapxml/CostCenter.xml" />
+		<mapper resource="com/audit/modules/electricity/mapxml/ElectricitySubmit.xml" />
+		<mapper resource="com/audit/modules/electricity/mapxml/InputElectricity.xml" />
+		<mapper resource="com/audit/modules/invoice/mapxml/Invoice.xml" />
+		<mapper resource="com/audit/modules/site/mapxml/SiteInfo.xml" />
+		<mapper resource="com/audit/modules/supplier/mapxml/Supplier.xml" />
+		<mapper resource="com/audit/modules/watthourmeter/mapxml/WatthourMeter.xml" />
+		<mapper resource="com/audit/modules/testdemo/mapxml/TestDemo.xml" />
+		<mapper resource="com/audit/modules/payment/mapxml/advancePayment.xml" />
+		<mapper resource="com/audit/modules/system/mapxml/SysNotic.xml" />
+		<mapper resource="com/audit/modules/system/mapxml/ResourcePoint.xml" />
+
+		<mapper resource="com/audit/modules/reimbursementgroup/mapxml/ReimbursementGroup.xml"/>
+		<mapper resource="com/audit/modules/report/mapxml/ElectricCharge.xml" />
+		<mapper resource="com/audit/modules/report/mapxml/ElectricPower.xml" />
+
+		<mapper resource="com/audit/modules/electricity/mapxml/owner.xml" />
+
+		<mapper resource="com/audit/modules/basedata/mapxml/AccountSiteManage.xml" />
+		<mapper resource="com/audit/modules/basedata/mapxml/AccountSitePSU.xml" />
+		<mapper resource="com/audit/modules/basedata/mapxml/AccountSiteOther.xml" />
+		<mapper resource="com/audit/modules/basedata/mapxml/SupplierManage.xml"/>
+		<mapper resource="com/audit/modules/basedata/mapxml/PowerRateManage.xml"/>
+	</mappers>
+</configuration>

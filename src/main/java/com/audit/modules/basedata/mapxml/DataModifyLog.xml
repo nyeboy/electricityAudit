@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.basedata.dao.DataModifyLogDao">
+  <resultMap id="BaseResultMap" type="com.audit.modules.basedata.entity.DataModifyLog">
+    <id column="ID" jdbcType="VARCHAR" property="id" />
+    <result column="ORIGINAL_PARAMS" jdbcType="VARCHAR" property="originalParams" />
+    <result column="NEW_PARAMS" jdbcType="VARCHAR" property="newParams" />
+    <result column="MODIFY_TYPE" jdbcType="VARCHAR" property="modifyType" />
+    <result column="TABL_NAME" jdbcType="VARCHAR" property="tablName" />
+    <result column="APPLY_ID" jdbcType="VARCHAR" property="applyId" />
+    <result column="APPLY_USER_ID" jdbcType="VARCHAR" property="applyUserId" />
+    <result column="DATA_ID" jdbcType="VARCHAR" property="dataId" />
+    <result column="MODIFY_TIME" jdbcType="TIMESTAMP" property="modifyTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, ORIGINAL_PARAMS, NEW_PARAMS, MODIFY_TYPE, TABL_NAME, APPLY_ID, APPLY_USER_ID, DATA_ID,
+    MODIFY_TIME
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from SYS_DATA_MODIFY_LOG
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="findLogByApplyId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT 
+    ID, ORIGINAL_PARAMS, NEW_PARAMS, MODIFY_TYPE, TABL_NAME, APPLY_ID, APPLY_USER_ID, DATA_ID,
+    MODIFY_TIME
+    FROM SYS_DATA_MODIFY_LOG
+    WHERE APPLY_ID = #{applyId,jdbcType=VARCHAR}
+  </select>
+  <select id="findLogByData" resultMap="BaseResultMap">
+    SELECT 
+    ID, ORIGINAL_PARAMS, NEW_PARAMS, MODIFY_TYPE, TABL_NAME, APPLY_ID, APPLY_USER_ID, DATA_ID,
+    MODIFY_TIME
+    FROM SYS_DATA_MODIFY_LOG
+    WHERE DATA_ID = #{dataId,jdbcType=VARCHAR} 
+    AND TABL_NAME = #{tableName,jdbcType=VARCHAR}
+    AND MODIFY_TYPE != 'C'
+    ORDER BY MODIFY_TIME ASC NULLS LAST
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from SYS_DATA_MODIFY_LOG
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByApplyIds" >
+    DELETE FROM 
+    SYS_DATA_MODIFY_LOG
+    WHERE APPLY_ID IN
+    <foreach collection="array" item="applyid" index="index"
+			open="(" separator="," close=")">
+			#{applyid}
+		</foreach>
+  </delete>
+  <insert id="insert" parameterType="com.audit.modules.basedata.entity.DataModifyLog">
+    insert into SYS_DATA_MODIFY_LOG (ID, ORIGINAL_PARAMS, NEW_PARAMS, 
+      MODIFY_TYPE, TABL_NAME, APPLY_ID, DATA_ID,
+      APPLY_USER_ID, MODIFY_TIME)
+    values (#{id,jdbcType=VARCHAR}, #{originalParams,jdbcType=VARCHAR}, #{newParams,jdbcType=VARCHAR}, 
+      #{modifyType,jdbcType=VARCHAR}, #{tablName,jdbcType=VARCHAR}, #{applyId,jdbcType=VARCHAR},#{dataId,jdbcType=VARCHAR}, 
+      #{applyUserId,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.audit.modules.basedata.entity.DataModifyLog">
+    insert into SYS_DATA_MODIFY_LOG
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="originalParams != null">
+        ORIGINAL_PARAMS,
+      </if>
+      <if test="newParams != null">
+        NEW_PARAMS,
+      </if>
+      <if test="modifyType != null">
+        MODIFY_TYPE,
+      </if>
+      <if test="tablName != null">
+        TABL_NAME,
+      </if>
+      <if test="applyId != null">
+        APPLY_ID,
+      </if>
+      <if test="dataId != null">
+        DATA_ID,
+      </if>
+      <if test="applyUserId != null">
+        APPLY_USER_ID,
+      </if>
+      <if test="modifyTime != null">
+        MODIFY_TIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="originalParams != null">
+        #{originalParams,jdbcType=VARCHAR},
+      </if>
+      <if test="newParams != null">
+        #{newParams,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyType != null">
+        #{modifyType,jdbcType=VARCHAR},
+      </if>
+      <if test="tablName != null">
+        #{tablName,jdbcType=VARCHAR},
+      </if>
+      <if test="applyId != null">
+        #{applyId,jdbcType=VARCHAR},
+      </if>
+      <if test="dataId != null">
+        #{dataId,jdbcType=VARCHAR},
+      </if>
+      <if test="applyUserId != null">
+        #{applyUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.audit.modules.basedata.entity.DataModifyLog">
+    update SYS_DATA_MODIFY_LOG
+    <set>
+      <if test="originalParams != null">
+        ORIGINAL_PARAMS = #{originalParams,jdbcType=VARCHAR},
+      </if>
+      <if test="newParams != null">
+        NEW_PARAMS = #{newParams,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyType != null">
+        MODIFY_TYPE = #{modifyType,jdbcType=VARCHAR},
+      </if>
+      <if test="tablName != null">
+        TABL_NAME = #{tablName,jdbcType=VARCHAR},
+      </if>
+      <if test="applyId != null">
+        APPLY_ID = #{applyId,jdbcType=VARCHAR},
+      </if>
+      <if test="dataId != null">
+        DATA_ID = #{dataId,jdbcType=VARCHAR},
+      </if>
+      <if test="applyUserId != null">
+        APPLY_USER_ID = #{applyUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.audit.modules.basedata.entity.DataModifyLog">
+    update SYS_DATA_MODIFY_LOG
+    set ORIGINAL_PARAMS = #{originalParams,jdbcType=VARCHAR},
+      NEW_PARAMS = #{newParams,jdbcType=VARCHAR},
+      MODIFY_TYPE = #{modifyType,jdbcType=VARCHAR},
+      TABL_NAME = #{tablName,jdbcType=VARCHAR},
+      APPLY_ID = #{applyId,jdbcType=VARCHAR},
+      DATA_ID = #{dataId,jdbcType=VARCHAR},
+      APPLY_USER_ID = #{applyUserId,jdbcType=VARCHAR},
+      MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

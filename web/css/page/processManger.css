@@ -1,0 +1,199 @@
+@charset "utf-8";
+/* CSS Document */
+/*
+	*@description: 流程管理;
+	*@author:tmliu;
+	*@date:2017.3.19 11:35;
+
+ */
+/* 流程查询 */ 
+.process-header {
+	padding: 14px;
+	box-sizing: border-box;
+	border: 1px solid #edf0f2;
+	background-color: #fff;
+	overflow: hidden;
+	margin-bottom: 20px;
+}
+.search-input {
+	padding-right: 106px;
+	float: left;
+	margin-right: 14px;
+}
+.search-input input{
+	border: 1px solid #e3e4e6;
+	height: 36px;
+	box-sizing: border-box;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	-ms-border-radius: 2px;
+	-o-border-radius: 2px;
+	border-radius: 2px;
+}
+.querybtn {
+	float: left;
+	margin-left: -108px;
+	width: 94px;
+	background: #4b8de6;
+	text-align: center;
+	height: 36px;
+	line-height: 36px;
+	color: #fff;
+	cursor: pointer;
+	box-sizing: border-box;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	-ms-border-radius: 2px;
+	-o-border-radius: 2px;
+	border-radius: 2px;
+}
+.subtitle {
+	padding: 14px 14px;
+	background: #fff;
+}
+.subtitle input[type="button"] {
+	width: 144px;
+	height: 38px;
+	border: 1px solid #4b8de6;
+	box-sizing: border-box;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	-ms-border-radius: 2px;
+	-o-border-radius: 2px;
+	border-radius: 2px;
+	background: #ecf4ff;
+	color: #4b8de6;
+	font-weight: 700;
+}
+/* 查看 修改 */ 
+.query-date tr td .check-detail,
+.query-date tr td .edit-process {
+	display: inline-block;
+	width: 56px;
+	color: #4b8de6;
+	padding-left: 16px;
+	cursor: pointer;
+}
+.query-date tr
+.query-date tr td .check-detail {
+	background: url(../../img/search_icon.png) no-repeat left center;
+}
+.query-date tr td .edit-process {
+	background: url(../../img/editor_icon.png) no-repeat left center;
+}
+.query-date tr td .check-detail:hover,
+.query-date tr td .edit-process:hover {
+	padding-left: 16px;
+}
+/* 新增审批 */
+.add-process {
+	overflow: hidden;
+	background: #fff;
+	font-family: "微软雅黑";
+} 
+.add-process form {
+	overflow: hidden;
+	color: #585c5e;
+}
+.list-iteam {
+	margin-bottom: 0;
+	padding: 20px;
+	border-bottom: 1px solid #edf0f2;
+}
+.list-iteam li {
+	margin-bottom: 20px;
+}
+.list-iteam li:last-of-type {
+	margin-bottom: 0;
+}
+.list-iteam li span,
+.list-iteam li select,
+.list-iteam li input,
+.list-iteam li i{
+	display: inline-block;
+	vertical-align: middle;
+}
+.list-iteam li i {
+	width: 145px;
+	padding-left: 14px;
+	box-sizing: border-box;
+	height: 38px;
+	font-style: normal;
+	line-height: 38px;
+	background: url(../../img/examine_bg.png);
+	color: #afb3b6;
+}
+.list-iteam li span {
+	margin-right: 12px;
+}
+.right-padding {
+	padding-left: 72px;
+}
+.add-process .list-text span {
+	vertical-align: top;
+}
+.list-iteam li select,
+.list-iteam li input,
+.list-iteam li textarea {
+	outline: none;
+	border: none;
+	border: 1px solid #d2d4d6; 
+}
+.list-ul li input,
+.list-ul li select {
+	width: 355px;
+	height: 38px;
+}
+.list-ul li textarea {
+	width: 560px;
+	height: 80px;
+}
+.list-iteam li select:focus,
+.list-iteam li input[type="text"]:focus,
+.list-iteam li textarea:focus {
+	padding-left: 12px;
+	border: 1px solid #66afe9 ;
+	-webkit-box-shadow: 0 0 8px rgba(82,168,236,0.6);
+	-moz-box-shadow: 0 0 8px rgba(82,168,236,0.6);
+	-ms-box-shadow: 0 0 8px rgba(82,168,236,0.6);
+	-o-box-shadow: 0 0 8px rgba(82,168,236,0.6);
+	box-shadow: 0 0 8px rgba(82,168,236,0.6);
+}
+.list-middle li input[type="text"] {
+	border: 1px solid #66afe9 ;
+}
+.list-middle li input[type="text"]{
+	width: 397px;
+	height: 38px;
+	border: 1px solid #d2d4d6;
+	margin-left: 12px;
+	padding-left: 12px;
+}
+.list-middle li input[type="button"] {
+	width: 554px;
+	height: 58px;
+	line-height: 58px;
+	box-sizing: border-box;
+	background: #f7faff;
+	margin-left: 12px;
+	border: 2px dashed #4b8de6;
+	color: #4b8de6;
+}
+.save-process,
+.cancel {
+	width: 94px;
+	height: 38px;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	-ms-border-radius: 2px;
+	-o-border-radius: 2px;
+	border-radius: 2px;
+	background: #4b8de6;
+	color: #fff;
+	font-weight: 700;
+	margin-right: 12px;
+}
+/* 330需求 */
+.list-ul select {
+	padding-left: 12px;
+}

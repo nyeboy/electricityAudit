@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=8" >
+    <meta http-equiv="X-UA-Compatible" content="IE=9" />
+    <meta http-equiv="X-UA-Compatible" content="IE=10" />
+    <meta http-equiv="X-UA-Compatible" content="IE=11" />
+    <title>四川移动网络业务管理稽核平台</title>
+    <link rel="stylesheet" href="./assets/css/extends/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="./assets/css/cores/public.css">
+    <link rel="stylesheet" href="./assets/css/index.css">
+    <link rel="stylesheet" href="./assets/css/page/whole-frame.css">
+    <link rel="stylesheet" href="./assets/css/page/user-manager.css">
+    <link rel="stylesheet" href="./assets/css/page/basic-date.css">
+    <link rel="stylesheet" href="./assets/css/page/statistic-report.css">
+    <link rel="stylesheet" href="./assets/css/page/page-contant.css">
+    <link rel="stylesheet" href="./assets/css/extends/bootstrap/bootstrap-datetimepicker.min.css">
+    <link rel="shortcut icon" href="./favicon.ico" type="images/x-icon">
+  
+  	<link rel="stylesheet" type="text/css" href="bower_components/ng-dialog/css/ngDialog.min.css">
+	<link rel="stylesheet" type="text/css" href="bower_components/ng-dialog/css/ngDialog-theme-plain.min.css">
+	<link rel="stylesheet" type="text/css" href="bower_components/ng-dialog/css/ngDialog-theme-default.min.css">
+	<link rel="stylesheet" type="text/css" href="bower_components/angular-bootstrap-nav-tree-master/dist/abn_tree.css">
+
+	<!-- page -->
+	<link href="bower_components/im.pagination/src/css/im-pagination.css">
+</head>
+
+<body ng-app="app">
+
+    <div class="system-auit">
+
+        <div ui-view="header"></div>
+
+        <div class="systemBox">
+            <div  ui-view="aside"  class="left-cont"></div>
+            <div  ui-view="content"  class="right-cont"></div>
+        </div>
+
+
+        <!-- footer -->
+        <div ui-view="footer"  style="display: none;"></div>
+
+    </div>
+
+
+<http-loading httploading="httpLoading"></http-loading>
+
+
+
+
+<!-- aside right -->
+<!-- <div ui-view="right" style="display: none;"></div> -->
+<!-- / aside right -->
+
+<!-- BigDecimal -->
+<script src="./assets/js/extends/BigDecimal.js"></script>
+
+
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+  <script src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+  <script src="http://apps.bdimg.com/libs/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+
+<!-- jQuery -->
+<script src="./assets/js/extends/jquery.min.js"></script>
+<!-- <script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script> -->
+
+<!-- <script src="assets/js/bootstrap.min.js"></script> -->
+
+<!-- Angular -->
+<!-- <script src="bower_components/angular/angular.min.js"></script> -->
+<script src="./src/angular.min.js"></script>
+<!-- <script src="http://cdn.bootcss.com/angular.js/1.2.30/angular.min.js"></script> -->
+
+<script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+<script src="bower_components/angular-loading/httpLoading.min.js"></script>
+<script src="bower_components/angular-cookie-master/angular-cookie.min.js"></script>
+<script src="bower_components/angular-bootstrap-nav-tree-master/dist/abn_tree_directive.js"></script>
+<!-- <script src="assets/js/extends/jquery.min.js"></script> -->
+<script src="assets/js/extends/echarts.min.js"></script>
+
+<!-- 导出excel -->
+<script src="./assets/js/extends/Blob.js"></script> 
+<script src="./src/canvas-toBlob.js"></script> 
+<script src="./src/FileSaver.js"></script> 
+<script src="./src/FileSaver.min.js"></script> 
+<!--
+<script src="./assets/js/extends/FileSaver.js"></script>
+
+
+-->
+
+<!--Sweetalert-->
+<!--<link rel="stylesheet" href="bower_components/sweetalert-master/dist/sweetalert.min.css">-->
+<!--<script src="bower_components/sweetalert-master/dist/sweetalert.min.js"></script>-->
+
+
+<!--layer 弹出框-->
+<script src="bower_components/layer/layer.js" ></script>
+
+
+
+<script src="bower_components/im.pagination/src/js/im.pagination.js"></script>
+
+<script src="bower_components/angular-resource.js"></script>
+
+<!--laydate-->
+<script src="bower_components/ngLaydate/laydate/laydate.min.js"></script>
+<script src="bower_components/ngLaydate/ngLaydate.js"></script>
+
+<script src="config.js"></script>
+
+
+
+
+<script src="bower_components/ng-dialog/js/ngDialog.js"></script>
+
+<script src="bower_components/angular-bootstrap-show-errors/src/showErrors.min.js"></script>
+<script src="bower_components/jquery-cookie/jquery.cookie.js"></script>
+
+
+
+<script type="text/javascript">
+
+    var obj={
+        name:null,
+        id:"",
+        val:undefined
+    }
+
+
+    function checkNull(object,attrs,alias){
+
+        var result=[];
+
+        var flag=true;
+
+        for(i in object){
+
+            if(attrs!=undefined){
+
+                for(var j=0; j<attrs.length; j++){
+                    if(attrs[j]==i){
+                        if(object[i]==null){
+                            result.push(alias[j]+"为空");
+                            flag=false;
+                        }
+                    }
+                }
+            }else{
+                if(object[i]==null){
+                    result.push(i+"为空");
+                    flag=false;
+                }
+            }
+
+
+
+            console.log(i,object[i]);
+        }
+
+        return  {
+            tipStr:result.join(','),
+            flag:flag
+        }
+    }
+
+
+   console.log(checkNull(obj,['name'],["姓名"]));
+
+
+
+
+
+
+
+
+
+
+    function error(text){
+        layer.alert(text, {
+            icon:2,
+            time:2000,
+            btn:[]
+        });
+    }
+
+
+    // window.addEventListener("beforeunload", function (e) {
+    //     $.cookie('user',null);
+    //     $.cookie("token",null);
+    //     $.cookie("clinicName",null);
+    //     $.cookie("clinicId",null);
+    // });
+
+ if ( !Array.prototype.forEach ) {
+
+     Array.prototype.forEach = function forEach( callback, thisArg ) {
+
+       var T, k;
+
+       if ( this == null ) {
+
+         throw new TypeError("this is null or not defined" );
+
+       }
+       var O = Object(this);
+
+       var len = O.length >>> 0;
+
+       if ( typeof callback !== "function" ) {
+
+         throw new TypeError( callback +" is not a function" );
+
+       }
+
+       if ( arguments.length > 1 ) {
+
+         T = thisArg;
+
+       }
+
+       k = 0;
+
+       while( k < len ) {
+
+         var kValue;
+
+         if ( k in O ) {
+
+           kValue = O[ k ];
+
+           callback.call( T, kValue, k, O );
+
+         }
+
+         k++;
+
+       }
+
+     };
+
+   }
+
+
+    Array.prototype.unique = function(){
+        var res = [this[0]];
+        for(var i = 1; i < this.length; i++){
+            var repeat = false;
+            for(var j = 0; j < res.length; j++){
+                if(this[i] == res[j]){
+                    repeat = true;
+                    break;
+                }
+            }
+            if(!repeat){
+                res.push(this[i]);
+            }
+        }
+        return res;
+    };
+
+
+    /**
+     * 查看是否包含某元素
+     * @param item
+     * @returns {boolean}
+     */
+    Array.prototype.has = function (item) {
+
+        var i = this.length;
+        while (i--) {
+            if (this[i] === item) {
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
+
+    function logout(){
+      //alert('业务出问题啦,请重新登录!!');
+      var url=window.location.pathname;
+
+//      if(url.indexOf('/page/') != -1){
+//          window.location.href='/page/login.html';
+//      }else{
+//          window.location.href='/login.html';
+//      }
+//
+//         $.cookie('user',null);
+//         $.cookie("token",null);
+//         $.cookie("clinicName",null);
+//         $.cookie("clinicId",null);
+//
+//        if(window.sessionStorage){
+//            window.sessionStorage.clear();
+//        }
+    };
+
+
+
+
+
+   
+    //全选
+    function checkAll(myDomId,domId){
+        var  flag = $(myDomId).is(':checked');
+
+        $(domId +" input[type='checkbox']").each(function(){
+
+            $(this).prop('checked',flag);
+
+        });
+    };
+
+    //全不选
+
+    function unCheckAll(domId){
+
+        $(domId+" input[type='checkbox']").each(function(){
+
+            $(this).prop('checked',false);
+
+        });
+    };
+
+
+    function checkOne(dom) {
+        var  flag = $(dom).is(':checked');
+
+        console.log("flag",flag);
+
+
+        if(flag){
+            $("input[type='checkbox'].test").each(function(){
+                $(this).prop('checked',!flag);
+            });
+        }
+        $(dom).prop('checked',flag);
+    }
+
+
+
+
+
+
+    //去重 返回 arrB 与 arrA 中 arrB不重复部分
+    function compareArray(arrA,arrB,arrAAtrr,arrBAtrr){
+      var temp=[];
+
+      for (var i = 0; i<arrA.length; i++) {
+
+          for(var j=0; j<arrB.length; j++){
+
+
+
+              if(arrA[i][arrAAtrr]==arrB[j][arrBAtrr]){
+
+                console.log("重复的有：",arrB[j][arrBAtrr]);                
+                  temp.push(arrB[j][arrBAtrr]);
+              }
+          }
+      }
+
+
+      for(var i=0;i<temp.length; i++){
+
+          for(var j=0; j<arrB.length; j++){
+
+              console.log(arrB[j][arrBAtrr],temp[i],arrB[j][arrBAtrr]==temp[i]);
+
+              if(arrB[j][arrBAtrr]==temp[i]){
+                  arrB.splice(j,1);
+              }
+          }
+      }
+
+
+    //  console.log("去重部分剩下部分：",arrB);
+
+      return arrB;
+    }
+
+
+
+    //提示
+    function msg(str,fn){
+        var index= layer.msg(str);
+
+        setTimeout(function(){
+            layer.close(index);
+            //回调方法
+            if(typeof fn == 'function'){
+                fn();
+            }
+        },2000);
+
+    }
+
+
+    //区间校验
+    function  checkRegion(num,regionArr) {
+
+        var flag=false;
+
+        if(num>=regionArr[0] && num<=regionArr[1]){
+            flag=true;
+        }
+        return flag;
+    }
+
+
+    function  checkRegion2(num,regionArr) {
+
+        var flag=false;
+
+        if(num>regionArr[0] && num<=regionArr[1]){
+            flag=true;
+        }
+        return flag;
+    }
+</script>
+
+
+<script src="bower_components/jquery.form.min.js"></script>
+<!-- <script src="https://cdn.bootcss.com/echarts/3.5.3/echarts.common.js"></script> -->
+
+<!-- 上线接口公用 -->
+<script src="config.js"></script>
+<script src="src/waterMark.js"></script>
+
+<!-- 自维页面 -->
+<script src="src/app.js"></script>
+<script src="src/ctrl.js"></script>
+<script src="src/tplSubmitAuditCtrl.js"></script>
+<script src="src/serv.js"></script>
+<script src="src/flowCtrl.js"></script>
+<script src="src/ownerCtrl.js"></script>
+<script src="src/statisticsReportCtrl.js"></script>
+<script src="src/tplprepay.js"></script>
+
+<!-- 塔维页面 -->
+<!-- <script src="src/taiweiCtrl.js"></script> -->
+<script src="src/basicManagerCtrl.js"></script> 
+<script src="src/towerAuditCtrl.js"></script>
+<script src="src/towerSubmitCtrl.js"></script>
+<script src="src/towerAuditServ.js"></script>
+<script src="src/basicManagerServ.js"></script><!-- 基础数据管理 -->
+
+<script src="src/towerstatisticsReportCtrl.js"></script>
+<script src="src/towerReportServ.js"></script>
+
+
+
+<!-- 自维/塔维页面公用部分 -->
+<script src="src/utils.js"></script>
+<script src="src/filter.js"></script>
+
+<!-- <script src="assets/js/waterMark.js"></script> -->
+
+</body>
+</html>

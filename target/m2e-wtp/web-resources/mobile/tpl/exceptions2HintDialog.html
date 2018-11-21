@@ -1,0 +1,49 @@
+﻿ <!-- 异常 (报账点单电表日均电费超1千元)-->
+ <style>
+ 
+.heading {
+padding-left: 0px;
+color:#4b8de6;
+}
+
+.content {
+padding-left: 10%;
+padding-top:5%;
+color:red;
+}
+
+.causes {
+height: 100px;
+padding-left: 10%;
+}
+
+.causes .cause {
+height:100%;
+width: 85%;
+
+}
+
+ .causes .required {
+ font-size:25px;
+	color:red;
+}
+
+</style>
+ 	<div class="heading">
+ 	<h3>异常提示</h3>	
+ 	</div>
+ 	<div class="content">
+ 	<h3>发现数据异常: </h3><br><br><br>
+ 	<h3>异常电表号: {{wattID}}</h3><br>
+ 	<h3>电表户号:  {{wattPaymentAccountCode}}</h3><br>
+ 	<h3>电表标识符: {{wattCode}} </h3><br><br><br>
+ 	<h3>异常原因: 报账点单电表日均电费超1千元</h3><br><br><br>
+ 	</div>
+ 	<div class="causes">
+ 	<textarea class="cause" placeholder="异常原因说明(必填):" id="cause2"></textarea>&nbsp;<span class="required">*</span>
+ 	</div>
+ 	
+<div class="reimbur-foot ledge-foot audit-dialog">
+<button ng-click="ack2()" class="reimbur-save btn">确认</button>
+<button ng-click="closeDialog('exceptions2HintDialog')" class="reimbur-save btn">取消</button>
+</div>

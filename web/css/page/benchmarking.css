@@ -1,0 +1,24 @@
+@charset "utf-8";
+/* CSS Document */
+/*
+	*@description: 标杆管理;
+	*@author:tmliu;
+	*@date:2017.3.7 11:35;
+
+ */
+/* 额定标杆管理 */
+.rate-date {
+	width: 100%;
+	// min-width: 1121px;
+	height: 100%;
+} 
+// /* 额定标杆content */ 
+// .basic-content {
+// 	overflow: hidden;
+// }
+// .basic-content .table-result {
+//     width: 100%;
+//     border-collapse: collapse;
+//     border-spacing: 0;
+// 	border: 1px solid #edf0f2;
+// }

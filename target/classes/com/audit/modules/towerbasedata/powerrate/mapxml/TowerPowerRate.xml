@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.towerbasedata.powerrate.dao.TowerPowerRateDao">
+	
+	<!-- 分页查找所有 -->
+  <!--   <select id="getPageList" resultType="com.audit.modules.towerbasedata.powerrate.entity.TowerPowerRateVO">
+		SELECT
+		  	DISTINCT 
+			sepr.ID AS id,
+			sepr.POWER_RATING AS powerRating,
+			sepr.DEVICE_TYPE AS deviceType,
+			sepr.DEVICE_MODEL AS deviceModel,
+			sepr.DEVICE_VENDOR AS deviceVendor,
+			(SELECT zsc.CITY_NAME FROM ZG_SPACE_CITY zsc WHERE  zsc.INT_ID = zser.CITY_ID) AS cityStr,
+		 	(SELECT zsct.ZH_LABEL FROM ZG_SPACE_COUNTY zsct WHERE zsct.INT_ID = zser.COUNTY_ID) AS countyStr,
+			zser.CITY_ID AS cityId, 
+			zser.COUNTY_ID AS countyId,
+			to_char(sepr.UPDATE_TIME,'yyyy-MM-dd') AS updateDateStr
+		FROM
+			SYS_EQUROOM_POWER_RATING sepr
+			LEFT JOIN ZG_SPACE_EQUIP_ROOM zser ON zser.INT_ID = sepr.EQUROOM_ID
+		where 1=1
+			<if test="obj.deviceType!=null and obj.deviceType!=''">AND DEVICE_TYPE = #{obj.deviceType}</if>
+			<if test="obj.deviceModel!=null and obj.deviceModel!=''">AND DEVICE_MODEL LIKE '%'||#{obj.deviceModel}||'%'</if>
+	        <if test="obj.cityId!=null and obj.cityId!=''">AND zser.CITY_ID = #{obj.cityId}</if>
+	        <if test="obj.countyId!=null and obj.countyId!=''">AND zser.COUNTY_ID = #{obj.countyId}</if>
+    </select>
+	
+	根据id查找
+    <select id="selectById" resultType="com.audit.modules.towerbasedata.powerrate.entity.TowerPowerRateVO">
+		SELECT
+			sepr.ID AS id,
+			sepr.POWER_RATING AS powerRating,
+			sepr.DEVICE_TYPE AS deviceType,
+			sepr.DEVICE_MODEL AS deviceModel,
+			sepr.DEVICE_VENDOR AS deviceVendor,
+			to_char(sepr.UPDATE_TIME,'yyyy-MM-dd') AS updateDateStr,
+			(SELECT zsc.CITY_NAME FROM ZG_SPACE_CITY zsc WHERE  zsc.INT_ID = zser.CITY_ID) AS cityStr,
+		 	(SELECT zsct.ZH_LABEL FROM ZG_SPACE_COUNTY zsct WHERE zsct.INT_ID = zser.COUNTY_ID) AS countyStr,
+			zser.CITY_ID AS cityId, 
+			zser.COUNTY_ID AS countyId
+		FROM
+			SYS_EQUROOM_POWER_RATING sepr
+			LEFT JOIN  ZG_SPACE_EQUIP_ROOM zser ON zser.INT_ID = sepr.EQUROOM_ID
+		where 1=1
+			<if test="id !=null and id !=''">AND ID = #{id}</if>
+	</select> -->
+	
+	  <select id="getPageList" resultType="com.audit.modules.towerbasedata.powerrate.entity.TowerPowerRateVO">
+		SELECT
+		  	DISTINCT 
+			sepr.ID AS id,
+			sepr.POWER_RATING AS powerRating,
+			sepr.DEVICE_TYPE AS deviceType,
+			sepr.DEVICE_MODEL AS deviceModel,
+			sepr.DEVICE_VENDOR AS deviceVendor,
+			(SELECT zsc.NAME FROM YDJH_AREA zsc WHERE  zsc.ID = zser.CITY_ID) AS cityStr,
+		 	(SELECT zsct.NAME FROM YDJH_AREA zsct WHERE zsct.ID = zser.COUNTY_ID) AS countyStr,
+			zser.CITY_ID AS cityId, 
+			zser.COUNTY_ID AS countyId,
+			to_char(sepr.UPDATE_TIME,'yyyy-MM-dd') AS updateDateStr
+		FROM
+			SYS_EQUROOM_POWER_RATING sepr
+			LEFT JOIN ZG_SPACE_EQUIP_ROOM zser ON zser.INT_ID = sepr.EQUROOM_ID
+		where 1=1
+			<if test="obj.deviceType!=null and obj.deviceType!=''">AND DEVICE_TYPE = #{obj.deviceType}</if>
+			<if test="obj.deviceModel!=null and obj.deviceModel!=''">AND DEVICE_MODEL LIKE '%'||#{obj.deviceModel}||'%'</if>
+	        <if test="obj.cityId!=null and obj.cityId!=''">AND zser.CITY_ID = #{obj.cityId}</if>
+	        <if test="obj.countyId!=null and obj.countyId!=''">AND zser.COUNTY_ID = #{obj.countyId}</if>
+    </select>
+	
+	<!-- 根据id查找 -->
+    <select id="selectById" resultType="com.audit.modules.towerbasedata.powerrate.entity.TowerPowerRateVO">
+		SELECT
+			sepr.ID AS id,
+			sepr.POWER_RATING AS powerRating,
+			sepr.DEVICE_TYPE AS deviceType,
+			sepr.DEVICE_MODEL AS deviceModel,
+			sepr.DEVICE_VENDOR AS deviceVendor,
+			to_char(sepr.UPDATE_TIME,'yyyy-MM-dd') AS updateDateStr,
+			(SELECT zsc.NAME FROM YDJH_AREA zsc WHERE  zsc.ID = zser.CITY_ID) AS cityStr,
+		 	(SELECT zsct.NAME FROM YDJH_AREA zsct WHERE zsct.ID = zser.COUNTY_ID) AS countyStr,
+			zser.CITY_ID AS cityId, 
+			zser.COUNTY_ID AS countyId
+		FROM
+			SYS_EQUROOM_POWER_RATING sepr
+			LEFT JOIN  ZG_SPACE_EQUIP_ROOM zser ON zser.INT_ID = sepr.EQUROOM_ID
+		where 1=1
+			<if test="id !=null and id !=''">AND ID = #{id}</if>
+	</select>
+	
+	<!-- 根据ID删除 -->
+	<delete id="delete">        
+		DELETE from SYS_EQUROOM_POWER_RATING WHERE ID IN
+        <foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+	</delete>
+	
+	
+	<!-- 更新 -->
+	<update id="update" parameterType="com.audit.modules.towerbasedata.powerrate.entity.TowerPowerRateVO">
+		UPDATE SYS_EQUROOM_POWER_RATING 
+		<set>
+     	 	<if test="powerRating != null">POWER_RATING = #{powerRating,jdbcType=VARCHAR},</if>
+			<if test="deviceType != null">DEVICE_TYPE = #{deviceType,jdbcType=VARCHAR},</if>
+			<if test="deviceModel != null">DEVICE_MODEL = #{deviceModel,jdbcType=VARCHAR},</if>
+			<if test="deviceVendor != null">DEVICE_VENDOR = #{deviceVendor,jdbcType=VARCHAR},</if>
+			<if test="updateDate != null">UPDATE_TIME = #{updateDate,jdbcType=TIMESTAMP},</if>
+		</set>
+		 WHERE 
+		 	ID = #{id,jdbcType=NUMERIC} 
+	</update>
+	
+</mapper>

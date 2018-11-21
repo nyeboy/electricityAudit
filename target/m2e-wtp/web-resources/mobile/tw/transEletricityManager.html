@@ -1,0 +1,171 @@
+<!-- 转供电改造管理 -->
+<div class="system-content" id="systemContent">
+<div class="business-box" id="businessBox">
+    <div class="content-rout" id="contentRout">
+        <span>基础数据</span>&gt;<span>转供电信息管理</span>&gt;<span class="now-rout">转供电改造</span>
+    </div>
+    <div class="content-box reimbur-manager" id="contentBox" >
+       <div ng-if="transLevel==0 || transLevel ==1 || transLevel ==3" class="search-box">
+            <div>
+
+           <select name="" id="" class="title-select"
+                            ng-show="userCity==null || transLevel==1"
+                            ng-model="$parent.cityId"
+                            ng-options="city.key as city.value for city in citys"
+                            ng-change="queryCountyList(cityId)">
+                    <option  value="">全省</option>
+                    </select> 
+                     <input
+                        ng-show="userCity!=null && transLevel!=1"
+                        name="" class="title-select"
+                        disabled="disabled"
+                        ng-model="userCity"
+                        type="text">  
+                    <select class="title-select"
+                            ng-show="userCounty==null || transLevel==1"
+                            ng-model="$parent.countyId"
+                            ng-options="county.key as county.value for county in countys">
+                    <option value="" >全市</option>
+                    </select>
+                     <input
+                          ng-show="userCounty!=null && transLevel !=1"
+                          name="" class="title-select"
+                          disabled="disabled"
+                          ng-model="userCounty"
+                          type="text">  
+               <!--  <select  ng-model="$parent.properType" name="" id="" class="title-select supplier-parts">
+                  <option value="">资产产权性质</option>
+                  <option value="0">自维</option>
+                   <option value="2">塔维</option>
+                   
+               </select> -->
+                 <select  ng-model="$parent.resultStatus" name="" id="" class="title-select supplier-parts">
+                   <option value="">状态</option>
+                   <option value="4">未进入审批流程</option>
+                    <option value="0">审批中</option>
+                     <option value="1">改造成功</option>
+                    <option value="2">审批失败</option>
+                    
+                </select>
+                <input ng-model="$parent.roomName" type="text" placeholder="资管站点名称" class="process-input search-t" name="">
+
+            </div>
+            <button ng-click="getSubmitData(true)" class="btn btn-primary" type="button">搜索</button>
+
+        </div>
+                   
+                    <div class="table-title">
+                        <button ng-show="transLevel == 1 " ng-click="goAddTrans()" class="btn btn-blue">新增</button>
+                        <button ng-show="transLevel == 1 " ng-click="deleteSelected()" class="btn btn-blue">删除</button>
+                       <!--  <button ng-show="transLevel == 1 || transLevel == 0" ng-click="bachSubmit3(1)" class="btn btn-blue">批量审核通过</button>
+                       <button ng-show="transLevel == 1 || transLevel == 0" ng-click="bachSubmit3(-1)" class="btn btn-blue">批量审核驳回</button> -->
+                        <button ng-show="transLevel == 1 || transLevel == 0" ng-click="getDataExcel()" class="btn btn-blue">Excel导出</button>
+                       <!--  <button ng-show="transLevel == 1 || transLevel == 0" ng-click="" class="btn btn-blue">Excel导入</button> -->
+
+                        <!-- <button ng-show="userLevel!=undefined && (userLevel == 2 || userLevel == 4)" ng-click="goAddTrans()" class="btn btn-blue">新增</button>
+                        <button ng-show="userLevel!=undefined && (userLevel == 2 || userLevel == 4)" ng-click="bachSubmit2(1)" class="btn btn-blue">删除</button>
+                        <button ng-show="userLevel!=undefined && (userLevel == 2 || userLevel == 4)" ng-click="bachDeleteTaskList()" class="btn btn-blue">批量审核通过</button>
+                        <button ng-show="userLevel!=undefined && (userLevel == 2 || userLevel == 3)" ng-click="bachSubmit3(1)" class="btn btn-blue">批量审核驳回</button>
+                        <button ng-show="userLevel!=undefined && (userLevel == 2 || usserLevel == 3)" ng-click="bachSubmit3(-1)" class="btn btn-blue">Excel导出</button>
+                        <button ng-show="userLevel!=undefined && (userLevel == 2 || usserLevel == 3)" ng-click="bachSubmit3(-1)" class="btn btn-blue">Excel导入</button> -->
+                    </div>
+                     <!-- table-content -->
+                <div ng-if="transLevel==0 || transLevel ==1 || transLevel ==3" class="table-content">
+                    <div class="data-table">
+                    <div class="table-details">
+                        <div>
+                            <table>
+                               <colgroup>
+                                    <col style="width:2%" />
+                                    <col style="width:3%" />
+                                    <col style="width:5%" />
+                                    <col style="width:5%" />
+                                    <col style="width:10%" />
+                                    <col style="width:10%" />
+                                    <col style="width:7%" />
+                                    <col style="width:7%" />
+                                    <col style="width:9%" />
+                                    <col style="width:20%" />
+                                </colgroup> 
+                                <tbody class="query-date" id="list">
+                                <tr>
+                                    <th><input ng-click="checkAll('#checkAll','#list')" id="checkAll" type="checkbox"></th>
+                                    <th>序号</th>
+                                    <th>地市</th>
+                                    <th>区县</th>
+                                    <th>资管站点名称</th>
+                                    <th>铁塔站点名称</th>
+                                    <th>铁塔站址编码</th>
+                                    <!-- <th>状态</th> -->
+                                    <th>用电类型</th>
+                                   <!--  <th>提交状态</th> -->
+                                    <th>改造状态</th>
+                                    <th style="width: 200px">操作</th>
+                                </tr>
+                                    <tr ng-repeat="item in list track by $index">
+                                        <td><input type="checkbox" value="{{item.onlyId}}"></td>
+                                        <td>{{((params.pageNo-1)*params.pageSize)+1*(1+$index)}}</td>
+                                        <td>{{item.cityName}}</td>
+                                        <td>{{item.countyName}}</td>
+                                        <td>{{item.roomName}}</td>
+                                        <td>{{item.towerSiteName}}</td>
+                                        <td>{{item.towerSiteCode}}</td>
+                                         <td>{{item.roomEleType}}</td>
+                                        <!-- <td>{{item.submitStatus==null?"未提交流程":(item.submitStatus==1?"改造完成":"审批失败")}}</td> -->
+                                        <td>{{item.resultStatus==null?"未进入审批流程":(item.resultStatus==0?"审批中":(item.resultStatus==1?"改造成功":"审批失败"))}}</td>
+                                        
+                                       <td style="width: 200px">
+                                            <!--{{item}}-->
+                                            <a ng-show="transLevel == 3 || transLevel ==2 || transLevel ==1 ||transLevel ==0" ng-click="showDetail(item,false,true)" class="check-detail">查看</a>
+                                            <a ng-show="(transLevel == 3)&&(item.resultStatus==null||item.resultStatus==2) " ng-click="showDetail(item,true,false)" class="edit-process">修改</a>
+                                             <a ng-show="(transLevel == 3 && item.resultStatus==null)||(transLevel == 3 && item.resultStatus==2)" ng-click="submitToFlow(item)" class="edit-process">提交</a>
+                                              <a ng-show="(item.resultStatus==null||item.resultStatus==2)&&(transLevel == 3 || transLevel ==1 )" ng-click="cancelBtn(item)" class="edit-process">撤销</a>
+                                           <!--  <a ng-show="transLevel == 2" ng-click="bachSubmit(item.instanceId, 1)"  class="submit-icon">通过</a> -->
+                                           <!--  <a ng-show="transLevel == 2" ng-click="bachSubmit(item.instanceId, -1)"  class="submit-icon">驳回</a> -->
+
+                                            <!-- <a 
+                                                ng-click="showDetail(item,true,false)"
+                                                ng-if="item.flowState <= 1 && item.operation == true"
+                                                class="edit-process">修改</a> -->
+
+                                          <!--   <a 
+                                              ng-if="item.operation == true && item.flowState <= 1"
+                                              ng-click = "bachSubmit(1,item.instanceId)" 
+                                              class="submit-icon">提交</a>
+                                          <a
+                                              ng-if="item.operation == true && item.flowState == 2"
+                                              ng-click = "bachSubmit(1,item.instanceId)"
+                                              class="submit-icon">同意</a>   
+                                          <a 
+                                              ng-if="item.flowState > 1 && item.operation == true"
+                                              ng-click = "bachSubmit(-1,item.instanceId)"
+                                              class="submit-icon">驳回</a>
+                                          
+                                          <a  
+                                              ng-if="item.flowState <=1  && item.operation == true" ng-click="deleteSelected(item)"
+                                              class="delete">撤销</a>
+                                                                                     <a  
+                                              ng-if="item.flowState ==-1  && item.operation == false && item.adpv.status==2" ng-click="talkInfo(item.adpv.id)"
+                                              class="delete">意见</a>       -->
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+                </div>
+              
+                     <div ng-if="transLevel==0 || transLevel ==1 || transLevel ==3" class="page-foot">
+                        <im-pagination conf="pageInfo" params="params" get-data="getSubmitData()"></im-pagination>
+                    </div> 
+            </div>
+        </div>
+    </div>
+
+        </div>
+    </div>
+</div>
+</div>

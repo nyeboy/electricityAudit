@@ -1,0 +1,109 @@
+<!-- 转供电改造管理 -->
+<div class="system-content" id="systemContent">
+<div class="business-box" id="businessBox">
+    <div class="content-rout" id="contentRout">
+        <span>基础数据</span>&gt;<span>基础数据维护</span>&gt;<span class="now-rout">转供电改造管理</span>
+    </div>
+    <div class="content-box reimbur-manager" id="contentBox">
+       <div class="search-box">
+            <div>
+              <select name="" id="" class="title-select"
+                            
+                            ng-model="$parent.cityId"
+                            ng-options="city.key as city.value for city in citys"
+                            ng-change="queryCountyList(cityId)">
+                    <option  value="">全省</option>
+                    </select> 
+                 <!--    <input
+                           ng-show="userCity!=null"
+                           name="" class="title-select"
+                           disabled="disabled"
+                           ng-model="userCity"
+                           type="text">  -->
+                    <select class="title-select"
+                            
+                            ng-model="$parent.countyId"
+                            ng-options="county.key as county.value for county in countys">
+                    <option value="" >全市</option>
+                    </select>
+                   <!--  <input
+                           ng-show="userCounty!=null"
+                           name="" class="title-select"
+                           disabled="disabled"
+                           ng-model="userCounty"
+                           type="text"> 
+            -->
+               
+                <input ng-model="siteName" type="text" placeholder="资源站点名称" class="process-input search-t" name="">
+
+            </div>
+            <button ng-click="getNeedTransData(true)" class="btn btn-primary" type="button">搜索</button>
+        </div>
+                   
+                    <div class="table-title">
+                        <button ng-show="userLevel!=undefined && (userLevel == 2 || userLevel == 4)" ng-click="allLoad()" class="btn btn-blue">批量新增</button>
+                      
+                    </div>
+                     <!-- table-content -->
+                <div class="table-content">
+                    <div class="data-table">
+                    <div class="table-details">
+                        <div>
+                            <table>
+                                <tbody class="query-date" id="list">
+                                <tr>
+                                    <th><input ng-click="checkAll('#checkAll','#list')" id="checkAll" type="checkbox"></th>
+                                    <th>序号</th>
+                                    
+                                    <th>前期上报站点名称</th>
+                                    <th>站点名称</th>
+                                    <th>资管产权性质</th>
+                                   
+                                    <th>用电类型</th>
+                                    <th>状态</th>
+                                    <!-- <th>审批状态</th> -->
+                                    <th style="width: 304px">操作</th>
+                                </tr>
+                                    <tr ng-repeat="item in needTransList track by $index">
+                                        <td><input type="checkbox" value="{{item.instanceId}}" id="{{item.adpv.paymentNumber}}"></td>
+                                        <td>{{((params.pageNo-1)*params.pageSize)+1*(1+$index)}}</td>
+                                       
+                                        <td>{{item.siteName}}</td>
+                                        <td>{{item.siteName}}</td>
+                                        <td>{{item.properType==0?"自维":"塔维"}}</td>
+                                      
+                                        <td>{{item.powerSupplyType}}</td>
+                                        <td>{{item.submitStatus==null || item.submitStatus==""?"未提交":(item.submitStatus==1?"已提交至下一级":(item.submitStatus==2?"被撤销":(item.submitStatus==3?"改造完成":"审批失败")))}}</td>
+                                       <!--   <td>{{item.submitStatus==null || item.submitStatus==""?"未提交":(item.submitStatus==1?"已提交至下一级":(item.submitStatus==2?"被撤销":"改造完成"))}}</td> -->
+                                       <td style="width: 304px">
+                                            <!--{{item}}-->
+                                            <!-- <a ng-click="showDetail(item,false,true)" class="check-detail">查看</a> -->
+
+
+                                            <a 
+                                            
+                                                ng-click = "addNeedChangeSiteToNext(item)" 
+                                                class="submit-icon">新增</a>
+                                          
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+                </div>
+              
+                     <div class="page-foot">
+                        <im-pagination conf="pageInfo" params="params" get-data="getNeedTransData()"></im-pagination>
+                    </div> 
+            </div>
+        </div>
+    </div>
+
+        </div>
+    </div>
+</div>
+</div>

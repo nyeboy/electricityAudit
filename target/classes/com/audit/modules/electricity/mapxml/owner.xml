@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.electricity.dao.OwnerDao">
+	<sql id="columns">
+		OWNER_ID AS ownerId,
+		OWNER_NAME AS ownerName,
+		CITY_ID AS cityId,
+		COUNTY_ID AS countyId,
+		BANK_NAME AS bankName,
+		BANK_ACCOUNT AS bankAccount,
+		SUPPLIER AS supplier,
+		USE_COMPANY AS useCompany,
+		START_TIME AS startTime,
+		TO_CHAR(START_TIME,'yyyy-mm-dd') AS startTimeStr,
+		END_TIME AS endTime,
+		TO_CHAR(END_TIME,'yyyy-mm-dd') AS endTimeStr,
+		PRICE AS price
+	</sql>
+	
+<!-- 	<select id="queryPage" parameterType="com.audit.modules.common.mybatis.PageUtil" resultType="com.audit.modules.electricity.entity.OwnerVo">
+		SELECT
+			OWNER_ID AS ownerId,
+			OWNER_NAME AS ownerName,
+			(SELECT CITY_NAME FROM ZG_SPACE_CITY WHERE INT_ID = SO.CITY_ID) AS cityName,
+			(SELECT ZH_LABEL FROM ZG_SPACE_COUNTY WHERE INT_ID = SO.COUNTY_ID) AS countyName,
+			BANK_NAME AS bankName,
+			BANK_ACCOUNT AS bankAccount,
+			SUPPLIER AS supplier,
+			USE_COMPANY AS useCompany,
+			START_TIME AS startTime,
+			TO_CHAR(START_TIME,'yyyy-mm-dd') AS startTimeStr,
+			END_TIME AS endTime,
+			TO_CHAR(END_TIME,'yyyy-mm-dd') AS endTimeStr,
+			PRICE AS price
+		FROM 
+			SYS_OWNER SO
+		WHERE 1=1
+			<if test="obj.cityId!=null and obj.cityId!=''">
+				AND CITY_ID = #{obj.cityId,jdbcType=VARCHAR}
+			</if>
+			<if test="obj.countyId!=null and obj.countyId!=''">
+				AND COUNTY_ID = #{obj.countyId,jdbcType=VARCHAR}
+			</if>
+			<if test="obj.vague!=null and obj.vague!=''">
+				AND 
+					OWNER_NAME LIKE '%'||#{obj.vague}||'%' OR
+					BANK_NAME LIKE '%'||#{obj.vague}||'%' OR 
+					BANK_ACCOUNT LIKE '%'||#{obj.vague}||'%' OR
+					SUPPLIER LIKE '%'||#{obj.vague}||'%'
+				
+			</if>
+	</select>
+	<select id="queryOwner" resultType="com.audit.modules.electricity.entity.OwnerVo">
+		SELECT
+			(SELECT CITY_NAME FROM ZG_SPACE_CITY WHERE INT_ID = SO.CITY_ID) AS cityName,
+			(SELECT ZH_LABEL FROM ZG_SPACE_COUNTY WHERE INT_ID = SO.COUNTY_ID) AS countyName,
+			<include refid="columns"/>
+		FROM 
+			SYS_OWNER SO
+		WHERE 1=1 AND SO.OWNER_ID = #{ownerId}
+	</select> -->
+	
+		<select id="queryPage" parameterType="com.audit.modules.common.mybatis.PageUtil" resultType="com.audit.modules.electricity.entity.OwnerVo">
+		SELECT
+			OWNER_ID AS ownerId,
+			OWNER_NAME AS ownerName,
+			(SELECT NAME FROM YDJH_AREA WHERE ID = SO.CITY_ID) AS cityName,
+			(SELECT NAME FROM YDJH_AREA WHERE ID = SO.COUNTY_ID) AS countyName,
+			BANK_NAME AS bankName,
+			BANK_ACCOUNT AS bankAccount,
+			SUPPLIER AS supplier,
+			USE_COMPANY AS useCompany,
+			START_TIME AS startTime,
+			TO_CHAR(START_TIME,'yyyy-mm-dd') AS startTimeStr,
+			END_TIME AS endTime,
+			TO_CHAR(END_TIME,'yyyy-mm-dd') AS endTimeStr,
+			PRICE AS price
+		FROM 
+			SYS_OWNER SO
+		WHERE 1=1
+			<if test="obj.cityId!=null and obj.cityId!=''">
+				AND CITY_ID = #{obj.cityId,jdbcType=VARCHAR}
+			</if>
+			<if test="obj.countyId!=null and obj.countyId!=''">
+				AND COUNTY_ID = #{obj.countyId,jdbcType=VARCHAR}
+			</if>
+			<if test="obj.vague!=null and obj.vague!=''">
+				AND 
+					OWNER_NAME LIKE '%'||#{obj.vague}||'%' OR
+					BANK_NAME LIKE '%'||#{obj.vague}||'%' OR 
+					BANK_ACCOUNT LIKE '%'||#{obj.vague}||'%' OR
+					SUPPLIER LIKE '%'||#{obj.vague}||'%'
+				
+			</if>
+	</select>
+	<select id="queryOwner" resultType="com.audit.modules.electricity.entity.OwnerVo">
+		SELECT
+			(SELECT NAME FROM YDJH_AREA WHERE ID = SO.CITY_ID) AS cityName,
+			(SELECT NAME FROM YDJH_AREA WHERE ID = SO.COUNTY_ID) AS countyName,
+			<include refid="columns"/>
+		FROM 
+			SYS_OWNER SO
+		WHERE 1=1 AND SO.OWNER_ID = #{ownerId}
+	</select>
+	
+	<insert id="saveOwner" parameterType="com.audit.modules.electricity.entity.OwnerVo">
+		<!-- <selectKey resultType="INTEGER" order="BEFORE" keyProperty="ownerId">  
+	       SELECT SYS_OWNER_SEQ.NEXTVAL as ownerId from DUAL
+	   	</selectKey>  -->
+		 INSERT INTO SYS_OWNER
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="ownerId != null">
+        OWNER_ID,
+      </if>
+      <if test="cityId != null">
+        CITY_ID,
+      </if>
+      <if test="countyId != null">
+        COUNTY_ID,
+      </if>
+      <if test="ownerName != null">
+        OWNER_NAME,
+      </if>
+      <if test="bankName != null">
+        BANK_NAME,
+      </if>
+      <if test="bankAccount != null">
+        BANK_ACCOUNT,
+      </if>
+      <if test="supplier != null">
+        SUPPLIER,
+      </if>
+      <if test="useCompany != null">
+        USE_COMPANY,
+      </if>
+      <if test="startTime != null">
+        START_TIME,
+      </if>
+      <if test="endTime != null">
+        END_TIME,
+      </if>
+      <if test="price != null">
+        PRICE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="ownerId != null">
+        #{ownerId,jdbcType=VARCHAR},
+      </if>
+      <if test="cityId != null">
+        #{cityId,jdbcType=VARCHAR},
+      </if>
+      <if test="countyId != null">
+        #{countyId,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerName != null">
+        #{ownerName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankName != null">
+        #{bankName,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccount != null">
+        #{bankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="supplier != null">
+        #{supplier,jdbcType=VARCHAR},
+      </if>
+      <if test="useCompany != null">
+        #{useCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=INTEGER},
+      </if>
+    </trim>
+	</insert>
+	<update id="updateOwner" parameterType="com.audit.modules.electricity.entity.OwnerVo">
+		 update SYS_OWNER
+    <set>
+	      <if test="cityId != null">
+	        CITY_ID = #{cityId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="countyId != null">
+	        COUNTY_ID = #{countyId,jdbcType=VARCHAR},
+	      </if>
+	      <if test="ownerName != null">
+	        OWNER_NAME = #{ownerName,jdbcType=VARCHAR},
+	      </if>
+	      <if test="bankName != null">
+	        BANK_NAME = #{bankName,jdbcType=VARCHAR},
+	      </if>
+	      <if test="bankAccount != null">
+	        BANK_ACCOUNT = #{bankAccount,jdbcType=VARCHAR},
+	      </if>
+	      <if test="supplier != null">
+	        SUPPLIER = #{supplier,jdbcType=VARCHAR},
+	      </if>
+	      <if test="useCompany != null">
+	        USE_COMPANY = #{useCompany,jdbcType=VARCHAR},
+	      </if>
+	      <if test="startTime != null">
+	        START_TIME = #{startTime,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="endTime != null">
+	        END_TIME = #{endTime,jdbcType=TIMESTAMP},
+	      </if>
+	      <if test="price != null">
+	        PRICE = #{price,jdbcType=INTEGER},
+	      </if>
+	    </set>
+	    where OWNER_ID = #{ownerId,jdbcType=VARCHAR}
+	</update>
+	<delete id="deleteOwner">
+        DELETE FROM SYS_OWNER WHERE OWNER_ID = #{ownerId}
+    </delete>
+    <delete id="bathDeleteOwner">
+        DELETE FROM SYS_OWNER WHERE OWNER_ID IN
+        <foreach collection="array" index="index" item="id" open="("
+                 separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    <!-- 	<select id="exportExcel" parameterType="java.util.Map" resultType="com.audit.modules.electricity.entity.OwnerMeterVo">
+		SELECT * FROM(
+		SELECT
+			(SELECT CITY_NAME FROM ZG_SPACE_CITY WHERE INT_ID = SO.CITY_ID) AS cityName,
+			(SELECT ZH_LABEL FROM ZG_SPACE_COUNTY WHERE INT_ID = SO.COUNTY_ID) AS countyName,
+			SO.OWNER_NAME AS ownerName,
+			SO.BANK_NAME AS bankName,
+			SO.BANK_ACCOUNT AS bankAccount,
+			SO.SUPPLIER AS supplier,
+			SO.USE_COMPANY AS useCompany,
+			SO.START_TIME AS startTime,
+			SO.END_TIME AS endTime,
+			SO.PRICE AS price,
+			sm.METER_NUMBER as meterNumber,
+			sm.METER_IDENTIFIER as meterIdentifier,
+			sm.METER_ACCOUT as meterAccout,
+			sm.METER_TYPE as meterType,
+			sm.METER_PURPOSE as meterPurpose,
+			rownum rn 
+		FROM 
+			SYS_OWNER SO 
+			LEFT JOIN SYS_METER sm on sm.OWNER_ID=SO.OWNER_ID 
+		WHERE 1=1 and rownum &lt; #{page})
+		WHERE rn &gt; #{rows}
+	</select> -->
+	
+		<select id="exportExcel" parameterType="java.util.Map" resultType="com.audit.modules.electricity.entity.OwnerMeterVo">
+		SELECT * FROM(
+		SELECT
+			(SELECT NAME FROM YDJH_AREA WHERE ID = SO.CITY_ID) AS cityName,
+			(SELECT NAME FROM YDJH_AREA WHERE ID = SO.COUNTY_ID) AS countyName,
+			SO.OWNER_NAME AS ownerName,
+			SO.BANK_NAME AS bankName,
+			SO.BANK_ACCOUNT AS bankAccount,
+			SO.SUPPLIER AS supplier,
+			SO.USE_COMPANY AS useCompany,
+			SO.START_TIME AS startTime,
+			SO.END_TIME AS endTime,
+			SO.PRICE AS price,
+			sm.METER_NUMBER as meterNumber,
+			sm.METER_IDENTIFIER as meterIdentifier,
+			sm.METER_ACCOUT as meterAccout,
+			sm.METER_TYPE as meterType,
+			sm.METER_PURPOSE as meterPurpose,
+			rownum rn 
+		FROM 
+			SYS_OWNER SO 
+			LEFT JOIN SYS_METER sm on sm.OWNER_ID=SO.OWNER_ID 
+		WHERE 1=1 and rownum &lt; #{page})
+		WHERE rn &gt; #{rows}
+	</select>
+	
+    <select id="listCount" resultType="java.lang.Long">
+    SELECT
+			COUNT(SO.OWNER_ID)
+		FROM 
+			SYS_OWNER SO 
+			LEFT JOIN SYS_METER sm on sm.OWNER_ID=SO.OWNER_ID
+    </select>
+</mapper>

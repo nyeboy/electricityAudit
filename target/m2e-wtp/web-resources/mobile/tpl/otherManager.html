@@ -1,0 +1,98 @@
+<!-- 其他信息管理 -->
+<div class="system-content">
+<div class="business-box" id="businessBox">
+    <div class="content-rout" id="contentRout">
+        <span>基础数据</span>&gt;<span>基础数据维护</span>&gt;<span class="now-rout">其他信息管理</span>
+    </div>
+    <div class="content-box" id="contentBox">
+        <div class="search-box">
+            <div>
+                <select name="" id="" class="title-select"
+                        ng-model="cityId"
+                        ng-options="city.key as city.value for city in citys"
+                        ng-change="queryCountyList(cityId)">
+                <option value="">全省</option>
+                </select>
+                <select class="title-select"
+                        ng-model="countyId"
+                        ng-options="county.key as county.value for county in countys">
+                <option value="">全市</option>
+                </select>
+                <input ng-model="accountName" type="text" placeholder="报账点" id="accountName" class="process-input" style="width: 48.5%">
+            </div>
+            <button ng-click="getData(true)" class="btn btn-primary" type="button">搜索</button>
+        </div>
+
+        <!-- table-content -->
+        <div class="table-content">
+            <!-- table -->
+            <div class="data-table">
+<!--                 <table class="table-result">
+                    <colgroup>
+                        <col style="width:40%">
+                        <col style="width:40%">
+                        <col style="width:20%">
+                    </colgroup>
+                    <thead>
+                       <tr>
+                           <th>报账点名称</th>
+                           <th>报账周期</th>
+                           <th>操作</th>
+                        </tr>
+                    </thead>
+                </table> -->
+                <div class="table-details ">
+                    <div>
+                        <table>
+<!--                             <colgroup>
+                                <col style="width:46%">
+                                <col style="width:46%">
+                                <col style="width:20%">
+                            </colgroup> -->
+                            <tbody class="query-date">
+ 						<tr>
+ 						   <th>序号</th>
+ 						   <th>地市</th>
+ 						   <th>区县</th>
+                           <th>报账点名称</th>
+                           <th>报账周期</th>
+                           <th>操作</th>
+                        </tr>
+
+                            <!--"id": "ffdaa9b43305448d99d0fe1479a58187",-->
+                            <!--"siteName": "成都锦江区中洲中央城邦一",-->
+                            <!--"accountName": "成都锦江区中洲中央城邦一001",-->
+                            <!--"accountAlias": "中洲中央城邦",-->
+                            <!--"oldFinanceName": "中洲中央城邦",-->
+                            <!--"productNature": null,-->
+                            <!--"cityId": "28",-->
+                            <!--"countyId": "1186",-->
+                            <!--"cycle": 6-->
+
+
+                                <tr ng-repeat="item in list track by $index">
+                                	<td>{{((params.pageNo-1)*params.pageSize)+1*(1+$index)}}</td>
+                                	<td>{{item.cityName}}</td>
+                                    <td>{{item.countyName}}</td>
+                                    <td>{{item.accountName}}</td>
+                                    <td>{{item.cycle | paymentCycleFilter}}</td>
+                                    <td>
+                                        <a ng-click="showDetail(item)" class="edit-process">修改</a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        
+                    </div>
+					<div class="page-foot">
+                            <im-pagination  conf="pageInfo" params="params" get-data="getData()"></im-pagination>
+                        </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+</div>

@@ -1,0 +1,121 @@
+<!-- 综合电费录入 -->
+<div class="system-content" id="systemContent">
+    <div class="business-box" id="businessBox">
+        <div class="content-rout" id="contentRout">
+            <span>综合电费</span>&gt;<span>电费提交</span>&gt;<span class="now-rout">电费录入</span>
+        </div>
+        <div class="content-box" id="contentBox">
+            <div class="trariffc-table">
+                <div class="search-box">
+                    <div>
+                        <select name="" id="" class="title-select"
+                            ng-model="cityId"
+                            ng-options="city.key as city.value for city in citys"
+                            ng-change="queryCountyList(cityId)">
+                            <option value="">全省</option>
+                        </select>
+                        <select class="title-select"
+                            ng-model="countyId"
+                            ng-options="county.key as county.value for county in countys">
+                            <option value="">全市</option>
+                        </select>
+                        <input type="text" placeholder="稽核单流水号" class="process-input con-parts" name="" ng-model="serialNumber" ng-keypress="search($event)">
+                        <input type="text" placeholder="报账点名称" class="process-input con-parts" name="" ng-model="accountName">
+                    </div>
+                    <button ng-click="getZiweiData()" class="btn btn-primary" type="button">搜索</button>
+                </div>
+                <!-- table-content -->
+                <div class="table-content">
+                    <div class="table-title">
+                        <button ng-click="goAddPage()" class="btn btn-blue">+ 新增稽核单</button>
+                        <button ng-click="bachSubmit()" class="btn btn-blue">批量提交</button>
+                        <button ng-click="deleteSelected()" class="btn btn-blue">批量删除</button>
+                        <!-- <button class="btn btn-blue">批量导入</button> -->
+                    </div>
+                    <!-- table -->
+                    <!-- <table class="table-result" id="tableResult">
+                        <colgroup>
+                            <col style="width:5%" />
+                            <col style="width:15%" />
+                            <col style="width:5%" />
+                            <col style="width:5%" />
+                            <col style="width:13%" />
+                            <col style="width:10%" />
+                            <col style="width:8%" />
+                            <col style="width:11%" />
+                            <col style="width:5%" />
+                            <col style="width:20%" />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th><input  ng-click="checkAll('#checkAll','#list')" id="checkAll"  type="checkbox" ></th>
+                                <th>稽核单流水号</th>
+                                <th>地区</th>
+                                <th>区县</th>
+                                <th>报账点名称</th>
+                                <th>建单时间</th>
+                                <th>电量</th>
+                                <th>总金额(含税)</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                    </table> -->
+                    <div class="table-details">
+                        <div>
+                            <table>
+                               <!--  <colgroup>
+                                    <col style="width:5%" />
+                                    <col style="width:15%" />
+                                    <col style="width:5%" />
+                                    <col style="width:5%" />
+                                    <col style="width:13%" />
+                                    <col style="width:10%" />
+                                    <col style="width:8%" />
+                                    <col style="width:11%" />
+                                    <col style="width:5%" />
+                                    <col style="width:20%" />
+                                </colgroup> -->
+                                <tbody class="query-date" id="list">
+                                    <tr>
+                                        <th><input  ng-click="checkAll('#checkAll','#list')" id="checkAll"  type="checkbox" ></th>
+                                        <th>稽核单流水号</th>
+                                        <th>地区</th>
+                                        <th>区县</th>
+                                        <th>报账点名称</th>
+                                        <th>建单时间</th>
+                                        <th>电量</th>
+                                        <th>总金额(含税)</th>
+                                        <th>状态</th>
+                                        <th style="width: 304px">操作</th>
+                                    </tr>
+                                    <tr ng-repeat="item in list track by $index">
+                                        <td><input type="checkbox" value="{{item.id}}"></td>
+                                        <td>{{item.serialNumber}}</td>
+                                        <td>{{item.areas}}</td>
+                                        <td>{{item.counties}}</td>
+                                        <td>{{item.accountName}}</td>
+                                        <td>{{item.createDate|date:"yyyy-MM-dd HH:mm:ss"}}</td>
+                                        <td>{{item.electricity}}</td>
+                                        <td>{{item.amount}}</td>
+                                        <td>{{item.status| ElectrictyStatusFilter}}</td>
+                                        <td style="width: 304px">
+                                            <a ng-click="showSubmitDetail(item,false,true)" class="check-detail">查看</a>
+                                            <a ng-click="showSubmitDetail(item,true,false)" class="edit-process">修改</a>
+                                            <a ng-click="bachSubmit2(item.id)" class="submit-icon">提交</a>
+                                            <a ng-click="deleteSelected2(item.id)" class="delete">删除</a>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="page-foot">
+                        <im-pagination conf="pageInfo" params="params" get-data="getZiweiData()"></im-pagination>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

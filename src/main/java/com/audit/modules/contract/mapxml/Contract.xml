@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.contract.dao.ContractDao">
+
+   <sql id="columns">
+		con.ID as id,con.NAME as name,con.START_DATE as startDate,con.END_DATE as endDate,con.IS_CLUD as isClud,
+		con.CLUD_PRICE as cludPrice,con.PAYMENT_CYCLE as paymentCycle,con.PRICE as unitPrice
+	</sql>
+
+    <select id="queryBySiteId" resultType="com.audit.modules.contract.entity.ContractVO" parameterType="java.util.Map">
+		SELECT
+			sc.ID AS id,
+			sc. NAME AS NAME,
+			sc.START_DATE AS startDate,
+			sc.END_DATE AS endDate,
+			sc.IS_CLUD AS isClud,
+			sc.CLUD_PRICE AS cludPrice,
+			sc.PAYMENT_CYCLE AS paymentCycle,
+			--swm.PAYMENT_ACCOUNT_CODE AS paymentAccountCode,
+			sc.PRICE AS unitPrice
+		FROM
+			SYS_SITE_MID_CONTRACT ssmc
+		LEFT JOIN sys_contract sc ON ssmc.CONTRACT_ID = sc.ID
+		--LEFT JOIN SYS_SITE_MID_METER ssme ON sas.ID=ssme.ACCOUNT_SITE_ID
+		--LEFT JOIN SYS_WATTHOUR_METER swm ON swm.ID=ssme.WATTHOUR_METER_ID
+		WHERE	1 = 1
+        <if test="siteId!=null and siteId!=''">
+            AND ssmc.ACCOUNT_SITE_ID = #{siteId}
+        </if>
+    </select>
+
+    <select id="findAll" resultType="com.audit.modules.contract.entity.ContractVO">
+		SELECT ID,NAME
+		FROM SYS_CONTRACT
+	</select>
+
+    <!-- 依据ID查询单个合同 -->
+	<select id="selectByContractId"  resultType="com.audit.modules.contract.entity.ContractVO">
+		SELECT
+		<include refid="columns" />, sas.ACCOUNT_NAME as accountName, sas.OLD_FINANCE_NAME as oldFinanceName, sas.CITY_ID as cityId, sas.COUNTY_ID as countyId
+		FROM SYS_CONTRACT con, SYS_SITE_MID_CONTRACT mcon, SYS_ACCOUNT_SITE sas
+		WHERE mcon.CONTRACT_ID = con.ID AND mcon.ACCOUNT_SITE_ID =sas.ID AND  con.ID = #{contractId}
+	</select>
+
+    <!-- 分页搜索查询 -->
+<!-- 	<select id="getPageContractList" resultType="com.audit.modules.contract.entity.ContractVO">
+		SELECT
+		<include refid="columns" />, sas.ACCOUNT_NAME as accountName, sas.OLD_FINANCE_NAME as oldFinanceName, sas.CITY_ID as cityId, sas.COUNTY_ID as countyId 
+		FROM SYS_CONTRACT con, SYS_SITE_MID_CONTRACT mcon, SYS_ACCOUNT_SITE sas
+		WHERE  mcon.CONTRACT_ID = con.ID AND mcon.ACCOUNT_SITE_ID =sas.ID 
+			<if test="obj.CityId != null and obj.CityId!=''">
+				AND  sas.CITY_ID = #{obj.CityId,jdbcType=VARCHAR}
+			</if>
+			<if test="obj.CountyId != null and obj.CountyId!=''">
+				AND  sas.COUNTY_ID = #{obj.CountyId,jdbcType=VARCHAR}
+			</if>
+			<if test="obj.Id != null and obj.Id!=''">
+				AND  con.ID LIKE '%'||#{obj.Id,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="obj.Name != null and obj.Name!=''">
+				AND  con.NAME LIKE '%'||#{obj.Name,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="obj.accountName != null and obj.accountName!=''">
+				AND  sas.ACCOUNT_NAME LIKE '%'||#{obj.accountName,jdbcType=VARCHAR}||'%'
+			</if>
+			order by con.END_DATE desc
+	</select>   -->
+	
+	<select id="getPageContractList" resultType="com.audit.modules.contract.entity.ContractVO">
+		SELECT
+			CONTRACT_NUMBER as contractNumber,
+			CONTRACT_TITLE as contractName,
+			EXECUTION_BEGIN_DATE as startDateStr,
+			EXECUTION_END_DATE as endDateStr,
+			PRICE_OR_LUMP_SUM_PRICE as priceOrLumpSumPrice,
+			IS_UPLOAD_OVERPROOF as isUploadOverproof,
+			PAYMENT_PERIOD as paymentCycle,
+			COMPANY_NAME as companyName,
+			CONTRACT_STATUS as contractStatus,
+			METER_ACCOUNT_NUMBER as paymentAccountCode,
+			SITE_NAME as siteName			
+		FROM SYS_CONTRACT
+		WHERE 1=1 
+			<if test="obj.CityId != null and obj.CityId!=''">
+				AND  CITY = #{obj.CityId,jdbcType=VARCHAR}
+			</if>
+			<if test="obj.CountyId != null and obj.CountyId!=''">
+				AND  COUNTY = #{obj.CountyId,jdbcType=VARCHAR}
+			</if>
+			<if test="obj.Id != null and obj.Id!=''">
+				AND  CONTRACT_NUMBER LIKE '%'||#{obj.Id,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="obj.Name != null and obj.Name!=''">
+				AND  CONTRACT_TITLE LIKE '%'||#{obj.Name,jdbcType=VARCHAR}||'%'
+			</if>
+			<if test="obj.accountName != null and obj.accountName!=''">
+				AND  SITE_NAME LIKE '%'||#{obj.accountName,jdbcType=VARCHAR}||'%'
+			</if>
+			order by EXECUTION_END_DATE desc
+	</select> 
+	
+	<!-- 业务调整无需要操作 -->
+	<!-- 根据合同ID删除合同 -->
+	<delete id="deleteContract">
+		DELETE from SYS_CONTRACT WHERE ID IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+	</delete>
+	<!-- 业务调整无需要操作 -->
+	<!-- 添加/修改合同信息 -->
+	<insert id="saveOrUpdateContract" parameterType="com.audit.modules.contract.entity.ContractVO">
+	<selectKey keyProperty="count" resultType="int" order="BEFORE">
+		select count(*) from SYS_CONTRACT where ID = #{id}
+	</selectKey>
+	<!-- 修改合同信息 -->
+	<if test="count > 0">
+	    UPDATE SYS_CONTRACT 
+		<set>
+		<if test="name != null">
+			NAME = #{name,jdbcType=VARCHAR},
+		</if>
+		<if test="startDate != null">
+			 START_DATE = #{startDate,jdbcType=TIMESTAMP},
+		</if>
+		<if test="endDate != null">
+			 END_DATE = #{endDate,jdbcType=TIMESTAMP},
+		</if>
+		<if test="isClud != null">
+			 IS_CLUD = #{isClud,jdbcType=NUMERIC},
+		</if>
+		<if test="cludPrice != null">
+			CLUD_PRICE = #{cludPrice,jdbcType=NUMERIC},
+		</if>
+		<if test="paymentCycle != null">
+			 PAYMENT_CYCLE = #{paymentCycle,jdbcType=NUMERIC},
+		</if>
+		<if test="unitPrice != null">
+			 PRICE = #{unitPrice,jdbcType=NUMERIC},
+		</if>
+		</set>
+		WHERE ID = #{id}
+	</if>
+	<!-- 添加合同 -->
+	<if test="count == 0">
+	   INSERT INTO SYS_CONTRACT
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				ID,
+			</if>
+			<if test="name != null">
+				NAME,
+			</if>
+			<if test="startDate != null">
+				START_DATE,
+			</if>
+			<if test="endDate != null">
+				END_DATE,
+			</if>
+			<if test="isClud != null">
+				IS_CLUD,
+			</if>
+			<if test="cludPrice != null">
+				CLUD_PRICE,
+			</if>
+			<if test="paymentCycle != null">
+				PAYMENT_CYCLE,
+			</if>
+			<if test="unitPrice != null">
+				PRICE,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+		    <if test="id != null">
+				#{id,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="startDate != null">
+				#{startDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endDate != null">
+				#{endDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isClud != null">
+				#{isClud,jdbcType=NUMERIC},
+			</if>
+			<if test="cludPrice != null">
+				#{cludPrice,jdbcType=NUMERIC},
+			</if>
+			<if test="paymentCycle != null">
+				#{paymentCycle,jdbcType=NUMERIC},
+			</if>
+			<if test="unitPrice != null">
+				#{unitPrice,jdbcType=NUMERIC},
+			</if>
+		</trim>
+	</if>
+    </insert>
+
+</mapper>

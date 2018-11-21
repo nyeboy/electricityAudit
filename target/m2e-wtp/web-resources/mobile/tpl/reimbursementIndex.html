@@ -1,0 +1,121 @@
+﻿<!--报销发起人首页-->
+<div class="system-content" id="systemContent">
+
+    <div class="index-box" id="indexBox">
+
+        <!-- 首页内容 -->
+        <div id="home-page">
+            <!-- 顶部信息 -->
+            <div class="top-message">
+                <div class="flex">
+                    <div class="top-title">电费提交单<span>{{approvalElectricityNum}}</span></div>
+                    <div class="detail">
+                        <div class="audit-pedding" id="submitContent" ng-click="goTowerElectricityApproval()">待处理<span class="circle">{{approvalElectricityNum}}</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="manager-pie">
+                <div class="header-pie">
+                    <ul>
+                        <li ng-click="tabs=1" ng-class="{'tab-hover':tabs==1}">稽核单状态统计</li>
+                        <li ng-click="tabs=2"  ng-class="{'tab-hover':tabs==2}">历史稽核单</li>
+                    </ul>
+                </div>
+                <div class="manager-content" id="manager">
+                    <div ng-show="tabs==1" >
+                        <div id="container" style="height: 600px; width: 100%"></div>
+                    </div>
+                   
+                    <div  ng-if="tabs==2" class="data-table">
+                      <!-- 自维稽核单 -->
+                      <div ng-if="!functionType">
+                        <div class="table-details">
+                            <div>
+                                <table>
+                                    <tbody class="query-date">
+                                    <tr>
+                                        <th>稽核单流水号</th>
+                                        <th>地区</th>
+                                        <th>区县</th>
+                                        <th>稽核单状态</th>
+                                        <th>报账点名称</th>
+                                        <th>建单时间</th>
+                                        <th>电量(度)</th>
+                                        <th>金额（元）</th>
+                                        <th>同比上个月涨幅</th>
+                                        <th>操作</th>
+                                    </tr>
+                                        <tr ng-repeat="item in list track by $index">
+                                            <td>{{item.electricty.serialNumber}}</td>
+                                            <td>{{item.electricty.areas}}</td>
+                                            <td>{{item.electricty.counties}}</td>
+                                            <td>{{item.flowState | flowStateFilter}}</td>
+                                            <td>{{item.electricty.accountName}}</td>
+                                            <td>{{item.electricty.createDate|date:"yyyy-MM-dd HH:mm:ss"}}</td>
+                                            <td>{{}}</td>
+                                            <td>{{item.electricty.shareAmount}}</td>
+                                            <td>{{}}</td>
+                                            <td>
+                                                <a ng-click="showIndexDetail(item,false,true)" href="javascript:void(0)" class="check-detail">查看</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                          <div class="page-foot">
+                          <im-pagination conf="pageInfo" params="params" get-data="getData()"></im-pagination>
+                      </div>
+                      </div>
+                      
+                      <!-- 塔维历史稽核单 -->
+                      <div ng-if="functionType == 1">
+                        <div class="table-details">
+                            <div>
+                                <table>
+                                    <tbody class="query-date">
+                                    <tr>
+                                        <th>稽核单流水号</th>
+                                        <th>地区</th>
+                                        <th>区县</th>
+                                        <th>稽核单状态</th>
+                                        <th>报账点名称</th>
+                                        <th>建单时间</th>
+                                        <th>电量(度)</th>
+                                        <th>金额（元）</th>
+                                        <th>同比上个月涨幅</th>
+                                        <th>操作</th>
+                                    </tr>
+                                        <tr ng-repeat="item in list track by $index">
+                                            <td>{{item.towerInfo.serialNumber}}</td>
+                                            <td>{{item.towerInfo.areas}}</td>
+                                            <td>{{item.towerInfo.counties}}</td>
+                                            <td>{{item.flowState | flowStateFilter}}</td>
+                                            <td>{{}}</td>
+                                            <td>{{item.towerInfo.createDate|date:"yyyy-MM-dd HH:mm:ss"}}</td>
+                                            <td>{{}}</td>
+                                            <td>{{item.towerInfo.shareAmount}}</td>
+                                            <td>{{}}</td>
+                                            <td>
+                                                <a ng-click="showTWIndexDetail(item,false,true)" href="javascript:void(0)" class="check-detail">查看</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                          <div  class="page-foot">
+                              <im-pagination conf="pageInfo" params="params" get-data="getData()"></im-pagination>
+                          </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 市级首页 -->
+            <div class="middle-chart">
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,70 @@
+<!-- ��ͬ�б�  ������ʽ-->
+<div class="reimbur-dialog">
+<div class="reimbur-dialog-title">合同列表</div>
+    <div class="reimbur-search" style="padding: 10px 0px;">     
+        <input ng-model="contractName" type="text"  placeholder="合同号">
+        <button ng-click="getData3(contractName,true)"  class="reimbur-btn" >搜索</button>
+    </div>
+   <!--  <table class="table-result" id="tableResult">
+        <colgroup>
+            <col style="width:6%" />
+            <col style="width:20%" />
+            <col style="width:15%" />
+            <col style="width:15%" />
+            <col style="width:14%" />
+            <col style="width:15%" />
+            <col style="width:15%" />
+        </colgroup>
+        <thead>
+            
+        </thead>
+    </table> -->
+    <div class="table-details">
+        <div>
+            <table id="table_list">
+              <!--   <colgroup>
+                    <col style="width:6%" />
+                    <col style="width:20%" />
+                    <col style="width:15%" />
+                    <col style="width:15%" />
+                    <col style="width:14%" />
+                    <col style="width:15%" />
+                    <col style="width:15%" />
+                </colgroup> -->
+                <tbody class="query-date" id="ContractList">
+                    <tr>
+                        <th style="width: 80px; text-align: center;">选择</th>
+                        <th>ID</th>
+                        <th>合同名</th>
+                        <th>合同开始时间</th>
+                        <th>合同结束时间</th>
+                        <th>包干</th>
+                        <th>包干价</th>
+                        <th>报账周期</th>
+                        <th>单价</th>
+                    </tr>
+                    <tr ng-repeat="item in Contract track by $index">
+                        <td style="width: 80px; text-align: center;">
+                            <input type="radio" name="reimbur" value="{{item}}" ng-model="$parent.confs[$index]">
+                        </td>
+                        <td>{{item.id}}</td>
+                        <td>{{item.name}}</td>
+                        <td>{{item.startDate}}</td>
+                        <td>{{item.endDate}}</td>
+                        <td>{{item.isClud}}</td>
+                        <td>{{item.cludPrice}}</td>
+                        <td>{{item.paymentCycle}}</td>
+                        <td>{{item.price}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div style="text-align: right;">
+        <im-pagination conf="coNpageInfo" params="getSparams" get-data="getData3()"></im-pagination>
+    </div>
+    <div class="reimbur-foot">
+        <button ng-click="closeDialog('choiceContractDialogs')" class="reimbur-cancel btn">取消</button>
+        <button ng-click="choiceContract()" class="reimbur-save btn">确定</button>
+    </div>
+</div>

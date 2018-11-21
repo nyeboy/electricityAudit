@@ -1,0 +1,181 @@
+﻿<!-- 塔维新增稽核单 -->
+<div class="system-content" id="systemContent">
+    <div class="business-box" id="businessBox">
+        <div class="content-rout" id="contentRout">
+            <span>铁塔电费</span>&gt;<span>电费录入</span>&gt;<span>电费录入</span>&gt;<span class="now-rout">新增稽核单</span>
+        </div>
+        <div class="content-box" id="contentBox">
+            <div class="ledge-detail">
+                <div class="ledge-title">台账明细</div>
+                <div class="ledge-table">
+                    <table>
+                        <tbody>
+
+                        <tr>
+                            <td>
+                                <span class="sign table-left">铁塔类型:</span>
+                                <select ng-model="towerType" 
+                                        ng-change="choiceType(towerType)"
+                                name="" id="" class="title-select con-parts">
+                            <option value="">请选择铁塔类型</option>
+                            <option value="1">铁塔公司</option>
+                            <option value="2">三方铁塔</option>
+                        </select>
+                            </td>
+                        
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="table-left">稽核单流水号:</span>
+                                <input type="text" ng-model="resultData.serialNumber" disabled="disabled" name="" class="table-right" value="JH201732222224612">
+                            </td>
+                            <td>
+                                <span class="table-left">地市:</span>
+                                <input ng-model="resultData.areas" type="text" disabled="disabled" name="" class="table-right" value="成都市">
+                            </td>
+                            <td>
+                                <span class="table-left">区县:</span>
+                                <input ng-model="resultData.counties" type="text" disabled="disabled" name="" class="table-right" value="武侯">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="sign table-left">铁塔站址编号:</span>
+                                <input 
+                                    ng-click="getTowerSite()" 
+                                    ng-model="resultData.sysTowerSitNo" 
+                                    type="text" name="" class="table-right" 
+                                    value="锦江区汇金国际001" readOnly="true">
+                                <i ng-click="getTowerSite()" class="search-icon"></i>
+                            </td>
+                            <td>
+                                <span class="table-left">资管站址名称:</span>
+                                <input ng-model="resultData.zgSpaceSiteName" type="text" disabled="disabled" name="" class="table-right" value="汇金国际001">
+                            </td>
+                            <td>
+                                <span class="table-left">铁塔站址名称:</span>
+                                <input ng-model="resultData.zgTowerSiteName" type="text" disabled="disabled" name="" class="table-right" value="汇金国际001">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="sign table-left">是否包干:</span>
+                               <!-- <input ng-model="siteObject.isClud" type="text" name="" class="table-right" disabled="disabled" > -->
+							   <input value="否" type="text" name="" class="table-right" disabled="disabled" >
+                            </td>
+                            <td>
+                                <span class="sign table-left">成本中心:</span>
+                                <select  name="costCenterID" id="" class="table-right"
+                                         ng-model="resultData.costCenterID"
+                                         ng-options="i.id as i.costCenterName for i in costCeterVOs">
+                                    <option value="">请选择</option>
+                                </select>
+                            </td>
+                            <td>
+                                <span class="table-left sign">供应商名称:</span>
+                                <input 
+                                    ng-click="choiceSupplierDialog()" 
+                                    ng-model="supplierObject.supplierName" 
+                                    type="text" name="" class="table-right" value="汇金国际001" readOnly="true">
+                                <i ng-click="choiceSupplierDialog()" class="search-icon"></i>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="table-left">分摊电费总金额:</span>
+                                <input ng-model="resultData.shareAmount" type="text" name="" class="table-right" disabled="disabled">
+                            </td>
+                            <td>
+                                   <span class="table-left">在网状态:</span>                              
+                                  <select name="" id="isOnline" class="table-right">
+                                      <option value="">-- 请选择在网状态 --</option>
+                                      <option value="1">在网</option>
+                                      <option value="2">退网</option>
+                                                                
+                                  </select>   
+                              </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- 电表信息-->
+                <div class="ledge-title ledge-sub" ng-if="siteObject.isClud == '不包干' || siteObject.isClud == null">
+                <!-- <div class="ledge-title ledge-sub"> -->
+                    电表明细<span ng-click="addElecDialog(true)" class="add-btn">新增电表</span>
+                </div>
+                <div class="invoinc-table" ng-if="siteObject.isClud == '不包干' || siteObject.isClud == null">
+
+                <!-- <div class="invoinc-table"> -->
+                    <table class="table-result">
+                        <colgroup>
+                            <col style="width:5%" />
+                            <col style="width:8%" />
+                            <col style="width:10%" />
+                            <col style="width:15%" />
+                            <col style="width:15%" />
+                            <col style="width:10%" />
+                            <col style="width:12%" />
+                            <col style="width:12%" />
+                            <col style="width:10%" />
+                            <col style="width:10%" />
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>电表编码</th>
+                            <th>缴费户号</th>
+                            <th>电费归属地起始日期</th>
+                            <th>电费归属终止日期</th>
+                            <th>总电量(度)</th>
+                            <th>实际支付电费(元)</th>
+                            <th>分摊比例</th>
+                            <th>分摊电费金额</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                    </table>
+                    <div class="table-details invoinc-list" >
+                        <div>
+                            <table style="table-layout: fixed; ">
+                                <colgroup>
+                                    <col style="width:5%" />
+                                    <col style="width:8%" />
+                                    <col style="width:10%" />
+                                    <col style="width:15%" />
+                                    <col style="width:15%" />
+                                    <col style="width:10%" />
+                                    <col style="width:12%" />
+                                    <col style="width:12%" />
+                                    <col style="width:10%" />
+                                    <col style="width:10%" />
+                                </colgroup>
+                                <tbody class="query-date">
+                                    <tr ng-repeat="item in resultData.towerWatthourMeterVOs track by $index" >
+                                        <td>{{$index+1}}</td>
+                                        <td>{{item.code}}</td>
+                                        <td>{{item.paymentAccountCode}}</td>
+                                        <td>{{item.belongStartTime}}</td>
+                                        <td>{{item.belongEndTime}}</td>
+                                        <td>{{item.totalEleciric}}</td>
+                                        <td>{{item.actualAmount}}</td>
+                                        <td>{{item.shareProportion}}</td>
+                                        <td>{{item.shareAmount}}</td>
+                                        <td>
+                                            <a ng-click="editedElectrictInfo($index,true)" href="javascript:void(0)" class="edit-process">修改</a>
+                                            <a ng-click="removeElectrictInfo($index)" href="javascript:void(0)" class="delete">删除</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="reimbur-foot ledge-foot">
+                    <button ng-click="returnPage()" class="reimbur-cancel btn">取消</button>
+                    <button ng-click="saveTowerAuditPage(0)" class="reimbur-save btn">保存</button>
+                    <button ng-click="submitTowerAuditPage(1)" class="reimbur-save btn">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>  

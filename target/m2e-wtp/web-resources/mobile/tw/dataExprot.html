@@ -1,0 +1,35 @@
+<!--数据导入-->
+<div class="system-content" id="systemContent">
+    <div class="business-box" id="businessBox">
+        <div class="content-rout" id="contentRout">
+            <span>基础数据维护</span>&gt;<span class="now-rout">数据导入</span>
+        </div>
+        <div class="content-box" id="contentBox">
+            <div class="panel-body data-import">
+                 <form role="form" method="post" name="saleUserForm" target="excelExportForm" novalidate id="excelExportForm"　enctype="multipart/form-data" class="import-form">
+
+                    <div class="import-btn" style="    margin: 150px auto 30px auto;">
+                        <label for="upfile">
+                           
+                            <p>点击这里，上传文件</p>
+                            <input 
+                                id="upfile" 
+                                ng-model="excelExport.file" type="file" name="file" class="up-btn"/>
+                        </label> 
+                        <p>（文件限制: 10M）</p>
+                    </div>
+                  
+                    <div style="margin-top: 20px;border: none;background: none;" >下载模板:
+                        <!-- <a href="javascript:alert('下载模板')" class="text-info">模板</a> -->
+                        <a href="javascript:;" class="text-info" ng-click="downDownDemo()">基础数据模板</a>
+                        <span style="width:90px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <button type="button" class="btn btn-primary" ng-click="excelExports(excelExportDialog,excelExport)" style="width: 110px;
+    						height: 30px;">基础数据导入
+                    </button>
+                    </div>
+                    
+                </form> 
+            </div>
+        </div>
+    </div>
+</div>

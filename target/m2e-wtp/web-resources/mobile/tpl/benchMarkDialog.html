@@ -1,0 +1,69 @@
+<!-- 标杆管理中查看详情 dialog -->
+
+<div class="detial-inside detial-source" style="padding: 0px;">
+    <div class="ledge-table meter-details">
+    <div class="reimbur-dialog-title">标杆管理详情</div>
+
+   <!--  <table class="table-result" id="tableResult">
+        <colgroup>
+            <col style="width:15%" />
+            <col style="width:20%" />
+            <col style="width:14%" />
+            <col style="width:18%" />
+            <col style="width:15%" />
+            <col style="width:12%" />
+            <col style="width:6%" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>设备ID号</th>
+                <th>机房名称</th>
+                <th>设备专业</th>
+                <th>网元状态</th>
+                <th>型号</th>
+                <th>生产厂家</th>
+                <th>数量</th>
+            </tr>
+        </thead>
+    </table> -->
+    <div>额定功率合计: {{allPowerRating}}</div>
+    <div class="table-details">
+        <div>
+            <table>
+               <!--  <colgroup>
+                    <col style="width:15%" />
+                    <col style="width:20%" />
+                    <col style="width:14%" />
+                    <col style="width:18%" />
+                    <col style="width:15%" />
+                    <col style="width:12%" />
+                    <col style="width:6%" />
+                </colgroup> -->
+                <tbody class="query-date">
+                <tr>
+               
+                <th>机房名称</th>
+                <th>设备专业</th>
+                <th>网元状态</th>
+                <th>型号</th>
+                <th>生产厂家</th>
+                <th>数量</th>
+                <th>额定功率</th>
+                <th>额定总功率</th>
+            </tr>
+                    <tr ng-repeat="item in subList track by $index">
+                        
+                        <td>{{item.equipmentRoomName}}</td>
+                        <td>{{item.deviceBelong}}</td>
+                        <td>{{item.deviceStatus}}</td>
+                        <td>{{item.deviceModel}}</td>
+                        <td>{{item.deviceVendor}}</td>
+                        <td>{{item.number}}</td>
+                        <td>{{item.powerRating}}</td>
+                        <td>{{item.powerRating * item.number}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

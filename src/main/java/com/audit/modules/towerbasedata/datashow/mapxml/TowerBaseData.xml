@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.towerbasedata.datashow.dao.TowerBaseDateDao">
+
+	<!-- 分页查询 基础信息呈现 -->
+    <!-- <select id="showBaseDateByPage" resultType="com.audit.modules.towerbasedata.datashow.entity.TowerDataShow" parameterType="java.util.Map">
+		SELECT
+			stas.id as towerId,
+			stas.PROPORTION  as proportion,
+			zsy.CITY_NAME AS cityName,
+			zsc.ZH_LABEL AS countyName,
+			stas.ZY_CODE AS towerNum,
+			stas.ZY_NAME AS addrName,
+			zss.ZH_LABEL AS resName
+		FROM SYS_TOWER_ACCOUNT_SITE stas
+		LEFT JOIN ZG_TOWER_SITE zts ON stas.ZY_CODE = ZTS.YW_CODE
+		LEFT JOIN ZG_SPACE_SITE zss ON ZTS.YW_CODE = ZSS.TOWER_SITE_CODE
+		LEFT JOIN ZG_SPACE_CITY zsy ON stas.CITY_ID = zsy.INT_ID
+		LEFT JOIN ZG_SPACE_COUNTY zsc ON stas.COUNTY_ID = zsc.INT_ID
+		where 1=1
+			<if test="obj.towerNum!=null and obj.towerNum!=''">AND stas.ZY_CODE LIKE '%'||#{obj.towerNum}||'%'</if>
+			<if test="obj.resName!=null and obj.resName!=''">AND zss.ZH_LABEL LIKE '%'||#{obj.resName}||'%'</if>
+	        <if test="obj.cityId!=null and obj.cityId!=''">AND stas.CITY_ID = #{obj.cityId}</if>
+	        <if test="obj.countyId!=null and obj.countyId!=''">AND stas.COUNTY_ID = #{obj.countyId}</if>
+	        <if test="obj.addrName!=null and obj.addrName!=''">AND stas.ZY_NAME=#{obj.addrName}</if>
+
+    </select> -->
+	
+	<select id="showBaseDateByPage" resultType="com.audit.modules.towerbasedata.datashow.entity.TowerDataShow" parameterType="java.util.Map">
+		SELECT
+			stas.id as towerId,
+			stas.PROPORTION  as proportion,
+			zsy.NAME AS cityName,
+			zsc.NAME AS countyName,
+			stas.ZY_CODE AS towerNum,
+			stas.ZY_NAME AS addrName,
+			zss.ZH_LABEL AS resName
+		FROM SYS_TOWER_ACCOUNT_SITE stas
+		LEFT JOIN ZG_TOWER_SITE zts ON stas.ZY_CODE = ZTS.YW_CODE
+		LEFT JOIN ZG_SPACE_SITE zss ON ZTS.YW_CODE = ZSS.TOWER_SITE_CODE
+		LEFT JOIN YDJH_AREA zsy ON stas.CITY_ID = zsy.ID
+		LEFT JOIN YDJH_AREA zsc ON stas.COUNTY_ID = zsc.ID
+		where 1=1
+			<if test="obj.towerNum!=null and obj.towerNum!=''">AND stas.ZY_CODE LIKE '%'||#{obj.towerNum}||'%'</if>
+			<if test="obj.resName!=null and obj.resName!=''">AND zss.ZH_LABEL LIKE '%'||#{obj.resName}||'%'</if>
+	        <if test="obj.cityId!=null and obj.cityId!=''">AND stas.CITY_ID = #{obj.cityId}</if>
+	        <if test="obj.countyId!=null and obj.countyId!=''">AND stas.COUNTY_ID = #{obj.countyId}</if>
+	        <if test="obj.addrName!=null and obj.addrName!=''">AND stas.ZY_NAME=#{obj.addrName}</if>
+
+    </select>
+	
+	<!-- 根据towerId 获取： 供电信息、其他信息-->
+    <select id="findTowerSiteById" resultType="com.audit.modules.towerbasedata.datashow.entity.TowerDataShow">
+	SELECT
+		ELECTRICITY_TYPE AS elecType,
+		ZZ_TYPE AS zzType,
+		SHARE_TYPE as shareType,
+		CYCLE AS cycle,
+		PROPORTION as proportion
+	FROM SYS_TOWER_ACCOUNT_SITE
+	where 1=1
+			<if test="towerId!=null and towerId !=''">AND ID = #{towerId}</if>
+	</select>
+	
+	
+	<!-- 根据towerId 获取： 查询机房设备信息-->
+    <select id="queryDeviceById" resultType="com.audit.modules.site.entity.EquRoomDevice">
+		SELECT 
+			sepr.id,
+			sepr.EQUROOM_ID as equipmentRoomId,
+			sepr.EQUROOM_NAME as equipmentRoomName,
+			sepr.EQUROOM_TYPE as equipmentRoomType,
+			sepr.DEVICE_BELONG as deviceBelong,
+			sepr.DEVICE_ID as deviceId,
+			sepr.POWER_RATING as powerRating,
+			sepr.DEVICE_STATUS as deviceStatus,
+			sepr.DEVICE_TYPE as deviceType,
+			sepr.DEVICE_MODEL as deviceModel,
+			sepr.DEVICE_VENDOR as deviceVendor												
+		FROM SYS_EQUROOM_POWER_RATING sepr																																						
+		LEFT JOIN ZG_SPACE_EQUIP_ROOM zser ON sepr.EQUROOM_ID = zser.INT_ID 										  
+		LEFT JOIN ZG_SPACE_SITE zss ON	zser.RELATED_SITE = zss.INT_ID 																	 					
+		LEFT JOIN ZG_TOWER_SITE zts ON ZTS.YW_CODE = ZSS.TOWER_SITE_CODE
+		LEFT JOIN SYS_TOWER_ACCOUNT_SITE stas ON stas.ZY_CODE = ZTS.YW_CODE
+		WHERE 1=1
+			<if test="towerId!=null and towerId !=''">AND stas.ID = #{towerId}</if>
+			
+	</select>
+	
+
+</mapper>

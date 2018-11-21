@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="
+          http://www.springframework.org/schema/beans
+     	  http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+       	  http://www.springframework.org/schema/context 
+       	  http://www.springframework.org/schema/context/spring-context-3.2.xsd
+      	  http://www.springframework.org/schema/aop
+	      http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+	      http://www.springframework.org/schema/tx
+	      http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+		  http://www.springframework.org/schema/jdbc 
+		  http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd 
+		  http://www.springframework.org/schema/mvc      
+          http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd  
+		  ">
+
+	<!-- 缓存管理器 -->
+	<bean id="shiroCacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager">
+	</bean>
+
+	<!-- <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager"> 
+		session的失效时长，单位毫秒 <property name="globalSessionTimeout" value="600000" /> 
+		删除失效的session <property name="deleteInvalidSessions" value="true" /> </bean> -->
+
+	<!-- Shiro主过滤器 -->
+	<!--支持任何基于URL路径表达式的、自定义的过滤器的执行 -->
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager" />
+		<property name="loginUrl" value="/loginerror.do" />
+		<property name="filters">
+			<map>
+				<!-- 将自定义 的FormAuthenticationFilter注入shiroFilter中 -->
+				<entry key="authc" value-ref="loginFormAuthenticationFilter" />
+			</map>
+		</property>
+		<property name="filterChainDefinitions">
+			<ref bean="shiroFilterChainDefinitions" />
+		</property>
+	</bean>
+
+	<bean name="loginFormAuthenticationFilter"
+		class="com.audit.filter.interceptor.LoginFormAuthenticationFilter">
+		<property name="usernameParam" value="account" />
+        <property name="passwordParam" value="password" />
+	</bean>
+	<!-- Shiro连接约束配置,即过滤链的定义 -->
+	<!-- anon：对应的过滤器里面是空的,什么都没做 -->
+	<!-- authc：该过滤器下的页面必须验证后才能访问 -->
+	<bean name="shiroFilterChainDefinitions" class="java.lang.String">
+		<constructor-arg>
+			<value>
+				/loginerror.do = anon
+				/jsp/error.jsp = anon
+				/css/** = anon
+				/js/** = anon
+				/config/** = anon
+				/img/** = anon
+				/diagram-viewer/** = anon
+				/editor-app/** = anon
+				/html/** = anon
+				/testJson/** = anon
+				/mobile/** = anon
+				dataModifyApply/handleApply.do = anon
+				dataModifyApply/transEleApply.do = anon
+				/testDemo/** = anon
+				/webservice/** = anon
+				<!-- /role/** = authc, roles[省级超级管理员],perms[systemMgt:role:*] -->
+				<!-- /** = authc  -->
+			</value>
+		</constructor-arg>
+	</bean>
+	<!-- 自定义凭证匹配器 -->
+	<bean id="credentialsMatcher" class="com.audit.modules.system.shiro.CustomCredentialsMatcher">
+	</bean>
+
+	<!-- 自定义realm -->
+	<bean id="userRealm" class="com.audit.modules.system.shiro.UserRealm">
+		<property name="credentialsMatcher" ref="credentialsMatcher" />
+	</bean>
+
+	<!-- 安全管理器 -->
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realm" ref="userRealm" />
+		<!-- <property name="sessionManager" ref="sessionManager" /> <property 
+			name="cacheManager" ref="shiroCacheManager" /> -->
+	</bean>
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor" />
+
+	<!-- Shiro注解影响自定义注解 暂不启用-->
+</beans>

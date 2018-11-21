@@ -1,0 +1,67 @@
+<!-- 自维生成预付提交单 dialog弹框 -->
+<div class="add-submit" >
+    <div class="reimbur-dialog-title" style="padding: 10px 0px;">预付费提交单</div>
+    <div class="search-box">
+        <div>
+            <input ng-model="$parent.serialNumber" type="text" placeholder="预付流水号" name="" class="add-title" >
+            <input 
+                readOnly="true"
+                ng-laydate
+                id="createDate"
+                format="YYYY-MM-DD"
+                ng-model="$parent.createStartDate" 
+                type="text" placeholder="建单时间（起）" 
+                name="" class="add-title">
+            <input 
+                readOnly="true"
+                ng-laydate
+                id="endDate"
+                format="YYYY-MM-DD"
+                ng-model="$parent.createEndDate" 
+                type="text" placeholder="建单时间（止）" 
+                name="" class="add-title">
+        </div>
+        <button class="btn btn-primary" type="button" ng-click="getPreDialog()">搜索</button>
+    </div>
+    <!-- table-content -->
+    <div class="table-content">
+        <div class="table-title">
+            <button ng-click="createSubmitOrder()" class="btn btn-blue">生成预付提交单</button>
+        </div>
+        <!-- table -->
+        <div class="invoinc-table">
+            <div class="table-details">
+                <div>
+                    <table class="table-result" id="tableResult">
+                        <tbody class="query-date" id="SubmitOrder">
+                        <tr>
+                            <th><input ng-click="checkAll('#checkAll2','#SubmitOrder')" id="checkAll2"  type="checkbox"  type="checkbox" ></th>
+                            <th>预付流水号</th>
+                            <th>地区</th>
+                            <th>区县</th>
+                            <th>预付单状态</th>
+                            <th>供应商</th>
+                            <th>建单时间</th>
+                            <th>金额(元)</th>
+                        </tr>
+                            <tr ng-repeat="item in waitList track by $index">
+                                <td><input type="checkbox" value="{{item.id}}"></td>
+                                <td>{{item.paymentNumber}}</td>
+                                <td>{{item.cityStr}}</td>
+                                <td>{{item.countyStr}}</td>
+                                <td>{{item.status | ElectrictyStatusFilter}}</td>
+                                <td>{{item.supplyStr}}</td>
+                                <td>{{item.createDate|date:"yyyy-MM-dd HH:mm:ss"}}</td>
+                                <td>{{item.totalMoney}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- 分页 -->
+        <div class="page-foot">
+            <im-pagination conf="generatedPageInfo" params="generatedParams" get-data="getGeneratedData()"></im-pagination>
+        </div>
+    </div>
+</div>

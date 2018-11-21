@@ -1,0 +1,38 @@
+﻿ <!-- 上传界面 -->
+ <div class="upload-file">
+ 	<!-- 上传图片 -->
+ 	<form action="" method="post" enctype="multipart/form-data" id="uploadForm1" ng-show="tabUpload==1" >  
+	 	<div class="upload-title">上传内容</div>
+		<div class="upload-info">
+			<label for="upload-continue">
+				<img class="preview-box" src="./assets/img/upload_img.png">
+					<!-- accept="image/*"  判断图片-->
+					<!-- multiple="multiple"  上传单个-->
+					<!-- src="./assets/img/build_bg.png" -->
+				<input type="file" 
+					id="upload-continue" 
+					name="files" 
+					class="load-input"  
+					ng-model="upFiles" 
+					onchange="angular.element(this).scope().change1(this)">
+					<input type="text" name="fileName" ng-model="fileName">
+			</label>
+		</div>
+		<div class="reimbur-foot ledge-foot">
+			<button ng-click="closeDialog('uploadImgDialog')" class="reimbur-cancel btn">取消</button>
+			<button ng-click="uploadImgType()" class="reimbur-save btn">确定上传</button>
+			<button ng-click="deleteImgType()" class="reimbur-save btn">删除图片</button>
+			<!-- <input type="sumbit" class="reimbur-save btn" ng-click="uploadType()"> -->
+		</div>
+	</form>	
+	<!-- 查看上传的图片 -->
+	<form action="" ng-show="tabUpload==2" >
+		<div class="upload-title">查看上传图片</div>
+		<div class="upload-info">
+			<img class="show-img" ng-src="{{showUrls}}" >
+		</div>
+		<div class="reimbur-foot ledge-foot">
+			<button ng-click="closeDialog('uploadImg')" class="reimbur-save btn">关闭</button>
+		</div>
+	</form>
+ </div>

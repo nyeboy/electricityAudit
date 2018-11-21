@@ -1,0 +1,230 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.audit.modules.electricity.dao.TowerReimburseDao">
+	<sql id="Base_Column_List">
+		ID AS id, 
+		REIMBURSE_NO AS reimburseNo, 
+		USER_ID AS userId, 
+		CITY_ID AS cityId, 
+		COUNTY_ID AS countyId, 
+		REIMBURSE_TYPE AS reimburseType,
+		TOTAL_AMOUNT AS totalAmount,
+		STATUS AS status,
+		CREATE_DATE AS createDate,
+		TO_CHAR(CREATE_DATE,'yyyy-mm-dd') AS timeStr,
+		PRICE_AMOUNT as priceAmount,
+		TAX_AMOUNT as taxAmount,
+		INVOICE_TYPE as invoiceType
+	</sql>
+	
+	<!-- <select id="queryPage" parameterType="com.audit.modules.common.mybatis.PageUtil" resultType="com.audit.modules.electricity.entity.TowerReimburseVo">
+		SELECT
+			(SELECT CITY_NAME FROM ZG_SPACE_CITY WHERE INT_ID = STR.CITY_ID) AS cityName,
+			(SELECT ZH_LABEL FROM ZG_SPACE_COUNTY WHERE INT_ID = STR.COUNTY_ID) AS countyName,
+			<include refid="Base_Column_List" />
+		FROM 
+			SYS_TOWER_REIMBURSE STR
+		WHERE 1=1
+			<if test="obj.cityId!=null and obj.cityId!=''">
+				AND CITY_ID = #{obj.cityId,jdbcType=VARCHAR} 
+			</if>
+			<if test="obj.countyId!=null and obj.countyId!=''">
+				AND COUNTY_ID = #{obj.countyId,jdbcType=VARCHAR} 
+			</if>
+			<if test="obj.status!=null">
+				AND STATUS = #{obj.status} 
+			</if>
+			<if test="obj.reimburseNo!=null">
+			    AND REIMBURSE_NO like '%'||#{obj.reimburseNo}||'%' 
+			</if>
+			<if test="obj.startCreateDate!=null">
+			    AND CREATE_DATE &gt;= #{obj.startCreateDate} 
+			</if>
+			<if test="obj.endCreateDate!=null">
+			    AND CREATE_DATE &lt;= #{obj.endCreateDate} 
+			</if>
+	</select>
+	<select id="selectByPrimaryKey" resultType="com.audit.modules.electricity.entity.TowerReimburseVo" parameterType="Integer">
+		SELECT
+			(SELECT CITY_NAME FROM ZG_SPACE_CITY WHERE INT_ID = STR.CITY_ID) AS cityName,
+			(SELECT ZH_LABEL FROM ZG_SPACE_COUNTY WHERE INT_ID = STR.COUNTY_ID) AS countyName,
+			(SELECT USER_NAME FROM SYS_USER WHERE ID = STR.USER_ID) AS userName,
+			(SELECT BILL_TYPE FROM SYS_INVOICE WHERE ID = STR.INVOICE_TYPE) as invoiceTypeName,
+			<include refid="Base_Column_List" />
+		FROM 
+			SYS_TOWER_REIMBURSE STR
+		WHERE ID = #{id,jdbcType=INTEGER}
+	</select> -->
+	
+	<select id="queryPage" parameterType="com.audit.modules.common.mybatis.PageUtil" resultType="com.audit.modules.electricity.entity.TowerReimburseVo">
+		SELECT
+			(SELECT NAME FROM YDJH_AREA WHERE ID = STR.CITY_ID) AS cityName,
+			(SELECT NAME FROM YDJH_AREA WHERE ID = STR.COUNTY_ID) AS countyName,
+			<include refid="Base_Column_List" />
+		FROM 
+			SYS_TOWER_REIMBURSE STR
+		WHERE 1=1
+			<if test="obj.cityId!=null and obj.cityId!=''">
+				AND CITY_ID = #{obj.cityId,jdbcType=VARCHAR} 
+			</if>
+			<if test="obj.countyId!=null and obj.countyId!=''">
+				AND COUNTY_ID = #{obj.countyId,jdbcType=VARCHAR} 
+			</if>
+			<if test="obj.status!=null">
+				AND STATUS = #{obj.status} 
+			</if>
+			<if test="obj.reimburseNo!=null">
+			    AND REIMBURSE_NO like '%'||#{obj.reimburseNo}||'%' 
+			</if>
+			<if test="obj.startCreateDate!=null">
+			    AND CREATE_DATE &gt;= #{obj.startCreateDate} 
+			</if>
+			<if test="obj.endCreateDate!=null">
+			    AND CREATE_DATE &lt;= #{obj.endCreateDate} 
+			</if>
+	</select>
+	<select id="selectByPrimaryKey" resultType="com.audit.modules.electricity.entity.TowerReimburseVo" parameterType="Integer">
+		SELECT
+			(SELECT NAME FROM YDJH_AREA WHERE ID = STR.CITY_ID) AS cityName,
+			(SELECT NAME FROM YDJH_AREA WHERE ID = STR.COUNTY_ID) AS countyName,
+			(SELECT USER_NAME FROM SYS_USER WHERE ID = STR.USER_ID) AS userName,
+			(SELECT BILL_TYPE FROM SYS_INVOICE WHERE ID = STR.INVOICE_TYPE) as invoiceTypeName,
+			<include refid="Base_Column_List" />
+		FROM 
+			SYS_TOWER_REIMBURSE STR
+		WHERE ID = #{id,jdbcType=INTEGER}
+	</select>
+	
+	<delete id="deleteByPrimaryKey" parameterType="Integer">
+		DELETE FROM SYS_TOWER_REIMBURSE WHERE ID = #{id,jdbcType=INTEGER}
+	</delete>
+	
+	<select id="selectId" resultType="INTEGER" >
+			select * from (select ID from SYS_TOWER_REIMBURSE ORDER BY ID desc) where ROWNUM=1
+	</select>
+	
+		<select id="selectReId" resultType="INTEGER" >
+			select * from (select ID from SYS_TOWER_REI_ELE ORDER BY ID desc) where ROWNUM=1
+	</select>
+	
+	<insert id="insert" parameterType="com.audit.modules.electricity.entity.TowerReimburseVo">
+	<!-- 	<selectKey resultType="INTEGER" order="BEFORE" keyProperty="id">  
+	       SELECT SYS_TOWER_REIMBURSE_SEQ.NEXTVAL as id from DUAL
+	   	</selectKey>   -->
+		INSERT INTO SYS_TOWER_REIMBURSE 
+		(ID, REIMBURSE_NO, USER_ID,
+		CITY_ID, COUNTY_ID, REIMBURSE_TYPE,
+		TOTAL_AMOUNT, STATUS,
+		CREATE_DATE,INVOICE_TYPE,PRICE_AMOUNT,TAX_AMOUNT)
+		VALUES 
+		(#{id,jdbcType=INTEGER}, #{reimburseNo,jdbcType=VARCHAR},
+		#{userId,jdbcType=OTHER},
+		#{cityId,jdbcType=INTEGER}, #{countyId,jdbcType=INTEGER}, #{reimburseType,jdbcType=INTEGER},
+		#{totalAmount,jdbcType=VARCHAR},
+		#{status,jdbcType=INTEGER},
+		#{createDate,jdbcType=TIMESTAMP},
+		#{invoiceType,jdbcType=VARCHAR},
+		#{priceAmount,jdbcType=VARCHAR},
+		#{taxAmount,jdbcType=VARCHAR})
+	</insert>
+	
+	<insert id="saveReiEle" parameterType="java.util.List">
+		INSERT INTO SYS_TOWER_REI_ELE 
+		(ID, REIMBURSE_ID, TOWER_ID)
+		( <foreach collection="list" index="" item="item" separator="union all">
+		select   
+		 	#{item.id,jdbcType=INTEGER},
+		 	#{item.reimburseId,jdbcType=INTEGER},
+		 	#{item.towerId,jdbcType=VARCHAR}
+		  from dual  
+		 </foreach> 
+		)
+	</insert>
+	
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.audit.modules.electricity.entity.TowerReimburseVo">
+		UPDATE SYS_TOWER_REIMBURSE
+		<set>
+			<if test="reimburseNo != null">
+				REIMBURSE_NO = #{reimburseNo,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null">
+				USER_ID = #{userId,jdbcType=OTHER},
+			</if>
+			<if test="cityId != null">
+				CITY_ID = #{cityId,jdbcType=INTEGER},
+			</if>
+			<if test="countyId != null">
+				COUNTY_ID = #{countyId,jdbcType=INTEGER},
+			</if>
+			<if test="reimburseType != null">
+				REIMBURSE_TYPE = #{reimburseType,jdbcType=INTEGER},
+			</if>
+			<if test="totalAmount != null">
+				TOTAL_AMOUNT = #{totalAmount,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				STATUS = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="createDate != null">
+				CREATE_DATE = #{createDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="invoiceType != null">
+				INVOICE_TYPE = #{invoiceType,jdbcType=VARCHAR},
+			</if>
+			<if test="invoiceType != null">
+				PRICE_AMOUNT = #{priceAmount,jdbcType=VARCHAR},
+			</if>
+			<if test="invoiceType != null">
+				TAX_AMOUNT = #{taxAmount,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where ID = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.audit.modules.electricity.entity.TowerReimburseVo">
+		UPDATE SYS_TOWER_REIMBURSE
+		SET REIMBURSE_NO = #{reimburseNo,jdbcType=VARCHAR},
+		USER_ID = #{userId,jdbcType=OTHER},
+		CITY_ID = #{cityId,jdbcType=INTEGER},
+		COUNTY_ID = #{countyId,jdbcType=INTEGER},
+		REIMBURSE_TYPE = #{reimburseType,jdbcType=INTEGER},
+		TOTAL_AMOUNT = #{totalAmount,jdbcType=VARCHAR},
+		STATUS = #{status,jdbcType=INTEGER},
+		CREATE_DATE = #{createDate,jdbcType=TIMESTAMP}
+		WHERE ID = #{id,jdbcType=INTEGER}
+	</update>
+	
+	<update id="updateByNo" parameterType="java.util.Map">
+		UPDATE SYS_TOWER_REIMBURSE SET STATUS = #{map.status} WHERE REIMBURSE_NO IN
+		<foreach collection="map.submitNos" index="index" item="submitNo" open="("
+				 separator="," close=")">
+			#{submitNo}
+		</foreach>
+	</update>
+	
+	<!-- <select id="queryByNo" resultType="com.audit.modules.electricity.entity.TowerReimburseVo">
+		SELECT
+			(SELECT CITY_NAME FROM ZG_SPACE_CITY WHERE INT_ID = STR.CITY_ID) AS cityName,
+			(SELECT ZH_LABEL FROM ZG_SPACE_COUNTY WHERE INT_ID = STR.COUNTY_ID) AS countyName,
+			(SELECT USER_NAME FROM SYS_USER WHERE ID = STR.USER_ID) AS userName,
+			(SELECT BILL_TYPE FROM SYS_INVOICE WHERE ID = STR.INVOICE_TYPE) as invoiceTypeName,
+			<include refid="Base_Column_List" />
+		FROM 
+			SYS_TOWER_REIMBURSE STR
+		WHERE 
+			REIMBURSE_NO = #{reimburseNo}
+	</select> -->
+	
+	<select id="queryByNo" resultType="com.audit.modules.electricity.entity.TowerReimburseVo">
+		SELECT
+			(SELECT NAME FROM YDJH_AREA WHERE ID = STR.CITY_ID) AS cityName,
+			(SELECT NAME FROM YDJH_AREA WHERE ID = STR.COUNTY_ID) AS countyName,
+			(SELECT USER_NAME FROM SYS_USER WHERE ID = STR.USER_ID) AS userName,
+			(SELECT BILL_TYPE FROM SYS_INVOICE WHERE ID = STR.INVOICE_TYPE) as invoiceTypeName,
+			<include refid="Base_Column_List" />
+		FROM 
+			SYS_TOWER_REIMBURSE STR
+		WHERE 
+			REIMBURSE_NO = #{reimburseNo}
+	</select>
+	
+</mapper>

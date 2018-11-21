@@ -1,0 +1,226 @@
+<!-- 统计报表页面 -->
+<div class="content-box1" id="contentBox1">
+<link rel="stylesheet" type="text/css" href="css/page/statistic-report.css">
+<div id="statistic-report">
+    <div class="top-filter">
+        <select class="selectpicker pull-left" id="province">
+            <option>四川省</option>
+        </select>
+        <select class="selectpicker pull-left" id="city">
+            <option>成都市</option>
+        </select>
+        <select class="selectpicker pull-left" id="reportType">
+            <option>报表1</option>
+        </select>
+        <button type="button" class="btn btn-primary pull-right" id="queryBtn">查询</button>
+    </div>
+    <div class="content-chart">
+        <span id="testa"></span>
+        <div id="main" style="width:600px;height:400px;"></div>
+    </div>
+    <div class="bottom-total container-fluid">
+    <div class="row total-row">
+        <div class="col-md-3 total-box" id="eleFee">
+            <div class="top-data">
+                <div class="pull-left">
+                <div class="title">直供电比例</div>
+                <div class="data">75.41%</div>
+            </div>
+            <div class="pull-right">
+                <div class="title">转供电比例</div>
+                <div class="data">75.41%</div>
+            </div>
+            </div>
+            <div class="bottom-title">电费基本数据</div>
+        </div>
+        <div class="col-md-3 total-box" id="eleFee">
+            <div class="top-data">
+                <div class="pull-left">
+                <div class="title">直供电比例</div>
+                <div class="data">75.41%</div>
+            </div>
+            <div class="pull-right">
+                <div class="title">转供电比例</div>
+                <div class="data">75.41%</div>
+            </div>
+            </div>
+            <div class="bottom-title">电费基本数据</div>
+        </div>
+        <div class="col-md-3 total-box" id="eleFee">
+            <div class="top-data">
+                <div class="pull-left">
+                <div class="title">直供电比例</div>
+                <div class="data">75.41%</div>
+            </div>
+            <div class="pull-right">
+                <div class="title">转供电比例</div>
+                <div class="data">75.41%</div>
+            </div>
+            </div>
+            <div class="bottom-title">电费基本数据</div>
+        </div>
+        <div class="col-md-3 total-box" id="eleFee">
+            <div class="top-data">
+                <div class="pull-left">
+                <div class="title">直供电比例</div>
+                <div class="data">75.41%</div>
+            </div>
+            <div class="pull-right">
+                <div class="title">转供电比例</div>
+                <div class="data">75.41%</div>
+            </div>
+            </div>
+            <div class="bottom-title">电费基本数据</div>
+        </div>
+
+    </div>
+    </div>
+</div>
+</div>
+
+<!--homePage-->
+<div id="home-page">
+                 <div class="top-message container-fluid">
+                     <div class="profile-option row">
+                         <select class="selectpicker pull-left" data-width="fit"　id="province">
+                             <option>待办事项</option>
+                             <option>电费</option>
+                             <option>油费</option>
+                             <option>场租</option>
+                         </select>
+                     </div>
+                     <div class="message-show row">
+                         <div class="col-md-2 message-content">
+                             <div class="title">稽核单<span>3</span></div>
+                             <div class="detail">
+                             <div class="pull-left">待处理<span class="circle">2</span></div>
+                             <div class="pull-right">待审批<span class="circle">1</span></div>
+                             </div>
+                         </div>
+                         <div class="col-md-2 message-content">
+                             <div class="title">稽核单<span>3</span></div>
+                             <div class="detail">
+                             <div class="pull-left">待处理<span class="circle">2</span></div>
+                             <div class="pull-right">待审批<span class="circle">1</span></div>
+                             </div>
+                         </div>
+                         <div class="col-md-2 message-content">
+                             <div class="title">稽核单<span>3</span></div>
+                             <div class="detail">
+                             <div class="pull-left">待处理<span class="circle">2</span></div>
+                             <div class="pull-right">待审批<span class="circle">1</span></div>
+                             </div>
+                         </div>
+                         <div class="col-md-2 message-content">
+                             <div class="title">稽核单<span>3</span></div>
+                             <div class="detail">
+                             <div class="pull-left">待处理<span class="circle">2</span></div>
+                             <div class="pull-right">待审批<span class="circle">1</span></div>
+                             </div>
+                         </div>
+                         <div class="col-md-2 message-content">
+                             <div class="title">稽核单<span>3</span></div>
+                             <div class="detail">
+                             <div class="pull-left">待处理<span class="circle">2</span></div>
+                             <div class="pull-right">待审批<span class="circle">1</span></div>
+                             </div>
+                         </div>
+                         <div class="col-md-2 message-content">
+                             <div class="title">稽核单<span>3</span></div>
+                             <div class="detail">
+                             <div class="pull-left">待处理<span class="circle">2</span></div>
+                             <div class="pull-right">待审批<span class="circle">1</span></div>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 <div class="middle-chart">
+                     <ul id="typeTab" class="nav nav-tabs">
+                         <li class="active">
+                             <a href="#targetSystem" data-toggle="tab">评优指标体系(月) (地图)</a>
+                         </li>
+                         <li class="dropdown">
+                             <a href="#siteEleCharge" data-toggle="tab">全省电费情况报表</a>
+                         </li>
+                         <li class="dropdown">
+                             <a href="#targetSystem" data-toggle="tab">全省电费占收比、占支比报表</a>
+                         </li>
+                         <li class="dropdown">
+                             <a href="#targetSystem" data-toggle="tab">全省单载波电费情况报表</a>
+                         </li>
+                         <li class="dropdown">
+                             <a href="#targetSystem" data-toggle="tab">全省直供电、转供电用电量情况报表</a>
+                         </li>
+                         <li class="dropdown">
+                             <a href="#targetSystem" data-toggle="tab">全省电费单价占比情况报表</a>
+                         </li>
+                     </ul>
+                     <div id="typeContent" class="tab-content">
+                         <div class="tab-pane fade in active" id="targetSystem">
+                             <div class="targer-system-chart" style="width:600px;height:400px;"></div>
+                         </div>
+                         <div class="tab-pane fade in active" id="siteEleCharge">
+                             <div class="targer-system-chart" style="width:600px;height:400px;"></div>
+                         </div>
+                     </div>
+                 </div>
+                 <div class="bottom-total container-fluid">
+                 <div class="row total-row">
+                     <div class="col-md-3 total-box" id="eleFee">
+                         <div class="top-data">
+                             <div class="pull-left">
+                             <div class="title">直供电比例</div>
+                             <div class="data">75.41%</div>
+                         </div>
+                         <div class="pull-right">
+                             <div class="title">转供电比例</div>
+                             <div class="data">75.41%</div>
+                         </div>
+                         </div>
+                         <div class="bottom-title">电费基本数据</div>
+                     </div>
+                     <div class="col-md-3 total-box" id="eleFee">
+                         <div class="top-data">
+                             <div class="pull-left">
+                             <div class="title">直供电比例</div>
+                             <div class="data">75.41%</div>
+                         </div>
+                         <div class="pull-right">
+                             <div class="title">转供电比例</div>
+                             <div class="data">75.41%</div>
+                         </div>
+                         </div>
+                         <div class="bottom-title">电费基本数据</div>
+                     </div>
+                     <div class="col-md-3 total-box" id="eleFee">
+                         <div class="top-data">
+                             <div class="pull-left">
+                             <div class="title">直供电比例</div>
+                             <div class="data">75.41%</div>
+                         </div>
+                         <div class="pull-right">
+                             <div class="title">转供电比例</div>
+                             <div class="data">75.41%</div>
+                         </div>
+                         </div>
+                         <div class="bottom-title">电费基本数据</div>
+                     </div>
+                     <div class="col-md-3 total-box" id="eleFee">
+                         <div class="top-data">
+                             <div class="pull-left">
+                             <div class="title">直供电比例</div>
+                             <div class="data">75.41%</div>
+                         </div>
+                         <div class="pull-right">
+                             <div class="title">转供电比例</div>
+                             <div class="data">75.41%</div>
+                         </div>
+                         </div>
+                         <div class="bottom-title">电费基本数据</div>
+                     </div>
+                 </div>
+                 </div>
+
+             </div>
+
+

@@ -1,0 +1,80 @@
+﻿
+<!-- 供应商信息管理 -->
+<div class="system-content">
+<div class="business-box" id="businessBox">
+    <div class="content-rout" id="contentRout">
+        <span>基础数据</span>&gt;<span>基础数据维护</span>&gt;<span class="now-rout">供应商信息管理</span>
+    </div>
+    <button ng-click="getDataExcel()" class="btn btn-primary" type="button">导出excel</button>
+    <div class="content-box trariffc-table" id="contentBox">
+        <div class="search-box">
+            <div>
+                <select name="" id="" class="title-select"
+                        ng-model="cityId"
+                        ng-options="city.key as city.value for city in citys"
+                        ng-change="queryCountyList(cityId)">
+               	 		<option value="">全省</option>
+                </select>
+
+                <select class="title-select"
+                        ng-model="countyId"
+                        ng-options="county.key as county.value for county in countys">
+                		<option value="">全市</option>
+                </select>
+                <input ng-model="name" type="text" placeholder="供应商名称" class="process-input con-parts" name="">
+                <input ng-model="organizationCode" type="text" placeholder="供应商组织ID" class="process-input con-parts" name="">
+            </div>
+            <button ng-click="getData(true)" class="btn btn-primary" type="button">搜索</button>
+        </div>
+        <!-- table-content -->
+        <div class="table-content">
+            <!-- table -->
+            <div class="data-table">
+                <div class="table-details">
+                    <div>
+                        <table>
+                            <tbody class="query-date">
+                            <tr>
+                           <th>序号</th>
+                           <th>报账点名称</th>
+                           <th>供应商名称</th>
+                           <th>供应商编号</th>
+                           <th>供应商地点</th>
+                            <th>供应商地点id</th>
+                           <th>供应商组织ID</th>
+                           <th>分公司</th>
+                           <th>银行名称</th>
+                           <th>银行账户</th>
+                           <th>操作</th>
+                        </tr>
+                                <tr ng-repeat="item in list track by $index">
+                                    <td>{{$index+1}}</td>
+                                    <td>{{item.accountName}}</td>
+                                    <td>{{item.name}}</td>
+                                    <td>{{item.vendorCode}}</td>
+                                    <td>{{item.address}}</td>
+                                    <td>{{item.regionCode}}</td>
+                                    <td>{{item.organizationCode}}</td>
+                                    <td>{{item.ouName}}</td>
+                                    <td>{{item.bankBranchName}}</td>
+                                    <td>{{item.bankNum}}</td>
+                                    <td>
+                                    	 <a ng-click="showSupplyDetail(item.id)" href="javascript:void(0)" class="check-detail">查看</a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                    </div>
+					
+                </div>
+                <div class="page-foot">
+                            <im-pagination  conf="pageInfo" params="params" get-data="getData()"></im-pagination>
+                        </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>

@@ -1,0 +1,66 @@
+<!-- 基础数据呈现--查看额定功率详情 -->
+<div class="table-content">
+<div class="reimbur-dialog-title">额定功率页面详情</div>
+    <!-- table -->
+    <div class="data-table">
+<!--         <table class="table-result">
+            <caption></caption>
+            <colgroup>
+                <col style="width:11.11%">
+                <col style="width:11.11%">
+                <col style="width:11.11%">
+                <col style="width:11.11%">
+                <col style="width:11.11%">
+                <col style="width:11.11%">
+                <col style="width:11.11%">
+                <col style="width:11.11%">
+                <col style="width:11.11%">
+
+            </colgroup>
+            <thead>
+        
+            </thead>
+        </table> -->
+        <div class="table-details basic-table">
+            <div>
+                <table>
+                  <!--   <colgroup>
+                        <col style="width:11.11%">
+                        <col style="width:11.11%">
+                        <col style="width:11.11%">
+                        <col style="width:11.11%">
+                        <col style="width:11.11%">
+                        <col style="width:11.11%">
+                        <col style="width:11.11%">
+                        <col style="width:11.11%">
+                        <col style="width:11.11%">
+                    </colgroup> -->
+                    <tbody class="query-date">
+                        <tr>
+                <th>机房或资源点名称</th>
+                <th>设备专业</th>
+                <th>设备类型</th>
+                <th>型号</th>
+                <th>生产厂家</th>
+                <th>数量</th>
+                <th>额定功率</th>
+                <th>额定总功率</th>
+                <th>站点总功率</th>
+            </tr>
+                         <tr ng-repeat="item in object track by $index">
+                            <td>{{item.equName}}</td>
+                            <td>{{item.deviceBelong}}</td>
+                            <td>{{item.deviceType}}</td>
+                            <td>{{item.deviceModel}}</td>
+                            <td>{{item.deviceVendor}}</td>
+                            <td>{{item.amount}}</td>
+                            <td>{{item.ratePower}}</td>
+                            <td>{{item.rateTotalPower}}</td>
+                            <td>{{item.siteTotalPower}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

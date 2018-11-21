@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.audit.modules.excelUpload.dao.PowerRatingDao">
+
+	<insert id="batchSave" parameterType="com.audit.file.excel.entity.PowerRatingMeta">
+		INSERT INTO SYS_POWER_RATING(ID,TYPE,MODEL,VENDOR,POWER_RATING)
+		<foreach collection="list" index="index" item="powerRatingMeta" separator="union all" >
+			select
+				get_seq('SEQ_POWER_RATING'),#{powerRatingMeta.type,jdbcType=VARCHAR},
+				#{powerRatingMeta.model,jdbcType=VARCHAR},#{powerRatingMeta.vendor,jdbcType=VARCHAR},
+				#{powerRatingMeta.powerRatingD,jdbcType=DOUBLE}
+			from dual
+		</foreach>
+	</insert>
+	
+	
+	<!-- 调用存储过程-导入后数据更新 -->
+    <select id="dataUpdate" parameterType="java.util.Map" statementType="CALLABLE"  resultType="String">
+		{call PRO_ZGDATAUPDATE(#{code,mode=OUT,jdbcType=VARCHAR})}
+	</select>
+</mapper>

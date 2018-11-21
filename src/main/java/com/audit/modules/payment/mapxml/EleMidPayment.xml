@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.audit.modules.payment.dao.EleMidPaymentDao">
+
+	<!-- 添加中间表数据 -->
+	<insert id="add"  parameterType="com.audit.modules.payment.entity.EleMidPaymentVO">
+		INSERT INTO SYS_ELE_MID_PAYMENT(
+			ID,
+			ADVANCE_PAYMENT_ID,
+			ELECTRICITY_ID,
+			EXPENSE_AMOUNT,
+			CREATEDATE
+		)
+		VALUES(
+			#{id},
+			#{advancePaymentID},
+			#{electricityID},
+			#{expenseAmount},
+			#{createDate}
+		)
+	
+	</insert>
+	
+	<!-- 根据稽核单id获取预付详情 -->
+	<select id="getEleMidPaymentByEleID" parameterType="java.lang.String" resultType="com.audit.modules.payment.entity.EleMidPaymentVO">
+		SELECT 
+			ID AS id,
+			ADVANCE_PAYMENT_ID AS advancePaymentID,
+			ELECTRICITY_ID AS electricityID,
+			EXPENSE_AMOUNT AS expenseAmount,
+			CREATEDATE AS createDate
+		
+		FROM SYS_ELE_MID_PAYMENT
+		WHERE ELECTRICITY_ID = #{electricityID}
+	</select>
+	
+	<!-- 根据稽核单id和预付单id查核销金额 -->
+	<select id="getExpenseAmountByEIdAndPId" parameterType="com.audit.modules.payment.entity.EleMidPaymentVO" resultType="java.lang.String">
+		SELECT 
+			EXPENSE_AMOUNT AS expenseAmount
+		FROM SYS_ELE_MID_PAYMENT
+		WHERE ADVANCE_PAYMENT_ID = #{advancePaymentID}
+			AND ELECTRICITY_ID = #{electricityID}
+	</select>
+	
+	<!-- 根据稽核单id和预付单id修改核销金额 -->
+	<update id="updateEleMidPaymentByEIdAndPId" parameterType="com.audit.modules.payment.entity.EleMidPaymentVO">
+		UPDATE SYS_ELE_MID_PAYMENT
+			SET EXPENSE_AMOUNT = #{expenseAmount}
+		WHERE ADVANCE_PAYMENT_ID = #{advancePaymentID}
+			AND ELECTRICITY_ID = #{electricityID}
+	</update>
+	
+	<!-- 根据稽核单id和预付单id删除中间表记录 -->
+	<delete id="deleteEleMidPaymentByEIdAndPId" parameterType="com.audit.modules.payment.entity.EleMidPaymentVO">
+		DELETE FROM SYS_ELE_MID_PAYMENT
+		WHERE ADVANCE_PAYMENT_ID = #{advancePaymentID}
+			AND ELECTRICITY_ID = #{electricityID}
+	</delete>
+</mapper>

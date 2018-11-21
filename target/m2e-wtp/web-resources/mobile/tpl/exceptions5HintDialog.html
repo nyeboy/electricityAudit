@@ -1,0 +1,45 @@
+﻿ <!-- 异常 (报账点电表单价高于2.5元/度)-->
+ <style>
+ 
+.heading {
+padding-left: 0px;
+color:#4b8de6;
+}
+
+.content {
+padding-left: 10%;
+padding-top:5%;
+color:red;
+}
+
+.causes {
+height: 100px;
+padding-left: 10%;
+}
+
+.causes .cause {
+height:100%;
+width: 85%;
+
+}
+
+ .causes .required {
+ font-size:25px;
+	color:red;
+}
+
+</style>
+ 	<div class="heading">
+ 	<h3>异常提示</h3>	
+ 	</div>
+ 	<div class="content">
+ 	<h3>发现数据异常: </h3><br><br><br>
+ 	<h3>异常电表号: {{wattID}}</h3><br>
+ 	<h3>电表户号:  {{wattPaymentAccountCode}}</h3><br>
+ 	<h3>电表标识符: {{wattCode}} </h3><br><br><br>
+ 	<h3>异常原因: 报账点电表单价高于2.5元/度或远远高于直供电单价</h3><br><br><br>
+ 	</div>
+<div class="reimbur-foot ledge-foot audit-dialog">
+<button ng-click="ack5()" class="reimbur-save btn">继续提交</button>
+<button ng-click="closeDialog('exceptions5HintDialog')" class="reimbur-save btn">取消</button>
+</div>
